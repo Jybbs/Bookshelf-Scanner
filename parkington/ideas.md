@@ -1,0 +1,1 @@
+- Find a way (maybe with `minAreaRect`) to force contour shaping to always be a rectangle/quadrialtera, so that `RETR_EXTERNAL` can more easily eliminate internal contours from text
