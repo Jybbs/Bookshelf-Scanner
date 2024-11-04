@@ -56,7 +56,7 @@ class ProcessingStep:
         Adjusts the parameter value based on the key pressed.
 
         Args:
-            key (int): ASCII value of the key pressed.
+            key (int) : ASCII value of the key pressed.
 
         Returns:
             str: 'reprocess' if parameter was adjusted and reprocessing is needed, None otherwise.
@@ -152,7 +152,7 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
     Initializes processing steps with default parameters or overrides.
 
     Args:
-        params_override (dict[str, Any], optional): Parameters to override defaults.
+        params_override (dict[str, Any], optional) : Parameters to override defaults.
 
     Returns:
         list[ProcessingStep]: List of initialized processing steps.
@@ -383,8 +383,8 @@ def process_image(
     Processes the image according to the parameters provided.
 
     Args:
-        image (np.ndarray): Original image to process.
-        **params: Arbitrary keyword arguments containing processing parameters.
+        image (np.ndarray) : Original image to process.
+        **params           : Arbitrary keyword arguments containing processing parameters.
 
     Returns:
         tuple[np.ndarray, np.ndarray, np.ndarray, list[np.ndarray]]:
@@ -500,8 +500,8 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
     Performs OCR on a given spine image using Tesseract.
 
     Args:
-        spine_image (np.ndarray): The image of the book spine to perform OCR on.
-        **params: Arbitrary keyword arguments containing OCR parameters.
+        spine_image (np.ndarray) : The image of the book spine to perform OCR on.
+        **params                 : Arbitrary keyword arguments containing OCR parameters.
 
     Returns:
         str: Extracted text from the spine image.
@@ -525,9 +525,9 @@ def draw_contours_and_text(
     Draws contours and recognized text on the image.
 
     Args:
-        image (np.ndarray): Original image.
-        contours (list[np.ndarray]): List of contours to draw.
-        params (dict[str, Any]): Parameters including whether to perform OCR.
+        image    (np.ndarray)       : Original image.
+        contours (list[np.ndarray]) : List of contours to draw.
+        params   (dict[str, Any])   : Parameters including whether to perform OCR.
 
     Returns:
         np.ndarray: Annotated image with contours and text.
@@ -593,11 +593,11 @@ def create_sidebar(
     Creates a sidebar image displaying the controls and current settings.
 
     Args:
-        steps (list[ProcessingStep]): List of processing steps.
-        sidebar_width (int): Width of the sidebar.
-        current_display (str): Name of the current display option.
-        image_name (str): Name of the current image file.
-        window_height (int): Height of the window.
+        steps           (list[ProcessingStep]) : List of processing steps.
+        sidebar_width   (int)                  : Width of the sidebar.
+        current_display (str)                  : Name of the current display option.
+        image_name      (str)                  : Name of the current image file.
+        window_height   (int)                  : Height of the window.
 
     Returns:
         np.ndarray: Image of the sidebar.
@@ -691,8 +691,8 @@ def interactive_experiment(
     Runs the interactive experiment allowing the user to adjust image processing parameters.
 
     Args:
-        image_files (list[Path]): List of image file paths to process.
-        params_override (dict[str, Any], optional): Parameters to override default settings.
+        image_files     (list[Path])               : List of image file paths to process.
+        params_override (dict[str, Any], optional) : Parameters to override default settings.
 
     Raises:
         ValueError: If no image files are provided.
