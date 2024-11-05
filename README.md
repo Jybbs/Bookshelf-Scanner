@@ -14,10 +14,24 @@
 
 This is the set of requirements I'm using for development, in case you're interesting in matching my patterns for local developments:
 
-- **Homebrew:** Package manager for macOS. [Install Homebrew](https://brew.sh/)
+### Development Environment
+
+- **MacOS**
+
+  - **Homebrew:** Package manager for macOS. [Install Homebrew](https://brew.sh/)
+  - **Tesseract OCR:** Installed via Homebrew
+    ```bash
+    brew install tesseract
+    ```
 - **Python:** Version 3.13
-- **Tesseract OCR:** Installed via Homebrew
 - **Poetry** Python package management installed via Homebrew — a TOML file has been supplied for quick shell installation, if interested
+
+### Python Dependencies
+Install the required Python dependencies using Poetry:
+
+```bash
+poetry install
+```
 
 ## Usage
 
