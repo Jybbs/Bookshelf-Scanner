@@ -3,9 +3,10 @@ import logging
 import numpy as np
 import pytesseract
 
-from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
+from dataclasses import dataclass, field
+from pathlib     import Path
+from ruamel.yaml import YAML
+from typing      import Any
 
 # -------------------- Configuration and Logging --------------------
 
@@ -17,7 +18,34 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# -------------------- Data Class --------------------
+# -------------------- Data Classes --------------------
+
+@dataclass
+class Parameter:
+    """
+    Represents a parameter in a processing step.
+
+    Attributes:
+        name         (str) : Internal name of the parameter.
+        display_name (str) : Name to display in the UI.
+        value        (Any) : Current value of the parameter.
+        min          (Any) : Minimum value of the parameter.
+        max          (Any) : Maximum value of the parameter.
+        step         (Any) : Step size for incrementing/decrementing the parameter.
+        increase_key (str) : Key to increase the parameter.
+        decrease_key (str) : Key to decrease the parameter (automatically set to lowercase of increase_key).
+    """
+    name         : str
+    display_name : str
+    value        : Any
+    min          : Any
+    max          : Any
+    step         : Any
+    increase_key : str
+    decrease_key : str = field(init = False)
+
+    def __post_init__(self):
+        self.decrease_key = self.increase_key.lower()
 
 @dataclass
 class ProcessingStep:
@@ -25,15 +53,17 @@ class ProcessingStep:
     Represents a processing step in the image processing pipeline.
 
     Attributes:
-        name       (str)                  : Name of the processing step.
-        toggle_key (str)                  : Key to toggle this processing step.
-        parameters (list[dict[str, Any]]) : List of parameter dictionaries.
-        is_enabled (bool)                 : Whether the step is enabled (default: False).
+        name         (str)             : Internal name of the processing step.
+        display_name (str)             : Name to display in the UI.
+        toggle_key   (str)             : Key to toggle this processing step.
+        parameters   (List[Parameter]) : List of parameter instances.
+        is_enabled   (bool)            : Whether the step is enabled (default: False).
     """
-    name       : str
-    toggle_key : str
-    parameters : list[dict[str, Any]]
-    is_enabled : bool = False
+    name         : str
+    display_name : str
+    toggle_key   : str
+    parameters   : list[Parameter]
+    is_enabled   : bool = False
 
     def toggle(self) -> str:
         """
@@ -45,7 +75,7 @@ class ProcessingStep:
         previous_state  = self.is_enabled
         self.is_enabled = not self.is_enabled
         logger.info(
-            f"Toggled '{self.name}' from "
+            f"Toggled '{self.display_name}' from "
             f"{'On' if previous_state else 'Off'} to "
             f"{'On' if self.is_enabled else 'Off'}"
         )
@@ -56,66 +86,53 @@ class ProcessingStep:
         Adjusts the parameter value based on the key pressed.
 
         Args:
-            key (int) : ASCII value of the key pressed.
+            key (int): ASCII value of the key pressed.
 
         Returns:
             str: 'reprocess' if parameter was adjusted and reprocessing is needed, None otherwise.
         """
         for param in self.parameters:
-            if key == ord(param['increase_key']):
-                old_value      = param['value']
-                param['value'] = min(param['value'] + param['step'], param['max'])
+            if key == ord(param.increase_key):
+                old_value   = param.value
+                param.value = min(param.value + param.step, param.max)
                 logger.info(
-                    f"Increased '{param['display_name']}' from {old_value} to {param['value']}"
+                    f"Increased '{param.display_name}' from {old_value} to {param.value}"
                 )
                 return 'reprocess'
-            elif key == ord(param['decrease_key']):
-                old_value      = param['value']
-                param['value'] = max(param['value'] - param['step'], param['min'])
+
+            elif key == ord(param.decrease_key):
+                old_value   = param.value
+                param.value = max(param.value - param.step, param.min)
                 logger.info(
-                    f"Decreased '{param['display_name']}' from {old_value} to {param['value']}"
+                    f"Decreased '{param.display_name}' from {old_value} to {param.value}"
                 )
                 return 'reprocess'
         return None
 
 # -------------------- Utility Functions --------------------
 
-def find_images_directory() -> Path:
+def get_image_files(images_dir: Path = None) -> list[Path]:
     """
-    Searches for the 'images' directory in the parent directories.
+    Retrieves a sorted list of image files from the nearest 'images' directory.
     """
-    current_dir = Path(__file__).parent
-    while current_dir != current_dir.parent:
-        images_dir = current_dir / 'images'
-        if images_dir.is_dir():
-            return images_dir
-        current_dir = current_dir.parent
-    raise FileNotFoundError("Could not find 'images' directory in parent directories")
+    images_dir = images_dir or Path(__file__).resolve().parent
 
-def get_image_files() -> list[Path]:
-    """
-    Retrieves a sorted list of image files from the 'images' directory.
-    """
-    images_dir       = find_images_directory()
-    image_extensions = {
-        '.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.JPG', '.JPEG', '.PNG'
-    }
+    for parent in [images_dir, *images_dir.parents]:
+        potential_images_dir = parent / 'images'
+        if potential_images_dir.is_dir():
+            image_files = sorted(
+                f for f in potential_images_dir.iterdir()
+                if f.is_file() and f.suffix.lower() in {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+            )
+            if image_files:
+                return image_files
 
-    image_files = sorted(
-        [
-            f for f in images_dir.iterdir()
-            if f.is_file() and f.suffix in image_extensions
-        ]
-    )
-
-    if not image_files:
-        raise FileNotFoundError("No image files found in images directory")
-
-    return image_files
+    raise FileNotFoundError("No image files found in an 'images' directory.")
 
 def ensure_odd(value: int) -> int:
     """
-    Ensures that the given integer value is odd.
+    Uses the bitwise OR operation to set the least significant bit to 1,
+    making the number odd if it isn't already.
     """
     return value | 1
 
@@ -133,13 +150,13 @@ def extract_params(steps: list[ProcessingStep]) -> dict[str, Any]:
     Extracts parameters from processing steps into a dictionary.
     """
     params = {
-        param['name']: param['value']
+        param.name: param.value
         for step in steps
         for param in step.parameters
     }
 
     params.update({
-        f"use_{step.name.lower().replace(' ', '_')}": step.is_enabled
+        f"use_{step.name}": step.is_enabled
         for step in steps
     })
 
@@ -152,226 +169,54 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
     Initializes processing steps with default parameters or overrides.
 
     Args:
-        params_override (dict[str, Any], optional) : Parameters to override defaults.
+        params_override (Dict[str, Any], optional): Parameters to override defaults.
 
     Returns:
-        list[ProcessingStep]: List of initialized processing steps.
+        List[ProcessingStep]: List of initialized processing steps.
     """
-    steps = []
-    step_definitions = [
-        {
-            'name': 'Shadow Removal',
-            'parameters': [
-                {
-                    'name'         : 'shadow_kernel_size',
-                    'display_name' : 'Shadow Kernel Size',
-                    'value'        : 15,
-                    'min'          : 3,
-                    'max'          : 21,
-                    'step'         : 2,
-                    'increase_key' : 'K',
-                },
-                {
-                    'name'         : 'shadow_median_blur',
-                    'display_name' : 'Shadow Median Blur',
-                    'value'        : 21,
-                    'min'          : 3,
-                    'max'          : 99,
-                    'step'         : 2,
-                    'increase_key' : 'B',
-                },
-            ],
-        },
-        {
-            'name': 'Gaussian Blur',
-            'parameters': [
-                {
-                    'name'         : 'gaussian_kernel_size',
-                    'display_name' : 'Gaussian Kernel Size',
-                    'value'        : 5,
-                    'min'          : 3,
-                    'max'          : 21,
-                    'step'         : 2,
-                    'increase_key' : 'G',
-                },
-            ],
-        },
-        {
-            'name': 'Color CLAHE',
-            'parameters': [
-                {
-                    'name'         : 'clahe_clip_limit',
-                    'display_name' : 'CLAHE Clip Limit',
-                    'value'        : 2.0,
-                    'min'          : 0.5,
-                    'max'          : 10.0,
-                    'step'         : 0.5,
-                    'increase_key' : 'H',
-                },
-            ],
-        },
-        {
-            'name': 'Edge Detection',
-            'parameters': [
-                {
-                    'name'         : 'canny_threshold1',
-                    'display_name' : 'Canny Threshold1',
-                    'value'        : 50,
-                    'min'          : 0,
-                    'max'          : 255,
-                    'step'         : 5,
-                    'increase_key' : 'T',
-                },
-                {
-                    'name'         : 'canny_threshold2',
-                    'display_name' : 'Canny Threshold2',
-                    'value'        : 150,
-                    'min'          : 0,
-                    'max'          : 255,
-                    'step'         : 5,
-                    'increase_key' : 'Y',
-                },
-            ],
-        },
-        {
-            'name': 'Adaptive Thresholding',
-            'parameters': [
-                {
-                    'name'         : 'adaptive_block_size',
-                    'display_name' : 'Block Size',
-                    'value'        : 11,
-                    'min'          : 3,
-                    'max'          : 99,
-                    'step'         : 2,
-                    'increase_key' : 'A',
-                },
-                {
-                    'name'         : 'adaptive_c',
-                    'display_name' : 'C Value',
-                    'value'        : 2,
-                    'min'          : -10,
-                    'max'          : 10,
-                    'step'         : 1,
-                    'increase_key' : 'C',
-                },
-            ],
-        },
-        {
-            'name': 'Morphology',
-            'parameters': [
-                {
-                    'name'         : 'morph_kernel_size',
-                    'display_name' : 'Morphology Kernel Size',
-                    'value'        : 3,
-                    'min'          : 1,
-                    'max'          : 21,
-                    'step'         : 2,
-                    'increase_key' : 'M',
-                },
-                {
-                    'name'         : 'erosion_iterations',
-                    'display_name' : 'Erosion Iterations',
-                    'value'        : 1,
-                    'min'          : 0,
-                    'max'          : 10,
-                    'step'         : 1,
-                    'increase_key' : 'E',
-                },
-                {
-                    'name'         : 'dilation_iterations',
-                    'display_name' : 'Dilation Iterations',
-                    'value'        : 1,
-                    'min'          : 0,
-                    'max'          : 10,
-                    'step'         : 1,
-                    'increase_key' : 'D',
-                },
-            ],
-        },
-        {
-            'name': 'Contour Adjustments',
-            'parameters': [
-                {
-                    'name'         : 'min_contour_area',
-                    'display_name' : 'Min Contour Area',
-                    'value'        : 1000,
-                    'min'          : 0,
-                    'max'          : 10000,
-                    'step'         : 250,
-                    'increase_key' : 'N',
-                },
-                {
-                    'name'         : 'max_contour_area',
-                    'display_name' : 'Max Contour Area',
-                    'value'        : 250000,
-                    'min'          : 0,
-                    'max'          : 500000,
-                    'step'         : 10000,
-                    'increase_key' : 'X',
-                },
-            ],
-        },
-        {
-            'name': 'Contour Approximation',
-            'parameters': [
-                {
-                    'name'         : 'approx_epsilon',
-                    'display_name' : 'Approximation Epsilon',
-                    'value'        : 0.02,
-                    'min'          : 0,
-                    'max'          : 0.1,
-                    'step'         : 0.01,
-                    'increase_key' : 'P',
-                },
-            ],
-        },
-        {
-            'name': 'OCR Settings',
-            'parameters': [
-                {
-                    'name'         : 'oem',
-                    'display_name' : 'OEM',
-                    'value'        : 3,
-                    'min'          : 0,
-                    'max'          : 3,
-                    'step'         : 1,
-                    'increase_key' : 'O',
-                },
-                {
-                    'name'         : 'psm',
-                    'display_name' : 'PSM',
-                    'value'        : 6,
-                    'min'          : 0,
-                    'max'          : 13,
-                    'step'         : 1,
-                    'increase_key' : 'R',
-                },
-            ],
-        },
-    ]
+    # Load step definitions from the YAML configuration file
+    params_file = Path(__file__).resolve().parent / 'params.yml'
+    yaml        = YAML(typ = 'safe')
 
-    # Initialize steps with automated toggle keys and decrease keys
+    try:
+        with open(params_file, 'r') as f:
+            step_definitions = yaml.load(f)
+    except FileNotFoundError:
+        logger.error(f"Configuration file not found: {params_file}")
+        raise
+    except Exception as e:
+        logger.error(f"Error parsing configuration file: {e}")
+        raise
+
+    steps = []
     for index, step_def in enumerate(step_definitions):
         toggle_key = str(index + 1)
-        for param in step_def['parameters']:
-            param['decrease_key'] = param['increase_key'].lower()
-        steps.append(ProcessingStep(
-            name       = step_def['name'],
-            toggle_key = toggle_key,
-            parameters = step_def['parameters']
-        ))
+
+        # Create Parameter instances from the parameter dictionaries
+        parameters = [Parameter(**param) for param in step_def.get('parameters', [])]
+        steps.append(
+            ProcessingStep(
+                name=step_def['name'],
+                display_name=step_def['display_name'],
+                toggle_key=toggle_key,
+                parameters=parameters
+            )
+        )
+
+    # Create maps for quick lookup
+    step_map  = {f"use_{step.name}": step for step in steps}
+    param_map = {param.name: param for step in steps for param in step.parameters}
 
     # Apply any parameter overrides
     if params_override:
-        for step in steps:
-            toggle_key = f"use_{step.name.lower().replace(' ', '_')}"
-            if toggle_key in params_override:
-                step.is_enabled = params_override[toggle_key]
-            for param in step.parameters:
-                if param['name'] in params_override:
-                    param['value'] = params_override[param['name']]
+        for key, value in params_override.items():
+            if key in step_map:
+                step_map[key].is_enabled = value
+            elif key in param_map:
+                param_map[key].value = value
 
     return steps
+
 
 # -------------------- Image Processing Functions --------------------
 
@@ -475,22 +320,21 @@ def process_image(
 
     # Contour Adjustments
     if params.get('use_contour_adjustments'):
-        min_area = params['min_contour_area']
-        max_area = params['max_contour_area']
-        contours = [
+        min_area   = params['min_contour_area']
+        image_area = image.shape[0] * image.shape[1]
+        contours   = [
             contour for contour in contours
-            if min_area <= cv2.contourArea(contour) <= max_area
+            if min_area <= cv2.contourArea(contour) <= 0.9 * image_area
         ]
 
-    # Contour Approximation
+        max_contours = int(params['max_contours'])
+        contours     = contours[:max_contours]
+
+    # Contour Approximation using minAreaRect
     if params.get('use_contour_approximation'):
-        epsilon_factor = params['approx_epsilon']
         contours = [
-            cv2.approxPolyDP(
-                curve   = contour,
-                epsilon = epsilon_factor * cv2.arcLength(contour, True),
-                closed  = True
-            ) for contour in contours
+            cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
+            for contour in contours
         ]
 
     return processed, grayscale, binary, contours
@@ -509,25 +353,50 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
     config = f"--oem {int(params['oem'])} --psm {int(params['psm'])}"
 
     try:
-        text = pytesseract.image_to_string(spine_image, lang = 'eng', config = config)
-        return text.strip()
+        max_ocr_image_size = params.get('max_ocr_image_size', 1000)
+        height, width      = spine_image.shape[:2]
+        scaling_factor     = min(1.0, max_ocr_image_size / max(height, width))
+        if scaling_factor < 1.0:
+            spine_image = cv2.resize(
+                spine_image,
+                (int(width * scaling_factor), int(height * scaling_factor)),
+                interpolation = cv2.INTER_AREA
+            )
 
+        data = pytesseract.image_to_data(
+            spine_image, 
+            lang        = 'eng', 
+            config      = config, 
+            output_type = pytesseract.Output.DICT
+        )
+
+        text    = ''
+        n_boxes = len(data['text'])
+
+        for i in range(n_boxes):
+            conf = int(data['conf'][i])
+            if conf >= params.get('ocr_confidence_threshold', 50):
+                text += data['text'][i] + ' '
+        return text.strip()
+    
     except Exception as e:
         logger.error(f"OCR failed: {e}")
         return ''
 
 def draw_contours_and_text(
-    image    : np.ndarray,
-    contours : list[np.ndarray],
-    params   : dict[str, Any]
+    image       : np.ndarray,
+    ocr_image   : np.ndarray,
+    contours    : list[np.ndarray],
+    params      : dict[str, Any]
 ) -> np.ndarray:
     """
     Draws contours and recognized text on the image.
 
     Args:
-        image    (np.ndarray)       : Original image.
-        contours (list[np.ndarray]) : List of contours to draw.
-        params   (dict[str, Any])   : Parameters including whether to perform OCR.
+        image       (np.ndarray)       : Original image (used for annotations).
+        ocr_image   (np.ndarray)       : Image to use for OCR.
+        contours    (list[np.ndarray]) : List of contours to draw.
+        params      (dict[str, Any])   : Parameters including whether to perform OCR.
 
     Returns:
         np.ndarray: Annotated image with contours and text.
@@ -546,7 +415,8 @@ def draw_contours_and_text(
 
         if params.get('use_ocr_settings'):
             x, y, w, h = cv2.boundingRect(contour)
-            ocr_text   = ocr_spine(image[y:y+h, x:x+w], **params)
+            ocr_region = ocr_image[y:y+h, x:x+w]
+            ocr_text   = ocr_spine(ocr_region, **params)
 
             if ocr_text:
                 (text_width, text_height), _ = cv2.getTextSize(
@@ -648,7 +518,7 @@ def create_sidebar(
     # Display controls for each processing step
     for step in steps:
         put_text(
-            text  = f"[{step.toggle_key}] {step.name}: {'On' if step.is_enabled else 'Off'}",
+            text  = f"[{step.toggle_key}] {step.display_name}: {'On' if step.is_enabled else 'Off'}",
             x     = 10,
             y     = y_position,
             scale = 1.1
@@ -657,12 +527,12 @@ def create_sidebar(
 
         for param in step.parameters:
             value_str = (
-                f"{param['value']:.3f}" if isinstance(param['value'], float)
-                else str(param['value'])
+                f"{param.value:.3f}" if isinstance(param.value, float)
+                else str(param.value)
             )
-            key_text = f"[{param['decrease_key']} | {param['increase_key']}]"
+            key_text = f"[{param.decrease_key} | {param.increase_key}]"
             put_text(
-                text  = f"   {key_text} {param['display_name']}: {value_str}",
+                text  = f"   {key_text} {param.display_name}: {value_str}",
                 x     = 20,
                 y     = y_position,
                 color = (200, 200, 200),
@@ -670,7 +540,7 @@ def create_sidebar(
             )
             y_position += line_height
 
-        y_position += int(line_height * 0.5)
+        y_position += line_height
 
     # Display quit option
     put_text(
@@ -730,20 +600,16 @@ def interactive_experiment(
 
     # Define key actions
     key_actions = {
-        ord('q') : 'quit',
-        ord('/') : 'toggle_display',
-        ord('?') : 'next_image',
+        ord('q'): 'quit',
+        ord('/'): 'toggle_display',
+        ord('?'): 'next_image',
     }
 
     for step in steps:
-        key_actions[ord(step.toggle_key)] = step.toggle
+        key_actions[ord(step.toggle_key)] = lambda step = step: step.toggle()
         for param in step.parameters:
-            key_actions[ord(param['increase_key'])] = (
-                lambda s = step, k = ord(param['increase_key']): s.adjust_param(k)
-            )
-            key_actions[ord(param['decrease_key'])] = (
-                lambda s = step, k = ord(param['decrease_key']): s.adjust_param(k)
-            )
+            key_actions[ord(param.increase_key)] = lambda step = step, key_char = param.increase_key: step.adjust_param(ord(key_char))
+            key_actions[ord(param.decrease_key)] = lambda step = step, key_char = param.decrease_key: step.adjust_param(ord(key_char))
 
     # Main loop
     while True:
@@ -762,13 +628,14 @@ def interactive_experiment(
         if last_params != current_params:
             # Reprocess the image if parameters have changed
             processed_image, _, binary_image, contours = process_image(
-                image = original_image,
+                image=original_image,
                 **current_params
             )
             annotated_image = draw_contours_and_text(
-                image    = original_image,
-                contours = contours,
-                params   = current_params
+                image     = original_image,
+                ocr_image = processed_image,
+                contours  = contours,
+                params    = current_params
             )
             cached_results = (processed_image, binary_image, annotated_image)
             last_params    = current_params.copy()
@@ -830,8 +697,7 @@ if __name__ == "__main__":
         'use_shadow_removal'      : True,
         'shadow_kernel_size'      : 11,
         'use_contour_adjustments' : True,
-        'min_contour_area'        : 1000,
-        'max_contour_area'        : 250000,
+        'min_contour_area'        : 1000
     }
 
     image_files = get_image_files()

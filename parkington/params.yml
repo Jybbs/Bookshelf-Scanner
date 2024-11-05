@@ -1,0 +1,147 @@
+- name: shadow_removal
+  display_name: Shadow Removal
+  parameters:
+    - name         : shadow_kernel_size
+      display_name : Shadow Kernel Size
+      value        : 15
+      min          : 3
+      max          : 21
+      step         : 2
+      increase_key : K
+    - name         : shadow_median_blur
+      display_name : Shadow Median Blur
+      value        : 21
+      min          : 3
+      max          : 99
+      step         : 2
+      increase_key : B
+
+- name: gaussian_blur
+  display_name: Gaussian Blur
+  parameters:
+    - name         : gaussian_kernel_size
+      display_name : Gaussian Kernel Size
+      value        : 5
+      min          : 3
+      max          : 21
+      step         : 2
+      increase_key : G
+
+- name: color_clahe
+  display_name: Color CLAHE
+  parameters:
+    - name         : clahe_clip_limit
+      display_name : CLAHE Clip Limit
+      value        : 2.0
+      min          : 0.5
+      max          : 10.0
+      step         : 0.5
+      increase_key : H
+
+- name: edge_detection
+  display_name: Edge Detection
+  parameters:
+    - name         : canny_threshold1
+      display_name : Canny Threshold1
+      value        : 50
+      min          : 0
+      max          : 255
+      step         : 5
+      increase_key : T
+    - name         : canny_threshold2
+      display_name : Canny Threshold2
+      value        : 150
+      min          : 0
+      max          : 255
+      step         : 5
+      increase_key : Y
+
+- name: adaptive_thresholding
+  display_name: Adaptive Thresholding
+  parameters:
+    - name         : adaptive_block_size
+      display_name : Block Size
+      value        : 11
+      min          : 3
+      max          : 99
+      step         : 2
+      increase_key : A
+    - name         : adaptive_c
+      display_name : C Value
+      value        : 2
+      min          : -10
+      max          : 10
+      step         : 1
+      increase_key : C
+
+- name: morphology
+  display_name: Morphology
+  parameters:
+    - name         : morph_kernel_size
+      display_name : Morphology Kernel Size
+      value        : 3
+      min          : 1
+      max          : 21
+      step         : 2
+      increase_key : M
+    - name         : erosion_iterations
+      display_name : Erosion Iterations
+      value        : 1
+      min          : 0
+      max          : 10
+      step         : 1
+      increase_key : E
+    - name         : dilation_iterations
+      display_name : Dilation Iterations
+      value        : 1
+      min          : 0
+      max          : 10
+      step         : 1
+      increase_key : D
+
+- name: contour_adjustments
+  display_name: Contour Adjustments
+  parameters:
+    - name         : min_contour_area
+      display_name : Min Contour Area
+      value        : 1000
+      min          : 0
+      max          : 10000
+      step         : 250
+      increase_key : N
+    - name         : max_contours
+      display_name : Max Contours
+      value        : 50
+      min          : 0
+      max          : 100
+      step         : 5
+      increase_key : X
+
+- name: contour_approximation
+  display_name: Contour Approximation
+  parameters: []
+
+- name: ocr_settings
+  display_name: OCR Settings
+  parameters:
+    - name         : oem
+      display_name : OCR Engine Mode
+      value        : 3
+      min          : 0
+      max          : 3
+      step         : 1
+      increase_key : O
+    - name         : psm
+      display_name : Page Segmentation Mode
+      value        : 6
+      min          : 0
+      max          : 13
+      step         : 1
+      increase_key : R
+    - name         : ocr_confidence_threshold
+      display_name : OCR Confidence Threshold
+      value        : 50
+      min          : 0
+      max          : 100
+      step         : 5
+      increase_key : F
