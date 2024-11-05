@@ -4,8 +4,8 @@ import numpy as np
 import pytesseract
 
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
+from pathlib     import Path
+from typing      import Any
 
 # -------------------- Configuration and Logging --------------------
 
@@ -279,7 +279,7 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
                 },
                 {
                     'name'         : 'dilation_iterations',
-                    'display_name' : 'Dilation Iterations',
+                    'display_name' : 'D',
                     'value'        : 1,
                     'min'          : 0,
                     'max'          : 10,
@@ -301,29 +301,19 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
                     'increase_key' : 'N',
                 },
                 {
-                    'name'         : 'max_contour_area',
-                    'display_name' : 'Max Contour Area',
-                    'value'        : 250000,
+                    'name'         : 'max_contours',
+                    'display_name' : 'Max Contours',
+                    'value'        : 50,
                     'min'          : 0,
-                    'max'          : 500000,
-                    'step'         : 10000,
+                    'max'          : 100,
+                    'step'         : 5,
                     'increase_key' : 'X',
                 },
             ],
         },
         {
             'name': 'Contour Approximation',
-            'parameters': [
-                {
-                    'name'         : 'approx_epsilon',
-                    'display_name' : 'Approximation Epsilon',
-                    'value'        : 0.02,
-                    'min'          : 0,
-                    'max'          : 0.1,
-                    'step'         : 0.01,
-                    'increase_key' : 'P',
-                },
-            ],
+            'parameters': [],
         },
         {
             'name': 'OCR Settings',
@@ -345,6 +335,15 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
                     'max'          : 13,
                     'step'         : 1,
                     'increase_key' : 'R',
+                },
+                {
+                    'name'         : 'ocr_confidence_threshold',
+                    'display_name' : 'OCR Confidence Threshold',
+                    'value'        : 50,
+                    'min'          : 0,
+                    'max'          : 100,
+                    'step'         : 5,
+                    'increase_key' : 'F',
                 },
             ],
         },
@@ -475,22 +474,21 @@ def process_image(
 
     # Contour Adjustments
     if params.get('use_contour_adjustments'):
-        min_area = params['min_contour_area']
-        max_area = params['max_contour_area']
-        contours = [
+        min_area   = params['min_contour_area']
+        image_area = image.shape[0] * image.shape[1]
+        contours   = [
             contour for contour in contours
-            if min_area <= cv2.contourArea(contour) <= max_area
+            if min_area <= cv2.contourArea(contour) <= 0.9 * image_area
         ]
 
-    # Contour Approximation
+        max_contours = int(params['max_contours'])
+        contours     = contours[:max_contours]
+
+    # Contour Approximation using minAreaRect
     if params.get('use_contour_approximation'):
-        epsilon_factor = params['approx_epsilon']
         contours = [
-            cv2.approxPolyDP(
-                curve   = contour,
-                epsilon = epsilon_factor * cv2.arcLength(contour, True),
-                closed  = True
-            ) for contour in contours
+            cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
+            for contour in contours
         ]
 
     return processed, grayscale, binary, contours
@@ -509,25 +507,39 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
     config = f"--oem {int(params['oem'])} --psm {int(params['psm'])}"
 
     try:
-        text = pytesseract.image_to_string(spine_image, lang = 'eng', config = config)
-        return text.strip()
+        data = pytesseract.image_to_data(
+            spine_image, 
+            lang        = 'eng', 
+            config      = config, 
+            output_type = pytesseract.Output.DICT
+        )
+        text = ''
+        n_boxes = len(data['text'])
 
+        for i in range(n_boxes):
+            conf = int(data['conf'][i])
+            if conf >= params.get('ocr_confidence_threshold', 50):
+                text += data['text'][i] + ' '
+        return text.strip()
+    
     except Exception as e:
         logger.error(f"OCR failed: {e}")
         return ''
 
 def draw_contours_and_text(
-    image    : np.ndarray,
-    contours : list[np.ndarray],
-    params   : dict[str, Any]
+    image       : np.ndarray,
+    ocr_image   : np.ndarray,
+    contours    : list[np.ndarray],
+    params      : dict[str, Any]
 ) -> np.ndarray:
     """
     Draws contours and recognized text on the image.
 
     Args:
-        image    (np.ndarray)       : Original image.
-        contours (list[np.ndarray]) : List of contours to draw.
-        params   (dict[str, Any])   : Parameters including whether to perform OCR.
+        image       (np.ndarray)       : Original image (used for annotations).
+        ocr_image   (np.ndarray)       : Image to use for OCR.
+        contours    (list[np.ndarray]) : List of contours to draw.
+        params      (dict[str, Any])   : Parameters including whether to perform OCR.
 
     Returns:
         np.ndarray: Annotated image with contours and text.
@@ -546,7 +558,8 @@ def draw_contours_and_text(
 
         if params.get('use_ocr_settings'):
             x, y, w, h = cv2.boundingRect(contour)
-            ocr_text   = ocr_spine(image[y:y+h, x:x+w], **params)
+            ocr_region = ocr_image[y:y+h, x:x+w]
+            ocr_text   = ocr_spine(ocr_region, **params)
 
             if ocr_text:
                 (text_width, text_height), _ = cv2.getTextSize(
@@ -735,15 +748,18 @@ def interactive_experiment(
         ord('?') : 'next_image',
     }
 
+    def create_adjust_param_function(step, key_char):
+        key_code = ord(key_char)
+        return lambda: step.adjust_param(key_code)
+
+    def create_toggle_function(step):
+        return lambda: step.toggle()
+
     for step in steps:
-        key_actions[ord(step.toggle_key)] = step.toggle
+        key_actions[ord(step.toggle_key)] = create_toggle_function(step)
         for param in step.parameters:
-            key_actions[ord(param['increase_key'])] = (
-                lambda s = step, k = ord(param['increase_key']): s.adjust_param(k)
-            )
-            key_actions[ord(param['decrease_key'])] = (
-                lambda s = step, k = ord(param['decrease_key']): s.adjust_param(k)
-            )
+            key_actions[ord(param['increase_key'])] = create_adjust_param_function(step, param['increase_key'])
+            key_actions[ord(param['decrease_key'])] = create_adjust_param_function(step, param['decrease_key'])
 
     # Main loop
     while True:
@@ -766,9 +782,10 @@ def interactive_experiment(
                 **current_params
             )
             annotated_image = draw_contours_and_text(
-                image    = original_image,
-                contours = contours,
-                params   = current_params
+                image     = original_image,
+                ocr_image = processed_image,
+                contours  = contours,
+                params    = current_params
             )
             cached_results = (processed_image, binary_image, annotated_image)
             last_params    = current_params.copy()
@@ -830,8 +847,7 @@ if __name__ == "__main__":
         'use_shadow_removal'      : True,
         'shadow_kernel_size'      : 11,
         'use_contour_adjustments' : True,
-        'min_contour_area'        : 1000,
-        'max_contour_area'        : 250000,
+        'min_contour_area'        : 1000
     }
 
     image_files = get_image_files()
