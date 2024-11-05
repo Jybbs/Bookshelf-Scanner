@@ -62,6 +62,7 @@ class ProcessingStep:
             str: 'reprocess' if parameter was adjusted and reprocessing is needed, None otherwise.
         """
         for param in self.parameters:
+
             if key == ord(param['increase_key']):
                 old_value      = param['value']
                 param['value'] = min(param['value'] + param['step'], param['max'])
@@ -69,6 +70,7 @@ class ProcessingStep:
                     f"Increased '{param['display_name']}' from {old_value} to {param['value']}"
                 )
                 return 'reprocess'
+            
             elif key == ord(param['decrease_key']):
                 old_value      = param['value']
                 param['value'] = max(param['value'] - param['step'], param['min'])
@@ -76,6 +78,7 @@ class ProcessingStep:
                     f"Decreased '{param['display_name']}' from {old_value} to {param['value']}"
                 )
                 return 'reprocess'
+            
         return None
 
 # -------------------- Utility Functions --------------------
@@ -279,7 +282,7 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
                 },
                 {
                     'name'         : 'dilation_iterations',
-                    'display_name' : 'D',
+                    'display_name' : 'Dilation Iterations',
                     'value'        : 1,
                     'min'          : 0,
                     'max'          : 10,
