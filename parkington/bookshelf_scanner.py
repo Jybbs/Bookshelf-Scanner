@@ -1,11 +1,11 @@
 import cv2
-import json
 import logging
 import numpy as np
 import pytesseract
 
 from dataclasses import dataclass, field
 from pathlib     import Path
+from ruamel.yaml import YAML
 from typing      import Any
 
 # -------------------- Configuration and Logging --------------------
@@ -22,24 +22,48 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Parameter:
-    name         : str                       # Internal name of the parameter.
-    display_name : str                       # Name to display in the UI.
-    value        : Any                       # Current value of the parameter.
-    min          : Any                       # Minimum value of the parameter.
-    max          : Any                       # Maximum value of the parameter.
-    step         : Any                       # Step size for incrementing/decrementing the parameter.
-    increase_key : str                       # Key to increase the parameter.
-    decrease_key : str = field(init = False) # Key to decrease the parameter (lowercase of increase_key).
+    """
+    Represents a parameter in a processing step.
+
+    Attributes:
+        name         (str) : Internal name of the parameter.
+        display_name (str) : Name to display in the UI.
+        value        (Any) : Current value of the parameter.
+        min          (Any) : Minimum value of the parameter.
+        max          (Any) : Maximum value of the parameter.
+        step         (Any) : Step size for incrementing/decrementing the parameter.
+        increase_key (str) : Key to increase the parameter.
+        decrease_key (str) : Key to decrease the parameter (automatically set to lowercase of increase_key).
+    """
+    name         : str
+    display_name : str
+    value        : Any
+    min          : Any
+    max          : Any
+    step         : Any
+    increase_key : str
+    decrease_key : str = field(init = False)
 
     def __post_init__(self):
         self.decrease_key = self.increase_key.lower()
 
 @dataclass
 class ProcessingStep:
-    name       : str             # Name of the processing step.
-    toggle_key : str             # Key to toggle this processing step.
-    parameters : list[Parameter] # List of parameter instances.
-    is_enabled : bool = False    # Whether the step is enabled (default: False).
+    """
+    Represents a processing step in the image processing pipeline.
+
+    Attributes:
+        name         (str)             : Internal name of the processing step.
+        display_name (str)             : Name to display in the UI.
+        toggle_key   (str)             : Key to toggle this processing step.
+        parameters   (List[Parameter]) : List of parameter instances.
+        is_enabled   (bool)            : Whether the step is enabled (default: False).
+    """
+    name         : str
+    display_name : str
+    toggle_key   : str
+    parameters   : list[Parameter]
+    is_enabled   : bool = False
 
     def toggle(self) -> str:
         """
@@ -51,7 +75,7 @@ class ProcessingStep:
         previous_state  = self.is_enabled
         self.is_enabled = not self.is_enabled
         logger.info(
-            f"Toggled '{self.name}' from "
+            f"Toggled '{self.display_name}' from "
             f"{'On' if previous_state else 'Off'} to "
             f"{'On' if self.is_enabled else 'Off'}"
         )
@@ -69,7 +93,7 @@ class ProcessingStep:
         """
         for param in self.parameters:
             if key == ord(param.increase_key):
-                old_value = param.value
+                old_value   = param.value
                 param.value = min(param.value + param.step, param.max)
                 logger.info(
                     f"Increased '{param.display_name}' from {old_value} to {param.value}"
@@ -77,14 +101,13 @@ class ProcessingStep:
                 return 'reprocess'
 
             elif key == ord(param.decrease_key):
-                old_value = param.value
+                old_value   = param.value
                 param.value = max(param.value - param.step, param.min)
                 logger.info(
                     f"Decreased '{param.display_name}' from {old_value} to {param.value}"
                 )
                 return 'reprocess'
         return None
-
 
 # -------------------- Utility Functions --------------------
 
@@ -131,31 +154,39 @@ def extract_params(steps: list[ProcessingStep]) -> dict[str, Any]:
         for step in steps
         for param in step.parameters
     }
+
     params.update({
-        f"use_{step.name.lower().replace(' ', '_')}": step.is_enabled
+        f"use_{step.name}": step.is_enabled
         for step in steps
     })
-    return params
 
+    return params
 
 # -------------------- Initialization Function --------------------
 
-import json
-
-def initialize_steps(config_override: dict[str, Any] = None) -> list[ProcessingStep]:
+def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingStep]:
     """
     Initializes processing steps with default parameters or overrides.
 
     Args:
-        config_override (Dict[str, Any], optional): Parameters to override defaults.
+        params_override (Dict[str, Any], optional): Parameters to override defaults.
 
     Returns:
-        list[ProcessingStep]: List of initialized processing steps.
+        List[ProcessingStep]: List of initialized processing steps.
     """
-    # Load step definitions from the JSON configuration file
-    config_file = Path(__file__).resolve().parent / 'config.json'
-    with open(config_file, 'r') as f:
-        step_definitions = json.load(f)
+    # Load step definitions from the YAML configuration file
+    params_file = Path(__file__).resolve().parent / 'params.yml'
+    yaml        = YAML(typ = 'safe')
+
+    try:
+        with open(params_file, 'r') as f:
+            step_definitions = yaml.load(f)
+    except FileNotFoundError:
+        logger.error(f"Configuration file not found: {params_file}")
+        raise
+    except Exception as e:
+        logger.error(f"Error parsing configuration file: {e}")
+        raise
 
     steps = []
     for index, step_def in enumerate(step_definitions):
@@ -165,25 +196,27 @@ def initialize_steps(config_override: dict[str, Any] = None) -> list[ProcessingS
         parameters = [Parameter(**param) for param in step_def.get('parameters', [])]
         steps.append(
             ProcessingStep(
-                name       = step_def['name'],
-                toggle_key = toggle_key,
-                parameters = parameters
+                name=step_def['name'],
+                display_name=step_def['display_name'],
+                toggle_key=toggle_key,
+                parameters=parameters
             )
         )
 
     # Create maps for quick lookup
-    step_map  = {f"use_{step.name.lower().replace(' ', '_')}": step for step in steps}
+    step_map  = {f"use_{step.name}": step for step in steps}
     param_map = {param.name: param for step in steps for param in step.parameters}
 
     # Apply any parameter overrides
-    if config_override:
-        for key, value in config_override.items():
+    if params_override:
+        for key, value in params_override.items():
             if key in step_map:
                 step_map[key].is_enabled = value
             elif key in param_map:
                 param_map[key].value = value
 
     return steps
+
 
 # -------------------- Image Processing Functions --------------------
 
@@ -485,7 +518,7 @@ def create_sidebar(
     # Display controls for each processing step
     for step in steps:
         put_text(
-            text  = f"[{step.toggle_key}] {step.name}: {'On' if step.is_enabled else 'Off'}",
+            text  = f"[{step.toggle_key}] {step.display_name}: {'On' if step.is_enabled else 'Off'}",
             x     = 10,
             y     = y_position,
             scale = 1.1
@@ -522,14 +555,14 @@ def create_sidebar(
 
 def interactive_experiment(
     image_files     : list[Path],
-    config_override : dict[str, Any] = None
+    params_override : dict[str, Any] = None
 ):
     """
     Runs the interactive experiment allowing the user to adjust image processing parameters.
 
     Args:
         image_files     (list[Path])               : List of image file paths to process.
-        config_override (dict[str, Any], optional) : Parameters to override default settings.
+        params_override (dict[str, Any], optional) : Parameters to override default settings.
 
     Raises:
         ValueError: If no image files are provided.
@@ -543,7 +576,7 @@ def interactive_experiment(
     current_image_idx  = 0
     display_options    = ['Processed Image', 'Binary Image', 'Annotated Image']
     current_display    = 0
-    steps              = initialize_steps(config_override)
+    steps              = initialize_steps(params_override)
     original_image     = load_image(str(image_files[current_image_idx]))
     window_height      = max(original_image.shape[0], 800)
     scale_factor       = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
@@ -567,23 +600,16 @@ def interactive_experiment(
 
     # Define key actions
     key_actions = {
-        ord('q') : 'quit',
-        ord('/') : 'toggle_display',
-        ord('?') : 'next_image',
+        ord('q'): 'quit',
+        ord('/'): 'toggle_display',
+        ord('?'): 'next_image',
     }
 
-    def create_adjust_param_function(step, key_char):
-        key_code = ord(key_char)
-        return lambda: step.adjust_param(key_code)
-
-    def create_toggle_function(step):
-        return lambda: step.toggle()
-
     for step in steps:
-        key_actions[ord(step.toggle_key)] = create_toggle_function(step)
+        key_actions[ord(step.toggle_key)] = lambda step = step: step.toggle()
         for param in step.parameters:
-            key_actions[ord(param.increase_key)] = create_adjust_param_function(step, param.increase_key)
-            key_actions[ord(param.decrease_key)] = create_adjust_param_function(step, param.decrease_key)
+            key_actions[ord(param.increase_key)] = lambda step = step, key_char = param.increase_key: step.adjust_param(ord(key_char))
+            key_actions[ord(param.decrease_key)] = lambda step = step, key_char = param.decrease_key: step.adjust_param(ord(key_char))
 
     # Main loop
     while True:
@@ -602,7 +628,7 @@ def interactive_experiment(
         if last_params != current_params:
             # Reprocess the image if parameters have changed
             processed_image, _, binary_image, contours = process_image(
-                image = original_image,
+                image=original_image,
                 **current_params
             )
             annotated_image = draw_contours_and_text(
@@ -667,7 +693,7 @@ def interactive_experiment(
 # -------------------- Entry Point --------------------
 
 if __name__ == "__main__":
-    config_override = {
+    params_override = {
         'use_shadow_removal'      : True,
         'shadow_kernel_size'      : 11,
         'use_contour_adjustments' : True,
@@ -675,4 +701,4 @@ if __name__ == "__main__":
     }
 
     image_files = get_image_files()
-    interactive_experiment(image_files, config_override)
+    interactive_experiment(image_files, params_override)
