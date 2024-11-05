@@ -320,7 +320,7 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
             'parameters': [
                 {
                     'name'         : 'oem',
-                    'display_name' : 'OEM',
+                    'display_name' : 'OCR Engine Mode',
                     'value'        : 3,
                     'min'          : 0,
                     'max'          : 3,
@@ -329,7 +329,7 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
                 },
                 {
                     'name'         : 'psm',
-                    'display_name' : 'PSM',
+                    'display_name' : 'Page Segmentation Mode',
                     'value'        : 6,
                     'min'          : 0,
                     'max'          : 13,
@@ -507,6 +507,16 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
     config = f"--oem {int(params['oem'])} --psm {int(params['psm'])}"
 
     try:
+        max_ocr_image_size = params.get('max_ocr_image_size', 1000)
+        height, width      = spine_image.shape[:2]
+        scaling_factor     = min(1.0, max_ocr_image_size / max(height, width))
+        if scaling_factor < 1.0:
+            spine_image = cv2.resize(
+                spine_image,
+                (int(width * scaling_factor), int(height * scaling_factor)),
+                interpolation=cv2.INTER_AREA
+            )
+
         data = pytesseract.image_to_data(
             spine_image, 
             lang        = 'eng', 
@@ -683,7 +693,7 @@ def create_sidebar(
             )
             y_position += line_height
 
-        y_position += int(line_height * 0.5)
+        y_position += line_height
 
     # Display quit option
     put_text(
