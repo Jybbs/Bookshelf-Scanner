@@ -1,9 +1,10 @@
 import cv2
+import json
 import logging
 import numpy as np
 import pytesseract
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib     import Path
 from typing      import Any
 
@@ -17,23 +18,28 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# -------------------- Data Class --------------------
+# -------------------- Data Classes --------------------
+
+@dataclass
+class Parameter:
+    name         : str                       # Internal name of the parameter.
+    display_name : str                       # Name to display in the UI.
+    value        : Any                       # Current value of the parameter.
+    min          : Any                       # Minimum value of the parameter.
+    max          : Any                       # Maximum value of the parameter.
+    step         : Any                       # Step size for incrementing/decrementing the parameter.
+    increase_key : str                       # Key to increase the parameter.
+    decrease_key : str = field(init = False) # Key to decrease the parameter (lowercase of increase_key).
+
+    def __post_init__(self):
+        self.decrease_key = self.increase_key.lower()
 
 @dataclass
 class ProcessingStep:
-    """
-    Represents a processing step in the image processing pipeline.
-
-    Attributes:
-        name       (str)                  : Name of the processing step.
-        toggle_key (str)                  : Key to toggle this processing step.
-        parameters (list[dict[str, Any]]) : List of parameter dictionaries.
-        is_enabled (bool)                 : Whether the step is enabled (default: False).
-    """
-    name       : str
-    toggle_key : str
-    parameters : list[dict[str, Any]]
-    is_enabled : bool = False
+    name       : str             # Name of the processing step.
+    toggle_key : str             # Key to toggle this processing step.
+    parameters : list[Parameter] # List of parameter instances.
+    is_enabled : bool = False    # Whether the step is enabled (default: False).
 
     def toggle(self) -> str:
         """
@@ -56,69 +62,54 @@ class ProcessingStep:
         Adjusts the parameter value based on the key pressed.
 
         Args:
-            key (int) : ASCII value of the key pressed.
+            key (int): ASCII value of the key pressed.
 
         Returns:
             str: 'reprocess' if parameter was adjusted and reprocessing is needed, None otherwise.
         """
         for param in self.parameters:
+            if key == ord(param.increase_key):
+                old_value = param.value
+                param.value = min(param.value + param.step, param.max)
+                logger.info(
+                    f"Increased '{param.display_name}' from {old_value} to {param.value}"
+                )
+                return 'reprocess'
 
-            if key == ord(param['increase_key']):
-                old_value      = param['value']
-                param['value'] = min(param['value'] + param['step'], param['max'])
+            elif key == ord(param.decrease_key):
+                old_value = param.value
+                param.value = max(param.value - param.step, param.min)
                 logger.info(
-                    f"Increased '{param['display_name']}' from {old_value} to {param['value']}"
+                    f"Decreased '{param.display_name}' from {old_value} to {param.value}"
                 )
                 return 'reprocess'
-            
-            elif key == ord(param['decrease_key']):
-                old_value      = param['value']
-                param['value'] = max(param['value'] - param['step'], param['min'])
-                logger.info(
-                    f"Decreased '{param['display_name']}' from {old_value} to {param['value']}"
-                )
-                return 'reprocess'
-            
         return None
+
 
 # -------------------- Utility Functions --------------------
 
-def find_images_directory() -> Path:
+def get_image_files(images_dir: Path = None) -> list[Path]:
     """
-    Searches for the 'images' directory in the parent directories.
+    Retrieves a sorted list of image files from the nearest 'images' directory.
     """
-    current_dir = Path(__file__).parent
-    while current_dir != current_dir.parent:
-        images_dir = current_dir / 'images'
-        if images_dir.is_dir():
-            return images_dir
-        current_dir = current_dir.parent
-    raise FileNotFoundError("Could not find 'images' directory in parent directories")
+    images_dir = images_dir or Path(__file__).resolve().parent
 
-def get_image_files() -> list[Path]:
-    """
-    Retrieves a sorted list of image files from the 'images' directory.
-    """
-    images_dir       = find_images_directory()
-    image_extensions = {
-        '.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.JPG', '.JPEG', '.PNG'
-    }
+    for parent in [images_dir, *images_dir.parents]:
+        potential_images_dir = parent / 'images'
+        if potential_images_dir.is_dir():
+            image_files = sorted(
+                f for f in potential_images_dir.iterdir()
+                if f.is_file() and f.suffix.lower() in {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+            )
+            if image_files:
+                return image_files
 
-    image_files = sorted(
-        [
-            f for f in images_dir.iterdir()
-            if f.is_file() and f.suffix in image_extensions
-        ]
-    )
-
-    if not image_files:
-        raise FileNotFoundError("No image files found in images directory")
-
-    return image_files
+    raise FileNotFoundError("No image files found in an 'images' directory.")
 
 def ensure_odd(value: int) -> int:
     """
-    Ensures that the given integer value is odd.
+    Uses the bitwise OR operation to set the least significant bit to 1,
+    making the number odd if it isn't already.
     """
     return value | 1
 
@@ -136,242 +127,61 @@ def extract_params(steps: list[ProcessingStep]) -> dict[str, Any]:
     Extracts parameters from processing steps into a dictionary.
     """
     params = {
-        param['name']: param['value']
+        param.name: param.value
         for step in steps
         for param in step.parameters
     }
-
     params.update({
         f"use_{step.name.lower().replace(' ', '_')}": step.is_enabled
         for step in steps
     })
-
     return params
+
 
 # -------------------- Initialization Function --------------------
 
-def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingStep]:
+import json
+
+def initialize_steps(config_override: dict[str, Any] = None) -> list[ProcessingStep]:
     """
     Initializes processing steps with default parameters or overrides.
 
     Args:
-        params_override (dict[str, Any], optional) : Parameters to override defaults.
+        config_override (Dict[str, Any], optional): Parameters to override defaults.
 
     Returns:
         list[ProcessingStep]: List of initialized processing steps.
     """
-    steps = []
-    step_definitions = [
-        {
-            'name': 'Shadow Removal',
-            'parameters': [
-                {
-                    'name'         : 'shadow_kernel_size',
-                    'display_name' : 'Shadow Kernel Size',
-                    'value'        : 15,
-                    'min'          : 3,
-                    'max'          : 21,
-                    'step'         : 2,
-                    'increase_key' : 'K',
-                },
-                {
-                    'name'         : 'shadow_median_blur',
-                    'display_name' : 'Shadow Median Blur',
-                    'value'        : 21,
-                    'min'          : 3,
-                    'max'          : 99,
-                    'step'         : 2,
-                    'increase_key' : 'B',
-                },
-            ],
-        },
-        {
-            'name': 'Gaussian Blur',
-            'parameters': [
-                {
-                    'name'         : 'gaussian_kernel_size',
-                    'display_name' : 'Gaussian Kernel Size',
-                    'value'        : 5,
-                    'min'          : 3,
-                    'max'          : 21,
-                    'step'         : 2,
-                    'increase_key' : 'G',
-                },
-            ],
-        },
-        {
-            'name': 'Color CLAHE',
-            'parameters': [
-                {
-                    'name'         : 'clahe_clip_limit',
-                    'display_name' : 'CLAHE Clip Limit',
-                    'value'        : 2.0,
-                    'min'          : 0.5,
-                    'max'          : 10.0,
-                    'step'         : 0.5,
-                    'increase_key' : 'H',
-                },
-            ],
-        },
-        {
-            'name': 'Edge Detection',
-            'parameters': [
-                {
-                    'name'         : 'canny_threshold1',
-                    'display_name' : 'Canny Threshold1',
-                    'value'        : 50,
-                    'min'          : 0,
-                    'max'          : 255,
-                    'step'         : 5,
-                    'increase_key' : 'T',
-                },
-                {
-                    'name'         : 'canny_threshold2',
-                    'display_name' : 'Canny Threshold2',
-                    'value'        : 150,
-                    'min'          : 0,
-                    'max'          : 255,
-                    'step'         : 5,
-                    'increase_key' : 'Y',
-                },
-            ],
-        },
-        {
-            'name': 'Adaptive Thresholding',
-            'parameters': [
-                {
-                    'name'         : 'adaptive_block_size',
-                    'display_name' : 'Block Size',
-                    'value'        : 11,
-                    'min'          : 3,
-                    'max'          : 99,
-                    'step'         : 2,
-                    'increase_key' : 'A',
-                },
-                {
-                    'name'         : 'adaptive_c',
-                    'display_name' : 'C Value',
-                    'value'        : 2,
-                    'min'          : -10,
-                    'max'          : 10,
-                    'step'         : 1,
-                    'increase_key' : 'C',
-                },
-            ],
-        },
-        {
-            'name': 'Morphology',
-            'parameters': [
-                {
-                    'name'         : 'morph_kernel_size',
-                    'display_name' : 'Morphology Kernel Size',
-                    'value'        : 3,
-                    'min'          : 1,
-                    'max'          : 21,
-                    'step'         : 2,
-                    'increase_key' : 'M',
-                },
-                {
-                    'name'         : 'erosion_iterations',
-                    'display_name' : 'Erosion Iterations',
-                    'value'        : 1,
-                    'min'          : 0,
-                    'max'          : 10,
-                    'step'         : 1,
-                    'increase_key' : 'E',
-                },
-                {
-                    'name'         : 'dilation_iterations',
-                    'display_name' : 'Dilation Iterations',
-                    'value'        : 1,
-                    'min'          : 0,
-                    'max'          : 10,
-                    'step'         : 1,
-                    'increase_key' : 'D',
-                },
-            ],
-        },
-        {
-            'name': 'Contour Adjustments',
-            'parameters': [
-                {
-                    'name'         : 'min_contour_area',
-                    'display_name' : 'Min Contour Area',
-                    'value'        : 1000,
-                    'min'          : 0,
-                    'max'          : 10000,
-                    'step'         : 250,
-                    'increase_key' : 'N',
-                },
-                {
-                    'name'         : 'max_contours',
-                    'display_name' : 'Max Contours',
-                    'value'        : 50,
-                    'min'          : 0,
-                    'max'          : 100,
-                    'step'         : 5,
-                    'increase_key' : 'X',
-                },
-            ],
-        },
-        {
-            'name': 'Contour Approximation',
-            'parameters': [],
-        },
-        {
-            'name': 'OCR Settings',
-            'parameters': [
-                {
-                    'name'         : 'oem',
-                    'display_name' : 'OCR Engine Mode',
-                    'value'        : 3,
-                    'min'          : 0,
-                    'max'          : 3,
-                    'step'         : 1,
-                    'increase_key' : 'O',
-                },
-                {
-                    'name'         : 'psm',
-                    'display_name' : 'Page Segmentation Mode',
-                    'value'        : 6,
-                    'min'          : 0,
-                    'max'          : 13,
-                    'step'         : 1,
-                    'increase_key' : 'R',
-                },
-                {
-                    'name'         : 'ocr_confidence_threshold',
-                    'display_name' : 'OCR Confidence Threshold',
-                    'value'        : 50,
-                    'min'          : 0,
-                    'max'          : 100,
-                    'step'         : 5,
-                    'increase_key' : 'F',
-                },
-            ],
-        },
-    ]
+    # Load step definitions from the JSON configuration file
+    config_file = Path(__file__).resolve().parent / 'config.json'
+    with open(config_file, 'r') as f:
+        step_definitions = json.load(f)
 
-    # Initialize steps with automated toggle keys and decrease keys
+    steps = []
     for index, step_def in enumerate(step_definitions):
         toggle_key = str(index + 1)
-        for param in step_def['parameters']:
-            param['decrease_key'] = param['increase_key'].lower()
-        steps.append(ProcessingStep(
-            name       = step_def['name'],
-            toggle_key = toggle_key,
-            parameters = step_def['parameters']
-        ))
+
+        # Create Parameter instances from the parameter dictionaries
+        parameters = [Parameter(**param) for param in step_def.get('parameters', [])]
+        steps.append(
+            ProcessingStep(
+                name       = step_def['name'],
+                toggle_key = toggle_key,
+                parameters = parameters
+            )
+        )
+
+    # Create maps for quick lookup
+    step_map  = {f"use_{step.name.lower().replace(' ', '_')}": step for step in steps}
+    param_map = {param.name: param for step in steps for param in step.parameters}
 
     # Apply any parameter overrides
-    if params_override:
-        for step in steps:
-            toggle_key = f"use_{step.name.lower().replace(' ', '_')}"
-            if toggle_key in params_override:
-                step.is_enabled = params_override[toggle_key]
-            for param in step.parameters:
-                if param['name'] in params_override:
-                    param['value'] = params_override[param['name']]
+    if config_override:
+        for key, value in config_override.items():
+            if key in step_map:
+                step_map[key].is_enabled = value
+            elif key in param_map:
+                param_map[key].value = value
 
     return steps
 
@@ -517,7 +327,7 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
             spine_image = cv2.resize(
                 spine_image,
                 (int(width * scaling_factor), int(height * scaling_factor)),
-                interpolation=cv2.INTER_AREA
+                interpolation = cv2.INTER_AREA
             )
 
         data = pytesseract.image_to_data(
@@ -526,7 +336,8 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
             config      = config, 
             output_type = pytesseract.Output.DICT
         )
-        text = ''
+
+        text    = ''
         n_boxes = len(data['text'])
 
         for i in range(n_boxes):
@@ -683,12 +494,12 @@ def create_sidebar(
 
         for param in step.parameters:
             value_str = (
-                f"{param['value']:.3f}" if isinstance(param['value'], float)
-                else str(param['value'])
+                f"{param.value:.3f}" if isinstance(param.value, float)
+                else str(param.value)
             )
-            key_text = f"[{param['decrease_key']} | {param['increase_key']}]"
+            key_text = f"[{param.decrease_key} | {param.increase_key}]"
             put_text(
-                text  = f"   {key_text} {param['display_name']}: {value_str}",
+                text  = f"   {key_text} {param.display_name}: {value_str}",
                 x     = 20,
                 y     = y_position,
                 color = (200, 200, 200),
@@ -711,14 +522,14 @@ def create_sidebar(
 
 def interactive_experiment(
     image_files     : list[Path],
-    params_override : dict[str, Any] = None
+    config_override : dict[str, Any] = None
 ):
     """
     Runs the interactive experiment allowing the user to adjust image processing parameters.
 
     Args:
         image_files     (list[Path])               : List of image file paths to process.
-        params_override (dict[str, Any], optional) : Parameters to override default settings.
+        config_override (dict[str, Any], optional) : Parameters to override default settings.
 
     Raises:
         ValueError: If no image files are provided.
@@ -732,7 +543,7 @@ def interactive_experiment(
     current_image_idx  = 0
     display_options    = ['Processed Image', 'Binary Image', 'Annotated Image']
     current_display    = 0
-    steps              = initialize_steps(params_override)
+    steps              = initialize_steps(config_override)
     original_image     = load_image(str(image_files[current_image_idx]))
     window_height      = max(original_image.shape[0], 800)
     scale_factor       = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
@@ -771,8 +582,8 @@ def interactive_experiment(
     for step in steps:
         key_actions[ord(step.toggle_key)] = create_toggle_function(step)
         for param in step.parameters:
-            key_actions[ord(param['increase_key'])] = create_adjust_param_function(step, param['increase_key'])
-            key_actions[ord(param['decrease_key'])] = create_adjust_param_function(step, param['decrease_key'])
+            key_actions[ord(param.increase_key)] = create_adjust_param_function(step, param.increase_key)
+            key_actions[ord(param.decrease_key)] = create_adjust_param_function(step, param.decrease_key)
 
     # Main loop
     while True:
@@ -856,7 +667,7 @@ def interactive_experiment(
 # -------------------- Entry Point --------------------
 
 if __name__ == "__main__":
-    params_override = {
+    config_override = {
         'use_shadow_removal'      : True,
         'shadow_kernel_size'      : 11,
         'use_contour_adjustments' : True,
@@ -864,4 +675,4 @@ if __name__ == "__main__":
     }
 
     image_files = get_image_files()
-    interactive_experiment(image_files, params_override)
+    interactive_experiment(image_files, config_override)
