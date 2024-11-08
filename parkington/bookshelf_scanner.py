@@ -1,8 +1,8 @@
 import cv2
+import easyocr
+import functools
 import logging
 import numpy as np
-import pytesseract
-import functools
 
 from dataclasses import dataclass, field
 from pathlib     import Path
@@ -284,21 +284,25 @@ def process_image(
 
     return processed, grayscale, binary, contours
 
-def ocr_spine(spine_image: np.ndarray, **params) -> str:
+def ocr_spine(
+    spine_image : np.ndarray, 
+    reader      : easyocr.Reader, 
+    **params
+) -> str:
     """
-    Performs OCR on a given spine image using Tesseract.
+    Performs OCR on a given spine image using EasyOCR.
 
     Args:
         spine_image : The image of the book spine to perform OCR on.
+        reader      : An instance of easyocr.Reader.
         **params    : Arbitrary keyword arguments containing OCR parameters.
 
     Returns:
         Extracted text from the spine image.
     """
-    config = f"--oem {int(params['oem'])} --psm {int(params['psm'])}"
-
     try:
         max_size       = params.get('max_ocr_image_size', 1000)
+        min_confidence = params.get('ocr_confidence_threshold', 0.5)
         height, width  = spine_image.shape[:2]
         scaling_factor = min(1.0, max_size / max(height, width))
 
@@ -309,17 +313,20 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
                 interpolation = cv2.INTER_AREA
             )
 
-        data = pytesseract.image_to_data(
-            spine_image,
-            lang        = 'eng',
-            config      = config,
-            output_type = pytesseract.Output.DICT
+        # Convert image to RGB
+        spine_image_rgb = cv2.cvtColor(spine_image, cv2.COLOR_BGR2RGB)
+
+        # Perform OCR using EasyOCR
+        result = reader.readtext(
+            spine_image_rgb,
+            min_size       = params.get('ocr_min_size', 5),
+            text_threshold = params.get('ocr_text_threshold', 0.7),
+            low_text       = params.get('ocr_low_text', 0.4),
+            link_threshold = params.get('ocr_link_threshold', 0.4)
         )
 
-        text = ' '.join([
-            data['text'][i] for i in range(len(data['text']))
-            if int(data['conf'][i]) >= params.get('ocr_confidence_threshold', 50)
-        ])
+        # Filter results based on confidence
+        text = ' '.join([res[1] for res in result if res[2] >= min_confidence])
         return text.strip()
 
     except Exception as e:
@@ -331,6 +338,7 @@ def draw_contours_and_text(
     ocr_image   : np.ndarray,
     contours    : list[np.ndarray],
     params      : dict,
+    reader      : easyocr.Reader,
     perform_ocr : bool = True
 ) -> tuple[np.ndarray, int]:
     """
@@ -359,9 +367,14 @@ def draw_contours_and_text(
         )
 
         if perform_ocr and params.get('use_ocr_settings'):
+
+            # Create a mask for the contour
+            mask = np.zeros_like(ocr_image)
+            cv2.drawContours(mask, [contour], -1, color = (255, 255, 255), thickness = -1)
+
             x, y, w, h = cv2.boundingRect(contour)
-            ocr_region = ocr_image[y:y+h, x:x+w]
-            ocr_text   = ocr_spine(ocr_region, **params)
+            ocr_region = cv2.bitwise_and(ocr_image, mask)[y:y+h, x:x+w]
+            ocr_text   = ocr_spine(ocr_region, reader, **params)
 
             if ocr_text:
                 total_characters += len(ocr_text)
@@ -537,7 +550,10 @@ def interactive_experiment(
     sidebar_width       = max(400, int(width * 1.2))
     last_params         = None
     cached_results      = None
-    pending_log_message = None
+    pending_log_message = None  # Initialize pending log message
+
+    # Initialize EasyOCR Reader
+    reader = easyocr.Reader(['en'], gpu = False)
 
     # Resize window to accommodate sidebar
     cv2.resizeWindow(
@@ -603,7 +619,6 @@ def interactive_experiment(
             if pending_log_message:
                 log_message = f"{pending_log_message} (Contours: {len(contours)}"
                 if current_params.get('use_ocr_settings') and current_display == 2:
-
                     # Ensure total_characters is calculated
                     if cached_results['annotated_image'] is None:
                         annotated_image, total_characters = draw_contours_and_text(
@@ -611,6 +626,7 @@ def interactive_experiment(
                             ocr_image   = cached_results['processed_image'],
                             contours    = cached_results['contours'],
                             params      = current_params,
+                            reader      = reader,
                             perform_ocr = True
                         )
                         cached_results['annotated_image']  = annotated_image
@@ -620,7 +636,7 @@ def interactive_experiment(
                     log_message += f"; Characters: {total_characters}"
                 log_message += ")"
                 logger.info(log_message)
-                pending_log_message = None # Clear the pending message
+                pending_log_message = None  # Clear the pending message
 
         # Determine which image to display
         if current_display == 0:
@@ -636,6 +652,7 @@ def interactive_experiment(
                     ocr_image   = cached_results['processed_image'],
                     contours    = cached_results['contours'],
                     params      = current_params,
+                    reader      = reader,
                     perform_ocr = True
                 )
                 cached_results['annotated_image']  = annotated_image
@@ -685,6 +702,7 @@ def interactive_experiment(
                 logger.info(f"Switched to image: {image_files[current_image_idx].name}")
 
             else:
+                # action_result is an action message from toggle or adjust_param
                 pending_log_message = action_result
                 last_params = None
                 if cached_results:
