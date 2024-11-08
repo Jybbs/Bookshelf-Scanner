@@ -459,8 +459,8 @@ def create_sidebar(
         steps           (list[ProcessingStep]) : List of processing steps.
         sidebar_width   (int)                  : Width of the sidebar.
         current_display (str)                  : Name of the current display option.
-        image_name      : str                   : Name of the current image file.
-        window_height   : int                   : Height of the window.
+        image_name      (str)                  : Name of the current image file.
+        window_height   (int)                  : Height of the window.
 
     Returns:
         np.ndarray: Image of the sidebar.
@@ -638,10 +638,10 @@ def interactive_experiment(
 
         elif current_display == 1:
             display_image = cached_results['binary_image']
-            
+
         elif current_display == 2:
             if cached_results['annotated_image'] is None:
-                # Perform OCR only when displaying Annotated Image
+                
                 annotated_image = draw_contours_and_text(
                     image       = original_image,
                     ocr_image   = cached_results['processed_image'],
@@ -685,6 +685,7 @@ def interactive_experiment(
             elif action == 'toggle_display':
                 current_display = (current_display + 1) % len(display_options)
                 logger.info(f"Switched to view: {display_options[current_display]}")
+
                 # Reset annotated image cache if switching to or from Annotated Image
                 if display_options[current_display] == 'Annotated Image':
                     last_params = None
@@ -698,6 +699,7 @@ def interactive_experiment(
                 result = action()
                 if result == 'reprocess':
                     last_params = None
+
                     # Clear annotated image cache
                     if cached_results:
                         cached_results['annotated_image'] = None
