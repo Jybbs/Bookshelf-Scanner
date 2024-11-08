@@ -644,15 +644,19 @@ def interactive_experiment(
         action = key_actions.get(key)
         if action:
             result = action()
+
             if result == 'quit':
                 break
+
             elif result == 'toggle_display':
                 current_display = (current_display + 1) % len(display_options)
                 logger.info(f"Switched to view: {display_options[current_display]}")
+
             elif result == 'next_image':
                 current_image_idx = (current_image_idx + 1) % len(image_files)
                 last_params       = None
                 logger.info(f"Switched to image: {image_files[current_image_idx].name}")
+                
             elif result == 'reprocess':
                 last_params = None
                 if cached_results:
