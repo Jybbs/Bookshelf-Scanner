@@ -16,17 +16,6 @@
       step         : 2
       increase_key : B
 
-- name: gaussian_blur
-  display_name: Gaussian Blur
-  parameters:
-    - name         : gaussian_kernel_size
-      display_name : Gaussian Kernel Size
-      value        : 5
-      min          : 3
-      max          : 21
-      step         : 2
-      increase_key : G
-
 - name: color_clahe
   display_name: Color CLAHE
   parameters:
