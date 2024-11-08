@@ -252,6 +252,18 @@ def process_image(
 
         processed = cv2.merge(channels)  # Merge channels back into a color image
 
+    # Bilateral Filter
+    if params.get('use_bilateral_filter'):
+        diameter    = int(params['bilateral_diameter'])
+        sigma_color = params['bilateral_sigma_color']
+        sigma_space = params['bilateral_sigma_space']
+        processed   = cv2.bilateralFilter(processed, diameter, sigma_color, sigma_space)
+
+    # Non-Local Means Denoising
+    if params.get('use_non_local_means'):
+        h         = params['nlm_h']
+        processed = cv2.fastNlMeansDenoisingColored(processed, None, h, h, 7, 21)
+
     # Gaussian Blur
     if params.get('use_gaussian_blur'):
         size      = ensure_odd(int(params['gaussian_kernel_size']))
@@ -296,21 +308,6 @@ def process_image(
             type   = cv2.THRESH_BINARY + cv2.THRESH_OTSU
         )
 
-    # Morphological Transformations
-    if params.get('use_morphology'):
-        k_size = ensure_odd(int(params['morph_kernel_size']))
-        kernel = np.ones((k_size, k_size), np.uint8)
-        binary = cv2.erode(
-            src        = binary,
-            kernel     = kernel,
-            iterations = int(params['erosion_iterations'])
-        )
-        binary = cv2.dilate(
-            src        = binary,
-            kernel     = kernel,
-            iterations = int(params['dilation_iterations'])
-        )
-
     # Find Contours
     contours, _ = cv2.findContours(
         image   = binary,
@@ -330,12 +327,12 @@ def process_image(
         max_contours = int(params['max_contours'])
         contours     = contours[:max_contours]
 
-    # Contour Approximation using minAreaRect
-    if params.get('use_contour_approximation'):
-        contours = [
-            cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
-            for contour in contours
-        ]
+        # Contour Approximation
+        if params['contour_approximation']:
+            contours = [
+                cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
+                for contour in contours
+            ]
 
     return processed, grayscale, binary, contours
 
@@ -610,7 +607,7 @@ def interactive_experiment(
         for param in step.parameters:
             key_actions[ord(param.increase_key)] = lambda step = step, key_char = param.increase_key: step.adjust_param(ord(key_char))
             key_actions[ord(param.decrease_key)] = lambda step = step, key_char = param.decrease_key: step.adjust_param(ord(key_char))
-
+              
     # Main loop
     while True:
         current_image_path = image_files[current_image_idx]

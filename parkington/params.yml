@@ -74,31 +74,6 @@
       step         : 1
       increase_key : C
 
-- name: morphology
-  display_name: Morphology
-  parameters:
-    - name         : morph_kernel_size
-      display_name : Morphology Kernel Size
-      value        : 3
-      min          : 1
-      max          : 21
-      step         : 2
-      increase_key : M
-    - name         : erosion_iterations
-      display_name : Erosion Iterations
-      value        : 1
-      min          : 0
-      max          : 10
-      step         : 1
-      increase_key : E
-    - name         : dilation_iterations
-      display_name : Dilation Iterations
-      value        : 1
-      min          : 0
-      max          : 10
-      step         : 1
-      increase_key : D
-
 - name: contour_adjustments
   display_name: Contour Adjustments
   parameters:
@@ -116,10 +91,49 @@
       max          : 100
       step         : 5
       increase_key : X
+    - name         : contour_approximation
+      display_name : Contour Approximation
+      value        : 1
+      min          : 0
+      max          : 1
+      step         : 1
+      increase_key : Z
 
-- name: contour_approximation
-  display_name: Contour Approximation
-  parameters: []
+- name: bilateral_filter
+  display_name: Bilateral Filter
+  parameters:
+    - name         : bilateral_diameter
+      display_name : Diameter
+      value        : 9
+      min          : 1
+      max          : 20
+      step         : 2
+      increase_key : D
+    - name         : bilateral_sigma_color
+      display_name : Sigma Color
+      value        : 75
+      min          : 25
+      max          : 150
+      step         : 25
+      increase_key : S
+    - name         : bilateral_sigma_space
+      display_name : Sigma Space
+      value        : 75
+      min          : 25
+      max          : 150
+      step         : 25
+      increase_key : P
+
+- name: non_local_means
+  display_name: Non-Local Means Denoising
+  parameters:
+    - name         : nlm_h
+      display_name : H Parameter
+      value        : 10
+      min          : 5
+      max          : 30
+      step         : 5
+      increase_key : L
 
 - name: ocr_settings
   display_name: OCR Settings
