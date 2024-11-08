@@ -1,5 +1,5 @@
-- name: shadow_removal
-  display_name: Shadow Removal
+- name         : shadow_removal
+  display_name : Shadow Removal
   parameters:
     - name         : shadow_kernel_size
       display_name : Shadow Kernel Size
@@ -16,8 +16,8 @@
       step         : 2
       increase_key : B
 
-- name: color_clahe
-  display_name: Color CLAHE
+- name         : color_clahe
+  display_name : Color CLAHE
   parameters:
     - name         : clahe_clip_limit
       display_name : CLAHE Clip Limit
@@ -27,113 +27,127 @@
       step         : 0.5
       increase_key : H
 
-- name: edge_detection
-  display_name: Edge Detection
+- name         : bilateral_filter
+  display_name : Bilateral Filter
+  parameters:
+    - name         : bilateral_diameter
+      display_name : Bilateral Diameter
+      value        : 9
+      min          : 1
+      max          : 25
+      step         : 2
+      increase_key : D
+    - name         : bilateral_sigma_color
+      display_name : Sigma Color
+      value        : 75.0
+      min          : 1.0
+      max          : 150.0
+      step         : 5.0
+      increase_key : C
+    - name         : bilateral_sigma_space
+      display_name : Sigma Space
+      value        : 75.0
+      min          : 1.0
+      max          : 150.0
+      step         : 5.0
+      increase_key : S
+
+- name         : edge_detection
+  display_name : Edge Detection
   parameters:
     - name         : canny_threshold1
-      display_name : Canny Threshold1
+      display_name : Canny Threshold 1
       value        : 50
       min          : 0
       max          : 255
       step         : 5
       increase_key : T
     - name         : canny_threshold2
-      display_name : Canny Threshold2
+      display_name : Canny Threshold 2
       value        : 150
       min          : 0
       max          : 255
       step         : 5
-      increase_key : Y
+      increase_key : t
 
-- name: adaptive_thresholding
-  display_name: Adaptive Thresholding
+- name         : adaptive_thresholding
+  display_name : Adaptive Thresholding
   parameters:
     - name         : adaptive_block_size
-      display_name : Block Size
+      display_name : Adaptive Block Size
       value        : 11
       min          : 3
-      max          : 99
+      max          : 51
       step         : 2
-      increase_key : A
+      increase_key : B
     - name         : adaptive_c
-      display_name : C Value
+      display_name : Adaptive C
       value        : 2
       min          : -10
       max          : 10
       step         : 1
       increase_key : C
 
-- name: contour_adjustments
-  display_name: Contour Adjustments
+- name         : contour_adjustments
+  display_name : Contour Adjustments
   parameters:
     - name         : min_contour_area
       display_name : Min Contour Area
       value        : 1000
-      min          : 0
+      min          : 100
       max          : 10000
-      step         : 250
-      increase_key : N
+      step         : 100
+      increase_key : A
     - name         : max_contours
       display_name : Max Contours
       value        : 50
-      min          : 0
+      min          : 1
       max          : 100
-      step         : 5
-      increase_key : X
+      step         : 1
+      increase_key : M
     - name         : contour_approximation
       display_name : Contour Approximation
-      value        : 1
-      min          : 0
-      max          : 1
+      value        : True
+      min          : False
+      max          : True
       step         : 1
-      increase_key : Z
-
-- name: bilateral_filter
-  display_name: Bilateral Filter
-  parameters:
-    - name         : bilateral_diameter
-      display_name : Diameter
-      value        : 9
-      min          : 1
-      max          : 20
-      step         : 2
-      increase_key : D
-    - name         : bilateral_sigma_color
-      display_name : Sigma Color
-      value        : 75
-      min          : 25
-      max          : 150
-      step         : 25
-      increase_key : S
-    - name         : bilateral_sigma_space
-      display_name : Sigma Space
-      value        : 75
-      min          : 25
-      max          : 150
-      step         : 25
       increase_key : P
 
-- name: ocr_settings
-  display_name: OCR Settings
+- name         : ocr_settings
+  display_name : OCR Settings
   parameters:
-    - name         : oem
-      display_name : OCR Engine Mode
-      value        : 3
-      min          : 0
-      max          : 3
-      step         : 1
-      increase_key : O
-    - name         : psm
-      display_name : Page Segmentation Mode
-      value        : 6
-      min          : 0
-      max          : 13
-      step         : 1
-      increase_key : R
     - name         : ocr_confidence_threshold
       display_name : OCR Confidence Threshold
-      value        : 50
-      min          : 0
-      max          : 100
-      step         : 5
-      increase_key : F
+      value        : 0.5
+      min          : 0.0
+      max          : 1.0
+      step         : 0.05
+      increase_key : O
+    - name         : ocr_min_size
+      display_name : OCR Min Size
+      value        : 5
+      min          : 1
+      max          : 20
+      step         : 1
+      increase_key : S
+    - name         : ocr_text_threshold
+      display_name : OCR Text Threshold
+      value        : 0.7
+      min          : 0.0
+      max          : 1.0
+      step         : 0.05
+      increase_key : T
+    - name         : ocr_low_text
+      display_name : OCR Low Text
+      value        : 0.4
+      min          : 0.0
+      max          : 1.0
+      step         : 0.05
+      increase_key : L
+    - name         : ocr_link_threshold
+      display_name : OCR Link Threshold
+      value        : 0.4
+      min          : 0.0
+      max          : 1.0
+      step         : 0.05
+      increase_key : N
