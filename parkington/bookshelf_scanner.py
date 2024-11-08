@@ -45,34 +45,29 @@ class ProcessingStep:
 
     def toggle(self) -> str:
         """
-        Toggle the 'is_enabled' state of the processing step and log the change.
+        Toggle the 'is_enabled' state of the processing step and return the action message.
         """
         self.is_enabled = not self.is_enabled
-        logger.info(
-            f"Toggled '{self.display_name}' to "
-            f"{'On' if self.is_enabled else 'Off'}"
-        )
-        return 'reprocess'
+        action_message  = f"Toggled '{self.display_name}' to {'On' if self.is_enabled else 'Off'}"
+        return action_message
 
     def adjust_param(self, key_char: str) -> str:
         """
-        Adjust the parameter value based on the provided key character.
+        Adjust the parameter value based on the provided key character and return the action message.
         """
         for param in self.parameters:
             if key_char == param.increase_key:
                 old_value   = param.value
                 param.value = min(param.value + param.step, param.max)
-                logger.info(
-                    f"Increased '{param.display_name}' from {old_value} to {param.value}"
-                )
-                return 'reprocess'
+                action_message = f"Increased '{param.display_name}' from {old_value} to {param.value}"
+                return action_message
+
             elif key_char == param.decrease_key:
                 old_value   = param.value
                 param.value = max(param.value - param.step, param.min)
-                logger.info(
-                    f"Decreased '{param.display_name}' from {old_value} to {param.value}"
-                )
-                return 'reprocess'
+                action_message = f"Decreased '{param.display_name}' from {old_value} to {param.value}"
+                return action_message
+
         return None
 
 # -------------------- Utility Functions --------------------
@@ -85,6 +80,7 @@ def get_image_files(images_dir: Path = None) -> list[Path]:
 
     for parent in [images_dir, *images_dir.parents]:
         potential_images_dir = parent / 'images'
+
         if potential_images_dir.is_dir():
             image_files = sorted(
                 f for f in potential_images_dir.iterdir()
@@ -160,6 +156,7 @@ def initialize_steps(params_override: dict = None) -> list[ProcessingStep]:
     for index, step_def in enumerate(step_definitions):
         toggle_key = str(index + 1)
         parameters = [Parameter(**param) for param in step_def.get('parameters', [])]
+
         steps.append(
             ProcessingStep(
                 name         = step_def['name'],
@@ -304,6 +301,7 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
         max_size       = params.get('max_ocr_image_size', 1000)
         height, width  = spine_image.shape[:2]
         scaling_factor = min(1.0, max_size / max(height, width))
+
         if scaling_factor < 1.0:
             spine_image = cv2.resize(
                 spine_image,
@@ -334,7 +332,7 @@ def draw_contours_and_text(
     contours    : list[np.ndarray],
     params      : dict,
     perform_ocr : bool = True
-) -> np.ndarray:
+) -> tuple[np.ndarray, int]:
     """
     Draws contours and recognized text on the image.
 
@@ -344,12 +342,12 @@ def draw_contours_and_text(
         contours    : List of contours to draw.
         params      : Parameters including whether to perform OCR.
         perform_ocr : Whether to perform OCR or not.
-
     Returns:
-        Annotated image with contours and text.
+        Annotated image with contours and text, and total number of characters.
     """
-    annotated     = image.copy()
-    contour_color = (180, 0, 180)
+    annotated        = image.copy()
+    contour_color    = (180, 0, 180)
+    total_characters = 0
 
     for contour in contours:
         cv2.drawContours(
@@ -366,6 +364,7 @@ def draw_contours_and_text(
             ocr_text   = ocr_spine(ocr_region, **params)
 
             if ocr_text:
+                total_characters += len(ocr_text)
                 (text_width, text_height), _ = cv2.getTextSize(
                     text      = ocr_text,
                     fontFace  = cv2.FONT_HERSHEY_DUPLEX,
@@ -395,7 +394,7 @@ def draw_contours_and_text(
                     thickness = 2
                 )
 
-    return annotated
+    return annotated, total_characters
 
 # -------------------- UI and Visualization Functions --------------------
 
@@ -535,9 +534,10 @@ def interactive_experiment(
         fontScale = 0.8 * scale_factor,
         thickness = 1
     )
-    sidebar_width      = max(400, int(width * 1.2))
-    last_params        = None
-    cached_results     = None
+    sidebar_width       = max(400, int(width * 1.2))
+    last_params         = None
+    cached_results      = None
+    pending_log_message = None
 
     # Resize window to accommodate sidebar
     cv2.resizeWindow(
@@ -571,6 +571,7 @@ def interactive_experiment(
     # Main loop
     while True:
         current_image_path = image_files[current_image_idx]
+
         if last_params is None:
             # Load new image and adjust window height
             original_image = load_image(str(current_image_path))
@@ -593,8 +594,33 @@ def interactive_experiment(
                 'processed_image' : processed_image,
                 'binary_image'    : binary_image,
                 'contours'        : contours,
-                'annotated_image' : None
+                'annotated_image' : None,
+                'total_characters': None,
+                'num_contours'    : len(contours)
             }
+
+            # If we have a pending log message, log it now with counts
+            if pending_log_message:
+                log_message = f"{pending_log_message} (Contours: {len(contours)}"
+                if current_params.get('use_ocr_settings') and current_display == 2:
+
+                    # Ensure total_characters is calculated
+                    if cached_results['annotated_image'] is None:
+                        annotated_image, total_characters = draw_contours_and_text(
+                            image       = original_image,
+                            ocr_image   = cached_results['processed_image'],
+                            contours    = cached_results['contours'],
+                            params      = current_params,
+                            perform_ocr = True
+                        )
+                        cached_results['annotated_image']  = annotated_image
+                        cached_results['total_characters'] = total_characters
+                    else:
+                        total_characters = cached_results['total_characters']
+                    log_message += f"; Characters: {total_characters}"
+                log_message += ")"
+                logger.info(log_message)
+                pending_log_message = None # Clear the pending message
 
         # Determine which image to display
         if current_display == 0:
@@ -605,14 +631,15 @@ def interactive_experiment(
 
         elif current_display == 2:
             if cached_results['annotated_image'] is None:
-                annotated_image = draw_contours_and_text(
+                annotated_image, total_characters = draw_contours_and_text(
                     image       = original_image,
                     ocr_image   = cached_results['processed_image'],
                     contours    = cached_results['contours'],
                     params      = current_params,
                     perform_ocr = True
                 )
-                cached_results['annotated_image'] = annotated_image
+                cached_results['annotated_image']  = annotated_image
+                cached_results['total_characters'] = total_characters
 
             display_image = cached_results['annotated_image']
 
@@ -643,21 +670,22 @@ def interactive_experiment(
 
         action = key_actions.get(key)
         if action:
-            result = action()
+            action_result = action()
 
-            if result == 'quit':
+            if action_result == 'quit':
                 break
 
-            elif result == 'toggle_display':
+            elif action_result == 'toggle_display':
                 current_display = (current_display + 1) % len(display_options)
                 logger.info(f"Switched to view: {display_options[current_display]}")
 
-            elif result == 'next_image':
+            elif action_result == 'next_image':
                 current_image_idx = (current_image_idx + 1) % len(image_files)
                 last_params       = None
                 logger.info(f"Switched to image: {image_files[current_image_idx].name}")
-                
-            elif result == 'reprocess':
+
+            else:
+                pending_log_message = action_result
                 last_params = None
                 if cached_results:
                     cached_results['annotated_image'] = None
