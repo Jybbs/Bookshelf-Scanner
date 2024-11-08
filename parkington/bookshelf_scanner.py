@@ -217,7 +217,6 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
 
     return steps
 
-
 # -------------------- Image Processing Functions --------------------
 
 def process_image(
@@ -258,11 +257,6 @@ def process_image(
         sigma_color = params['bilateral_sigma_color']
         sigma_space = params['bilateral_sigma_space']
         processed   = cv2.bilateralFilter(processed, diameter, sigma_color, sigma_space)
-
-    # Non-Local Means Denoising
-    if params.get('use_non_local_means'):
-        h         = params['nlm_h']
-        processed = cv2.fastNlMeansDenoisingColored(processed, None, h, h, 7, 21)
 
     # Gaussian Blur
     if params.get('use_gaussian_blur'):
@@ -384,7 +378,8 @@ def draw_contours_and_text(
     image       : np.ndarray,
     ocr_image   : np.ndarray,
     contours    : list[np.ndarray],
-    params      : dict[str, Any]
+    params      : dict[str, Any],
+    perform_ocr : bool = True
 ) -> np.ndarray:
     """
     Draws contours and recognized text on the image.
@@ -394,6 +389,7 @@ def draw_contours_and_text(
         ocr_image   (np.ndarray)       : Image to use for OCR.
         contours    (list[np.ndarray]) : List of contours to draw.
         params      (dict[str, Any])   : Parameters including whether to perform OCR.
+        perform_ocr (bool)             : Whether to perform OCR or not.
 
     Returns:
         np.ndarray: Annotated image with contours and text.
@@ -410,7 +406,7 @@ def draw_contours_and_text(
             thickness  = 4
         )
 
-        if params.get('use_ocr_settings'):
+        if perform_ocr and params.get('use_ocr_settings'):
             x, y, w, h = cv2.boundingRect(contour)
             ocr_region = ocr_image[y:y+h, x:x+w]
             ocr_text   = ocr_spine(ocr_region, **params)
@@ -463,8 +459,8 @@ def create_sidebar(
         steps           (list[ProcessingStep]) : List of processing steps.
         sidebar_width   (int)                  : Width of the sidebar.
         current_display (str)                  : Name of the current display option.
-        image_name      (str)                  : Name of the current image file.
-        window_height   (int)                  : Height of the window.
+        image_name      : str                   : Name of the current image file.
+        window_height   : int                   : Height of the window.
 
     Returns:
         np.ndarray: Image of the sidebar.
@@ -607,7 +603,7 @@ def interactive_experiment(
         for param in step.parameters:
             key_actions[ord(param.increase_key)] = lambda step = step, key_char = param.increase_key: step.adjust_param(ord(key_char))
             key_actions[ord(param.decrease_key)] = lambda step = step, key_char = param.decrease_key: step.adjust_param(ord(key_char))
-              
+
     # Main loop
     while True:
         current_image_path = image_files[current_image_idx]
@@ -628,16 +624,34 @@ def interactive_experiment(
                 image=original_image,
                 **current_params
             )
-            annotated_image = draw_contours_and_text(
-                image     = original_image,
-                ocr_image = processed_image,
-                contours  = contours,
-                params    = current_params
-            )
-            cached_results = (processed_image, binary_image, annotated_image)
             last_params    = current_params.copy()
+            cached_results = {
+                'processed_image' : processed_image,
+                'binary_image'    : binary_image,
+                'contours'        : contours,
+                'annotated_image' : None
+            }
 
-        display_image = cached_results[current_display]
+        # Determine which image to display
+        if current_display == 0:
+            display_image = cached_results['processed_image']
+
+        elif current_display == 1:
+            display_image = cached_results['binary_image']
+            
+        elif current_display == 2:
+            if cached_results['annotated_image'] is None:
+                # Perform OCR only when displaying Annotated Image
+                annotated_image = draw_contours_and_text(
+                    image       = original_image,
+                    ocr_image   = cached_results['processed_image'],
+                    contours    = cached_results['contours'],
+                    params      = current_params,
+                    perform_ocr = True
+                )
+                cached_results['annotated_image'] = annotated_image
+            display_image = cached_results['annotated_image']
+
         if len(display_image.shape) == 2:
             display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
 
@@ -671,6 +685,9 @@ def interactive_experiment(
             elif action == 'toggle_display':
                 current_display = (current_display + 1) % len(display_options)
                 logger.info(f"Switched to view: {display_options[current_display]}")
+                # Reset annotated image cache if switching to or from Annotated Image
+                if display_options[current_display] == 'Annotated Image':
+                    last_params = None
 
             elif action == 'next_image':
                 current_image_idx = (current_image_idx + 1) % len(image_files)
@@ -681,6 +698,9 @@ def interactive_experiment(
                 result = action()
                 if result == 'reprocess':
                     last_params = None
+                    # Clear annotated image cache
+                    if cached_results:
+                        cached_results['annotated_image'] = None
 
         for handler in logger.handlers:
             handler.flush()
