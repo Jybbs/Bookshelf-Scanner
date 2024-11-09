@@ -301,32 +301,15 @@ def ocr_spine(
         Extracted text from the spine image.
     """
     try:
-        max_size       = params.get('max_ocr_image_size', 1000)
-        min_confidence = params.get('ocr_confidence_threshold', 0.5)
-        height, width  = spine_image.shape[:2]
-        scaling_factor = min(1.0, max_size / max(height, width))
-
-        if scaling_factor < 1.0:
-            spine_image = cv2.resize(
-                spine_image,
-                (int(width * scaling_factor), int(height * scaling_factor)),
-                interpolation = cv2.INTER_AREA
-            )
-
-        # Convert image to RGB
-        spine_image_rgb = cv2.cvtColor(spine_image, cv2.COLOR_BGR2RGB)
-
-        # Perform OCR using EasyOCR
+        # EasyOCR expects RGB
         result = reader.readtext(
-            spine_image_rgb,
-            min_size       = params.get('ocr_min_size', 5),
-            text_threshold = params.get('ocr_text_threshold', 0.7),
-            low_text       = params.get('ocr_low_text', 0.4),
-            link_threshold = params.get('ocr_link_threshold', 0.4)
+            cv2.cvtColor(spine_image, cv2.COLOR_BGR2RGB)
         )
 
         # Filter results based on confidence
+        min_confidence = params.get('ocr_confidence_threshold', 0.3)
         text = ' '.join([res[1] for res in result if res[2] >= min_confidence])
+        
         return text.strip()
 
     except Exception as e:
@@ -343,70 +326,82 @@ def draw_contours_and_text(
 ) -> tuple[np.ndarray, int]:
     """
     Draws contours and recognized text on the image.
-
-    Args:
-        image       : Original image (used for annotations).
-        ocr_image   : Image to use for OCR.
-        contours    : List of contours to draw.
-        params      : Parameters including whether to perform OCR.
-        perform_ocr : Whether to perform OCR or not.
-    Returns:
-        Annotated image with contours and text, and total number of characters.
     """
-    annotated        = image.copy()
-    contour_color    = (180, 0, 180)
+    annotated = image.copy()
     total_characters = 0
-
-    for contour in contours:
-        cv2.drawContours(
-            image      = annotated,
-            contours   = [contour],
-            contourIdx = -1,
-            color      = contour_color,
-            thickness  = 4
+    
+    if perform_ocr and params.get('use_ocr_settings'):
+        sorted_contours = sorted(
+            contours,
+            key     = cv2.contourArea,
+            reverse = True
         )
-
-        if perform_ocr and params.get('use_ocr_settings'):
-
-            # Create a mask for the contour
-            mask = np.zeros_like(ocr_image)
-            cv2.drawContours(mask, [contour], -1, color = (255, 255, 255), thickness = -1)
-
+        
+        # Process only the largest contours up to max_contours
+        max_contours = min(int(params.get('max_contours', 10)), len(sorted_contours))
+        for contour in sorted_contours[:max_contours]:
+            cv2.drawContours(
+                image      = annotated,
+                contours   = [contour],
+                contourIdx = -1,
+                color      = (180, 0, 180),
+                thickness  = 4
+            )
+            
+            # Get region from the processed image
             x, y, w, h = cv2.boundingRect(contour)
-            ocr_region = cv2.bitwise_and(ocr_image, mask)[y:y+h, x:x+w]
-            ocr_text   = ocr_spine(ocr_region, reader, **params)
-
-            if ocr_text:
-                total_characters += len(ocr_text)
-                (text_width, text_height), _ = cv2.getTextSize(
-                    text      = ocr_text,
-                    fontFace  = cv2.FONT_HERSHEY_DUPLEX,
-                    fontScale = 0.6,
-                    thickness = 2
+            ocr_region = ocr_image[y:y+h, x:x+w]
+            
+            if ocr_region.size > 0:
+                # Convert to RGB for EasyOCR
+                ocr_region_rgb = cv2.cvtColor(ocr_region, cv2.COLOR_BGR2RGB)
+                
+                # Perform OCR with book spine specific settings
+                results = reader.readtext(
+                    ocr_region_rgb,
+                    decoder        = 'wordbeamsearch',  # Better for continuous text
+                    rotation_info  = [90, 180, 270]     # Check all possible rotations
                 )
-                text_x = x + (w - text_width)  // 2
-                text_y = y + (h + text_height) // 2
-
-                # Draw background rectangle for text
-                cv2.rectangle(
-                    img       = annotated,
-                    pt1       = (text_x - 5, text_y - text_height - 5),
-                    pt2       = (text_x + text_width + 5, text_y + 5),
-                    color     = (0, 0, 0),
-                    thickness = -1
-                )
-
-                # Put text over rectangle
-                cv2.putText(
-                    img       = annotated,
-                    text      = ocr_text,
-                    org       = (text_x, text_y),
-                    fontFace  = cv2.FONT_HERSHEY_DUPLEX,
-                    fontScale = 0.6,
-                    color     = (255, 255, 255),
-                    thickness = 2
-                )
-
+                
+                # Filter by confidence threshold
+                min_confidence = params.get('ocr_confidence_threshold', 0.3)
+                filtered_results = [res for res in results if res[2] >= min_confidence]
+                
+                if filtered_results:
+                    # Join all found text
+                    ocr_text = ' '.join(res[1] for res in filtered_results)
+                    total_characters += len(ocr_text)
+                    
+                    # Center text in contour
+                    (text_width, text_height), _ = cv2.getTextSize(
+                        text      = ocr_text,
+                        fontFace  = cv2.FONT_HERSHEY_DUPLEX,
+                        fontScale = 0.6,
+                        thickness = 2
+                    )
+                    text_x = x + (w - text_width) // 2
+                    text_y = y + (h + text_height) // 2
+                    
+                    # Draw background rectangle
+                    cv2.rectangle(
+                        img       = annotated,
+                        pt1       = (text_x - 5, text_y - text_height - 5),
+                        pt2       = (text_x + text_width + 5, text_y + 5),
+                        color     = (0, 0, 0),
+                        thickness = -1
+                    )
+                    
+                    # Draw text
+                    cv2.putText(
+                        img       = annotated,
+                        text      = ocr_text,
+                        org       = (text_x, text_y),
+                        fontFace  = cv2.FONT_HERSHEY_DUPLEX,
+                        fontScale = 0.6,
+                        color     = (255, 255, 255),
+                        thickness = 2
+                    )
+                    
     return annotated, total_characters
 
 # -------------------- UI and Visualization Functions --------------------
