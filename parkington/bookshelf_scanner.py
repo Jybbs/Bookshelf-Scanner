@@ -1,7 +1,8 @@
 import cv2
+import easyocr
+import functools
 import logging
 import numpy as np
-import pytesseract
 
 from dataclasses import dataclass, field
 from pathlib     import Path
@@ -22,103 +23,64 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Parameter:
-    """
-    Represents a parameter in a processing step.
-
-    Attributes:
-        name         (str) : Internal name of the parameter.
-        display_name (str) : Name to display in the UI.
-        value        (Any) : Current value of the parameter.
-        min          (Any) : Minimum value of the parameter.
-        max          (Any) : Maximum value of the parameter.
-        step         (Any) : Step size for incrementing/decrementing the parameter.
-        increase_key (str) : Key to increase the parameter.
-        decrease_key (str) : Key to decrease the parameter (automatically set to lowercase of increase_key).
-    """
-    name         : str
-    display_name : str
-    value        : Any
-    min          : Any
-    max          : Any
-    step         : Any
-    increase_key : str
-    decrease_key : str = field(init = False)
+    name         : str                       # Internal name of the parameter.
+    display_name : str                       # Name to display in the UI.
+    value        : Any                       # Current value of the parameter.
+    min          : Any                       # Minimum value of the parameter.
+    max          : Any                       # Maximum value of the parameter.
+    step         : Any                       # Step size for incrementing/decrementing the parameter.
+    increase_key : str                       # Key to increase the parameter.
+    decrease_key : str = field(init = False) # Key to decrease the parameter (lowercase of increase_key).
 
     def __post_init__(self):
         self.decrease_key = self.increase_key.lower()
 
 @dataclass
 class ProcessingStep:
-    """
-    Represents a processing step in the image processing pipeline.
-
-    Attributes:
-        name         (str)             : Internal name of the processing step.
-        display_name (str)             : Name to display in the UI.
-        toggle_key   (str)             : Key to toggle this processing step.
-        parameters   (List[Parameter]) : List of parameter instances.
-        is_enabled   (bool)            : Whether the step is enabled (default: False).
-    """
-    name         : str
-    display_name : str
-    toggle_key   : str
-    parameters   : list[Parameter]
-    is_enabled   : bool = False
+    name         : str                       # Internal name of the processing step.
+    display_name : str                       # Name to display in the UI.
+    toggle_key   : str                       # Key to toggle this processing step.
+    parameters   : list[Parameter]           # List of parameter instances.
+    is_enabled   : bool = False              # Whether the step is enabled (default: False).
 
     def toggle(self) -> str:
         """
-        Toggles the 'is_enabled' state of the processing step.
-
-        Returns:
-            str: 'reprocess' to indicate that the image needs to be reprocessed.
+        Toggle the 'is_enabled' state of the processing step and return the action message.
         """
-        previous_state  = self.is_enabled
         self.is_enabled = not self.is_enabled
-        logger.info(
-            f"Toggled '{self.display_name}' from "
-            f"{'On' if previous_state else 'Off'} to "
-            f"{'On' if self.is_enabled else 'Off'}"
-        )
-        return 'reprocess'
+        action_message  = f"Toggled '{self.display_name}' to {'On' if self.is_enabled else 'Off'}"
+        return action_message
 
-    def adjust_param(self, key: int) -> str:
+    def adjust_param(self, key_char: str) -> str:
         """
-        Adjusts the parameter value based on the key pressed.
-
-        Args:
-            key (int): ASCII value of the key pressed.
-
-        Returns:
-            str: 'reprocess' if parameter was adjusted and reprocessing is needed, None otherwise.
+        Adjust the parameter value based on the provided key character and return the action message.
         """
         for param in self.parameters:
-            if key == ord(param.increase_key):
+            if key_char == param.increase_key:
                 old_value   = param.value
                 param.value = min(param.value + param.step, param.max)
-                logger.info(
-                    f"Increased '{param.display_name}' from {old_value} to {param.value}"
-                )
-                return 'reprocess'
+                action_message = f"Increased '{param.display_name}' from {old_value} to {param.value}"
+                return action_message
 
-            elif key == ord(param.decrease_key):
+            elif key_char == param.decrease_key:
                 old_value   = param.value
                 param.value = max(param.value - param.step, param.min)
-                logger.info(
-                    f"Decreased '{param.display_name}' from {old_value} to {param.value}"
-                )
-                return 'reprocess'
+                action_message = f"Decreased '{param.display_name}' from {old_value} to {param.value}"
+                return action_message
+
         return None
 
 # -------------------- Utility Functions --------------------
 
 def get_image_files(images_dir: Path = None) -> list[Path]:
     """
-    Retrieves a sorted list of image files from the nearest 'images' directory.
+    Retrieve a sorted list of image files from the nearest 'images' directory.
     """
     images_dir = images_dir or Path(__file__).resolve().parent
 
     for parent in [images_dir, *images_dir.parents]:
         potential_images_dir = parent / 'images'
+
         if potential_images_dir.is_dir():
             image_files = sorted(
                 f for f in potential_images_dir.iterdir()
@@ -131,59 +93,61 @@ def get_image_files(images_dir: Path = None) -> list[Path]:
 
 def ensure_odd(value: int) -> int:
     """
-    Uses the bitwise OR operation to set the least significant bit to 1,
-    making the number odd if it isn't already.
+    Sets the least significant bit to 1, converting even numbers to the next odd number.
     """
     return value | 1
 
 def load_image(image_path: str) -> np.ndarray:
     """
-    Loads an image from the given file path.
+    Load an image from the specified file path.
     """
     image = cv2.imread(image_path)
     if image is None:
         raise FileNotFoundError(f"Image not found: {image_path}")
     return image
 
-def extract_params(steps: list[ProcessingStep]) -> dict[str, Any]:
+def extract_params(steps: list[ProcessingStep]) -> dict:
     """
-    Extracts parameters from processing steps into a dictionary.
+    Extract parameters from processing steps into a dictionary mapping names to values.
     """
     params = {
         param.name: param.value
         for step in steps
         for param in step.parameters
     }
-
     params.update({
         f"use_{step.name}": step.is_enabled
         for step in steps
     })
-
     return params
 
 # -------------------- Initialization Function --------------------
 
-def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingStep]:
+def initialize_steps(params_override: dict = None) -> list[ProcessingStep]:
     """
     Initializes processing steps with default parameters or overrides.
 
     Args:
-        params_override (Dict[str, Any], optional): Parameters to override defaults.
+        params_override : Optional; a dictionary of parameters to override default settings.
 
     Returns:
-        List[ProcessingStep]: List of initialized processing steps.
+        A list of initialized ProcessingStep instances.
+
+    Raises:
+        FileNotFoundError : If the configuration file is not found.
+        Exception         : If there is an error parsing the configuration file.
     """
-    # Load step definitions from the YAML configuration file
     params_file = Path(__file__).resolve().parent / 'params.yml'
     yaml        = YAML(typ = 'safe')
 
     try:
         with open(params_file, 'r') as f:
             step_definitions = yaml.load(f)
+
     except FileNotFoundError:
         logger.error(f"Configuration file not found: {params_file}")
         raise
+
     except Exception as e:
         logger.error(f"Error parsing configuration file: {e}")
         raise
@@ -191,24 +155,21 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
     steps = []
     for index, step_def in enumerate(step_definitions):
         toggle_key = str(index + 1)
-
-        # Create Parameter instances from the parameter dictionaries
         parameters = [Parameter(**param) for param in step_def.get('parameters', [])]
+
         steps.append(
             ProcessingStep(
-                name=step_def['name'],
-                display_name=step_def['display_name'],
-                toggle_key=toggle_key,
-                parameters=parameters
+                name         = step_def['name'],
+                display_name = step_def['display_name'],
+                toggle_key   = toggle_key,
+                parameters   = parameters
             )
         )
 
-    # Create maps for quick lookup
-    step_map  = {f"use_{step.name}": step for step in steps}
-    param_map = {param.name: param for step in steps for param in step.parameters}
-
-    # Apply any parameter overrides
     if params_override:
+        step_map  = {f"use_{step.name}": step for step in steps}
+        param_map = {param.name: param for step in steps for param in step.parameters}
+
         for key, value in params_override.items():
             if key in step_map:
                 step_map[key].is_enabled = value
@@ -216,7 +177,6 @@ def initialize_steps(params_override: dict[str, Any] = None) -> list[ProcessingS
                 param_map[key].value = value
 
     return steps
-
 
 # -------------------- Image Processing Functions --------------------
 
@@ -228,12 +188,15 @@ def process_image(
     Processes the image according to the parameters provided.
 
     Args:
-        image (np.ndarray) : Original image to process.
-        **params           : Arbitrary keyword arguments containing processing parameters.
+        image    : Original image to process.
+        **params : Arbitrary keyword arguments containing processing parameters.
 
     Returns:
-        tuple[np.ndarray, np.ndarray, np.ndarray, list[np.ndarray]]:
-            Processed color image, grayscale image, binary image, and list of contours.
+        A tuple containing:
+            - Processed color image.
+            - Grayscale image.
+            - Binary image.
+            - List of contours.
     """
     processed = image.copy()
 
@@ -242,20 +205,22 @@ def process_image(
         k_size    = ensure_odd(int(params['shadow_kernel_size']))
         blur_size = ensure_odd(int(params['shadow_median_blur']))
         kernel    = np.ones((k_size, k_size), np.uint8)
-        channels  = list(cv2.split(processed))  # Split image into channels for processing
+        channels  = list(cv2.split(processed))  # Convert tuple to list for modification
 
-        for i, channel in enumerate(channels):
-            dilated     = cv2.dilate(channel, kernel)
+        for i in range(len(channels)):
+            dilated     = cv2.dilate(channels[i], kernel)
             background  = cv2.medianBlur(dilated, blur_size)
-            difference  = 255 - cv2.absdiff(channel, background)
+            difference  = 255 - cv2.absdiff(channels[i], background)
             channels[i] = cv2.normalize(difference, None, 0, 255, cv2.NORM_MINMAX)
 
-        processed = cv2.merge(channels)  # Merge channels back into a color image
+        processed = cv2.merge(channels)
 
-    # Gaussian Blur
-    if params.get('use_gaussian_blur'):
-        size      = ensure_odd(int(params['gaussian_kernel_size']))
-        processed = cv2.GaussianBlur(processed, (size, size), 0)
+    # Bilateral Filter
+    if params.get('use_bilateral_filter'):
+        diameter    = int(params['bilateral_diameter'])
+        sigma_color = params['bilateral_sigma_color']
+        sigma_space = params['bilateral_sigma_space']
+        processed   = cv2.bilateralFilter(processed, diameter, sigma_color, sigma_space)
 
     # Color CLAHE
     if params.get('use_color_clahe'):
@@ -269,11 +234,7 @@ def process_image(
 
     # Edge Detection
     if params.get('use_edge_detection'):
-        edges = cv2.Canny(
-            image      = grayscale,
-            threshold1 = params['canny_threshold1'],
-            threshold2 = params['canny_threshold2']
-        )
+        edges     = cv2.Canny(grayscale, params['canny_threshold1'], params['canny_threshold2'])
         grayscale = cv2.bitwise_or(grayscale, edges)
 
     # Adaptive Thresholding
@@ -287,28 +248,12 @@ def process_image(
             blockSize      = b_size,
             C              = params['adaptive_c']
         )
-
     else:
         _, binary = cv2.threshold(
             src    = grayscale,
             thresh = 0,
             maxval = 255,
             type   = cv2.THRESH_BINARY + cv2.THRESH_OTSU
-        )
-
-    # Morphological Transformations
-    if params.get('use_morphology'):
-        k_size = ensure_odd(int(params['morph_kernel_size']))
-        kernel = np.ones((k_size, k_size), np.uint8)
-        binary = cv2.erode(
-            src        = binary,
-            kernel     = kernel,
-            iterations = int(params['erosion_iterations'])
-        )
-        binary = cv2.dilate(
-            src        = binary,
-            kernel     = kernel,
-            iterations = int(params['dilation_iterations'])
         )
 
     # Find Contours
@@ -330,55 +275,43 @@ def process_image(
         max_contours = int(params['max_contours'])
         contours     = contours[:max_contours]
 
-    # Contour Approximation using minAreaRect
-    if params.get('use_contour_approximation'):
-        contours = [
-            cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
-            for contour in contours
-        ]
+        # Contour Approximation
+        if params['contour_approximation']:
+            contours = [
+                cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
+                for contour in contours
+            ]
 
     return processed, grayscale, binary, contours
 
-def ocr_spine(spine_image: np.ndarray, **params) -> str:
+def ocr_spine(
+    spine_image : np.ndarray, 
+    reader      : easyocr.Reader, 
+    **params
+) -> str:
     """
-    Performs OCR on a given spine image using Tesseract.
+    Performs OCR on a given spine image using EasyOCR.
 
     Args:
-        spine_image (np.ndarray) : The image of the book spine to perform OCR on.
-        **params                 : Arbitrary keyword arguments containing OCR parameters.
+        spine_image : The image of the book spine to perform OCR on.
+        reader      : An instance of easyocr.Reader.
+        **params    : Arbitrary keyword arguments containing OCR parameters.
 
     Returns:
-        str: Extracted text from the spine image.
+        Extracted text from the spine image.
     """
-    config = f"--oem {int(params['oem'])} --psm {int(params['psm'])}"
-
     try:
-        max_ocr_image_size = params.get('max_ocr_image_size', 1000)
-        height, width      = spine_image.shape[:2]
-        scaling_factor     = min(1.0, max_ocr_image_size / max(height, width))
-        if scaling_factor < 1.0:
-            spine_image = cv2.resize(
-                spine_image,
-                (int(width * scaling_factor), int(height * scaling_factor)),
-                interpolation = cv2.INTER_AREA
-            )
-
-        data = pytesseract.image_to_data(
-            spine_image, 
-            lang        = 'eng', 
-            config      = config, 
-            output_type = pytesseract.Output.DICT
+        # EasyOCR expects RGB
+        result = reader.readtext(
+            cv2.cvtColor(spine_image, cv2.COLOR_BGR2RGB)
         )
 
-        text    = ''
-        n_boxes = len(data['text'])
-
-        for i in range(n_boxes):
-            conf = int(data['conf'][i])
-            if conf >= params.get('ocr_confidence_threshold', 50):
-                text += data['text'][i] + ' '
+        # Filter results based on confidence
+        min_confidence = params.get('ocr_confidence_threshold', 0.3)
+        text = ' '.join([res[1] for res in result if res[2] >= min_confidence])
+        
         return text.strip()
-    
+
     except Exception as e:
         logger.error(f"OCR failed: {e}")
         return ''
@@ -387,68 +320,89 @@ def draw_contours_and_text(
     image       : np.ndarray,
     ocr_image   : np.ndarray,
     contours    : list[np.ndarray],
-    params      : dict[str, Any]
-) -> np.ndarray:
+    params      : dict,
+    reader      : easyocr.Reader,
+    perform_ocr : bool = True
+) -> tuple[np.ndarray, int]:
     """
     Draws contours and recognized text on the image.
-
-    Args:
-        image       (np.ndarray)       : Original image (used for annotations).
-        ocr_image   (np.ndarray)       : Image to use for OCR.
-        contours    (list[np.ndarray]) : List of contours to draw.
-        params      (dict[str, Any])   : Parameters including whether to perform OCR.
-
-    Returns:
-        np.ndarray: Annotated image with contours and text.
     """
-    annotated     = image.copy()
-    contour_color = (180, 0, 180)
-
-    for contour in contours:
-        cv2.drawContours(
-            image      = annotated,
-            contours   = [contour],
-            contourIdx = -1,
-            color      = contour_color,
-            thickness  = 4
+    annotated = image.copy()
+    total_characters = 0
+    
+    if perform_ocr and params.get('use_ocr_settings'):
+        sorted_contours = sorted(
+            contours,
+            key     = cv2.contourArea,
+            reverse = True
         )
-
-        if params.get('use_ocr_settings'):
+        
+        # Process only the largest contours up to max_contours
+        max_contours = min(int(params.get('max_contours', 10)), len(sorted_contours))
+        for contour in sorted_contours[:max_contours]:
+            cv2.drawContours(
+                image      = annotated,
+                contours   = [contour],
+                contourIdx = -1,
+                color      = (180, 0, 180),
+                thickness  = 4
+            )
+            
+            # Get region from the processed image
             x, y, w, h = cv2.boundingRect(contour)
             ocr_region = ocr_image[y:y+h, x:x+w]
-            ocr_text   = ocr_spine(ocr_region, **params)
-
-            if ocr_text:
-                (text_width, text_height), _ = cv2.getTextSize(
-                    text      = ocr_text,
-                    fontFace  = cv2.FONT_HERSHEY_DUPLEX,
-                    fontScale = 0.6,
-                    thickness = 2
+            
+            if ocr_region.size > 0:
+                # Convert to RGB for EasyOCR
+                ocr_region_rgb = cv2.cvtColor(ocr_region, cv2.COLOR_BGR2RGB)
+                
+                # Perform OCR with book spine specific settings
+                results = reader.readtext(
+                    ocr_region_rgb,
+                    decoder        = 'wordbeamsearch',  # Better for continuous text
+                    rotation_info  = [90, 180, 270]     # Check all possible rotations
                 )
-                text_x = x + (w - text_width)  // 2
-                text_y = y + (h + text_height) // 2
-
-                # Draw background rectangle for text
-                cv2.rectangle(
-                    img       = annotated,
-                    pt1       = (text_x - 5, text_y - text_height - 5),
-                    pt2       = (text_x + text_width + 5, text_y + 5),
-                    color     = (0, 0, 0),
-                    thickness = -1
-                )
-
-                # Put text over rectangle
-                cv2.putText(
-                    img       = annotated,
-                    text      = ocr_text,
-                    org       = (text_x, text_y),
-                    fontFace  = cv2.FONT_HERSHEY_DUPLEX,
-                    fontScale = 0.6,
-                    color     = (255, 255, 255),
-                    thickness = 2
-                )
-
-    return annotated
+                
+                # Filter by confidence threshold
+                min_confidence = params.get('ocr_confidence_threshold', 0.3)
+                filtered_results = [res for res in results if res[2] >= min_confidence]
+                
+                if filtered_results:
+                    # Join all found text
+                    ocr_text = ' '.join(res[1] for res in filtered_results)
+                    total_characters += len(ocr_text)
+                    
+                    # Center text in contour
+                    (text_width, text_height), _ = cv2.getTextSize(
+                        text      = ocr_text,
+                        fontFace  = cv2.FONT_HERSHEY_DUPLEX,
+                        fontScale = 0.6,
+                        thickness = 2
+                    )
+                    text_x = x + (w - text_width) // 2
+                    text_y = y + (h + text_height) // 2
+                    
+                    # Draw background rectangle
+                    cv2.rectangle(
+                        img       = annotated,
+                        pt1       = (text_x - 5, text_y - text_height - 5),
+                        pt2       = (text_x + text_width + 5, text_y + 5),
+                        color     = (0, 0, 0),
+                        thickness = -1
+                    )
+                    
+                    # Draw text
+                    cv2.putText(
+                        img       = annotated,
+                        text      = ocr_text,
+                        org       = (text_x, text_y),
+                        fontFace  = cv2.FONT_HERSHEY_DUPLEX,
+                        fontScale = 0.6,
+                        color     = (255, 255, 255),
+                        thickness = 2
+                    )
+                    
+    return annotated, total_characters
 
 # -------------------- UI and Visualization Functions --------------------
 
@@ -463,14 +417,14 @@ def create_sidebar(
     Creates a sidebar image displaying the controls and current settings.
 
     Args:
-        steps           (list[ProcessingStep]) : List of processing steps.
-        sidebar_width   (int)                  : Width of the sidebar.
-        current_display (str)                  : Name of the current display option.
-        image_name      (str)                  : Name of the current image file.
-        window_height   (int)                  : Height of the window.
+        steps           : List of processing steps.
+        sidebar_width   : Width of the sidebar.
+        current_display : Name of the current display option.
+        image_name      : Name of the current image file.
+        window_height   : Height of the window.
 
     Returns:
-        np.ndarray: Image of the sidebar.
+        Image of the sidebar.
     """
     sidebar        = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
     scale_factor   = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
@@ -506,6 +460,7 @@ def create_sidebar(
         scale = 1.1
     )
     y_position += line_height
+
     put_text(
         text  = f"   [?] Current Image: {image_name}",
         x     = 10,
@@ -555,14 +510,14 @@ def create_sidebar(
 
 def interactive_experiment(
     image_files     : list[Path],
-    params_override : dict[str, Any] = None
+    params_override : dict = None
 ):
     """
     Runs the interactive experiment allowing the user to adjust image processing parameters.
 
     Args:
-        image_files     (list[Path])               : List of image file paths to process.
-        params_override (dict[str, Any], optional) : Parameters to override default settings.
+        image_files     : List of image file paths to process.
+        params_override : Optional; parameters to override default settings.
 
     Raises:
         ValueError: If no image files are provided.
@@ -587,9 +542,13 @@ def interactive_experiment(
         fontScale = 0.8 * scale_factor,
         thickness = 1
     )
-    sidebar_width      = max(400, int(width * 1.2))
-    last_params        = None
-    cached_results     = None
+    sidebar_width       = max(400, int(width * 1.2))
+    last_params         = None
+    cached_results      = None
+    pending_log_message = None  # Initialize pending log message
+
+    # Initialize EasyOCR Reader
+    reader = easyocr.Reader(['en'], gpu = False)
 
     # Resize window to accommodate sidebar
     cv2.resizeWindow(
@@ -599,21 +558,31 @@ def interactive_experiment(
     )
 
     # Define key actions
+    def quit_action():
+        return 'quit'
+
+    def toggle_display_action():
+        return 'toggle_display'
+
+    def next_image_action():
+        return 'next_image'
+
     key_actions = {
-        ord('q'): 'quit',
-        ord('/'): 'toggle_display',
-        ord('?'): 'next_image',
+        ord('q'): quit_action,
+        ord('/'): toggle_display_action,
+        ord('?'): next_image_action,
     }
 
     for step in steps:
-        key_actions[ord(step.toggle_key)] = lambda step = step: step.toggle()
+        key_actions[ord(step.toggle_key)] = step.toggle
         for param in step.parameters:
-            key_actions[ord(param.increase_key)] = lambda step = step, key_char = param.increase_key: step.adjust_param(ord(key_char))
-            key_actions[ord(param.decrease_key)] = lambda step = step, key_char = param.decrease_key: step.adjust_param(ord(key_char))
+            key_actions[ord(param.increase_key)] = functools.partial(step.adjust_param, param.increase_key)
+            key_actions[ord(param.decrease_key)] = functools.partial(step.adjust_param, param.decrease_key)
 
     # Main loop
     while True:
         current_image_path = image_files[current_image_idx]
+
         if last_params is None:
             # Load new image and adjust window height
             original_image = load_image(str(current_image_path))
@@ -628,19 +597,64 @@ def interactive_experiment(
         if last_params != current_params:
             # Reprocess the image if parameters have changed
             processed_image, _, binary_image, contours = process_image(
-                image=original_image,
+                image = original_image,
                 **current_params
             )
-            annotated_image = draw_contours_and_text(
-                image     = original_image,
-                ocr_image = processed_image,
-                contours  = contours,
-                params    = current_params
-            )
-            cached_results = (processed_image, binary_image, annotated_image)
             last_params    = current_params.copy()
+            cached_results = {
+                'processed_image' : processed_image,
+                'binary_image'    : binary_image,
+                'contours'        : contours,
+                'annotated_image' : None,
+                'total_characters': None,
+                'num_contours'    : len(contours)
+            }
 
-        display_image = cached_results[current_display]
+            # If we have a pending log message, log it now with counts
+            if pending_log_message:
+                log_message = f"{pending_log_message} (Contours: {len(contours)}"
+                if current_params.get('use_ocr_settings') and current_display == 2:
+                    # Ensure total_characters is calculated
+                    if cached_results['annotated_image'] is None:
+                        annotated_image, total_characters = draw_contours_and_text(
+                            image       = original_image,
+                            ocr_image   = cached_results['processed_image'],
+                            contours    = cached_results['contours'],
+                            params      = current_params,
+                            reader      = reader,
+                            perform_ocr = True
+                        )
+                        cached_results['annotated_image']  = annotated_image
+                        cached_results['total_characters'] = total_characters
+                    else:
+                        total_characters = cached_results['total_characters']
+                    log_message += f"; Characters: {total_characters}"
+                log_message += ")"
+                logger.info(log_message)
+                pending_log_message = None  # Clear the pending message
+
+        # Determine which image to display
+        if current_display == 0:
+            display_image = cached_results['processed_image']
+
+        elif current_display == 1:
+            display_image = cached_results['binary_image']
+
+        elif current_display == 2:
+            if cached_results['annotated_image'] is None:
+                annotated_image, total_characters = draw_contours_and_text(
+                    image       = original_image,
+                    ocr_image   = cached_results['processed_image'],
+                    contours    = cached_results['contours'],
+                    params      = current_params,
+                    reader      = reader,
+                    perform_ocr = True
+                )
+                cached_results['annotated_image']  = annotated_image
+                cached_results['total_characters'] = total_characters
+
+            display_image = cached_results['annotated_image']
+
         if len(display_image.shape) == 2:
             display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
 
@@ -668,22 +682,26 @@ def interactive_experiment(
 
         action = key_actions.get(key)
         if action:
-            if action == 'quit':
+            action_result = action()
+
+            if action_result == 'quit':
                 break
 
-            elif action == 'toggle_display':
+            elif action_result == 'toggle_display':
                 current_display = (current_display + 1) % len(display_options)
                 logger.info(f"Switched to view: {display_options[current_display]}")
 
-            elif action == 'next_image':
+            elif action_result == 'next_image':
                 current_image_idx = (current_image_idx + 1) % len(image_files)
                 last_params       = None
                 logger.info(f"Switched to image: {image_files[current_image_idx].name}")
 
             else:
-                result = action()
-                if result == 'reprocess':
-                    last_params = None
+                # action_result is an action message from toggle or adjust_param
+                pending_log_message = action_result
+                last_params = None
+                if cached_results:
+                    cached_results['annotated_image'] = None
 
         for handler in logger.handlers:
             handler.flush()
