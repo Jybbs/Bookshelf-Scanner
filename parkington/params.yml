@@ -1,18 +1,57 @@
+- name         : show_annotations
+  display_name : Show Annotations
+  parameters:
+    - name         : min_contour_area
+      display_name : Min Contour Area
+      value        : 1000
+      min          : 100
+      max          : 10000
+      step         : 100
+      increase_key : A
+    - name         : max_contours
+      display_name : Max Contours
+      value        : 10
+      min          : 0
+      max          : 250
+      step         : 5
+      increase_key : M
+    - name         : contour_approximation
+      display_name : Contour Approximation
+      value        : True
+      min          : False
+      max          : True
+      step         : 1
+      increase_key : P
+    - name         : enable_ocr
+      display_name : Enable OCR
+      value        : True
+      min          : False
+      max          : True
+      step         : 1
+      increase_key : O
+    - name         : ocr_confidence_threshold
+      display_name : OCR Confidence Threshold
+      value        : 0.3
+      min          : 0.0
+      max          : 1.0
+      step         : 0.1
+      increase_key : R
+
 - name         : shadow_removal
   display_name : Shadow Removal
   parameters:
     - name         : shadow_kernel_size
       display_name : Shadow Kernel Size
       value        : 15
-      min          : 3
-      max          : 21
+      min          : 1
+      max          : 45
       step         : 2
       increase_key : K
     - name         : shadow_median_blur
       display_name : Shadow Median Blur
       value        : 21
-      min          : 3
-      max          : 99
+      min          : 1
+      max          : 45
       step         : 2
       increase_key : B
 
@@ -22,7 +61,7 @@
     - name         : clahe_clip_limit
       display_name : CLAHE Clip Limit
       value        : 2.0
-      min          : 0.5
+      min          : 0.0
       max          : 10.0
       step         : 0.5
       increase_key : H
@@ -34,20 +73,20 @@
       display_name : Bilateral Diameter
       value        : 9
       min          : 1
-      max          : 25
+      max          : 45
       step         : 2
       increase_key : D
     - name         : bilateral_sigma_color
       display_name : Sigma Color
       value        : 75.0
-      min          : 1.0
+      min          : 0.0
       max          : 150.0
       step         : 5.0
-      increase_key : C
+      increase_key : G
     - name         : bilateral_sigma_space
       display_name : Sigma Space
       value        : 75.0
-      min          : 1.0
+      min          : 0.0
       max          : 150.0
       step         : 5.0
       increase_key : S
@@ -68,7 +107,7 @@
       min          : 0
       max          : 255
       step         : 5
-      increase_key : t
+      increase_key : U
 
 - name         : adaptive_thresholding
   display_name : Adaptive Thresholding
@@ -77,9 +116,9 @@
       display_name : Adaptive Block Size
       value        : 11
       min          : 3
-      max          : 51
+      max          : 45
       step         : 2
-      increase_key : B
+      increase_key : Z
     - name         : adaptive_c
       display_name : Adaptive C
       value        : 2
@@ -87,39 +126,3 @@
       max          : 10
       step         : 1
       increase_key : C
-
-- name         : contour_adjustments
-  display_name : Contour Adjustments
-  parameters:
-    - name         : min_contour_area
-      display_name : Min Contour Area
-      value        : 1000
-      min          : 100
-      max          : 10000
-      step         : 100
-      increase_key : A
-    - name         : max_contours
-      display_name : Max Contours for OCR
-      value        : 10
-      min          : 1
-      max          : 50
-      step         : 5
-      increase_key : M
-    - name         : contour_approximation
-      display_name : Contour Approximation
-      value        : True
-      min          : False
-      max          : True
-      step         : 1
-      increase_key : P
-
-- name         : ocr_settings
-  display_name : OCR Settings
-  parameters:
-    - name         : ocr_confidence_threshold
-      display_name : OCR Confidence Threshold
-      value        : 0.3
-      min          : 0.0
-      max          : 1.0
-      step         : 0.05
-      increase_key : O
