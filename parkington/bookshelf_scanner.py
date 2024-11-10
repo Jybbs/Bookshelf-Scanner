@@ -554,7 +554,6 @@ def interactive_experiment(
     last_params    = None
     cached_results = None
 
-    # Set up key actions
     key_actions = {
         ord('q'): lambda: 'quit',
         ord('/'): lambda: 'toggle_display',
@@ -566,12 +565,11 @@ def interactive_experiment(
            for step in steps for param in step.parameters}
     }
 
-    # Main loop
     while True:
         # Load new image if needed
         if last_params is None:
             original_image = load_image(str(image_files[current_image_idx]))
-            window_height = max(original_image.shape[0], 800)
+            window_height  = max(original_image.shape[0], 800)
             cv2.resizeWindow(window_name, original_image.shape[1] + sidebar_width, window_height)
 
         # Process image if parameters changed
@@ -583,14 +581,14 @@ def interactive_experiment(
             )
             last_params = current_params.copy()
             cached_results = {
-                'processed_image'    : processed_image,
-                'binary_image'       : binary_image,
-                'contours'           : contours,
-                'annotated_original' : None,
-                'annotated_processed': None,
-                'annotated_binary'   : None,
-                'total_characters'   : None,
-                'num_contours'       : len(contours)
+                'processed_image'     : processed_image,
+                'binary_image'        : binary_image,
+                'contours'            : contours,
+                'annotated_original'  : None,
+                'annotated_processed' : None,
+                'annotated_binary'    : None,
+                'total_characters'    : None,
+                'num_contours'        : len(contours)
             }
 
         # Get base image and cache key
@@ -612,7 +610,7 @@ def interactive_experiment(
                     reader      = reader,
                     perform_ocr = True
                 )
-                cached_results[cache_key] = annotated_image
+                cached_results[cache_key]          = annotated_image
                 cached_results['total_characters'] = total_characters
 
             display_image = cached_results[cache_key]
@@ -663,6 +661,7 @@ def interactive_experiment(
                     if current_params.get('enable_ocr'):
                         log_parts.append(f"Characters: {cached_results['total_characters']}")
                     logger.info(f"{result} {' '.join(log_parts)})")
+
                 last_params = None
                 if cached_results:
                     cached_results.update({k: None for k in 
