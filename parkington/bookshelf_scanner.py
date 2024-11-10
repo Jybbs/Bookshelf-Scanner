@@ -316,8 +316,8 @@ def ocr_spine(
         logger.error(f"OCR failed: {e}")
         return ''
 
-def draw_contours_and_text(
-    image       : np.ndarray,
+def draw_annotations(
+    base_image  : np.ndarray,
     ocr_image   : np.ndarray,
     contours    : list[np.ndarray],
     params      : dict,
@@ -325,29 +325,33 @@ def draw_contours_and_text(
     perform_ocr : bool = True
 ) -> tuple[np.ndarray, int]:
     """
-    Draws contours and recognized text on the image.
+    Draws contours and recognized text on the image if annotations are enabled.
     """
-    annotated = image.copy()
+    annotated       = base_image.copy()
     total_characters = 0
     
-    if perform_ocr and params.get('use_ocr_settings'):
-        sorted_contours = sorted(
-            contours,
-            key     = cv2.contourArea,
-            reverse = True
+    if not params.get('use_show_annotations'):
+        return annotated, total_characters
+
+    sorted_contours = sorted(
+        contours,
+        key     = cv2.contourArea,
+        reverse = True
+    )
+    
+    # Process only the largest contours up to max_contours
+    max_contours = min(int(params.get('max_contours', 10)), len(sorted_contours))
+    for contour in sorted_contours[:max_contours]:
+        cv2.drawContours(
+            image      = annotated,
+            contours   = [contour],
+            contourIdx = -1,
+            color      = (180, 0, 180),
+            thickness  = 4
         )
         
-        # Process only the largest contours up to max_contours
-        max_contours = min(int(params.get('max_contours', 10)), len(sorted_contours))
-        for contour in sorted_contours[:max_contours]:
-            cv2.drawContours(
-                image      = annotated,
-                contours   = [contour],
-                contourIdx = -1,
-                color      = (180, 0, 180),
-                thickness  = 4
-            )
-            
+        # Only perform OCR if enabled in parameters
+        if perform_ocr and params.get('enable_ocr', False):
             # Get region from the processed image
             x, y, w, h = cv2.boundingRect(contour)
             ocr_region = ocr_image[y:y+h, x:x+w]
@@ -359,8 +363,8 @@ def draw_contours_and_text(
                 # Perform OCR with book spine specific settings
                 results = reader.readtext(
                     ocr_region_rgb,
-                    decoder        = 'wordbeamsearch',  # Better for continuous text
-                    rotation_info  = [90, 180, 270]     # Check all possible rotations
+                    decoder       = 'wordbeamsearch',
+                    rotation_info = [90, 180, 270]
                 )
                 
                 # Filter by confidence threshold
@@ -526,17 +530,17 @@ def interactive_experiment(
         raise ValueError("No image files provided")
 
     # Initialize variables and UI elements
-    window_name        = 'Bookshelf Scanner'
-    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
-    current_image_idx  = 0
-    display_options    = ['Processed Image', 'Binary Image', 'Annotated Image']
-    current_display    = 0
-    steps              = initialize_steps(params_override)
-    original_image     = load_image(str(image_files[current_image_idx]))
-    window_height      = max(original_image.shape[0], 800)
-    scale_factor       = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
-    sample_text        = "   [X | Y] Very Long Parameter Name: 100000.000"
-    (width, _), _      = cv2.getTextSize(
+    window_name         = 'Bookshelf Scanner'
+    cv2.namedWindow('Bookshelf Scanner', cv2.WINDOW_NORMAL)
+    current_image_idx   = 0
+    display_options     = ['Original Image', 'Processed Image', 'Binary Image']
+    current_display     = 0
+    steps               = initialize_steps(params_override)
+    original_image      = load_image(str(image_files[current_image_idx]))
+    window_height       = max(original_image.shape[0], 800)
+    scale_factor        = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
+    sample_text         = "   [X | Y] Very Long Parameter Name: 100000.000"
+    (width, _), _       = cv2.getTextSize(
         text      = sample_text,
         fontFace  = cv2.FONT_HERSHEY_DUPLEX,
         fontScale = 0.8 * scale_factor,
@@ -545,10 +549,10 @@ def interactive_experiment(
     sidebar_width       = max(400, int(width * 1.2))
     last_params         = None
     cached_results      = None
-    pending_log_message = None  # Initialize pending log message
+    pending_log_message = None
 
     # Initialize EasyOCR Reader
-    reader = easyocr.Reader(['en'], gpu = False)
+    reader = easyocr.Reader(['en'], gpu=False)
 
     # Resize window to accommodate sidebar
     cv2.resizeWindow(
@@ -595,69 +599,80 @@ def interactive_experiment(
 
         current_params = extract_params(steps)
         if last_params != current_params:
-            # Reprocess the image if parameters have changed
+
+            # Process image and update cache
             processed_image, _, binary_image, contours = process_image(
                 image = original_image,
                 **current_params
             )
             last_params    = current_params.copy()
             cached_results = {
-                'processed_image' : processed_image,
-                'binary_image'    : binary_image,
-                'contours'        : contours,
-                'annotated_image' : None,
-                'total_characters': None,
-                'num_contours'    : len(contours)
+                'processed_image'     : processed_image,
+                'binary_image'        : binary_image,
+                'contours'            : contours,
+                'annotated_original'  : None,
+                'annotated_processed' : None,
+                'annotated_binary'    : None,
+                'total_characters'    : None,
+                'num_contours'        : len(contours)
             }
 
-            # If we have a pending log message, log it now with counts
+            # Log results if we have a pending message
             if pending_log_message:
-                log_message = f"{pending_log_message} (Contours: {len(contours)}"
-                if current_params.get('use_ocr_settings') and current_display == 2:
-                    # Ensure total_characters is calculated
-                    if cached_results['annotated_image'] is None:
-                        annotated_image, total_characters = draw_contours_and_text(
-                            image       = original_image,
-                            ocr_image   = cached_results['processed_image'],
-                            contours    = cached_results['contours'],
-                            params      = current_params,
-                            reader      = reader,
-                            perform_ocr = True
-                        )
-                        cached_results['annotated_image']  = annotated_image
-                        cached_results['total_characters'] = total_characters
-                    else:
-                        total_characters = cached_results['total_characters']
-                    log_message += f"; Characters: {total_characters}"
-                log_message += ")"
+                log_message = pending_log_message
+                if current_params.get('use_show_annotations'):
+                    log_message += f" (Contours: {len(contours)}"
+                    if current_params.get('enable_ocr'):
+                        # Ensure we have character count
+                        if cached_results['annotated_original'] is None:
+                            _, total_characters = draw_annotations(
+                                base_image  = original_image,
+                                ocr_image   = processed_image,
+                                contours    = contours,
+                                params      = current_params,
+                                reader      = reader,
+                                perform_ocr = True
+                            )
+                            cached_results['total_characters'] = total_characters
+                        log_message += f"; Characters: {cached_results['total_characters']}"
+                    log_message += ")"
                 logger.info(log_message)
-                pending_log_message = None  # Clear the pending message
+                pending_log_message = None
 
-        # Determine which image to display
+        # Determine which base image to display
         if current_display == 0:
-            display_image = cached_results['processed_image']
+            display_image = original_image
+            cache_key    = 'annotated_original'
 
         elif current_display == 1:
-            display_image = cached_results['binary_image']
+            display_image = cached_results['processed_image']
+            cache_key    = 'annotated_processed'
 
-        elif current_display == 2:
-            if cached_results['annotated_image'] is None:
-                annotated_image, total_characters = draw_contours_and_text(
-                    image       = original_image,
+        else:
+            display_image = cached_results['binary_image']
+            cache_key    = 'annotated_binary'
+
+        # Apply annotations if enabled
+        if current_params.get('use_show_annotations'):
+            if cached_results[cache_key] is None:
+                annotated_image, total_characters = draw_annotations(
+                    base_image  = display_image,
                     ocr_image   = cached_results['processed_image'],
                     contours    = cached_results['contours'],
                     params      = current_params,
                     reader      = reader,
                     perform_ocr = True
                 )
-                cached_results['annotated_image']  = annotated_image
-                cached_results['total_characters'] = total_characters
+                cached_results[cache_key] = annotated_image
+                if cache_key == 'annotated_original':
+                    cached_results['total_characters'] = total_characters
+            display_image = cached_results[cache_key]
 
-            display_image = cached_results['annotated_image']
-
+        # Convert to BGR if grayscale
         if len(display_image.shape) == 2:
             display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
 
+        # Resize display image
         display_image = cv2.resize(
             src   = display_image,
             dsize = (
@@ -666,7 +681,7 @@ def interactive_experiment(
             )
         )
 
-        # Create sidebar and display images
+        # Create and show sidebar
         sidebar_image = create_sidebar(
             steps           = steps,
             sidebar_width   = sidebar_width,
@@ -675,12 +690,14 @@ def interactive_experiment(
             window_height   = window_height
         )
 
+        # Combine images and display
         main_display = np.hstack([display_image, sidebar_image])
         cv2.imshow(window_name, main_display)
 
+        # Handle key events
         key = cv2.waitKey(1) & 0xFF
-
         action = key_actions.get(key)
+        
         if action:
             action_result = action()
 
@@ -693,16 +710,19 @@ def interactive_experiment(
 
             elif action_result == 'next_image':
                 current_image_idx = (current_image_idx + 1) % len(image_files)
-                last_params       = None
+                last_params      = None
                 logger.info(f"Switched to image: {image_files[current_image_idx].name}")
 
             else:
-                # action_result is an action message from toggle or adjust_param
+                # Action result is an action message from toggle or adjust_param
                 pending_log_message = action_result
                 last_params = None
                 if cached_results:
-                    cached_results['annotated_image'] = None
+                    cached_results['annotated_original']  = None
+                    cached_results['annotated_processed'] = None
+                    cached_results['annotated_binary']    = None
 
+        # Ensure log messages are written
         for handler in logger.handlers:
             handler.flush()
 
