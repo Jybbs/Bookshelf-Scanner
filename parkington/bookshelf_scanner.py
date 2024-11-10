@@ -731,12 +731,6 @@ def interactive_experiment(
 # -------------------- Entry Point --------------------
 
 if __name__ == "__main__":
-    params_override = {
-        'use_shadow_removal'      : True,
-        'shadow_kernel_size'      : 11,
-        'use_contour_adjustments' : True,
-        'min_contour_area'        : 1000
-    }
 
     image_files = get_image_files()
-    interactive_experiment(image_files, params_override)
+    interactive_experiment(image_files)
