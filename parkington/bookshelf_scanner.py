@@ -56,9 +56,12 @@ class Parameter:
     max          : Any                       # Maximum value of the parameter.
     step         : Any                       # Step size for incrementing/decrementing the parameter.
     increase_key : str                       # Key to increase the parameter.
-    decrease_key : str = field(init = False) # Key to decrease the parameter (lowercase of `increase_key``).
+    decrease_key : str = field(init = False) # Key to decrease the parameter.
 
     def __post_init__(self):
+        """
+        The `decrease_key` will always be the lowercase of the `increase_key` in `params.yml`.
+        """
         self.decrease_key = self.increase_key.lower()
 
 @dataclass
@@ -363,10 +366,13 @@ def draw_annotations(
     if not params.get('use_show_annotations'):
         return base_image.copy(), 0
         
-    annotated = base_image.copy()
+    annotated        = base_image.copy()
     total_characters = 0
-    
-    sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)[:int(params.get('max_contours', 10))]
+    sorted_contours  = sorted(
+        contours, 
+        key     = cv2.contourArea, 
+        reverse = True
+    )[:int(params.get('max_contours', 10))]
     
     for contour in sorted_contours:
         cv2.drawContours(
