@@ -1,2 +1,5 @@
 # Log files
 *.log
+
+#All pycache files
+**/__pycache__/
