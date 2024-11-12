@@ -4,19 +4,13 @@ version      = "0.0.0"
 description  = "Required packages for the final project for CS5330."
 authors      = ["James Parkington <pongs.acreage.0o@icloud.com>"]
 readme       = "README.md"
-package-mode = false
 
 [tool.poetry.dependencies]
-python        = "^3.12.7"
-duckdb        = "*"
-matplotlib    = "*"
-numpy         = "*"
+python        = "^3.12"
+easyocr       = "*"
 opencv-python = "*"
-pandas        = "*"
-pytesseract   = "*"
 ruamel-yaml   = "*"
-scipy         = "*"
-seaborn       = "*"
+torch         = "*"
 
 [build-system]
 requires      = ["poetry-core"]
