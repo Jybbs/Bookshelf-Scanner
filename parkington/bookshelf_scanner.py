@@ -59,13 +59,14 @@ class DisplayState:
 
 @dataclass
 class Parameter:
-    name         : str  # Internal name of the parameter.
-    display_name : str  # Name to display in the UI.
-    value        : Any  # Current value of the parameter.
-    min          : Any  # Minimum value of the parameter.
-    max          : Any  # Maximum value of the parameter.
-    step         : Any  # Step size for incrementing/decrementing the parameter.
-    increase_key : str  # Key to increase the parameter.
+    name         : str           # Internal name of the parameter.
+    display_name : str           # Name to display in the UI.
+    value        : Any           # Current value of the parameter.
+    increase_key : str           # Key to increase the parameter.
+    is_boolean   : bool = False  # Whether the parameter is a boolean.
+    min          : Any  = None   # Minimum value of the parameter.
+    max          : Any  = None   # Maximum value of the parameter.
+    step         : Any  = None   # Step size for incrementing/decrementing the parameter.
 
     @property
     def decrease_key(self) -> str:
@@ -73,6 +74,44 @@ class Parameter:
         The `decrease_key` is always the lowercase of the `increase_key`.
         """
         return self.increase_key.lower()
+    
+    @property
+    def display_value(self) -> str:
+        """
+        Returns the value formatted as a string for display purposes.
+        """
+        if self.is_boolean:
+            return 'On' if self.value else 'Off'
+        elif isinstance(self.value, float):
+            return f"{self.value:.3f}"
+        else:
+            return str(self.value)
+
+    def __post_init__(self):
+        if self.is_boolean:
+            self.min   = False
+            self.max   = True
+            self.step  = None             # Step is not applicable for booleans
+            self.value = bool(self.value) # Ensure the initial value is a boolean
+        else:
+            # Ensure min, max, and step are provided for non-boolean parameters
+            if self.min is None or self.max is None or self.step is None:
+                raise ValueError(f"Non-boolean parameter '{self.name}' must have 'min', 'max', and 'step' defined.")
+
+    def adjust_value(self, increase: bool):
+        """
+        Adjusts the parameter value based on whether the parameter should be increased or decreased.
+        """
+        old_value = self.value
+
+        if self.is_boolean:
+            self.value = not self.value
+        else:
+            delta      = self.step if increase else -self.step
+            new_value  = self.value + delta
+            self.value = max(self.min, min(new_value, self.max))
+
+        return old_value  # Return old value for logging purposes
 
 @dataclass
 class ProcessingStep:
@@ -87,14 +126,12 @@ class ProcessingStep:
         Adjust the parameter value based on the provided key character and return the action message.
         """
         for param in self.parameters:
-
             if key_char in (param.increase_key, param.decrease_key):
-                old_value      = param.value
-                delta          = param.step if key_char == param.increase_key else -param.step
-                param.value    = min(max(param.value + delta, param.min), param.max)
-                action_message = f"{'Increased' if delta > 0 else 'Decreased'} '{param.display_name}' from {old_value} to {param.value}"
-                return action_message
-        
+                increase    = key_char == param.increase_key
+                old_value   = param.adjust_value(increase)
+                action_type = 'Toggled' if param.is_boolean else 'Increased' if increase else 'Decreased'     
+                return f"{action_type} '{param.display_name}' from {old_value} to {param.value}"
+                
         return None
     
     def toggle(self) -> str:
@@ -187,10 +224,10 @@ def initialize_steps(params_override: dict = None) -> list[ProcessingStep]:
             name         = step_def['name'],
             display_name = step_def['display_name'],
             toggle_key   = str(index + 1),
-            parameters   = [Parameter(**param) for param in step_def.get('parameters', [])]
+            parameters   = [Parameter(**param_def) for param_def in step_def.get('parameters', [])]
         )
         for index, step_def in enumerate(step_definitions)
-]
+    ]
 
     if params_override:
         step_map  = {f"use_{step.name}": step for step in steps}
@@ -290,7 +327,7 @@ def process_image(
     )
 
     # Contour Adjustments
-    if params.get('use_contour_adjustments'):
+    if params.get('use_show_annotations'):
         min_area   = params['min_contour_area']
         image_area = image.shape[0] * image.shape[1]
         contours   = [
@@ -298,11 +335,11 @@ def process_image(
             if min_area <= cv2.contourArea(contour) <= 0.9 * image_area
         ]
 
-        max_contours = int(params['max_contours'])
-        contours     = contours[:max_contours]
+        contours = sorted(contours, key = cv2.contourArea, reverse = True)
+        contours = contours[:int(params['max_contours'])]
 
         # Contour Approximation
-        if params['contour_approximation']:
+        if params.get('contour_approximation', False):
             contours = [
                 cv2.boxPoints(cv2.minAreaRect(contour)).astype(int)
                 for contour in contours
@@ -369,15 +406,8 @@ def annotate_image_with_text(
 
     annotated_image  = original_image.copy()
     total_characters = 0
-    max_contours     = int(params.get('max_contours', 10))
 
-    sorted_contours = sorted(
-        contours,
-        key     = cv2.contourArea,
-        reverse = True
-    )[:max_contours]
-
-    for contour in sorted_contours:
+    for contour in contours:
         cv2.drawContours(
             image      = annotated_image,
             contours   = [contour],
@@ -469,7 +499,7 @@ def generate_sidebar_content(
         lines.append((f"[{step.toggle_key}] {step.display_name}: {status}", WHITE, 1.1))
 
         for param in step.parameters:
-            value_str = f"{param.value:.3f}" if isinstance(param.value, float) else str(param.value)
+            value_str = param.display_value
             lines.append((
                 f"   [{param.decrease_key} | {param.increase_key}] {param.display_name}: {value_str}",
                 GRAY,

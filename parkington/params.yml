@@ -17,17 +17,13 @@
       increase_key : M
     - name         : contour_approximation
       display_name : Contour Approximation
-      value        : False
-      min          : False
-      max          : True
-      step         : 1
+      value        : false
+      is_boolean   : true
       increase_key : P
     - name         : enable_ocr
       display_name : Enable OCR
-      value        : False
-      min          : False
-      max          : True
-      step         : 1
+      value        : false
+      is_boolean   : true
       increase_key : O
     - name         : ocr_confidence_threshold
       display_name : OCR Confidence Threshold
