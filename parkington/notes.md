@@ -1,0 +1,2 @@
+ - Contour Approximation is not working with booleans
+ - OCR should be doing a better job of caching results for contours that have been identified previously. If the contours haven't changed, the OCR should not re-run in it.
