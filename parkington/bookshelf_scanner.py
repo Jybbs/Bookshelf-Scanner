@@ -159,25 +159,34 @@ def extract_params(steps: list[ProcessingStep]) -> dict[str, Any]:
         **{f"use_{step.name}": step.is_enabled for step in steps}
     }
 
-def get_image_files(images_dir: Optional[Path] = None) -> list[Path]:
+def find_image_files(target_subdirectory: str = 'images', start_directory: Optional[Path] = None) -> list[Path]:
     """
-    Retrieve a sorted list of image files from the nearest 'images' directory.
+    Retrieve a sorted list of image files from the nearest directory containing the target_subdirectory.
+    By default, it searches in 'images', or a specified subdirectory like 'books'.
     """
-    images_dir = images_dir or Path(__file__).resolve().parent
-    image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+    start_directory = start_directory or Path(__file__).resolve().parent
+    allowed_image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
 
-    for parent in [images_dir, *images_dir.parents]:
-        potential_images_dir = parent / 'images'
-
-        if potential_images_dir.is_dir():
-            image_files = sorted(
-                f for f in potential_images_dir.iterdir()
-                if f.is_file() and f.suffix.lower() in image_extensions
+    image_files = next(
+        (
+            sorted(
+                file for file in (directory / target_subdirectory).rglob('*')
+                if file.is_file() and file.suffix.lower() in allowed_image_extensions
             )
-            if image_files:
-                return image_files
+            for directory in [start_directory, *start_directory.parents]
+            if (directory / target_subdirectory).is_dir()
+        ),
+        None
+    )
 
-    raise FileNotFoundError("No image files found in an 'images' directory.")
+    if image_files:
+        return image_files
+
+    raise FileNotFoundError(f"No image files found in '{target_subdirectory}' directory.")
+
+# Usage example:
+image_files = find_image_files(target_subdirectory='images/books')
+
 
 def load_image(image_path: str) -> np.ndarray:
     """
@@ -684,5 +693,5 @@ def interactive_experiment(
 
 if __name__ == "__main__":
 
-    image_files = get_image_files()
+    image_files = find_image_files('images/books')
     interactive_experiment(image_files)
