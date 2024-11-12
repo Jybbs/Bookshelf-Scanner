@@ -3,11 +3,10 @@ import easyocr
 import logging
 import numpy as np
 
-from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib     import Path
 from ruamel.yaml import YAML
-from typing      import Any, Callable, Iterator, Optional
+from typing      import Any, Optional
 
 # -------------------- Configuration and Logging --------------------
 
@@ -309,7 +308,7 @@ def process_image(
                 for contour in contours
             ]
 
-    return processed, grayscale, binary, contours
+    return processed, binary, contours
 
 # -------------------- Image Annotation Functions --------------------
 
@@ -349,8 +348,7 @@ def annotate_image_with_text(
     ocr_image      : np.ndarray,
     contours       : list[np.ndarray],
     params         : dict,
-    reader         : easyocr.Reader,
-    perform_ocr    : bool = True
+    reader         : easyocr.Reader
 ) -> tuple[np.ndarray, int]:
     """
     Draws contours and recognized text on the image if annotations are enabled.
@@ -388,7 +386,7 @@ def annotate_image_with_text(
             thickness  = 4
         )
 
-        if not (perform_ocr and params.get('enable_ocr')):
+        if not params.get('enable_ocr'):
             continue
 
         x, y, w, h = cv2.boundingRect(contour)
@@ -571,7 +569,7 @@ def interactive_experiment(
 
         # Process image if parameters have changed
         if state.last_params != current_params:
-            state.processed_image, _, state.binary_image, state.contours = process_image(state.original_image, **current_params)
+            state.processed_image, state.binary_image, state.contours = process_image(state.original_image, **current_params)
             state.last_params = current_params.copy()
             state.annotations = {}
 
@@ -633,11 +631,10 @@ def interactive_experiment(
             state.next_image(len(image_files))
 
         else:
-            param_changed = False
             for step in steps:
                 if char == step.toggle_key:
                     logger.info(step.toggle())
-                    param_changed = True
+                    state.last_params = None  # Force reprocessing
                     break
 
                 for param in step.parameters:
@@ -645,14 +642,11 @@ def interactive_experiment(
                         action = step.adjust_param(char)
                         if action:
                             logger.info(action)
-                            param_changed = True
+                            state.last_params = None  # Force reprocessing
                             break
-
-                if param_changed:
-                    break
-
-            if param_changed:
-                state.last_params = None  # Force reprocessing when parameters change
+                else:
+                    continue
+                break
 
     cv2.destroyAllWindows()
 
