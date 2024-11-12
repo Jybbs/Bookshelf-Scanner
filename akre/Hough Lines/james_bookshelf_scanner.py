@@ -118,7 +118,7 @@ def get_image_files(images_dir: Path = None) -> list[Path]:
     images_dir = images_dir or Path(__file__).resolve().parent
 
     for parent in [images_dir, *images_dir.parents]:
-        potential_images_dir = parent / 'images/Shelves'
+        potential_images_dir = parent / 'images/shelves'
         if potential_images_dir.is_dir():
             image_files = sorted(
                 f for f in potential_images_dir.iterdir()
