@@ -1,30 +1,6 @@
-- name         : show_annotations
-  display_name : Show Annotations
+- name         : ocr
+  display_name : OCR
   parameters:
-    - name         : min_contour_area
-      display_name : Min Contour Area
-      value        : 1000
-      min          : 100
-      max          : 10000
-      step         : 100
-      increase_key : A
-    - name         : max_contours
-      display_name : Max Contours
-      value        : 10
-      min          : 0
-      max          : 250
-      step         : 5
-      increase_key : M
-    - name         : contour_approximation
-      display_name : Contour Approximation
-      value        : false
-      is_boolean   : true
-      increase_key : P
-    - name         : enable_ocr
-      display_name : Enable OCR
-      value        : false
-      is_boolean   : true
-      increase_key : O
     - name         : ocr_confidence_threshold
       display_name : OCR Confidence Threshold
       value        : 0.3
@@ -90,14 +66,14 @@
 - name         : edge_detection
   display_name : Edge Detection
   parameters:
-    - name         : canny_threshold1
+    - name         : canny_threshold_1
       display_name : Canny Threshold 1
       value        : 50
       min          : 0
       max          : 255
       step         : 5
       increase_key : T
-    - name         : canny_threshold2
+    - name         : canny_threshold_2
       display_name : Canny Threshold 2
       value        : 150
       min          : 0
