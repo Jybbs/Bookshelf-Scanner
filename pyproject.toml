@@ -6,11 +6,17 @@ authors      = ["James Parkington <pongs.acreage.0o@icloud.com>"]
 readme       = "README.md"
 
 [tool.poetry.dependencies]
-python        = "^3.12"
+python        = ">=3.11,<3.12"
 easyocr       = "*"
 opencv-python = "*"
 ruamel-yaml   = "*"
 torch         = "*"
+inference = "^0.26.0"
+
+[tool.poetry.group.dev.dependencies]
+jupyter = "^1.1.1"
+ultralytics = "^8.3.29"
+comet-ml = "^3.47.2"
 
 [build-system]
 requires      = ["poetry-core"]
