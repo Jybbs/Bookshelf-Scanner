@@ -3,3 +3,5 @@
 
 #All pycache files
 **/__pycache__/
+
+model_cache/
