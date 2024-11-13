@@ -11,7 +11,7 @@ easyocr       = "*"
 opencv-python = "*"
 ruamel-yaml   = "*"
 torch         = "*"
-inference = "^0.26.0"
+onnxruntime-gpu = "^1.20.0"
 
 [tool.poetry.group.dev.dependencies]
 jupyter = "^1.1.1"
