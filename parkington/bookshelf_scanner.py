@@ -57,13 +57,13 @@ class DisplayState:
 
 @dataclass
 class Parameter:
-    name         : str           # Internal name of the parameter.
-    display_name : str           # Name to display in the UI.
-    value        : Any           # Current value of the parameter.
-    increase_key : str           # Key to increase the parameter.
-    min          : Any  = None   # Minimum value of the parameter.
-    max          : Any  = None   # Maximum value of the parameter.
-    step         : Any  = None   # Step size for incrementing/decrementing the parameter.
+    name          : str    # Internal name of the parameter.
+    display_name  : str    # Name to display in the UI.
+    value         : Any    # Current value of the parameter.
+    increase_key  : str    # Key to increase the parameter.
+    min           : Any    = None # Minimum value of the parameter.
+    max           : Any    = None # Maximum value of the parameter.
+    step          : Any    = None # Step size for incrementing/decrementing the parameter.
 
     @property
     def decrease_key(self) -> str:
@@ -102,13 +102,13 @@ class Parameter:
 
 @dataclass
 class ProcessingStep:
-    name         : str  # Internal name of the processing step.
-    display_name : str  # Name to display in the UI.
-    toggle_key   : str  # Key to toggle this processing step.
-    parameters   : list[Parameter]  # List of parameter instances.
-    is_enabled   : bool = False     # Whether the step is enabled (default: False).
+    name          : str          # Internal name of the processing step.
+    display_name  : str          # Name to display in the UI.
+    toggle_key    : str          # Key to toggle this processing step.
+    parameters    : list[Parameter]  # List of parameter instances.
+    is_enabled    : bool         = False     # Whether the step is enabled (default: False).
 
-    def adjust_param(self, key_char: str) -> str:
+    def adjust_param(self, key_char: str) -> Optional[str]:
         """
         Adjust the parameter value based on the provided key character and return the action message.
         """
@@ -147,10 +147,9 @@ def extract_params(steps: list[ProcessingStep]) -> dict[str, Any]:
         **{f"use_{step.name}": step.is_enabled for step in steps}
     }
 
-def find_image_files(target_subdirectory: str = 'images', start_directory: Optional[Path] = None) -> list[Path]:
+def find_image_files(target_subdirectory: str = 'images/books', start_directory: Optional[Path] = None) -> list[Path]:
     """
-    Retrieve a sorted list of image files from the nearest directory containing the target_subdirectory.
-    By default, it searches in 'images', or a specified subdirectory like 'books'.
+    Retrieve a sorted list of image files from the specified target_subdirectory.
     """
     start_directory = start_directory or Path(__file__).resolve().parent
     allowed_image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
@@ -171,7 +170,6 @@ def find_image_files(target_subdirectory: str = 'images', start_directory: Optio
         return image_files
 
     raise FileNotFoundError(f"No image files found in '{target_subdirectory}' directory.")
-
 
 def load_image(image_path: str) -> np.ndarray:
     """
@@ -253,65 +251,74 @@ def process_image(
             - Processed color image.
             - Binary image.
     """
-    processed = image.copy()
+    processed_image = image.copy()
+
+    # Brightness Adjustment
+    if params.get('use_brightness_adjustment'):
+        brightness_value = params['brightness_value']
+        hsv_image = cv2.cvtColor(processed_image, cv2.COLOR_BGR2HSV)
+        hsv_image[:, :, 2] = cv2.add(hsv_image[:, :, 2], brightness_value)
+        processed_image = cv2.cvtColor(hsv_image, cv2.COLOR_HSV2BGR)
+
+    # Contrast Adjustment
+    if params.get('use_contrast_adjustment'):
+        contrast_value = params['contrast_value']
+        processed_image = cv2.convertScaleAbs(processed_image, alpha=contrast_value, beta=0)
 
     # Shadow Removal
     if params.get('use_shadow_removal'):
-        k_size    = ensure_odd(int(params['shadow_kernel_size']))
-        blur_size = ensure_odd(int(params['shadow_median_blur']))
-        kernel    = np.ones((k_size, k_size), np.uint8)
-        channels  = list(cv2.split(processed))  # Convert tuple to list for modification
+        shadow_kernel_size = ensure_odd(int(params['shadow_kernel_size']))
+        shadow_median_blur = ensure_odd(int(params['shadow_median_blur']))
+        shadow_kernel      = np.ones((shadow_kernel_size, shadow_kernel_size), np.uint8)
+        channels           = list(cv2.split(processed_image))  # Convert tuple to list for modification
 
         for i in range(len(channels)):
-            dilated     = cv2.dilate(channels[i], kernel)
-            background  = cv2.medianBlur(dilated, blur_size)
-            difference  = 255 - cv2.absdiff(channels[i], background)
-            channels[i] = cv2.normalize(difference, None, 0, 255, cv2.NORM_MINMAX)
+            dilated_image    = cv2.dilate(channels[i], shadow_kernel)
+            background_image = cv2.medianBlur(dilated_image, shadow_median_blur)
+            difference_image = 255 - cv2.absdiff(channels[i], background_image)
+            channels[i]      = cv2.normalize(difference_image, None, 0, 255, cv2.NORM_MINMAX)
 
-        processed = cv2.merge(channels)
+        processed_image = cv2.merge(channels)
 
-    # Bilateral Filter
-    if params.get('use_bilateral_filter'):
-        diameter    = int(params['bilateral_diameter'])
-        sigma_color = params['bilateral_sigma_color']
-        sigma_space = params['bilateral_sigma_space']
-        processed   = cv2.bilateralFilter(processed, diameter, sigma_color, sigma_space)
+    # Gaussian Blur
+    if params.get('use_gaussian_blur'):
+        gaussian_kernel_size = ensure_odd(int(params['gaussian_kernel_size']))
+        processed_image = cv2.GaussianBlur(
+            src    = processed_image, 
+            ksize  = (gaussian_kernel_size, gaussian_kernel_size), 
+            sigmaX = params['gaussian_sigma']
+        )
 
     # Color CLAHE
     if params.get('use_color_clahe'):
-        lab          = cv2.cvtColor(processed, cv2.COLOR_BGR2LAB)
-        clahe        = cv2.createCLAHE(clipLimit=params['clahe_clip_limit'])
-        lab[:, :, 0] = clahe.apply(lab[:, :, 0])
-        processed    = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)
+        lab_image = cv2.cvtColor(processed_image, cv2.COLOR_BGR2LAB)
+        clahe     = cv2.createCLAHE(clipLimit=params['clahe_clip_limit'])
+        lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
+        processed_image    = cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
 
     # Convert to Grayscale
-    grayscale = 255 - cv2.cvtColor(processed, cv2.COLOR_BGR2GRAY)
-
-    # Edge Detection
-    if params.get('use_edge_detection'):
-        edges     = cv2.Canny(grayscale, params['canny_threshold_1'], params['canny_threshold_2'])
-        grayscale = cv2.bitwise_or(grayscale, edges)
+    grayscale_image = 255 - cv2.cvtColor(processed_image, cv2.COLOR_BGR2GRAY)
 
     # Adaptive Thresholding
     if params.get('use_adaptive_thresholding'):
-        b_size = ensure_odd(int(params['adaptive_block_size']))
-        binary = cv2.adaptiveThreshold(
-            src            = grayscale,
+        adaptive_block_size = ensure_odd(int(params['adaptive_block_size']))
+        binary_image = cv2.adaptiveThreshold(
+            src            = grayscale_image,
             maxValue       = 255,
             adaptiveMethod = cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
             thresholdType  = cv2.THRESH_BINARY_INV,
-            blockSize      = b_size,
+            blockSize      = adaptive_block_size,
             C              = params['adaptive_c']
         )
     else:
-        _, binary = cv2.threshold(
-            src    = grayscale,
+        _, binary_image = cv2.threshold(
+            src    = grayscale_image,
             thresh = 0,
             maxval = 255,
             type   = cv2.THRESH_BINARY + cv2.THRESH_OTSU
         )
 
-    return processed, binary
+    return processed_image, binary_image
 
 # -------------------- Image Annotation Functions --------------------
 
@@ -333,17 +340,17 @@ def extract_text_from_image(
     """
     try:
         min_confidence = params.get('ocr_confidence_threshold', 0.3)
-        result = reader.readtext(
+        ocr_results = reader.readtext(
             image[..., ::-1],  # BGR to RGB conversion
-            decoder       = 'wordbeamsearch',
+            decoder       = 'greedy',
             rotation_info = [90, 180, 270]
         )
 
         # Filter results by confidence
-        result = [res for res in result if res[2] >= min_confidence]
+        ocr_results = [result for result in ocr_results if result[2] >= min_confidence]
 
-        return result
-    
+        return ocr_results
+
     except Exception as e:
         logger.error(f"OCR failed: {e}")
         return []
@@ -374,24 +381,47 @@ def annotate_image_with_text(
         **params
     )
 
-    for bbox, text, confidence in ocr_results:
-        # Draw bounding box
-        bbox = np.array(bbox).astype(int)
-        cv2.polylines(annotated_image, [bbox], True, (0, 255, 0), 2)
+    for bounding_box, text, confidence in ocr_results:
 
-        # Log the extracted text
+        # Draw bounding box
+        coordinates = np.array(bounding_box).astype(int)
+        cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
         logger.info(f"OCR Text: '{text}' with confidence {confidence:.2f}")
 
-        # Put text near the bounding box
-        text_origin = (bbox[0][0], bbox[0][1] - 10)
+        # Calculate text size
+        font                    = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale              = 0.6
+        text_thickness          = 2
+        text_size, _            = cv2.getTextSize(text, font, font_scale, text_thickness)
+        text_width, text_height = text_size
+
+        # Define text origin
+        y_position = (
+            coordinates[0][1] - 10
+            if coordinates[0][1] - 10 > text_height
+            else coordinates[0][1] + text_height + 10
+        )
+        text_origin = (coordinates[0][0], y_position)
+
+        # Define background rectangle coordinates
+        top_left     = (text_origin[0], text_origin[1] - text_height - 5)
+        bottom_right = (text_origin[0] + text_width + 10, text_origin[1] + 5)
+
+        # Draw semi-transparent rectangle
+        overlay = annotated_image.copy()
+        cv2.rectangle(overlay, top_left, bottom_right, (0, 0, 0), -1)
+        alpha = 0.7
+        cv2.addWeighted(overlay, alpha, annotated_image, 1 - alpha, 0, annotated_image)
+
+        # Put bold white text
         cv2.putText(
             img       = annotated_image,
             text      = text,
-            org       = text_origin,
-            fontFace  = cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale = 0.5,
-            color     = (0, 0, 255),
-            thickness = 1,
+            org       = (text_origin[0] + 5, text_origin[1]),
+            fontFace  = font,
+            fontScale = font_scale,
+            color     = (255, 255, 255),
+            thickness = text_thickness,
             lineType  = cv2.LINE_AA
         )
 
@@ -503,7 +533,7 @@ def interactive_experiment(
     # Initialize components
     state  = DisplayState()
     steps  = initialize_steps(params_override)
-    reader = easyocr.Reader(['en'], gpu=False)
+    reader = easyocr.Reader(['en'], gpu = False)
 
     # Display options
     display_options = [
