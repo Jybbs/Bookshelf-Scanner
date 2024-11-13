@@ -255,14 +255,14 @@ def process_image(
 
     # Brightness Adjustment
     if params.get('use_brightness_adjustment'):
-        brightness_value = params['brightness_value']
-        hsv_image = cv2.cvtColor(processed_image, cv2.COLOR_BGR2HSV)
+        brightness_value   = params['brightness_value']
+        hsv_image          = cv2.cvtColor(processed_image, cv2.COLOR_BGR2HSV)
         hsv_image[:, :, 2] = cv2.add(hsv_image[:, :, 2], brightness_value)
-        processed_image = cv2.cvtColor(hsv_image, cv2.COLOR_HSV2BGR)
+        processed_image    = cv2.cvtColor(hsv_image, cv2.COLOR_HSV2BGR)
 
     # Contrast Adjustment
     if params.get('use_contrast_adjustment'):
-        contrast_value = params['contrast_value']
+        contrast_value  = params['contrast_value']
         processed_image = cv2.convertScaleAbs(processed_image, alpha=contrast_value, beta=0)
 
     # Shadow Removal
