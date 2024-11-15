@@ -2,7 +2,7 @@ import time
 import cv2
 import numpy as np
 import onnxruntime as ort
-from utils import sigmoid, crop_mask
+from BookSegmenter.utils import sigmoid, crop_mask
 
 class YOLO_model:
     """
@@ -13,12 +13,19 @@ class YOLO_model:
         self.confidence_threshold = 0.3
         self.iou_threshold = 0.5
 
+
     def init_model(self, model_path):
         self.ort_session = ort.InferenceSession(model_path)
         self.input_name = self.ort_session.get_inputs()[0].name
         self.output0_name = self.ort_session.get_outputs()[0].name
         self.output1_name = self.ort_session.get_outputs()[1].name
     
+    def check(self):
+        """
+        Checks if the model is loaded correctly
+        """
+        return self.ort_session is not None
+        
     def preprocess(self, image):
         self.image_height, self.image_width, _ = image.shape
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
