@@ -23,7 +23,7 @@ This is the set of requirements I'm using for development, in case you're intere
     ```bash
     brew install tesseract
     ```
-- **Python:** Version 3.13
+- **Python:** Version 3.12
 - **Poetry** Python package management installed via Homebrew — a TOML file has been supplied for quick shell installation, if interested
 
 ### Python Dependencies
@@ -34,6 +34,10 @@ poetry install
 ```
 
 ## Usage
+
+## Running BookSegmenter (Splits Shelf Images into Individual Book Images)
+
+Detailed instructions [here](BookSegmenter-README.md).
 
 ### Running the Scanner in `parkington`
 
