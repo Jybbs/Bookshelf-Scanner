@@ -1,11 +1,13 @@
-from YOLOv8 import YOLO_model
-from utils import display_image
+from BookSegmenter.YOLOv8 import YOLO_model
 import cv2
 import numpy as np
 
 class BookSegmenter:
-    def __init__(self, model_path = 'models/OpenShelves8.onnx'):
+    def __init__(self, model_path = 'BookSegmenter/models/OpenShelves8.onnx'):
         self.yolo = YOLO_model(model_path)
+
+    def check(self):
+        return self.yolo.check()
     
     def segment(self, image, use_masks = True):
         detections, masks = self.yolo.detect_books(image)
@@ -34,12 +36,12 @@ class BookSegmenter:
 def main():
     import os
     # Load the image(s)
-    image_dir = "../images/Shelves"
+    image_dir = "images/Shelves"
     image_files = os.listdir(image_dir)
+    segmenter = BookSegmenter()
     for image_file in image_files:
         image = cv2.imread(os.path.join(image_dir, image_file))
         # Segment the books
-        segmenter = BookSegmenter()
         books, confidence = segmenter.segment(image)
         # Display the segmented books
         segmenter.display_segmented_books(books, confidence)
