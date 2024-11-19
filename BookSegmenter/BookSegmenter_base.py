@@ -34,6 +34,7 @@ class BookSegmenter:
         """
         detections, masks = self.yolo.detect_books(image)
         segments = []
+        bboxes = []
         confidences = []
         for i, box in enumerate(detections):
             segment = image[int(box[1]):int(box[3]), int(box[0]):int(box[2])]
@@ -41,6 +42,7 @@ class BookSegmenter:
                 mask = masks[i][int(box[1]):int(box[3]), int(box[0]):int(box[2])]
                 segment = cv2.bitwise_and(segment, segment, mask= mask.astype(np.uint8))
             segments.append(segment)
+            bboxes.append(box[:4])
             confidences.append(box[4])
         return segments, confidences
     
@@ -72,7 +74,7 @@ def main():
     for image_file in image_files:
         image = cv2.imread(os.path.join(image_dir, image_file))
         # Segment the books
-        books, confidence = segmenter.segment(image)
+        books, bboxes, confidence = segmenter.segment(image)
         # Display the segmented books
         segmenter.display_segmented_books(books, confidence)
 
