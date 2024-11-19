@@ -44,7 +44,7 @@ class BookSegmenter:
             segments.append(segment)
             bboxes.append(box[:4])
             confidences.append(box[4])
-        return segments, confidences
+        return segments, bboxes, confidences
     
     def display_segmented_books(self, books, confidence):
         """
