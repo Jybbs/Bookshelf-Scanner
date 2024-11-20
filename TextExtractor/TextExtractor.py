@@ -1,5 +1,6 @@
 import cv2
 import easyocr
+import json
 import logging
 import numpy as np
 
@@ -27,6 +28,7 @@ class DisplayState:
     window_height   : int                   = 800   # Window height in pixels
     last_params     : Optional[dict]        = None  # Previous processing parameters
     annotations     : dict[str, np.ndarray] = field(default_factory = dict)  # Cached annotations
+    ocr_results     : dict[str, list]       = field(default_factory = dict)  # OCR results for each image
     original_image  : Optional[np.ndarray]  = None  # The original image
     processed_image : Optional[np.ndarray]  = None  # The processed image
     binary_image    : Optional[np.ndarray]  = None  # The binary (thresholded) image
@@ -378,10 +380,10 @@ def draw_rotated_text(
     Returns:
         The image with the text drawn on it.
     """
-    font                        = cv2.FONT_HERSHEY_SIMPLEX
-    text_size, baseline         = cv2.getTextSize(text, font, font_scale, thickness)
-    text_width, text_height     = text_size
-    text_image                  = np.zeros((text_height + baseline, text_width, 3), dtype=np.uint8)
+    font                    = cv2.FONT_HERSHEY_SIMPLEX
+    text_size, baseline     = cv2.getTextSize(text, font, font_scale, thickness)
+    text_width, text_height = text_size
+    text_image              = np.zeros((text_height + baseline, text_width, 3), dtype = np.uint8)
 
     # Draw outline text
     cv2.putText(
@@ -411,9 +413,9 @@ def draw_rotated_text(
     rotation_matrix        = cv2.getRotationMatrix2D(center, angle, 1.0)
     abs_cosine             = abs(rotation_matrix[0, 0])
     abs_sine               = abs(rotation_matrix[0, 1])
-    bounding_width         = int((text_height + baseline) * abs_sine + text_width * abs_cosine)
+    bounding_width         = int((text_height + baseline) * abs_sine   + text_width * abs_cosine)
     bounding_height        = int((text_height + baseline) * abs_cosine + text_width * abs_sine)
-    rotation_matrix[0, 2] += bounding_width / 2 - center[0]
+    rotation_matrix[0, 2] += bounding_width  / 2 - center[0]
     rotation_matrix[1, 2] += bounding_height / 2 - center[1]
 
     rotated_text_image = cv2.warpAffine(
@@ -454,7 +456,8 @@ def annotate_image_with_text(
     original_image : np.ndarray,
     ocr_image      : np.ndarray,
     params         : dict,
-    reader         : easyocr.Reader
+    reader         : easyocr.Reader,
+    state          : DisplayState
 ) -> np.ndarray:
     """
     Annotates the image with recognized text.
@@ -464,6 +467,7 @@ def annotate_image_with_text(
         ocr_image      : Image to use for OCR.
         params         : Dictionary of processing parameters.
         reader         : EasyOCR reader instance.
+        state          : DisplayState instance to store OCR results.
 
     Returns:
         Annotated image.
@@ -475,6 +479,7 @@ def annotate_image_with_text(
         annotated_image = original_image.copy()
 
     ocr_results = extract_text_from_image(image=ocr_image, reader=reader, **params)
+    image_text_results = []
 
     for bounding_box, text, confidence in ocr_results:
         coordinates = np.array(bounding_box).astype(int)
@@ -512,6 +517,12 @@ def annotate_image_with_text(
             position = text_position,
             angle    = angle
         )
+
+        # Collect OCR results for output
+        image_text_results.append([text, confidence])
+
+    # Store OCR results in state
+    state.ocr_results[state.image_name] = image_text_results
 
     return annotated_image
 
@@ -619,7 +630,9 @@ def render_sidebar(
 
 def interactive_experiment(
     image_files     : list[Path],
-    params_override : dict = None
+    params_override : dict = None,
+    output_json     : bool = True,
+    interactive_ui  : bool = True
 ):
     """
     Runs the interactive experiment allowing parameter adjustment and image processing.
@@ -627,6 +640,8 @@ def interactive_experiment(
     Args:
         image_files     : List of image file paths to process.
         params_override : Optional parameter overrides.
+        output_json     : Whether to output OCR results to JSON file on exit.
+        interactive_ui  : Whether to run the interactive UI.
     """
     if not image_files:
         raise ValueError("No image files provided")
@@ -644,104 +659,144 @@ def interactive_experiment(
     ]
     total_displays = len(display_options)
 
-    # Initialize window
-    window_name = 'Bookshelf Scanner'
-    cv2.namedWindow(window_name, cv2.WINDOW_KEEPRATIO)
+    if interactive_ui:
+        # Initialize window
+        window_name = 'Bookshelf Scanner'
+        cv2.namedWindow(window_name, cv2.WINDOW_KEEPRATIO)
 
-    while True:
-        if state.original_image is None:  # Load image only if not already loaded
-            image_path           = image_files[state.image_idx]
-            state.original_image = load_image(str(image_path))
-            state.window_height  = max(state.original_image.shape[0], 800)
-            state.image_name     = image_path.name
-            state.reset_image_state()
+    try:
+        while True:
+            if state.original_image is None:  # Load image only if not already loaded
+                image_path           = image_files[state.image_idx]
+                state.original_image = load_image(str(image_path))
+                state.window_height  = max(state.original_image.shape[0], 800)
+                state.image_name     = image_path.name
+                state.reset_image_state()
 
-        # Extract current parameters
-        current_params = extract_params(steps)
+            # Extract current parameters
+            current_params = extract_params(steps)
 
-        # Process image if parameters have changed
-        if state.last_params != current_params:
-            state.processed_image, state.binary_image = process_image(state.original_image, **current_params)
-            state.last_params = current_params.copy()
-            state.annotations = {}
+            # Process image if parameters have changed
+            if state.last_params != current_params:
+                state.processed_image, state.binary_image = process_image(state.original_image, **current_params)
+                state.last_params = current_params.copy()
+                state.annotations = {}
 
-        # Get current display image
-        display_name, get_image_func, cache_key = display_options[state.display_idx]
-        display_image = get_image_func()
+            # Get current display image
+            display_name, get_image_func, cache_key = display_options[state.display_idx]
+            display_image = get_image_func()
 
-        # Apply annotations if OCR is enabled
-        if current_params.get('use_ocr'):
-            if cache_key not in state.annotations:
-                annotated_image = annotate_image_with_text(
-                    original_image = display_image,
-                    ocr_image      = state.processed_image,
-                    params         = current_params,
-                    reader         = reader
+            # Apply annotations if OCR is enabled
+            if current_params.get('use_ocr'):
+                if cache_key not in state.annotations:
+                    annotated_image = annotate_image_with_text(
+                        original_image = display_image,
+                        ocr_image      = state.processed_image,
+                        params         = current_params,
+                        reader         = reader,
+                        state          = state
+                    )
+                    state.annotations[cache_key] = annotated_image
+                display_image = state.annotations[cache_key]
+            else:
+                # Even if OCR is not displayed, we still extract text for JSON output
+                if state.image_name not in state.ocr_results:
+                    ocr_results = extract_text_from_image(
+                        image  = state.processed_image,
+                        reader = reader,
+                        **current_params
+                    )
+                    image_text_results = [[text, confidence] for _, text, confidence in ocr_results]
+                    state.ocr_results[state.image_name] = image_text_results
+
+            if interactive_ui:
+                # Prepare display image
+                if display_image.ndim == 2:
+                    display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+
+                display_scale = state.window_height / display_image.shape[0]
+                display_image = cv2.resize(
+                    display_image,
+                    (int(display_image.shape[1] * display_scale), state.window_height)
                 )
-                state.annotations[cache_key] = annotated_image
-            display_image = state.annotations[cache_key]
 
-        # Prepare display image
-        if display_image.ndim == 2:
-            display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+                # Render sidebar
+                sidebar_image = render_sidebar(
+                    steps         = steps,
+                    display_name  = display_name,
+                    image_name    = state.image_name,
+                    window_height = state.window_height
+                )
 
-        display_scale = state.window_height / display_image.shape[0]
-        display_image = cv2.resize(
-            display_image,
-            (int(display_image.shape[1] * display_scale), state.window_height)
-        )
+                # Combine images and display
+                combined_image = np.hstack([display_image, sidebar_image])
+                cv2.imshow(window_name, combined_image)
+                cv2.resizeWindow(window_name, combined_image.shape[1], combined_image.shape[0])
 
-        # Render sidebar
-        sidebar_image = render_sidebar(
-            steps         = steps,
-            display_name  = display_name,
-            image_name    = state.image_name,
-            window_height = state.window_height
-        )
+                # Handle key input
+                key = cv2.waitKey(1) & 0xFF
+                if key == 255:
+                    continue  # No key pressed
 
-        # Combine images and display
-        combined_image = np.hstack([display_image, sidebar_image])
-        cv2.imshow(window_name, combined_image)
-        cv2.resizeWindow(window_name, combined_image.shape[1], combined_image.shape[0])
-
-        # Handle key input
-        key = cv2.waitKey(1) & 0xFF
-        if key == 255:
-            continue  # No key pressed
-
-        char = chr(key)
-        if char == 'q':
-            break
-
-        elif char == '/':
-            state.next_display(total_displays)
-
-        elif char == '?':
-            state.next_image(len(image_files))
-
-        else:
-            for step in steps:
-                if char == step.toggle_key:
-                    logger.info(step.toggle())
-                    state.last_params = None  # Force reprocessing
+                char = chr(key)
+                if char == 'q':
                     break
 
-                for param in step.parameters:
-                    if char in (param.increase_key, param.decrease_key):
-                        action = step.adjust_param(char)
-                        if action:
-                            logger.info(action)
+                elif char == '/':
+                    state.next_display(total_displays)
+
+                elif char == '?':
+                    state.next_image(len(image_files))
+
+                else:
+                    for step in steps:
+                        if char == step.toggle_key:
+                            logger.info(step.toggle())
                             state.last_params = None  # Force reprocessing
                             break
-                else:
-                    continue
-                break
 
-    cv2.destroyAllWindows()
+                        for param in step.parameters:
+                            if char in (param.increase_key, param.decrease_key):
+                                action = step.adjust_param(char)
+                                if action:
+                                    logger.info(action)
+                                    state.last_params = None  # Force reprocessing
+                                    break
+                        else:
+                            continue
+                        break
+            else:
+                # Non-interactive mode: Process all images sequentially
+                state.next_image(len(image_files))
+                if state.image_idx == 0:
+                    break  # Processed all images
+
+    finally:
+        if interactive_ui:
+            cv2.destroyAllWindows()
+
+        # Save OCR results to JSON file if enabled
+        if output_json and state.ocr_results:
+            output_path = Path('ocr_results.json')
+
+            with output_path.open('w', encoding = 'utf-8') as f:
+                json.dump(state.ocr_results, f, ensure_ascii = False, indent = 4)
+            logger.info(f"OCR results saved to {output_path}")
 
 # -------------------- Entry Point --------------------
 
 if __name__ == "__main__":
 
-    image_files = find_image_files('images/books')
-    interactive_experiment(image_files)
+    image_files     = find_image_files('images/books')
+    params_override = {
+        'use_ocr'            : True,
+        'use_shadow_removal' : True,
+        'use_color_clahe'    : True,
+    }
+
+    interactive_experiment(
+        image_files     = image_files,
+        params_override = params_override,
+        output_json     = True,
+        interactive_ui  = True
+    )
