@@ -23,16 +23,16 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DisplayState:
-    image_idx       : int                   = 0     # Index of current image
-    display_idx     : int                   = 0     # Index of current display mode
-    window_height   : int                   = 800   # Window height in pixels
-    last_params     : Optional[dict]        = None  # Previous processing parameters
-    annotations     : dict[str, np.ndarray] = field(default_factory = dict)  # Cached annotations
-    ocr_results     : dict[str, list]       = field(default_factory = dict)  # OCR results for each image
-    original_image  : Optional[np.ndarray]  = None  # The original image
-    processed_image : Optional[np.ndarray]  = None  # The processed image
-    binary_image    : Optional[np.ndarray]  = None  # The binary (thresholded) image
-    image_name      : str                   = ''    # Name of the current image
+    image_idx              : int                   = 0     # Index of current image
+    display_idx            : int                   = 0     # Index of current display mode
+    window_height          : int                   = 800   # Window height in pixels
+    last_params            : Optional[dict]        = None  # Previous processing parameters
+    annotations            : dict[str, np.ndarray] = field(default_factory = dict)  # Cached annotations
+    ocr_results            : dict[str, list]       = field(default_factory = dict)  # OCR results for each image
+    original_image         : Optional[np.ndarray]  = None  # The original image
+    rotated_original_image : Optional[np.ndarray]  = None  # The rotated original image
+    processed_image        : Optional[np.ndarray]  = None  # The processed image
+    image_name             : str                   = ''    # Name of the current image
 
     def next_display(self, total_displays: int):
         """
@@ -52,10 +52,10 @@ class DisplayState:
         """
         Resets processing-related state variables, keeping the original image and image name.
         """
-        self.processed_image = None
-        self.binary_image    = None
-        self.annotations     = {}
-        self.last_params     = None
+        self.processed_image        = None
+        self.rotated_original_image = None
+        self.annotations            = {}
+        self.last_params            = None
 
 @dataclass
 class Parameter:
@@ -236,6 +236,23 @@ def initialize_steps(params_override: dict = None) -> list[ProcessingStep]:
 
 # -------------------- Image Processing Functions --------------------
 
+def rotate_image(image: np.ndarray, angle: float) -> np.ndarray:
+    """
+    Rotates an image by the specified angle (in 90-degree increments).
+
+    Args:
+        image : Image to rotate.
+        angle : Angle in degrees (must be a multiple of 90).
+
+    Returns:
+        Rotated image.
+    """
+    if angle % 360 == 0:
+        return image.copy()
+    k = int(angle / 90) % 4
+    rotated = np.rot90(image, k)
+    return rotated
+
 def process_image(
     image : np.ndarray,
     **params
@@ -249,10 +266,17 @@ def process_image(
 
     Returns:
         A tuple containing:
-            - Processed color image.
-            - Binary image.
+            - Rotated original image.
+            - Processed image.
     """
-    processed_image = image.copy()
+    rotated_original_image = image.copy()
+    processed_image        = image.copy()
+
+    # Image Rotation
+    if params.get('use_image_rotation'):
+        rotation_angle        = params['rotation_angle']
+        rotated_original_image = rotate_image(rotated_original_image, rotation_angle)
+        processed_image        = rotate_image(processed_image, rotation_angle)
 
     # Brightness Adjustment
     if params.get('use_brightness_adjustment'):
@@ -297,29 +321,7 @@ def process_image(
         lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
         processed_image    = cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
 
-    # Convert to Grayscale
-    grayscale_image = 255 - cv2.cvtColor(processed_image, cv2.COLOR_BGR2GRAY)
-
-    # Adaptive Thresholding
-    if params.get('use_adaptive_thresholding'):
-        adaptive_block_size = ensure_odd(int(params['adaptive_block_size']))
-        binary_image = cv2.adaptiveThreshold(
-            src            = grayscale_image,
-            maxValue       = 255,
-            adaptiveMethod = cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            thresholdType  = cv2.THRESH_BINARY_INV,
-            blockSize      = adaptive_block_size,
-            C              = params['adaptive_c']
-        )
-    else:
-        _, binary_image = cv2.threshold(
-            src    = grayscale_image,
-            thresh = 0,
-            maxval = 255,
-            type   = cv2.THRESH_BINARY + cv2.THRESH_OTSU
-        )
-
-    return processed_image, binary_image
+    return rotated_original_image, processed_image
 
 # -------------------- Image Annotation Functions --------------------
 
@@ -578,23 +580,24 @@ def render_sidebar(
 ) -> np.ndarray:
     """
     Renders the sidebar image with controls and settings.
-    
+
     Args:
         steps         : List of processing steps to display.
         display_name  : Name of current display mode.
         image_name    : Name of current image file.
         window_height : Height of the window in pixels.
-    
+
     Returns:
         np.ndarray: Rendered sidebar image
     """
-    lines          = generate_sidebar_content(steps, display_name, image_name)
-    num_lines      = len(lines)
-    margin         = int(0.05 * window_height)
-    line_height    = max(20, min(int((window_height - 2 * margin) / num_lines), 40))
-    font_scale     = line_height / 40
-    font_thickness = max(1, int(font_scale * 1.5))
-    font           = cv2.FONT_HERSHEY_DUPLEX
+    lines             = generate_sidebar_content(steps, display_name, image_name)
+    num_lines         = len(lines)
+    margin            = int(0.05 * window_height)
+    horizontal_margin = 20  # Space on the left and right of the sidebar
+    line_height       = max(20, min(int((window_height - 2 * margin) / num_lines), 40))
+    font_scale        = line_height / 40
+    font_thickness    = max(1, int(font_scale * 1.5))
+    font              = cv2.FONT_HERSHEY_DUPLEX
 
     # Determine maximum text width
     max_text_width = max(
@@ -602,8 +605,8 @@ def render_sidebar(
         for text, _, rel_scale in lines if text
     )
 
-    # Sidebar width with padding
-    sidebar_width = max_text_width + 20  # 10 pixels padding on each side
+    # Sidebar width with horizontal margin
+    sidebar_width = max_text_width + 2 * horizontal_margin
 
     # Create sidebar image
     sidebar = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
@@ -615,7 +618,7 @@ def render_sidebar(
             cv2.putText(
                 img       = sidebar,
                 text      = text,
-                org       = (10, y_position),
+                org       = (horizontal_margin, y_position),  # Adjusted with horizontal margin
                 fontFace  = font,
                 fontScale = font_scale * rel_scale,
                 color     = color,
@@ -625,6 +628,26 @@ def render_sidebar(
         y_position += line_height
 
     return sidebar
+
+
+def center_image_in_square(image: np.ndarray) -> np.ndarray:
+    """
+    Centers the image in a square canvas with sides equal to the longest side of the image.
+    The background is set to black.
+
+    Args:
+        image: The image to center.
+
+    Returns:
+        The image centered in a square canvas.
+    """
+    height, width = image.shape[:2]
+    max_side      = max(height, width)
+    canvas        = np.zeros((max_side, max_side, 3), dtype = np.uint8)
+    y_offset      = (max_side - height) // 2
+    x_offset      = (max_side - width)  // 2
+    canvas[y_offset:y_offset + height, x_offset:x_offset + width] = image
+    return canvas
 
 # -------------------- Main Interactive Function --------------------
 
@@ -653,9 +676,8 @@ def interactive_experiment(
 
     # Display options
     display_options = [
-        ('Original Image',  lambda: state.original_image,  'annotated_original'),
-        ('Processed Image', lambda: state.processed_image, 'annotated_processed'),
-        ('Binary Image',    lambda: state.binary_image,    'annotated_binary')
+        ('Original Image',  lambda: state.rotated_original_image,  'annotated_original'),
+        ('Processed Image', lambda: state.processed_image,         'annotated_processed')
     ]
     total_displays = len(display_options)
 
@@ -679,7 +701,7 @@ def interactive_experiment(
 
             # Process image if parameters have changed
             if state.last_params != current_params:
-                state.processed_image, state.binary_image = process_image(state.original_image, **current_params)
+                state.rotated_original_image, state.processed_image = process_image(state.original_image, **current_params)
                 state.last_params = current_params.copy()
                 state.annotations = {}
 
@@ -714,6 +736,9 @@ def interactive_experiment(
                 # Prepare display image
                 if display_image.ndim == 2:
                     display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+
+                # Center the image in a square canvas
+                display_image = center_image_in_square(display_image)
 
                 display_scale = state.window_height / display_image.shape[0]
                 display_image = cv2.resize(
@@ -796,10 +821,12 @@ if __name__ == "__main__":
         'use_ocr'            : True,
         'use_shadow_removal' : True,
         'use_color_clahe'    : True,
+        'use_image_rotation' : True,
+        'rotation_angle'     : 90
     }
 
     interactive_experiment(
         image_files     = image_files,
         params_override = params_override,
-        interactive_ui  = False
+        interactive_ui  = True
     )

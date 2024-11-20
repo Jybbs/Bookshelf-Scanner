@@ -7,7 +7,7 @@
       min          : 0.0
       max          : 1.0
       step         : 0.05
-      increase_key : R
+      increase_key : O
 
 - name         : shadow_removal
   display_name : Shadow Removal
@@ -18,14 +18,14 @@
       min          : 1
       max          : 45
       step         : 2
-      increase_key : K
+      increase_key : S
     - name         : shadow_median_blur
       display_name : Shadow Median Blur
       value        : 15
       min          : 1
       max          : 45
       step         : 2
-      increase_key : B
+      increase_key : M
 
 - name         : color_clahe
   display_name : Color CLAHE
@@ -47,14 +47,14 @@
       min          : 1
       max          : 31
       step         : 2
-      increase_key : M
+      increase_key : G
     - name         : gaussian_sigma
       display_name : Gaussian Sigma
       value        : 1.0
       min          : 0.1
       max          : 10.0
       step         : 0.5
-      increase_key : N
+      increase_key : I
 
 - name         : brightness_adjustment
   display_name : Brightness Adjustment
@@ -65,7 +65,7 @@
       min          : -100
       max          : 100
       step         : 5
-      increase_key : F
+      increase_key : B
 
 - name         : contrast_adjustment
   display_name : Contrast Adjustment
@@ -76,22 +76,15 @@
       min          : 0.1
       max          : 3.0
       step         : 0.1
-      increase_key : L
-
-- name         : adaptive_thresholding
-  display_name : Adaptive Thresholding
-  parameters:
-    - name         : adaptive_block_size
-      display_name : Adaptive Block Size
-      value        : 11
-      min          : 3
-      max          : 45
-      step         : 2
-      increase_key : Z
-    - name         : adaptive_c
-      display_name : Adaptive C
-      value        : 2
-      min          : -10
-      max          : 10
-      step         : 1
       increase_key : C
+
+- name         : image_rotation
+  display_name : Image Rotation
+  parameters:
+    - name         : rotation_angle
+      display_name : Rotation Angle
+      value        : 0
+      min          : 0
+      max          : 270
+      step         : 90
+      increase_key : R
