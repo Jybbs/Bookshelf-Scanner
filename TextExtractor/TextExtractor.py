@@ -13,7 +13,7 @@ from typing      import Any, Optional
 logging.basicConfig(
     level    = logging.INFO,
     format   = '%(asctime)s - %(levelname)s - %(message)s',
-    filename = 'bookshelf_scanner.log',
+    filename = 'TextExtractor.log',
     filemode = 'w'
 )
 logger = logging.getLogger(__name__)
@@ -57,13 +57,13 @@ class DisplayState:
 
 @dataclass
 class Parameter:
-    name          : str    # Internal name of the parameter.
-    display_name  : str    # Name to display in the UI.
-    value         : Any    # Current value of the parameter.
-    increase_key  : str    # Key to increase the parameter.
-    min           : Any    = None # Minimum value of the parameter.
-    max           : Any    = None # Maximum value of the parameter.
-    step          : Any    = None # Step size for incrementing/decrementing the parameter.
+    name          : str         # Internal name of the parameter.
+    display_name  : str         # Name to display in the UI.
+    value         : Any         # Current value of the parameter.
+    increase_key  : str         # Key to increase the parameter.
+    min           : Any = None  # Minimum value of the parameter.
+    max           : Any = None  # Maximum value of the parameter.
+    step          : Any = None  # Step size for incrementing/decrementing the parameter.
 
     @property
     def decrease_key(self) -> str:
@@ -83,7 +83,6 @@ class Parameter:
             return str(self.value)
 
     def __post_init__(self):
-        # Ensure min, max, and step are provided for parameters
         if self.min is None or self.max is None or self.step is None:
             raise ValueError(f"Parameter '{self.name}' must have 'min', 'max', and 'step' defined.")
 
@@ -102,11 +101,11 @@ class Parameter:
 
 @dataclass
 class ProcessingStep:
-    name          : str          # Internal name of the processing step.
-    display_name  : str          # Name to display in the UI.
-    toggle_key    : str          # Key to toggle this processing step.
+    name          : str              # Internal name of the processing step.
+    display_name  : str              # Name to display in the UI.
+    toggle_key    : str              # Key to toggle this processing step.
     parameters    : list[Parameter]  # List of parameter instances.
-    is_enabled    : bool         = False     # Whether the step is enabled (default: False).
+    is_enabled    : bool = False     # Whether the step is enabled (default: False).
 
     def adjust_param(self, key_char: str) -> Optional[str]:
         """
@@ -355,6 +354,102 @@ def extract_text_from_image(
         logger.error(f"OCR failed: {e}")
         return []
 
+def draw_rotated_text(
+    image      : np.ndarray,
+    text       : str,
+    position   : tuple[int, int],
+    angle      : float,
+    font_scale : float                = 0.3,
+    color      : tuple[int, int, int] = (0, 0, 255),
+    thickness  : int                  = 1
+) -> np.ndarray:
+    """
+    Draws rotated text on an image at a specified position and angle.
+
+    Args:
+        image      : The image to draw on.
+        text       : The text string to draw.
+        position   : (x, y) tuple for the position to place the text.
+        angle      : Angle in degrees to rotate the text.
+        font_scale : Font scale for the text.
+        color      : Color of the text in BGR.
+        thickness  : Thickness of the text strokes.
+
+    Returns:
+        The image with the text drawn on it.
+    """
+    font                        = cv2.FONT_HERSHEY_SIMPLEX
+    text_size, baseline         = cv2.getTextSize(text, font, font_scale, thickness)
+    text_width, text_height     = text_size
+    text_image                  = np.zeros((text_height + baseline, text_width, 3), dtype=np.uint8)
+
+    # Draw outline text
+    cv2.putText(
+        img       = text_image,
+        text      = text,
+        org       = (0, text_height),
+        fontFace  = font,
+        fontScale = font_scale,
+        color     = (255, 255, 255),
+        thickness = thickness + 2,
+        lineType  = cv2.LINE_AA
+    )
+    # Draw main text
+    cv2.putText(
+        img       = text_image,
+        text      = text,
+        org       = (0, text_height),
+        fontFace  = font,
+        fontScale = font_scale,
+        color     = color,
+        thickness = thickness,
+        lineType  = cv2.LINE_AA
+    )
+
+    # Rotate the text image
+    center                 = (text_width / 2, (text_height + baseline) / 2)
+    rotation_matrix        = cv2.getRotationMatrix2D(center, angle, 1.0)
+    abs_cosine             = abs(rotation_matrix[0, 0])
+    abs_sine               = abs(rotation_matrix[0, 1])
+    bounding_width         = int((text_height + baseline) * abs_sine + text_width * abs_cosine)
+    bounding_height        = int((text_height + baseline) * abs_cosine + text_width * abs_sine)
+    rotation_matrix[0, 2] += bounding_width / 2 - center[0]
+    rotation_matrix[1, 2] += bounding_height / 2 - center[1]
+
+    rotated_text_image = cv2.warpAffine(
+        src         = text_image,
+        M           = rotation_matrix,
+        dsize       = (bounding_width, bounding_height),
+        flags       = cv2.INTER_LINEAR,
+        borderMode  = cv2.BORDER_CONSTANT,
+        borderValue = (0, 0, 0)
+    )
+
+    # Create mask and extract region of interest
+    rotated_gray_image = cv2.cvtColor(rotated_text_image, cv2.COLOR_BGR2GRAY)
+    _, mask            = cv2.threshold(rotated_gray_image, 1, 255, cv2.THRESH_BINARY)
+    height, width      = rotated_text_image.shape[:2]
+    x_pos, y_pos       = position
+    x_pos             -= width // 2
+    y_pos             -= height // 2
+    x_pos              = max(0, min(x_pos, image.shape[1] - width))
+    y_pos              = max(0, min(y_pos, image.shape[0] - height))
+    region_of_interest = image[y_pos:y_pos + height, x_pos:x_pos + width]
+
+    # Ensure the region of interest is in BGR format and correct size
+    if region_of_interest.ndim == 2 or region_of_interest.shape[2] == 1:
+        region_of_interest = cv2.cvtColor(region_of_interest, cv2.COLOR_GRAY2BGR)
+    if region_of_interest.shape[:2] != (height, width):
+        region_of_interest = cv2.resize(region_of_interest, (width, height))
+
+    # Combine the text image with the region of interest
+    image_background = cv2.bitwise_and(region_of_interest, region_of_interest, mask = cv2.bitwise_not(mask))
+    text_foreground  = cv2.bitwise_and(rotated_text_image, rotated_text_image, mask = mask)
+    combined_image   = cv2.add(image_background, text_foreground)
+    image[y_pos:y_pos + height, x_pos:x_pos + width] = combined_image
+
+    return image
+
 def annotate_image_with_text(
     original_image : np.ndarray,
     ocr_image      : np.ndarray,
@@ -373,61 +468,49 @@ def annotate_image_with_text(
     Returns:
         Annotated image.
     """
-    annotated_image = original_image.copy()
+    # Ensure the annotated image is in BGR format
+    if original_image.ndim == 2 or original_image.shape[2] == 1:
+        annotated_image = cv2.cvtColor(original_image, cv2.COLOR_GRAY2BGR)
+    else:
+        annotated_image = original_image.copy()
 
-    ocr_results = extract_text_from_image(
-        image  = ocr_image,
-        reader = reader,
-        **params
-    )
+    ocr_results = extract_text_from_image(image=ocr_image, reader=reader, **params)
 
     for bounding_box, text, confidence in ocr_results:
-
-        # Draw bounding box
         coordinates = np.array(bounding_box).astype(int)
-        cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
+        # Draw bounding box around detected text
+        cv2.polylines(
+            img       = annotated_image,
+            pts       = [coordinates],
+            isClosed  = True,
+            color     = (0, 255, 0),
+            thickness = 2
+        )
         logger.info(f"OCR Text: '{text}' with confidence {confidence:.2f}")
 
-        # Prepare text with confidence
-        text_with_confidence = f"{text} ({confidence:.2f})"
+        x_coordinates, y_coordinates = coordinates[:, 0], coordinates[:, 1]
+        top_edge_length      = np.hypot(x_coordinates[1] - x_coordinates[0], y_coordinates[1] - y_coordinates[0])
+        right_edge_length    = np.hypot(x_coordinates[2] - x_coordinates[1], y_coordinates[2] - y_coordinates[1])
+        text_with_confidence = f"{text} ({confidence * 100:.1f}%)"
 
-        # Calculate text size
-        font           = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale     = 0.6
-        text_thickness = 2
-        (text_width, text_height), baseline = cv2.getTextSize(text_with_confidence, font, font_scale, text_thickness)
+        if right_edge_length > top_edge_length:
+            # If the box is taller than it is wide, place text to the right and rotate it
+            angle          = 270
+            max_x          = np.max(x_coordinates)
+            min_y, max_y   = np.min(y_coordinates), np.max(y_coordinates)
+            text_position  = (int(max_x + 10), int((min_y + max_y) / 2))
+        else:
+            # If the box is wider than it is tall, place text above it
+            angle          = 0
+            min_x, max_x   = np.min(x_coordinates), np.max(x_coordinates)
+            min_y          = np.min(y_coordinates)
+            text_position  = (int((min_x + max_x) / 2), int(min_y - 10))
 
-        # Define text origin (place above the top-left corner of bounding box if possible)
-        x = coordinates[0][0]
-        y = coordinates[0][1] - 10
-
-        # Adjust position if text goes above the image
-        if y - text_height - baseline < 0:
-            y = coordinates[2][1] + text_height + 10
-
-        # Ensure text does not go outside the image boundaries
-        x = max(0, min(x, annotated_image.shape[1] - text_width))
-        y = max(text_height + baseline, min(y, annotated_image.shape[0] - baseline))
-
-        # Draw background rectangle for text
-        cv2.rectangle(
-            annotated_image,
-            (x - 5, y - text_height - baseline - 5),
-            (x + text_width + 5, y + 5),
-            (0, 0, 0),
-            thickness = -1
-        )
-
-        # Put text without rotation for legibility
-        cv2.putText(
-            img       = annotated_image,
-            text      = text_with_confidence,
-            org       = (x, y),
-            fontFace  = font,
-            fontScale = font_scale,
-            color     = (255, 255, 255),
-            thickness = text_thickness,
-            lineType  = cv2.LINE_AA
+        annotated_image = draw_rotated_text(
+            image    = annotated_image,
+            text     = text_with_confidence,
+            position = text_position,
+            angle    = angle
         )
 
     return annotated_image
@@ -455,21 +538,21 @@ def generate_sidebar_content(
     GRAY  = (200, 200, 200)
     
     lines = [
-        (f"[/] View Options for {display_name}", TEAL, 1.1),
-        (f"   [?] Current Image: {image_name}",  TEAL, 0.9),
+        (f"[/] View Options for {display_name}", TEAL, 1.0),
+        (f"   [?] Current Image: {image_name}",  TEAL, 0.85),
         ("", WHITE, 1.0)  # Spacer
     ]
     
     for step in steps:
         status = 'On' if step.is_enabled else 'Off'
-        lines.append((f"[{step.toggle_key}] {step.display_name}: {status}", WHITE, 1.1))
+        lines.append((f"[{step.toggle_key}] {step.display_name}: {status}", WHITE, 1.0))
 
         for param in step.parameters:
             value_str = param.display_value
             lines.append((
                 f"   [{param.decrease_key} | {param.increase_key}] {param.display_name}: {value_str}",
                 GRAY,
-                0.9
+                0.85
             ))
         lines.append(("", WHITE, 1.0))  # Spacer
     
@@ -494,42 +577,24 @@ def render_sidebar(
     Returns:
         np.ndarray: Rendered sidebar image
     """
-    # Generate the sidebar content
-    lines = generate_sidebar_content(steps, display_name, image_name)
-    num_lines = len(lines)
-
-    # Calculate line height and font scale to fit all text within sidebar height
-    margin = int(0.05 * window_height)  # 5% top and bottom margins
-    available_height = window_height - 2 * margin
-    line_height = int(available_height / num_lines)
-
-    # Set minimum and maximum line height
-    min_line_height = 20
-    max_line_height = 40
-    line_height = max(min_line_height, min(line_height, max_line_height))
-
-    y_position = margin + line_height
-
-    # Calculate font scale based on line height
-    font_scale = line_height / 30  # 30 is a factor determined empirically
+    lines          = generate_sidebar_content(steps, display_name, image_name)
+    num_lines      = len(lines)
+    margin         = int(0.05 * window_height)
+    line_height    = max(20, min(int((window_height - 2 * margin) / num_lines), 40))
+    font_scale     = line_height / 40
     font_thickness = max(1, int(font_scale * 1.5))
+    font           = cv2.FONT_HERSHEY_DUPLEX
 
     # Determine maximum text width
-    max_text_width = 0
-    for text, _, rel_scale in lines:
-        if text:
-            (text_width, _), _ = cv2.getTextSize(
-                text,
-                cv2.FONT_HERSHEY_DUPLEX,
-                font_scale * rel_scale,
-                font_thickness
-            )
-            max_text_width = max(max_text_width, text_width)
+    max_text_width = max(
+        cv2.getTextSize(text, font, font_scale * rel_scale, font_thickness)[0][0]
+        for text, _, rel_scale in lines if text
+    )
 
-    # Add padding
+    # Sidebar width with padding
     sidebar_width = max_text_width + 20  # 10 pixels padding on each side
 
-    # Create the sidebar image
+    # Create sidebar image
     sidebar = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
 
     # Draw text lines
@@ -540,7 +605,7 @@ def render_sidebar(
                 img       = sidebar,
                 text      = text,
                 org       = (10, y_position),
-                fontFace  = cv2.FONT_HERSHEY_DUPLEX,
+                fontFace  = font,
                 fontScale = font_scale * rel_scale,
                 color     = color,
                 thickness = font_thickness,
