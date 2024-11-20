@@ -1,5 +1,6 @@
 import cv2
 import easyocr
+import json
 import logging
 import numpy as np
 
@@ -13,7 +14,7 @@ from typing      import Any, Optional
 logging.basicConfig(
     level    = logging.INFO,
     format   = '%(asctime)s - %(levelname)s - %(message)s',
-    filename = 'bookshelf_scanner.log',
+    filename = 'TextExtractor.log',
     filemode = 'w'
 )
 logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ class DisplayState:
     window_height   : int                   = 800   # Window height in pixels
     last_params     : Optional[dict]        = None  # Previous processing parameters
     annotations     : dict[str, np.ndarray] = field(default_factory = dict)  # Cached annotations
+    ocr_results     : dict[str, list]       = field(default_factory = dict)  # OCR results for each image
     original_image  : Optional[np.ndarray]  = None  # The original image
     processed_image : Optional[np.ndarray]  = None  # The processed image
     binary_image    : Optional[np.ndarray]  = None  # The binary (thresholded) image
@@ -57,13 +59,13 @@ class DisplayState:
 
 @dataclass
 class Parameter:
-    name          : str    # Internal name of the parameter.
-    display_name  : str    # Name to display in the UI.
-    value         : Any    # Current value of the parameter.
-    increase_key  : str    # Key to increase the parameter.
-    min           : Any    = None # Minimum value of the parameter.
-    max           : Any    = None # Maximum value of the parameter.
-    step          : Any    = None # Step size for incrementing/decrementing the parameter.
+    name          : str         # Internal name of the parameter.
+    display_name  : str         # Name to display in the UI.
+    value         : Any         # Current value of the parameter.
+    increase_key  : str         # Key to increase the parameter.
+    min           : Any = None  # Minimum value of the parameter.
+    max           : Any = None  # Maximum value of the parameter.
+    step          : Any = None  # Step size for incrementing/decrementing the parameter.
 
     @property
     def decrease_key(self) -> str:
@@ -83,7 +85,6 @@ class Parameter:
             return str(self.value)
 
     def __post_init__(self):
-        # Ensure min, max, and step are provided for parameters
         if self.min is None or self.max is None or self.step is None:
             raise ValueError(f"Parameter '{self.name}' must have 'min', 'max', and 'step' defined.")
 
@@ -102,11 +103,11 @@ class Parameter:
 
 @dataclass
 class ProcessingStep:
-    name          : str          # Internal name of the processing step.
-    display_name  : str          # Name to display in the UI.
-    toggle_key    : str          # Key to toggle this processing step.
+    name          : str              # Internal name of the processing step.
+    display_name  : str              # Name to display in the UI.
+    toggle_key    : str              # Key to toggle this processing step.
     parameters    : list[Parameter]  # List of parameter instances.
-    is_enabled    : bool         = False     # Whether the step is enabled (default: False).
+    is_enabled    : bool = False     # Whether the step is enabled (default: False).
 
     def adjust_param(self, key_char: str) -> Optional[str]:
         """
@@ -355,11 +356,108 @@ def extract_text_from_image(
         logger.error(f"OCR failed: {e}")
         return []
 
+def draw_rotated_text(
+    image      : np.ndarray,
+    text       : str,
+    position   : tuple[int, int],
+    angle      : float,
+    font_scale : float                = 0.3,
+    color      : tuple[int, int, int] = (0, 0, 255),
+    thickness  : int                  = 1
+) -> np.ndarray:
+    """
+    Draws rotated text on an image at a specified position and angle.
+
+    Args:
+        image      : The image to draw on.
+        text       : The text string to draw.
+        position   : (x, y) tuple for the position to place the text.
+        angle      : Angle in degrees to rotate the text.
+        font_scale : Font scale for the text.
+        color      : Color of the text in BGR.
+        thickness  : Thickness of the text strokes.
+
+    Returns:
+        The image with the text drawn on it.
+    """
+    font                    = cv2.FONT_HERSHEY_SIMPLEX
+    text_size, baseline     = cv2.getTextSize(text, font, font_scale, thickness)
+    text_width, text_height = text_size
+    text_image              = np.zeros((text_height + baseline, text_width, 3), dtype = np.uint8)
+
+    # Draw outline text
+    cv2.putText(
+        img       = text_image,
+        text      = text,
+        org       = (0, text_height),
+        fontFace  = font,
+        fontScale = font_scale,
+        color     = (255, 255, 255),
+        thickness = thickness + 2,
+        lineType  = cv2.LINE_AA
+    )
+    # Draw main text
+    cv2.putText(
+        img       = text_image,
+        text      = text,
+        org       = (0, text_height),
+        fontFace  = font,
+        fontScale = font_scale,
+        color     = color,
+        thickness = thickness,
+        lineType  = cv2.LINE_AA
+    )
+
+    # Rotate the text image
+    center                 = (text_width / 2, (text_height + baseline) / 2)
+    rotation_matrix        = cv2.getRotationMatrix2D(center, angle, 1.0)
+    abs_cosine             = abs(rotation_matrix[0, 0])
+    abs_sine               = abs(rotation_matrix[0, 1])
+    bounding_width         = int((text_height + baseline) * abs_sine   + text_width * abs_cosine)
+    bounding_height        = int((text_height + baseline) * abs_cosine + text_width * abs_sine)
+    rotation_matrix[0, 2] += bounding_width  / 2 - center[0]
+    rotation_matrix[1, 2] += bounding_height / 2 - center[1]
+
+    rotated_text_image = cv2.warpAffine(
+        src         = text_image,
+        M           = rotation_matrix,
+        dsize       = (bounding_width, bounding_height),
+        flags       = cv2.INTER_LINEAR,
+        borderMode  = cv2.BORDER_CONSTANT,
+        borderValue = (0, 0, 0)
+    )
+
+    # Create mask and extract region of interest
+    rotated_gray_image = cv2.cvtColor(rotated_text_image, cv2.COLOR_BGR2GRAY)
+    _, mask            = cv2.threshold(rotated_gray_image, 1, 255, cv2.THRESH_BINARY)
+    height, width      = rotated_text_image.shape[:2]
+    x_pos, y_pos       = position
+    x_pos             -= width // 2
+    y_pos             -= height // 2
+    x_pos              = max(0, min(x_pos, image.shape[1] - width))
+    y_pos              = max(0, min(y_pos, image.shape[0] - height))
+    region_of_interest = image[y_pos:y_pos + height, x_pos:x_pos + width]
+
+    # Ensure the region of interest is in BGR format and correct size
+    if region_of_interest.ndim == 2 or region_of_interest.shape[2] == 1:
+        region_of_interest = cv2.cvtColor(region_of_interest, cv2.COLOR_GRAY2BGR)
+    if region_of_interest.shape[:2] != (height, width):
+        region_of_interest = cv2.resize(region_of_interest, (width, height))
+
+    # Combine the text image with the region of interest
+    image_background = cv2.bitwise_and(region_of_interest, region_of_interest, mask = cv2.bitwise_not(mask))
+    text_foreground  = cv2.bitwise_and(rotated_text_image, rotated_text_image, mask = mask)
+    combined_image   = cv2.add(image_background, text_foreground)
+    image[y_pos:y_pos + height, x_pos:x_pos + width] = combined_image
+
+    return image
+
 def annotate_image_with_text(
     original_image : np.ndarray,
     ocr_image      : np.ndarray,
     params         : dict,
-    reader         : easyocr.Reader
+    reader         : easyocr.Reader,
+    state          : DisplayState
 ) -> np.ndarray:
     """
     Annotates the image with recognized text.
@@ -369,61 +467,62 @@ def annotate_image_with_text(
         ocr_image      : Image to use for OCR.
         params         : Dictionary of processing parameters.
         reader         : EasyOCR reader instance.
+        state          : DisplayState instance to store OCR results.
 
     Returns:
         Annotated image.
     """
-    annotated_image = original_image.copy()
+    # Ensure the annotated image is in BGR format
+    if original_image.ndim == 2 or original_image.shape[2] == 1:
+        annotated_image = cv2.cvtColor(original_image, cv2.COLOR_GRAY2BGR)
+    else:
+        annotated_image = original_image.copy()
 
-    ocr_results = extract_text_from_image(
-        image  = ocr_image,
-        reader = reader,
-        **params
-    )
+    ocr_results = extract_text_from_image(image=ocr_image, reader=reader, **params)
+    image_text_results = []
 
     for bounding_box, text, confidence in ocr_results:
-
-        # Draw bounding box
         coordinates = np.array(bounding_box).astype(int)
-        cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
+        # Draw bounding box around detected text
+        cv2.polylines(
+            img       = annotated_image,
+            pts       = [coordinates],
+            isClosed  = True,
+            color     = (0, 255, 0),
+            thickness = 2
+        )
         logger.info(f"OCR Text: '{text}' with confidence {confidence:.2f}")
 
-        # Calculate text size
-        font                    = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale              = 0.6
-        text_thickness          = 2
-        text_size, _            = cv2.getTextSize(text, font, font_scale, text_thickness)
-        text_width, text_height = text_size
+        x_coordinates, y_coordinates = coordinates[:, 0], coordinates[:, 1]
+        top_edge_length      = np.hypot(x_coordinates[1] - x_coordinates[0], y_coordinates[1] - y_coordinates[0])
+        right_edge_length    = np.hypot(x_coordinates[2] - x_coordinates[1], y_coordinates[2] - y_coordinates[1])
+        text_with_confidence = f"{text} ({confidence * 100:.1f}%)"
 
-        # Define text origin
-        y_position = (
-            coordinates[0][1] - 10
-            if coordinates[0][1] - 10 > text_height
-            else coordinates[0][1] + text_height + 10
+        if right_edge_length > top_edge_length:
+            # If the box is taller than it is wide, place text to the right and rotate it
+            angle          = 270
+            max_x          = np.max(x_coordinates)
+            min_y, max_y   = np.min(y_coordinates), np.max(y_coordinates)
+            text_position  = (int(max_x + 10), int((min_y + max_y) / 2))
+        else:
+            # If the box is wider than it is tall, place text above it
+            angle          = 0
+            min_x, max_x   = np.min(x_coordinates), np.max(x_coordinates)
+            min_y          = np.min(y_coordinates)
+            text_position  = (int((min_x + max_x) / 2), int(min_y - 10))
+
+        annotated_image = draw_rotated_text(
+            image    = annotated_image,
+            text     = text_with_confidence,
+            position = text_position,
+            angle    = angle
         )
-        text_origin = (coordinates[0][0], y_position)
 
-        # Define background rectangle coordinates
-        top_left     = (text_origin[0], text_origin[1] - text_height - 5)
-        bottom_right = (text_origin[0] + text_width + 10, text_origin[1] + 5)
+        # Collect OCR results for output
+        image_text_results.append([text, confidence])
 
-        # Draw semi-transparent rectangle
-        overlay = annotated_image.copy()
-        cv2.rectangle(overlay, top_left, bottom_right, (0, 0, 0), -1)
-        alpha = 0.7
-        cv2.addWeighted(overlay, alpha, annotated_image, 1 - alpha, 0, annotated_image)
-
-        # Put bold white text
-        cv2.putText(
-            img       = annotated_image,
-            text      = text,
-            org       = (text_origin[0] + 5, text_origin[1]),
-            fontFace  = font,
-            fontScale = font_scale,
-            color     = (255, 255, 255),
-            thickness = text_thickness,
-            lineType  = cv2.LINE_AA
-        )
+    # Store OCR results in state
+    state.ocr_results[state.image_name] = image_text_results
 
     return annotated_image
 
@@ -450,21 +549,21 @@ def generate_sidebar_content(
     GRAY  = (200, 200, 200)
     
     lines = [
-        (f"[/] View Options for {display_name}", TEAL, 1.1),
-        (f"   [?] Current Image: {image_name}",  TEAL, 0.9),
+        (f"[/] View Options for {display_name}", TEAL, 1.0),
+        (f"   [?] Current Image: {image_name}",  TEAL, 0.85),
         ("", WHITE, 1.0)  # Spacer
     ]
     
     for step in steps:
         status = 'On' if step.is_enabled else 'Off'
-        lines.append((f"[{step.toggle_key}] {step.display_name}: {status}", WHITE, 1.1))
+        lines.append((f"[{step.toggle_key}] {step.display_name}: {status}", WHITE, 1.0))
 
         for param in step.parameters:
             value_str = param.display_value
             lines.append((
                 f"   [{param.decrease_key} | {param.increase_key}] {param.display_name}: {value_str}",
                 GRAY,
-                0.9
+                0.85
             ))
         lines.append(("", WHITE, 1.0))  # Spacer
     
@@ -473,7 +572,6 @@ def generate_sidebar_content(
 
 def render_sidebar(
     steps         : list[ProcessingStep],
-    sidebar_width : int,
     display_name  : str,
     image_name    : str,
     window_height : int
@@ -483,7 +581,6 @@ def render_sidebar(
     
     Args:
         steps         : List of processing steps to display.
-        sidebar_width : Width of the sidebar in pixels.
         display_name  : Name of current display mode.
         image_name    : Name of current image file.
         window_height : Height of the window in pixels.
@@ -491,34 +588,51 @@ def render_sidebar(
     Returns:
         np.ndarray: Rendered sidebar image
     """
-    sidebar        = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
-    scale          = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
-    font_scale     = 0.8 * scale
-    line_height    = int(32 * scale)
-    y_position     = int(30 * scale)
-    font_thickness = max(1, int(scale * 1.5))
-    
-    for text, color, rel_scale in generate_sidebar_content(steps, display_name, image_name):
+    lines          = generate_sidebar_content(steps, display_name, image_name)
+    num_lines      = len(lines)
+    margin         = int(0.05 * window_height)
+    line_height    = max(20, min(int((window_height - 2 * margin) / num_lines), 40))
+    font_scale     = line_height / 40
+    font_thickness = max(1, int(font_scale * 1.5))
+    font           = cv2.FONT_HERSHEY_DUPLEX
+
+    # Determine maximum text width
+    max_text_width = max(
+        cv2.getTextSize(text, font, font_scale * rel_scale, font_thickness)[0][0]
+        for text, _, rel_scale in lines if text
+    )
+
+    # Sidebar width with padding
+    sidebar_width = max_text_width + 20  # 10 pixels padding on each side
+
+    # Create sidebar image
+    sidebar = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
+
+    # Draw text lines
+    y_position = margin + line_height
+    for text, color, rel_scale in lines:
         if text:
             cv2.putText(
                 img       = sidebar,
                 text      = text,
                 org       = (10, y_position),
-                fontFace  = cv2.FONT_HERSHEY_DUPLEX,
+                fontFace  = font,
                 fontScale = font_scale * rel_scale,
                 color     = color,
                 thickness = font_thickness,
                 lineType  = cv2.LINE_AA
             )
         y_position += line_height
-    
+
     return sidebar
 
 # -------------------- Main Interactive Function --------------------
 
 def interactive_experiment(
     image_files     : list[Path],
-    params_override : dict = None
+    params_override : dict = None,
+    output_json     : bool = True,
+    interactive_ui  : bool = True
 ):
     """
     Runs the interactive experiment allowing parameter adjustment and image processing.
@@ -526,6 +640,8 @@ def interactive_experiment(
     Args:
         image_files     : List of image file paths to process.
         params_override : Optional parameter overrides.
+        output_json     : Whether to output OCR results to JSON file on exit.
+        interactive_ui  : Whether to run the interactive UI.
     """
     if not image_files:
         raise ValueError("No image files provided")
@@ -543,106 +659,147 @@ def interactive_experiment(
     ]
     total_displays = len(display_options)
 
-    # Initialize window
-    window_name = 'Bookshelf Scanner'
-    cv2.namedWindow(window_name, cv2.WINDOW_KEEPRATIO)
+    if interactive_ui:
+        # Initialize window
+        window_name = 'Bookshelf Scanner'
+        cv2.namedWindow(window_name, cv2.WINDOW_KEEPRATIO)
 
-    while True:
-        if state.original_image is None:  # Load image only if not already loaded
-            image_path           = image_files[state.image_idx]
-            state.original_image = load_image(str(image_path))
-            state.window_height  = max(state.original_image.shape[0], 800)
-            state.image_name     = image_path.name
-            state.reset_image_state()
+    try:
+        while True:
+            # Load image only if not already loaded
+            if state.original_image is None:
+                image_path           = image_files[state.image_idx]
+                state.original_image = load_image(str(image_path))
+                state.window_height  = max(state.original_image.shape[0], 800)
+                state.image_name     = image_path.name
+                state.reset_image_state()
 
-        # Extract current parameters
-        current_params = extract_params(steps)
+            # Extract current parameters
+            current_params = extract_params(steps)
 
-        # Process image if parameters have changed
-        if state.last_params != current_params:
-            state.processed_image, state.binary_image = process_image(state.original_image, **current_params)
-            state.last_params = current_params.copy()
-            state.annotations = {}
+            # Process image if parameters have changed
+            if state.last_params != current_params:
+                state.processed_image, state.binary_image = process_image(state.original_image, **current_params)
+                state.last_params = current_params.copy()
+                state.annotations = {}
 
-        # Get current display image
-        display_name, get_image_func, cache_key = display_options[state.display_idx]
-        display_image = get_image_func()
+            # Get current display image
+            display_name, get_image_func, cache_key = display_options[state.display_idx]
+            display_image = get_image_func()
 
-        # Apply annotations if OCR is enabled
-        if current_params.get('use_ocr'):
-            if cache_key not in state.annotations:
-                annotated_image = annotate_image_with_text(
-                    original_image = display_image,
-                    ocr_image      = state.processed_image,
-                    params         = current_params,
-                    reader         = reader
+            # Apply annotations if OCR is enabled
+            if current_params.get('use_ocr'):
+                if cache_key not in state.annotations:
+                    annotated_image = annotate_image_with_text(
+                        original_image = display_image,
+                        ocr_image      = state.processed_image,
+                        params         = current_params,
+                        reader         = reader,
+                        state          = state
+                    )
+                    state.annotations[cache_key] = annotated_image
+                display_image = state.annotations[cache_key]
+            else:
+                # Even if OCR is not displayed, we still extract text for JSON output
+                if state.image_name not in state.ocr_results:
+                    ocr_results = extract_text_from_image(
+                        image  = state.processed_image,
+                        reader = reader,
+                        **current_params
+                    )
+                    image_text_results = [[text, confidence] for _, text, confidence in ocr_results]
+                    state.ocr_results[state.image_name] = image_text_results
+
+            if interactive_ui:
+                # Prepare display image
+                if display_image.ndim == 2:
+                    display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+
+                display_scale = state.window_height / display_image.shape[0]
+                display_image = cv2.resize(
+                    display_image,
+                    (int(display_image.shape[1] * display_scale), state.window_height)
                 )
-                state.annotations[cache_key] = annotated_image
-            display_image = state.annotations[cache_key]
 
-        # Prepare display image
-        if display_image.ndim == 2:
-            display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+                # Render sidebar
+                sidebar_image = render_sidebar(
+                    steps         = steps,
+                    display_name  = display_name,
+                    image_name    = state.image_name,
+                    window_height = state.window_height
+                )
 
-        display_scale = state.window_height / display_image.shape[0]
-        display_image = cv2.resize(
-            display_image,
-            (int(display_image.shape[1] * display_scale), state.window_height)
-        )
+                # Combine images and display
+                combined_image = np.hstack([display_image, sidebar_image])
+                cv2.imshow(window_name, combined_image)
+                cv2.resizeWindow(window_name, combined_image.shape[1], combined_image.shape[0])
 
-        # Render sidebar
-        sidebar_width = 1400
-        sidebar_image = render_sidebar(
-            steps         = steps,
-            sidebar_width = sidebar_width,
-            display_name  = display_name,
-            image_name    = state.image_name,
-            window_height = state.window_height
-        )
+                # Handle key input
+                key = cv2.waitKey(1) & 0xFF
+                if key == 255:
+                    continue  # No key pressed
 
-        # Combine images and display
-        combined_image = np.hstack([display_image, sidebar_image])
-        cv2.imshow(window_name, combined_image)
-        cv2.resizeWindow(window_name, combined_image.shape[1], combined_image.shape[0])
-
-        # Handle key input
-        key = cv2.waitKey(1) & 0xFF
-        if key == 255:
-            continue  # No key pressed
-
-        char = chr(key)
-        if char == 'q':
-            break
-
-        elif char == '/':
-            state.next_display(total_displays)
-
-        elif char == '?':
-            state.next_image(len(image_files))
-
-        else:
-            for step in steps:
-                if char == step.toggle_key:
-                    logger.info(step.toggle())
-                    state.last_params = None  # Force reprocessing
+                char = chr(key)
+                if char == 'q':
                     break
 
-                for param in step.parameters:
-                    if char in (param.increase_key, param.decrease_key):
-                        action = step.adjust_param(char)
-                        if action:
-                            logger.info(action)
+                elif char == '/':
+                    state.next_display(total_displays)
+
+                elif char == '?':
+                    state.next_image(len(image_files))
+
+                else:
+                    for step in steps:
+                        if char == step.toggle_key:
+                            logger.info(step.toggle())
                             state.last_params = None  # Force reprocessing
                             break
-                else:
-                    continue
-                break
 
-    cv2.destroyAllWindows()
+                        for param in step.parameters:
+                            if char in (param.increase_key, param.decrease_key):
+                                action = step.adjust_param(char)
+                                if action:
+                                    logger.info(action)
+                                    state.last_params = None  # Force reprocessing
+                                    break
+                        else:
+                            continue
+                        break
+            else:
+                # Non-interactive mode: Process all images sequentially
+                state.image_idx += 1
+                if state.image_idx >= len(image_files):
+                    break
+                else:
+                    # Reset the state to process the next image
+                    state.original_image = None
+
+    finally:
+        if interactive_ui:
+            cv2.destroyAllWindows()
+
+        # Save OCR results to JSON file if enabled
+        if output_json and state.ocr_results:
+            output_path = Path('ocr_results.json')
+
+            with output_path.open('w', encoding = 'utf-8') as f:
+                json.dump(state.ocr_results, f, ensure_ascii = False, indent = 4)
+            logger.info(f"OCR results saved to {output_path}")
 
 # -------------------- Entry Point --------------------
 
 if __name__ == "__main__":
 
-    image_files = find_image_files('images/books')
-    interactive_experiment(image_files)
+    image_files     = find_image_files('images/books')
+    params_override = {
+        'use_ocr'            : True,
+        'use_shadow_removal' : True,
+        'use_color_clahe'    : True,
+    }
+
+    interactive_experiment(
+        image_files     = image_files,
+        params_override = params_override,
+        interactive_ui  = False
+    )
