@@ -388,36 +388,41 @@ def annotate_image_with_text(
         cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
         logger.info(f"OCR Text: '{text}' with confidence {confidence:.2f}")
 
+        # Prepare text with confidence
+        text_with_confidence = f"{text} ({confidence:.2f})"
+
         # Calculate text size
-        font                    = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale              = 0.6
-        text_thickness          = 2
-        text_size, _            = cv2.getTextSize(text, font, font_scale, text_thickness)
-        text_width, text_height = text_size
+        font           = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale     = 0.6
+        text_thickness = 2
+        (text_width, text_height), baseline = cv2.getTextSize(text_with_confidence, font, font_scale, text_thickness)
 
-        # Define text origin
-        y_position = (
-            coordinates[0][1] - 10
-            if coordinates[0][1] - 10 > text_height
-            else coordinates[0][1] + text_height + 10
+        # Define text origin (place above the top-left corner of bounding box if possible)
+        x = coordinates[0][0]
+        y = coordinates[0][1] - 10
+
+        # Adjust position if text goes above the image
+        if y - text_height - baseline < 0:
+            y = coordinates[2][1] + text_height + 10
+
+        # Ensure text does not go outside the image boundaries
+        x = max(0, min(x, annotated_image.shape[1] - text_width))
+        y = max(text_height + baseline, min(y, annotated_image.shape[0] - baseline))
+
+        # Draw background rectangle for text
+        cv2.rectangle(
+            annotated_image,
+            (x - 5, y - text_height - baseline - 5),
+            (x + text_width + 5, y + 5),
+            (0, 0, 0),
+            thickness = -1
         )
-        text_origin = (coordinates[0][0], y_position)
 
-        # Define background rectangle coordinates
-        top_left     = (text_origin[0], text_origin[1] - text_height - 5)
-        bottom_right = (text_origin[0] + text_width + 10, text_origin[1] + 5)
-
-        # Draw semi-transparent rectangle
-        overlay = annotated_image.copy()
-        cv2.rectangle(overlay, top_left, bottom_right, (0, 0, 0), -1)
-        alpha = 0.7
-        cv2.addWeighted(overlay, alpha, annotated_image, 1 - alpha, 0, annotated_image)
-
-        # Put bold white text
+        # Put text without rotation for legibility
         cv2.putText(
             img       = annotated_image,
-            text      = text,
-            org       = (text_origin[0] + 5, text_origin[1]),
+            text      = text_with_confidence,
+            org       = (x, y),
             fontFace  = font,
             fontScale = font_scale,
             color     = (255, 255, 255),
@@ -473,7 +478,6 @@ def generate_sidebar_content(
 
 def render_sidebar(
     steps         : list[ProcessingStep],
-    sidebar_width : int,
     display_name  : str,
     image_name    : str,
     window_height : int
@@ -483,7 +487,6 @@ def render_sidebar(
     
     Args:
         steps         : List of processing steps to display.
-        sidebar_width : Width of the sidebar in pixels.
         display_name  : Name of current display mode.
         image_name    : Name of current image file.
         window_height : Height of the window in pixels.
@@ -491,14 +494,47 @@ def render_sidebar(
     Returns:
         np.ndarray: Rendered sidebar image
     """
-    sidebar        = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
-    scale          = min(2.0, max(0.8, (window_height / 800) ** 0.5)) * 1.2
-    font_scale     = 0.8 * scale
-    line_height    = int(32 * scale)
-    y_position     = int(30 * scale)
-    font_thickness = max(1, int(scale * 1.5))
-    
-    for text, color, rel_scale in generate_sidebar_content(steps, display_name, image_name):
+    # Generate the sidebar content
+    lines = generate_sidebar_content(steps, display_name, image_name)
+    num_lines = len(lines)
+
+    # Calculate line height and font scale to fit all text within sidebar height
+    margin = int(0.05 * window_height)  # 5% top and bottom margins
+    available_height = window_height - 2 * margin
+    line_height = int(available_height / num_lines)
+
+    # Set minimum and maximum line height
+    min_line_height = 20
+    max_line_height = 40
+    line_height = max(min_line_height, min(line_height, max_line_height))
+
+    y_position = margin + line_height
+
+    # Calculate font scale based on line height
+    font_scale = line_height / 30  # 30 is a factor determined empirically
+    font_thickness = max(1, int(font_scale * 1.5))
+
+    # Determine maximum text width
+    max_text_width = 0
+    for text, _, rel_scale in lines:
+        if text:
+            (text_width, _), _ = cv2.getTextSize(
+                text,
+                cv2.FONT_HERSHEY_DUPLEX,
+                font_scale * rel_scale,
+                font_thickness
+            )
+            max_text_width = max(max_text_width, text_width)
+
+    # Add padding
+    sidebar_width = max_text_width + 20  # 10 pixels padding on each side
+
+    # Create the sidebar image
+    sidebar = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
+
+    # Draw text lines
+    y_position = margin + line_height
+    for text, color, rel_scale in lines:
         if text:
             cv2.putText(
                 img       = sidebar,
@@ -511,7 +547,7 @@ def render_sidebar(
                 lineType  = cv2.LINE_AA
             )
         y_position += line_height
-    
+
     return sidebar
 
 # -------------------- Main Interactive Function --------------------
@@ -591,10 +627,8 @@ def interactive_experiment(
         )
 
         # Render sidebar
-        sidebar_width = 1400
         sidebar_image = render_sidebar(
             steps         = steps,
-            sidebar_width = sidebar_width,
             display_name  = display_name,
             image_name    = state.image_name,
             window_height = state.window_height
