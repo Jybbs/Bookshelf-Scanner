@@ -666,7 +666,8 @@ def interactive_experiment(
 
     try:
         while True:
-            if state.original_image is None:  # Load image only if not already loaded
+            # Load image only if not already loaded
+            if state.original_image is None:
                 image_path           = image_files[state.image_idx]
                 state.original_image = load_image(str(image_path))
                 state.window_height  = max(state.original_image.shape[0], 800)
@@ -767,9 +768,12 @@ def interactive_experiment(
                         break
             else:
                 # Non-interactive mode: Process all images sequentially
-                state.next_image(len(image_files))
-                if state.image_idx == 0:
-                    break  # Processed all images
+                state.image_idx += 1
+                if state.image_idx >= len(image_files):
+                    break
+                else:
+                    # Reset the state to process the next image
+                    state.original_image = None
 
     finally:
         if interactive_ui:
@@ -797,6 +801,5 @@ if __name__ == "__main__":
     interactive_experiment(
         image_files     = image_files,
         params_override = params_override,
-        output_json     = True,
-        interactive_ui  = True
+        interactive_ui  = False
     )
