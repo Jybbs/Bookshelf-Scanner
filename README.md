@@ -54,13 +54,13 @@ The system processes bookshelf images through three main stages:
 ### Prerequisites
 
 - Python 3.12
-- Poetry (recommended for dependency management)
+- Poetry (*recommended for dependency management*)
 - OpenCV system dependencies:
   ```bash
   # MacOS
   brew install opencv
   ```
-- ONNX Runtime dependencies (installed automatically via Poetry)
+- ONNX Runtime dependencies (*installed automatically via Poetry*)
 
 ### Setup
 
