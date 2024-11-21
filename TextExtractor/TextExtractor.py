@@ -1,7 +1,7 @@
 import cv2
 import easyocr
+import json
 import logging
-import math
 import numpy as np
 
 from dataclasses import dataclass, field
@@ -595,14 +595,18 @@ def render_sidebar(
 
 def interactive_experiment(
     image_files     : list[Path],
-    params_override : dict = None
+    params_override : dict = None,
+    output_json     : bool = True,
+    interactive_ui  : bool = True
 ):
     """
     Runs the interactive experiment allowing parameter adjustment and image processing.
-
+    
     Args:
         image_files     : List of image file paths to process.
         params_override : Optional parameter overrides.
+        output_json     : Whether to output OCR results to JSON file on exit.
+        interactive_ui  : Whether to run the interactive UI.
     """
     if not image_files:
         raise ValueError("No image files provided")
@@ -611,11 +615,16 @@ def interactive_experiment(
     state  = DisplayState()
     steps  = initialize_steps(params_override)
     reader = easyocr.Reader(['en'], gpu = False)
-    window_name = 'Bookshelf Scanner'
-    cv2.namedWindow(window_name, cv2.WINDOW_KEEPRATIO)
+
+    # Initialize UI if needed
+    window_name = None
+    if interactive_ui:
+        window_name = 'Bookshelf Scanner'
+        cv2.namedWindow(window_name, cv2.WINDOW_KEEPRATIO)
 
     try:
-        while True:
+        while state.image_idx < len(image_files):
+            # Load new image if needed
             if state.original_image is None:
                 image_path           = image_files[state.image_idx]
                 state.original_image = load_image(str(image_path))
@@ -639,77 +648,88 @@ def interactive_experiment(
                 state.last_params     = current_params.copy()
                 state.annotations     = {}
 
+            # Handle OCR processing
+            ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in steps)
             display_image = state.processed_image
 
-            # Apply annotations if OCR is enabled
-            if any(step.is_enabled and step.name == 'ocr' for step in steps):
+            if ocr_enabled:
                 display_image = annotate_image_with_text(
                     image   = display_image,
                     reader  = reader,
                     params  = current_params,
                     state   = state
                 )
+            elif state.image_name not in state.ocr_results:
+                # Extract text for JSON output even if not displaying
+                ocr_results = extract_text_from_image(
+                    image          = state.processed_image,
+                    reader         = reader,
+                    min_confidence = current_params.get('ocr_confidence_threshold', 0.3)
+                )
+                state.ocr_results[state.image_name] = [[text, confidence] for _, text, confidence in ocr_results]
 
-            # Center the image in a square canvas
+            if not interactive_ui:
+                # Process next image in headless mode
+                state.image_idx += 1
+                state.original_image = None
+                continue
+
+            # Prepare image for display
             display_image = center_image_in_square(display_image)
-            display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR) if display_image.ndim == 2 else display_image
+            if display_image.ndim == 2:
+                display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
 
-            # Resize image to fit the window height
+            # Scale image to window height
             display_scale = state.window_height / display_image.shape[0]
             display_image = cv2.resize(
                 display_image,
                 (int(display_image.shape[1] * display_scale), state.window_height)
             )
 
-            # Render sidebar
-            sidebar_image = render_sidebar(
-                steps         = steps,
-                image_name    = state.image_name,
-                window_height = state.window_height
-            )
-
-            # Combine images and display
+            # Add sidebar and display
+            sidebar_image   = render_sidebar(steps, state.image_name, state.window_height)
             combined_image = np.hstack([display_image, sidebar_image])
             cv2.imshow(window_name, combined_image)
             cv2.resizeWindow(window_name, combined_image.shape[1], combined_image.shape[0])
 
-            # Handle key input
+            # Handle user input
             key = cv2.waitKey(1) & 0xFF
             if key == 255:
-                continue  # No key pressed
+                continue
 
             char = chr(key)
             if char == 'q':
                 break
-
             elif char == '/':
                 state.next_image(len(image_files))
-
             else:
+                # Handle parameter adjustments
                 for step in steps:
                     if char == step.toggle_key:
                         logger.info(step.toggle())
-                        state.last_params = None  # Force reprocessing
+                        state.last_params = None
                         break
 
-                    for param in step.parameters:
-                        if char in (param.increase_key, param.decrease_key):
-                            action = step.adjust_param(char)
-                            if action:
-                                logger.info(action)
-                                state.last_params = None  # Force reprocessing
-                                break
-                    else:
-                        continue
-                    break
+                    action = step.adjust_param(char)
+                    if action:
+                        logger.info(action)
+                        state.last_params = None
+                        break
 
     finally:
-        cv2.destroyAllWindows()
+        if interactive_ui:
+            cv2.destroyAllWindows()
+
+        if output_json and state.ocr_results:
+            output_path = Path('ocr_results.json')
+
+            with output_path.open('w', encoding = 'utf-8') as f:
+                json.dump(state.ocr_results, f, ensure_ascii = False, indent = 4)
+            logger.info(f"OCR results saved to {output_path}")
 
 # -------------------- Entry Point --------------------
 
 if __name__ == "__main__":
-
     image_files     = find_image_files('images/books')
     params_override = {
         'use_ocr'            : True,
@@ -721,5 +741,6 @@ if __name__ == "__main__":
 
     interactive_experiment(
         image_files     = image_files,
-        params_override = params_override
+        params_override = params_override,
+        interactive_ui  = False
     )
