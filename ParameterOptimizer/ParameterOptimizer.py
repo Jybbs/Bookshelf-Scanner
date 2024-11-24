@@ -32,12 +32,12 @@ class ImageOptimizationResult:
         score       : Total character-weighted confidence score
         char_count  : Total number of characters recognized
     """
-    parameters  : Dict[str, float]
-    text_results: List[Tuple[str, float]]
+    parameters  : dict[str, float]
+    text_results: list[tuple[str, float]]
     score       : float
     char_count  : int
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         Convert optimization result to dictionary format matching project structure.
         
@@ -55,7 +55,7 @@ class ImageOptimizationResult:
 
 # -------------------- Parameter Management --------------------
 
-def load_parameter_ranges(params_file: Path) -> Dict[str, Tuple[float, float, float]]:
+def load_parameter_ranges(params_file: Path) -> dict[str, tuple[float, float, float]]:
     """
     Extract parameter ranges from params.yml configuration.
     
@@ -90,8 +90,8 @@ def load_parameter_ranges(params_file: Path) -> Dict[str, Tuple[float, float, fl
     return ranges
 
 def generate_parameter_combinations(
-    param_ranges: Dict[str, Tuple[float, float, float]]
-) -> List[Dict[str, float]]:
+    param_ranges: dict[str, tuple[float, float, float]]
+) -> list[dict[str, float]]:
     """
     Generate all valid parameter combinations from defined ranges.
     
@@ -120,7 +120,7 @@ def generate_parameter_combinations(
 
 # -------------------- Optimization Logic --------------------
 
-def calculate_score(text_results: List[Tuple[str, float]]) -> Tuple[float, int]:
+def calculate_score(text_results: list[tuple[str, float]]) -> tuple[float, int]:
     """
     Calculate confidence-weighted character score for OCR results.
     
@@ -144,11 +144,11 @@ def calculate_score(text_results: List[Tuple[str, float]]) -> Tuple[float, int]:
 
 def optimize_parameters(
     text_extractor : Any,
-    image_files    : List[Path],
+    image_files    : list[Path],
     params_file    : Path,
     output_file    : Path,
     save_frequency : int = 10
-) -> Dict[str, ImageOptimizationResult]:
+) -> dict[str, ImageOptimizationResult]:
     """
     Find optimal parameters for OCR processing of each image.
     
@@ -167,7 +167,7 @@ def optimize_parameters(
     combinations = generate_parameter_combinations(param_ranges)
     
     # Track best results per image
-    best_results: Dict[str, ImageOptimizationResult] = {}
+    best_results: dict[str, ImageOptimizationResult] = {}
     
     # Process all parameter combinations
     for combo_idx, params in enumerate(combinations, 1):
@@ -208,7 +208,7 @@ def optimize_parameters(
     return best_results
 
 def save_optimization_results(
-    results     : Dict[str, ImageOptimizationResult],
+    results     : dict[str, ImageOptimizationResult],
     output_file : Path
 ) -> None:
     """
