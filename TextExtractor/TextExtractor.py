@@ -141,20 +141,6 @@ class ProcessingStep:
 # -------------------- Main TextExtractor Class --------------------
 
 class TextExtractor:
-    """
-    The TextExtractor provides functionality for:
-    - Processing batches of book spine images
-    - Optimizing image preprocessing parameters for OCR (rotation, contrast, etc.)
-    - Interactive parameter adjustment via UI
-    - Headless batch processing
-    - Result caching and export
-    
-    The class manages state through inner dataclasses:
-    - DisplayState   : Tracks current image and processing state
-    - Parameter      : Defines adjustable processing parameters
-    - ProcessingStep : Groups related parameters and processing logic
-    """
-
     def __init__(
             self,
             gpu_enabled     : bool = False,
@@ -364,9 +350,9 @@ class TextExtractor:
 
                     # Process each channel separately
                     for i in range(len(channels)):
-                        dilated    = cv2.dilate(channels[i], kernel)
-                        bg_image   = cv2.medianBlur(dilated, median_blur)
-                        diff_image = 255 - cv2.absdiff(channels[i], bg_image)
+                        dilated     = cv2.dilate(channels[i], kernel)
+                        bg_image    = cv2.medianBlur(dilated, median_blur)
+                        diff_image  = 255 - cv2.absdiff(channels[i], bg_image)
                         channels[i] = cv2.normalize(diff_image, None, 0, 255, cv2.NORM_MINMAX)
 
                     processed_image = cv2.merge(channels)
