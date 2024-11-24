@@ -142,33 +142,33 @@ class ProcessingStep:
 
 class TextExtractor:
     def __init__(
-            self,
-            gpu_enabled     : bool = False,
-            params_file     : Optional[Path] = None,
-            window_height   : int = 800,
-            allowed_formats : set[str] = None
-        ):
-            """
-            Initializes the TextExtractor instance.
-            
-            Args:
-                gpu_enabled     : Whether to use GPU for OCR processing
-                params_file     : Optional custom path to params.yml
-                window_height   : Default window height for UI display
-                allowed_formats : Set of allowed image extensions (defaults to {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'})
-            """
-            # Core components
-            self.reader          = easyocr.Reader(['en'], gpu = gpu_enabled)
-            self.state           = DisplayState(window_height = window_height)
-            self.params_file     = params_file or Path(__file__).resolve().parent / 'params.yml'
-            
-            # Configuration
-            self.allowed_formats = allowed_formats or {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
-            self.steps           = []  # Will be populated by initialize_steps
-            
-            # UI settings
-            self.window_name     = 'Bookshelf Scanner'
-            self.font_face       = cv2.FONT_HERSHEY_DUPLEX
+        self,
+        gpu_enabled     : bool = False,
+        params_file     : Optional[Path] = None,
+        window_height   : int = 800,
+        allowed_formats : set[str] = None
+    ):
+        """
+        Initializes the TextExtractor instance.
+        
+        Args:
+            gpu_enabled     : Whether to use GPU for OCR processing
+            params_file     : Optional custom path to params.yml
+            window_height   : Default window height for UI display
+            allowed_formats : Set of allowed image extensions (defaults to {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'})
+        """
+        # Core components
+        self.reader          = easyocr.Reader(['en'], gpu = gpu_enabled)
+        self.state           = DisplayState(window_height = window_height)
+        self.params_file     = params_file or Path(__file__).resolve().parent / 'params.yml'
+        
+        # Configuration
+        self.allowed_formats = allowed_formats or {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+        self.steps           = []  # Will be populated by initialize_steps
+        
+        # UI settings
+        self.window_name     = 'Bookshelf Scanner'
+        self.font_face       = cv2.FONT_HERSHEY_DUPLEX
 
 # -------------------- Static Utility Methods --------------------
     
