@@ -653,8 +653,8 @@ class TextExtractor:
         self,
         image_files     : list[Path],
         params_override : dict = None,
-        output_json     : bool = True,
-        interactive_ui  : bool = True
+        output_json     : bool = False,
+        interactive_ui  : bool = False
     ) -> dict[str, list[tuple[str, float]]]:
         """
         Runs the interactive experiment allowing parameter adjustment and image processing.
@@ -743,7 +743,7 @@ class TextExtractor:
                 )
 
                 # Add sidebar and display
-                sidebar_image  = self.render_sidebar(steps, self.state.image_name, self.state.window_height)
+                sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
                 combined_image = np.hstack([display_image, sidebar_image])
                 cv2.imshow(self.window_name, combined_image)
                 cv2.resizeWindow(self.window_name, combined_image.shape[1], combined_image.shape[0])
