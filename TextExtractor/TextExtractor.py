@@ -357,8 +357,8 @@ class TextExtractor:
                     processed_image = cv2.convertScaleAbs(processed_image, alpha=alpha, beta=0)
 
                 elif step.name == 'shadow_removal':
-                    kernel_size = int(params['shadow_kernel_size']) | 1  # Ensure odd
-                    median_blur = int(params['shadow_median_blur']) | 1  # Ensure odd
+                    kernel_size = int(params['shadow_kernel_size']) | 1
+                    median_blur = int(params['shadow_median_blur']) | 1
                     kernel      = np.ones((kernel_size, kernel_size), np.uint8)
                     channels    = list(cv2.split(processed_image))
 
@@ -370,11 +370,6 @@ class TextExtractor:
                         channels[i] = cv2.normalize(diff_image, None, 0, 255, cv2.NORM_MINMAX)
 
                     processed_image = cv2.merge(channels)
-
-                elif step.name == 'gaussian_blur':
-                    ksize = int(params['gaussian_kernel_size']) | 1  # Ensure odd
-                    sigma = params['gaussian_sigma']
-                    processed_image = cv2.GaussianBlur(processed_image, (ksize, ksize), sigma)
 
                 elif step.name == 'color_clahe':
                     clip_limit = params['clahe_clip_limit']
