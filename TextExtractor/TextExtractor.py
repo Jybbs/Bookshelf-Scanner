@@ -141,11 +141,24 @@ class ProcessingStep:
 # -------------------- Main TextExtractor Class --------------------
 
 class TextExtractor:
+    # Class constants
+    WINDOW_NAME     = 'Bookshelf Scanner'
+    FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
+    DEFAULT_HEIGHT  = 800
+    ALLOWED_FORMATS = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+    
+    # UI colors
+    UI_COLORS = {
+        'TEAL'  : (255, 255, 0),
+        'WHITE' : (255, 255, 255),
+        'GRAY'  : (200, 200, 200)
+    }
+
     def __init__(
         self,
         gpu_enabled     : bool = False,
         params_file     : Optional[Path] = None,
-        window_height   : int = 800,
+        window_height   : int = DEFAULT_HEIGHT,
         allowed_formats : set[str] = None
     ):
         """
@@ -155,7 +168,7 @@ class TextExtractor:
             gpu_enabled     : Whether to use GPU for OCR processing
             params_file     : Optional custom path to params.yml
             window_height   : Default window height for UI display
-            allowed_formats : Set of allowed image extensions (defaults to {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'})
+            allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
         """
         # Core components
         self.reader          = easyocr.Reader(['en'], gpu = gpu_enabled)
@@ -163,18 +176,41 @@ class TextExtractor:
         self.params_file     = params_file or Path(__file__).resolve().parent / 'params.yml'
         
         # Configuration
-        self.allowed_formats = allowed_formats or {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+        self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
         self.steps           = []  # Will be populated by initialize_steps
-        
-        # UI settings
-        self.window_name     = 'Bookshelf Scanner'
-        self.font_face       = cv2.FONT_HERSHEY_DUPLEX
 
-# -------------------- Static Utility Methods --------------------
-    
+    @property
+    def current_parameters(self) -> dict:
+        """
+        Returns the current set of enabled parameters across all processing steps.
+        
+        Returns:
+            Dictionary of parameter names and values, including enabled status for each step
+        """
+        params = {
+            param.name: param.value
+            for step in self.steps if step.is_enabled
+            for param in step.parameters
+        }
+        params.update({f"use_{step.name}": step.is_enabled for step in self.steps})
+        return params
+
+    @property
+    def needs_processing(self) -> bool:
+        """
+        Indicates whether the image needs reprocessing based on parameter changes.
+        
+        Returns:
+            True if parameters have changed since last processing
+        """
+        return self.state.last_params != self.current_parameters
+
+# -------------------- Class Utility Methods --------------------
+
+    @classmethod
     def find_image_files(
-        self,
-        target_subdirectory : str = 'images/books', 
+        cls,
+        target_subdirectory : str = 'images/books',
         start_directory     : Optional[Path] = None
     ) -> list[Path]:
         """
@@ -196,7 +232,7 @@ class TextExtractor:
             (
                 sorted(
                     file for file in (directory / target_subdirectory).rglob('*')
-                    if file.is_file() and file.suffix.lower() in self.allowed_formats
+                    if file.is_file() and file.suffix.lower() in cls.ALLOWED_FORMATS
                 )
                 for directory in [start_directory, *start_directory.parents]
                 if (directory / target_subdirectory).is_dir()
@@ -209,8 +245,8 @@ class TextExtractor:
 
         raise FileNotFoundError(f"No image files found in '{target_subdirectory}' directory.")
 
-    @staticmethod
-    def load_image(image_path: str) -> np.ndarray:
+    @classmethod
+    def load_image(cls, image_path: str) -> np.ndarray:
         """
         Loads an image from the specified file path.
 
@@ -228,8 +264,8 @@ class TextExtractor:
             raise FileNotFoundError(f"Image not found: {image_path}")
         return image
 
-    @staticmethod
-    def center_image_in_square(image: np.ndarray) -> np.ndarray:
+    @classmethod
+    def center_image_in_square(cls, image: np.ndarray) -> np.ndarray:
         """
         Centers the image in a square canvas with sides equal to the longest side.
 
@@ -552,28 +588,28 @@ class TextExtractor:
         Returns:
             List of tuples: (text content, RGB color, scale factor)
         """
-        TEAL  = (255, 255, 0)
-        WHITE = (255, 255, 255)
-        GRAY  = (200, 200, 200)
-        
         lines = [
-            (f"[/] Current Image: {image_name}",  TEAL, 0.85),
-            ("", WHITE, 1.0)  # Spacer
+            (f"[/] Current Image: {image_name}",  self.UI_COLORS['TEAL'],  0.85),
+            ("", self.UI_COLORS['WHITE'], 1.0)  # Spacer
         ]
         
         for step in steps:
             status = 'On' if step.is_enabled else 'Off'
-            lines.append((f"[{step.toggle_key}] {step.display_name}: {status}", WHITE, 1.0))
+            lines.append((
+                f"[{step.toggle_key}] {step.display_name}: {status}",
+                self.UI_COLORS['WHITE'],
+                1.0
+            ))
 
             for param in step.parameters:
                 lines.append((
                     f"   [{param.decrease_key} | {param.increase_key}] {param.display_name}: {param.display_value}",
-                    GRAY,
+                    self.UI_COLORS['GRAY'],
                     0.85
                 ))
-            lines.append(("", WHITE, 1.0))  # Spacer
+            lines.append(("", self.UI_COLORS['WHITE'], 1.0))  # Spacer
         
-        lines.append(("[q] Quit", WHITE, 1.0))
+        lines.append(("[q] Quit", self.UI_COLORS['WHITE'], 1.0))
         return lines
 
     def render_sidebar(
@@ -603,7 +639,7 @@ class TextExtractor:
 
         # Determine maximum text width
         max_text_width = max(
-            cv2.getTextSize(text, self.font_face, font_scale * rel_scale, font_thickness)[0][0]
+            cv2.getTextSize(text, self.FONT_FACE, font_scale * rel_scale, font_thickness)[0][0]
             for text, _, rel_scale in lines if text
         )
 
@@ -618,7 +654,7 @@ class TextExtractor:
                     img       = sidebar,
                     text      = text,
                     org       = (horizontal_margin, y_position),
-                    fontFace  = self.font_face,
+                    fontFace  = self.FONT_FACE,
                     fontScale = font_scale * rel_scale,
                     color     = color,
                     thickness = font_thickness,
@@ -658,7 +694,7 @@ class TextExtractor:
 
         # Initialize UI if needed
         if interactive_ui:
-            cv2.namedWindow(self.window_name, cv2.WINDOW_KEEPRATIO)
+            cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
 
         try:
             while self.state.image_idx < len(image_files):
@@ -666,40 +702,30 @@ class TextExtractor:
                 if self.state.original_image is None:
                     image_path                = image_files[self.state.image_idx]
                     self.state.original_image = self.load_image(str(image_path))
-                    self.state.window_height  = max(self.state.original_image.shape[0], 800)
+                    self.state.window_height  = max(self.state.original_image.shape[0], self.DEFAULT_HEIGHT)
                     self.state.image_name     = image_path.name
                     self.state.reset_image_state()
 
-                # Extract current parameters
-                current_params = {
-                    param.name: param.value
-                    for step in self.steps if step.is_enabled
-                    for param in step.parameters
-                }
-                current_params.update({
-                    f"use_{step.name}": step.is_enabled for step in self.steps
-                })
-
                 # Process image if parameters have changed
-                if self.state.last_params != current_params:
+                if self.needs_processing:
                     self.state.processed_image = self.process_image(self.state.original_image, self.steps)
-                    self.state.last_params     = current_params.copy()
+                    self.state.last_params     = self.current_parameters.copy()
                     self.state.annotations     = {}
 
                 # Handle OCR processing
-                ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
-                display_image = self.state.processed_image
+                ocr_enabled    = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
+                display_image  = self.state.processed_image
 
                 if ocr_enabled:
                     display_image = self.annotate_image_with_text(
                         image  = display_image,
-                        params = current_params
+                        params = self.current_parameters
                     )
                 elif self.state.image_name not in self.state.ocr_results:
                     # Extract text for output even if not displaying
                     ocr_results = self.extract_text_from_image(
                         image          = self.state.processed_image,
-                        min_confidence = current_params.get('ocr_confidence_threshold', 0.3)
+                        min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
                     )
                     self.state.ocr_results[self.state.image_name] = [
                         [text, confidence] for _, text, confidence in ocr_results
@@ -726,8 +752,8 @@ class TextExtractor:
                 # Add sidebar and display
                 sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
                 combined_image = np.hstack([display_image, sidebar_image])
-                cv2.imshow(self.window_name, combined_image)
-                cv2.resizeWindow(self.window_name, combined_image.shape[1], combined_image.shape[0])
+                cv2.imshow(self.WINDOW_NAME, combined_image)
+                cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
 
                 # Handle user input
                 key = cv2.waitKey(1) & 0xFF
