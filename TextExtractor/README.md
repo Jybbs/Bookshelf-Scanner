@@ -1,46 +1,125 @@
-1. **Prepare Image Directory**
+# TextExtractor
 
-   All the current segmented book images are in the `images/books` directory. The script is designed to pick up and use all of those files.
+The `TextExtractor` module focuses on text extraction from book spine images, aided by an intuitive interactive interface. It combines multiple image processing techniques with OCR capabilities, allowing real-time parameter adjustment to handle challenging lighting conditions, varied text styles, and diverse spine layouts.
 
-2. **Run the Scanner Script**
+## Core Features
 
-   Execute the `TextExractor.py` script using Poetry:
+- **Interactive Parameter Tuning**
+  
+  - Real-time visual feedback for immediate assessment
+  - Split-screen view showing original and processed images
+  - Informative sidebar displaying current settings and controls
 
+- **Image Processing Pipeline**
+  
+  - Shadow removal with adjustable kernel sizes for complex lighting
+  - Color CLAHE (*Contrast Limited Adaptive Histogram Equalization*) for enhanced readability
+  - Fine-grained brightness and contrast controls
+  - 90-degree rotation adjustments for varied spine orientations
+  - Each step can be independently toggled for optimal results
+
+- **Advanced OCR Integration**
+  
+  - EasyOCR backend with GPU acceleration support
+  - Confidence scoring for extracted text segments
+  - Structured JSON output for downstream processing
+  - Rotation-invariant text detection
+
+## Usage
+
+1. **Image Preparation**
+   Place segmented book spine images in the `images/books` directory. The module accepts common image formats (JPG, PNG, BMP).
+
+2. **Launch Interactive Interface**
    ```bash
-  poetry run python TextExtractor/TextExtractor.py
+   poetry run python TextExtractor/TextExtractor.py
    ```
-
-   The interactive interface will launch, displaying the first image from the `images/books` directory.
+   The interface presents your first image alongside an intuitive control panel.
 
 ### Interactive Controls
 
-The scanner provides an interactive UI to adjust processing parameters in real-time. Below are the key controls:
-
-- **Toggle Processing Steps**
-  - Press the corresponding number key (`1`, `2`, `3`, etc.) to enable or disable a processing step.
+- **Processing Steps**
   
-- **Adjust Parameters**
-  - For each parameter within a processing step:
-    - Press the uppercase key (e.g., `K`, `B`, `G`) to increase the parameter value.
-    - Press the lowercase key (e.g., `k`, `b`, `g`) to decrease the parameter value.
-  
-- **View Options**
-  - Press `/` to cycle through different display options:
-    - **Processed Image:** Shows the image after processing steps.
-    - **Binary Image:** Displays the binary thresholded image.
-    - **Annotated Image:** Shows contours and OCR results overlaid on the original image.
-  
-- **Navigate Images**
-  - Press `?` to switch to the next image in the `images/` directory.
-  
-- **Quit Application**
-  - Press `q` to exit the scanner.
+  - Number keys (`1`, `2`, `3`...) toggle individual processing steps
+  - Each step's state (On/Off) is clearly displayed in the sidebar
+  - Changes are applied instantly for immediate feedback
 
-**Sidebar Overview:**
+- **Parameter Adjustment**
+  
+  - Uppercase keys increase values (e.g., `B` for brightness)
+  - Lowercase keys decrease values (e.g., `b` for brightness)
+  - Current values are continuously updated in the sidebar
+  - Parameters automatically scale to appropriate ranges
 
-The sidebar displays the current settings and available controls:
+- **Navigation & Display**
 
-- **Processing Steps:** Each step can be toggled on/off.
-- **Parameters:** Adjustable parameters for each processing step with current values.
-- **Current View:** Indicates which display option is active.
-- **Image Information:** Shows the name of the current image being processed.
+  - `/`: Advance to next image
+  - `q`: Gracefully exit, saving results
+
+### Processing Pipeline Details
+
+1. **Shadow Removal**
+  
+   - Eliminates uneven lighting and shadow artifacts
+   - Adaptive kernel sizing for varying shadow intensities
+   - Multi-channel processing preserves color information
+   - Configurable median blur for noise reduction
+
+2. **Color CLAHE**
+  
+   - Enhances local contrast while maintaining global balance
+   - Adjustable clip limit prevents over-amplification
+   - Particularly effective for faded or low-contrast text
+   - Processes luminance channel to preserve color fidelity
+
+3. **Brightness/Contrast**
+  
+   - Independent control over image luminance and dynamic range
+   - Linear and non-linear adjustment options
+   - Helps recover text from under/overexposed regions
+   - Real-time histogram visualization
+
+4. **Image Rotation**
+  
+   - 90-degree increment rotation
+   - Maintains image quality through lossless transformation
+   - Automatic dimension adjustment
+   - Preserves aspect ratios
+
+### Output Format
+
+Results are saved to `ocr_results.json` in a structured format:
+```json
+{
+    "image_name.jpg": [
+        ["Extracted Text Segment", 0.95],
+        ["Another Text Segment",   0.87],
+        ["Series Information",     0.92]
+    ]
+}
+```
+
+## Programmatic Usage
+
+The `TextExtractor` can be integrated into automated workflows:
+
+```python
+from TextExtractor import TextExtractor
+
+# Initialize with GPU acceleration
+extractor = TextExtractor(gpu_enabled = True)
+
+# Configure and process images
+results = extractor.interactive_experiment(
+    image_files     = image_files,
+    params_override = {
+        'use_shadow_removal' : True,
+        'shadow_kernel_size' : 23,
+        'shadow_median_blur' : 15,
+        'use_color_clahe'    : True,
+        'clahe_clip_limit'   : 2.0
+    },
+    output_json    = True,
+    interactive_ui = False
+)
+```
