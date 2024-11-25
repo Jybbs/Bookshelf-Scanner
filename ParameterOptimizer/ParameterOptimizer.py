@@ -14,7 +14,7 @@ from typing        import Any, Optional, Iterator
 logging.basicConfig(
     level    = logging.INFO,
     format   = '%(asctime)s - %(levelname)s - %(message)s',
-    filename = 'parameter_optimizer.log',
+    filename = Path(__file__).parent / 'ParameterOptimizer.log',
     filemode = 'w'
 )
 logger = logging.getLogger(__name__)
@@ -88,39 +88,36 @@ class OptimizerState:
     total_batches  : int = 0  # Total number of parameter combination batches
     iteration      : int = 0  # Current iteration number
 
-# -------------------- Main Optimizer Class --------------------
+# -------------------- Main Optimizer Class --------------------optimi
 
 class ParameterOptimizer:
-    # Class constants
-    DEFAULT_BATCH_SIZE     = 100
-    DEFAULT_SAVE_FREQUENCY = 10
-    
-    # Result file paths
-    DEFAULT_OUTPUT_FILE = Path('optimized_ocr_results.json')
-    DEFAULT_PARAMS_FILE = Path('params.yml')
+    BATCH_SIZE     = 100
+    OUTPUT_FILE    = Path(__file__).parent / 'optimized_results.json',
+    PARAMS_FILE    = Path(__file__).resolve().parent.parent / 'config' / 'params.yml'
+    SAVE_FREQUENCY = 10
 
     def __init__(
         self,
         extractor      : TextExtractor,
-        params_file    : Optional[Path] = None,
+        batch_size     : int            = BATCH_SIZE,
         output_file    : Optional[Path] = None,
-        batch_size     : int = DEFAULT_BATCH_SIZE,
-        save_frequency : int = DEFAULT_SAVE_FREQUENCY
+        params_file    : Optional[Path] = None,
+        save_frequency : int            = SAVE_FREQUENCY
     ):
         """
         Initialize the parameter optimizer.
         
         Args:
             extractor      : Initialized TextExtractor instance
-            params_file    : Path to parameter configuration file
-            output_file    : Path to save optimization results
             batch_size     : Size of parameter combination batches
+            output_file    : Path to save optimization results
+            params_file    : Path to parameter configuration file
             save_frequency : How often to save intermediate results
         """
         self.extractor      = extractor
-        self.params_file    = params_file or self.DEFAULT_PARAMS_FILE
-        self.output_file    = output_file or self.DEFAULT_OUTPUT_FILE
         self.batch_size     = batch_size
+        self.output_file    = output_file or self.OUTPUT_FILE
+        self.params_file    = params_file or self.PARAMS_FILE
         self.save_frequency = save_frequency
         
         # Initialize state

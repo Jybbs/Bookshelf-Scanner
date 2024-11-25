@@ -15,7 +15,7 @@ from typing      import Any, Optional
 logging.basicConfig(
     level    = logging.INFO,
     format   = '%(asctime)s - %(levelname)s - %(message)s',
-    filename = 'TextExtractor.log',
+    filename = Path(__file__).parent / 'TextExtractor.log',
     filemode = 'w'
 )
 logger = logging.getLogger(__name__)
@@ -141,13 +141,13 @@ class ProcessingStep:
 # -------------------- Main TextExtractor Class --------------------
 
 class TextExtractor:
-    # Class constants
-    WINDOW_NAME     = 'Bookshelf Scanner'
-    FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
-    DEFAULT_HEIGHT  = 800
     ALLOWED_FORMATS = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
+    DEFAULT_HEIGHT  = 800
+    FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
+    OUTPUT_FILE     = Path(__file__).parent / 'ocr_results.json',
+    PARAMS_FILE     = Path(__file__).resolve().parent.parent / 'config' / 'params.yml'
+    WINDOW_NAME     = 'Bookshelf Scanner'
     
-    # UI colors
     UI_COLORS = {
         'TEAL'  : (255, 255, 0),
         'WHITE' : (255, 255, 255),
@@ -156,27 +156,27 @@ class TextExtractor:
 
     def __init__(
         self,
-        gpu_enabled     : bool = False,
+        allowed_formats : set[str]       = None,
+        gpu_enabled     : bool           = False,
+        output_file     : Optional[Path] = None,
         params_file     : Optional[Path] = None,
-        window_height   : int = DEFAULT_HEIGHT,
-        allowed_formats : set[str] = None
+        window_height   : int            = DEFAULT_HEIGHT
     ):
         """
         Initializes the TextExtractor instance.
         
         Args:
+            allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
             gpu_enabled     : Whether to use GPU for OCR processing
+            output_file     : Path to save resultant strings from OCR processing     
             params_file     : Optional custom path to params.yml
             window_height   : Default window height for UI display
-            allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
         """
-        # Core components
+        self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
+        self.output_file     = output_file or self.OUTPUT_FILE
+        self.params_file     = params_file or self.PARAMS_FILE
         self.reader          = easyocr.Reader(['en'], gpu = gpu_enabled)
         self.state           = DisplayState(window_height = window_height)
-        self.params_file     = params_file or Path(__file__).resolve().parent / 'params.yml'
-        
-        # Configuration
-        self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
         self.steps           = []  # Will be populated by initialize_steps
 
     @property
