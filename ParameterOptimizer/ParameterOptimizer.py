@@ -11,13 +11,14 @@ from typing        import Any, Optional, Iterator
 
 # -------------------- Configuration and Logging --------------------
 
-logging.basicConfig(
-    level    = logging.INFO,
-    format   = '%(asctime)s - %(levelname)s - %(message)s',
-    filename = Path(__file__).parent / 'ParameterOptimizer.log',
-    filemode = 'w'
-)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('ParameterOptimizer')
+logger.setLevel(logging.INFO)
+
+handler = logging.FileHandler(Path(__file__).parent / 'ParameterOptimizer.log', mode = 'w')
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+logger.addHandler(handler)
+logger.propagate = False
 
 # -------------------- Data Classes --------------------
 
@@ -133,16 +134,10 @@ class ParameterOptimizer:
         self.params_file    = params_file or self.PARAMS_FILE
         self.save_frequency = save_frequency
         
-        # Initialize state
-        self.state   = OptimizerState()
-        self.config  = self.load_config()
-        
-        # Calculate total combinations
+        self.state              = OptimizerState()
+        self.config             = self.load_config()
         self.total_combinations = self.config.calculate_total_combinations()
-        logger.info(f"Initialized optimizer with {len(self.config.enabled_steps)} enabled steps")
-        logger.info(f"Total parameter combinations to test: {self.total_combinations:,}")
-        for param_name, (min_val, max_val, step) in self.config.param_ranges.items():
-            logger.info(f"  - {param_name}: min={min_val}, max={max_val}, step={step}")
+        logger.info(f"Initialized with {self.total_combinations:,} parameter combinations to test")
 
     def load_config(self) -> OptimizationConfig:
         """
@@ -165,20 +160,14 @@ class ParameterOptimizer:
         
         logger.info(f"Loading configuration from {self.params_file}")
         
-        # Map step definitions to enabled steps in TextExtractor
+        # Get all available steps
         enabled_steps = []
         param_ranges  = {}
         
         for step_def in step_definitions:
-            step_name = next(
-                (step for step in self.extractor.steps 
-                 if step.name == step_def['name'] and step.is_enabled),
-                None
-            )
-            
-            if step_name:
-                enabled_steps.append(step_name.name)
-                logger.info(f"Found enabled step: {step_name.name}")
+            step_name = step_def['name']
+            if step_name != 'ocr':  # Skip OCR as it's always enabled
+                enabled_steps.append(step_name)
                 
                 for param in step_def.get('parameters', []):
                     if all(k in param for k in ('name', 'min', 'max', 'step')):
@@ -187,7 +176,6 @@ class ParameterOptimizer:
                             float(param['max']),
                             float(param['step'])
                         )
-                        logger.info(f"Added parameter: {param['name']}")
         
         return OptimizationConfig(
             enabled_steps   = enabled_steps,
@@ -199,43 +187,51 @@ class ParameterOptimizer:
     def generate_parameter_combinations(self) -> Iterator[dict[str, Any]]:
         """
         Generate valid parameter combinations based on enabled steps.
+        Ensures OCR is always on and only generates parameter combinations 
+        for enabled processing steps.
         
         Yields:
             Dictionary containing a valid parameter combination
         """
-        # Create mapping of parameters to their parent steps
-        param_to_step  = {}
-        enabled_params = {}
+        non_ocr_steps = self.config.enabled_steps
+        combinations_generated = 0
         
-        for step in self.extractor.steps:
-            if step.is_enabled:
-                for param in step.parameters:
-                    param_to_step[param.name] = step.name
-                    if param.name in self.config.param_ranges:
-                        enabled_params[param.name] = self.config.param_ranges[param.name]
-        
-        # Generate values for enabled parameters
-        param_values = {
-            name: np.arange(
-                start = min_val,
-                stop  = max_val + step / 2,
-                step  = step
-            ).tolist()
-            for name, (min_val, max_val, step) in enabled_params.items()
-        }
-        
-        # Generate combinations
-        param_names = list(param_values.keys())
-        combinations = itertools.product(*param_values.values())
-        
-        for value_combo in combinations:
-            combo = dict(zip(param_names, value_combo))
-            
-            # Add enabled flags for parent steps
-            for step in self.extractor.steps:
-                combo[f"use_{step.name}"] = step.is_enabled
-            
-            yield combo
+        # Generate all possible combinations of enabled/disabled steps
+        for r in range(1, len(non_ocr_steps) + 1):
+            for step_combo in itertools.combinations(non_ocr_steps, r):
+                # Create base combination with OCR always enabled
+                base_combo = {'use_ocr': True}
+                
+                # Set which steps are enabled in this combination
+                for step_name in self.config.enabled_steps:
+                    base_combo[f"use_{step_name}"] = step_name in step_combo
+                
+                # Get parameters for enabled steps
+                enabled_params = {}
+                for step_name in step_combo:
+                    # Find parameters belonging to this step
+                    for param_name, param_range in self.config.param_ranges.items():
+                        if param_name.startswith(step_name):
+                            min_val, max_val, step_size = param_range
+                            enabled_params[param_name] = np.arange(
+                                start = min_val,
+                                stop  = max_val + step_size / 2,
+                                step  = step_size
+                            ).tolist()
+                
+                if not enabled_params:
+                    combinations_generated += 1
+                    yield base_combo
+                    continue
+                    
+                param_names = list(enabled_params.keys())
+                value_combinations = itertools.product(*enabled_params.values())
+                
+                for values in value_combinations:
+                    combinations_generated += 1
+                    combo = base_combo.copy()
+                    combo.update(dict(zip(param_names, values)))
+                    yield combo
 
     @staticmethod
     def calculate_score(text_results: list[tuple[str, float]]) -> tuple[float, int]:
@@ -274,12 +270,18 @@ class ParameterOptimizer:
         with self.output_file.open('w', encoding = 'utf-8') as f:
             json.dump(output_dict, f, ensure_ascii = False, indent = 4)
         
-        logger.info(f"Results saved to {self.output_file}")
-        
-        # Log summary of current best results
-        logger.info("Current best scores:")
-        for image_name, result in self.state.best_results.items():
-            logger.info(f"  - {image_name}: score={result.score:.2f}, chars={result.char_count}")
+        if self.state.iteration >= self.total_combinations - 1:
+            logger.info(f"Results saved to {self.output_file}")
+            scores = [result.score for result in self.state.best_results.values()]
+            chars  = [result.char_count for result in self.state.best_results.values()]
+            
+            if scores:
+                logger.info(f"Final Results Summary:")
+                logger.info(f"  Images processed : {len(scores)}")
+                logger.info(f"  Average score    : {sum(scores)/len(scores):.2f}")
+                logger.info(f"  Average chars    : {sum(chars)/len(chars):.1f}")
+                logger.info(f"  Best score       : {max(scores):.2f}")
+                logger.info(f"  Worst score      : {min(scores):.2f}")
 
     def process_combination(
         self,
@@ -288,18 +290,8 @@ class ParameterOptimizer:
     ):
         """
         Process a single parameter combination across all images.
-        
-        Args:
-            params      : Parameter combination to test
-            image_files : List of image files to process
         """
         self.state.iteration += 1
-        
-        # Log current parameter combination
-        logger.debug(f"Testing parameter combination {self.state.iteration}/{self.total_combinations}:")
-        for param_name, value in params.items():
-            if not param_name.startswith('use_'):
-                logger.debug(f"  - {param_name}: {value}")
         
         # Run OCR with current parameters
         results = self.extractor.interactive_experiment(
@@ -309,8 +301,10 @@ class ParameterOptimizer:
             interactive_ui  = False
         )
         
+        # Track improvements
+        improvements = 0
+        
         # Update best results for each image
-        images_improved = 0
         for image_name, ocr_results in results.items():
             if image_name not in self.state.best_results:
                 score, count = self.calculate_score(ocr_results)
@@ -320,8 +314,7 @@ class ParameterOptimizer:
                     score        = score,
                     char_count   = count
                 )
-                logger.info(f"Initial score for {image_name}: {score:.2f} ({count} chars)")
-                images_improved += 1
+                improvements += 1
             else:
                 if self.state.best_results[image_name].update_if_better(
                     params,
@@ -329,20 +322,19 @@ class ParameterOptimizer:
                     self.state.iteration
                 ):
                     logger.info(
-                        f"New best score for {image_name}: "
-                        f"{self.state.best_results[image_name].score:.2f} "
+                        f"Image {image_name} | Score improved to {self.state.best_results[image_name].score:.2f} "
                         f"({self.state.best_results[image_name].char_count} chars)"
                     )
-                    images_improved += 1
+                    improvements += 1
         
-        # Log periodic progress updates
-        if self.state.iteration % 10 == 0:
+        # Only log progress periodically or when improvements occur
+        if improvements > 0 or self.state.iteration % 100 == 0:
             progress = (self.state.iteration / self.total_combinations) * 100
             logger.info(
-                f"Progress: {progress:.1f}% "
-                f"({self.state.iteration:,}/{self.total_combinations:,} combinations)"
+                f"Progress: {progress:.1f}% - "
+                f"Combination {self.state.iteration:,}/{self.total_combinations:,} "
+                f"improved {improvements} images"
             )
-            logger.info(f"Images improved this iteration: {images_improved}")
 
     def optimize(
         self,
@@ -351,25 +343,13 @@ class ParameterOptimizer:
     ) -> dict[str, ImageOptimizationResult]:
         """
         Run optimization process on provided image files.
-        
-        Args:
-            image_files : List of image files to process
-            resume      : Whether to resume from existing results
-            
-        Returns:
-            Dictionary mapping image names to their optimization results
-            
-        Raises:
-            ValueError: If no image files are provided
         """
         if not image_files:
             raise ValueError("No image files provided")
         
         logger.info(f"Starting optimization for {len(image_files)} images")
         
-        # Load previous results if resuming
         if resume and self.output_file.exists():
-            logger.info(f"Resuming optimization from {self.output_file}")
             with self.output_file.open('r') as f:
                 previous_results = json.load(f)
                 
@@ -381,26 +361,23 @@ class ParameterOptimizer:
                     char_count   = result_dict["metrics"]["char_count"],
                     iterations   = result_dict["metrics"]["iterations"]
                 )
-                logger.info(f"Loaded previous results for {image_name}")
         
         try:
             # Process parameter combinations
             for params in self.generate_parameter_combinations():
                 self.process_combination(params, image_files)
-                
+                    
                 # Save progress periodically
                 if self.state.iteration % self.save_frequency == 0:
                     self.save_results()
                     
         except KeyboardInterrupt:
             logger.warning("Optimization interrupted by user")
-            self.save_results()
         except Exception as e:
             logger.error(f"Error during optimization: {str(e)}", exc_info=True)
-            self.save_results()
             raise
-        else:
-            logger.info("Optimization completed successfully")
+        finally:
+            # Save results one final time
             self.save_results()
         
         return self.state.best_results

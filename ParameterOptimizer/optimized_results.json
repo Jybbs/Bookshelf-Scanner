@@ -1,0 +1,1820 @@
+{
+    "0.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANNE FRANK",
+                0.9936837949306894
+            ],
+            [
+                "THE",
+                0.9965623387294619
+            ],
+            [
+                "DIARV",
+                0.9248273936077791
+            ]
+        ],
+        "metrics": {
+            "score": 17.5507,
+            "char_count": 18,
+            "iterations": 0
+        }
+    },
+    "1.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "THE TORESHADOWING",
+                0.7467613816378346
+            ]
+        ],
+        "metrics": {
+            "score": 12.6949,
+            "char_count": 17,
+            "iterations": 0
+        }
+    },
+    "10.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Chinese",
+                0.9999844102815634
+            ],
+            [
+                "Cinderella",
+                0.7795352313038705
+            ]
+        ],
+        "metrics": {
+            "score": 14.7952,
+            "char_count": 17,
+            "iterations": 0
+        }
+    },
+    "11.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN",
+                0.9999183733850651
+            ],
+            [
+                "RINALDI",
+                0.6834752801404956
+            ],
+            [
+                "F",
+                0.864986822495112
+            ],
+            [
+                "Quilt",
+                0.8129676650170315
+            ]
+        ],
+        "metrics": {
+            "score": 12.7139,
+            "char_count": 16,
+            "iterations": 0
+        }
+    },
+    "12.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Emperor",
+                0.965075174650686
+            ]
+        ],
+        "metrics": {
+            "score": 6.7555,
+            "char_count": 7,
+            "iterations": 0
+        }
+    },
+    "13.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Wolf by the Ears",
+                0.7801655462942237
+            ],
+            [
+                "Rinaldi",
+                0.9996048259820394
+            ]
+        ],
+        "metrics": {
+            "score": 19.4799,
+            "char_count": 23,
+            "iterations": 0
+        }
+    },
+    "14.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.5245013967136316
+            ],
+            [
+                "1",
+                0.9312416298178192
+            ],
+            [
+                "1",
+                0.8596289165554403
+            ],
+            [
+                "TREMAJN",
+                0.8638316009843148
+            ]
+        ],
+        "metrics": {
+            "score": 8.3622,
+            "char_count": 10,
+            "iterations": 0
+        }
+    },
+    "15.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "13",
+                0.683157010674064
+            ],
+            [
+                "SOLDIER'S",
+                0.8097963837413603
+            ],
+            [
+                "HEART",
+                0.9976538268815571
+            ],
+            [
+                "GARY",
+                0.9949164390563965
+            ],
+            [
+                "PAULSEN",
+                0.9997876396612878
+            ]
+        ],
+        "metrics": {
+            "score": 24.6209,
+            "char_count": 27,
+            "iterations": 0
+        }
+    },
+    "16.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Avi",
+                0.9748732089772996
+            ],
+            [
+                "4",
+                0.9991891836256492
+            ]
+        ],
+        "metrics": {
+            "score": 3.9238,
+            "char_count": 4,
+            "iterations": 0
+        }
+    },
+    "17.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "B ETTE",
+                0.5912779793092109
+            ],
+            [
+                "1",
+                0.7876336939757635
+            ],
+            [
+                "GERMAN",
+                0.9831181320047515
+            ],
+            [
+                "1",
+                0.8538279269713236
+            ]
+        ],
+        "metrics": {
+            "score": 11.0878,
+            "char_count": 14,
+            "iterations": 0
+        }
+    },
+    "18.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "CHOTJEWITZ",
+                0.9017704490041355
+            ],
+            [
+                "DANIEL HALF HUMAN}",
+                0.7869162717797094
+            ]
+        ],
+        "metrics": {
+            "score": 23.1822,
+            "char_count": 28,
+            "iterations": 0
+        }
+    },
+    "19.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "SARAH BISHOP",
+                0.6763681110296687
+            ],
+            [
+                "SCOTT ODELL",
+                0.8535183547115995
+            ]
+        ],
+        "metrics": {
+            "score": 17.5051,
+            "char_count": 23,
+            "iterations": 0
+        }
+    },
+    "2.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN",
+                0.9996598032310127
+            ],
+            [
+                "2",
+                0.866398332073004
+            ],
+            [
+                "ALDI",
+                0.992128849029541
+            ],
+            [
+                "3",
+                0.8076051225044125
+            ],
+            [
+                "`",
+                0.5262600306250285
+            ],
+            [
+                "1",
+                0.6310032356687181
+            ]
+        ],
+        "metrics": {
+            "score": 9.7988,
+            "char_count": 11,
+            "iterations": 0
+        }
+    },
+    "20.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "BRENAMAN",
+                0.7455814733654215
+            ],
+            [
+                "9",
+                0.9777544159428295
+            ],
+            [
+                "3",
+                0.6871020534505448
+            ]
+        ],
+        "metrics": {
+            "score": 7.6295,
+            "char_count": 10,
+            "iterations": 0
+        }
+    },
+    "21.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Muskowitz SWFET",
+                0.6238696106476441
+            ],
+            [
+                "1",
+                0.8116171698929975
+            ],
+            [
+                "Lyon",
+                0.7898815870285034
+            ],
+            [
+                "IT",
+                0.9195000246854667
+            ],
+            [
+                "RaiNEd",
+                0.6090396161340255
+            ],
+            [
+                "WARM",
+                0.9313337206840515
+            ]
+        ],
+        "metrics": {
+            "score": 22.5478,
+            "char_count": 32,
+            "iterations": 0
+        }
+    },
+    "22.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "8",
+                0.710375072465613
+            ],
+            [
+                "GATES",
+                0.8526473205086859
+            ],
+            [
+                "Bolden",
+                0.9988653951486128
+            ],
+            [
+                "DARK",
+                0.9962350130081177
+            ],
+            [
+                "RISING",
+                0.9989889257393021
+            ],
+            [
+                "RECOMSTRU",
+                0.9578183367674883
+            ],
+            [
+                "3",
+                0.9901261891708977
+            ]
+        ],
+        "metrics": {
+            "score": 30.5562,
+            "char_count": 32,
+            "iterations": 0
+        }
+    },
+    "23.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ROBINSON",
+                0.998562364297998
+            ],
+            [
+                "8",
+                0.8093469172395231
+            ],
+            [
+                "the",
+                0.837634265422821
+            ],
+            [
+                "2",
+                0.9611000641085674
+            ]
+        ],
+        "metrics": {
+            "score": 12.2718,
+            "char_count": 13,
+            "iterations": 0
+        }
+    },
+    "24.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "APPLEGATE",
+                0.9525262250330357
+            ],
+            [
+                "HOME",
+                0.9985833764076233
+            ],
+            [
+                "Jo",
+                0.939535136073898
+            ],
+            [
+                "4",
+                0.6631157486796759
+            ],
+            [
+                "BRAVE",
+                0.9994781659237781
+            ]
+        ],
+        "metrics": {
+            "score": 20.1066,
+            "char_count": 21,
+            "iterations": 0
+        }
+    },
+    "25.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.5459028419529801
+            ],
+            [
+                "With THE",
+                0.8242059890337295
+            ],
+            [
+                "Might",
+                0.9667131089940699
+            ],
+            [
+                "6",
+                0.9236156776650297
+            ],
+            [
+                "ANGELS",
+                0.996657588176945
+            ]
+        ],
+        "metrics": {
+            "score": 18.8767,
+            "char_count": 21,
+            "iterations": 0
+        }
+    },
+    "26.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Houston",
+                0.9957995602249697
+            ],
+            [
+                "6",
+                0.9862145555611193
+            ],
+            [
+                "Manzanar",
+                0.9322344198211067
+            ],
+            [
+                "2",
+                0.5275174060705154
+            ],
+            [
+                "1",
+                0.9415298982692235
+            ]
+        ],
+        "metrics": {
+            "score": 16.8837,
+            "char_count": 18,
+            "iterations": 0
+        }
+    },
+    "27.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [],
+        "metrics": {
+            "score": 0.0,
+            "char_count": 0,
+            "iterations": 0
+        }
+    },
+    "28.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Lit CHAT",
+                0.631137952984377
+            ]
+        ],
+        "metrics": {
+            "score": 5.0491,
+            "char_count": 8,
+            "iterations": 0
+        }
+    },
+    "29.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "AGES",
+                0.9943791627883911
+            ],
+            [
+                "1",
+                0.5447362553139925
+            ]
+        ],
+        "metrics": {
+            "score": 4.5223,
+            "char_count": 5,
+            "iterations": 0
+        }
+    },
+    "3.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "NNV",
+                0.9997043314424671
+            ],
+            [
+                "RINALD",
+                0.8414513749227391
+            ],
+            [
+                "1",
+                0.6656200073945371
+            ]
+        ],
+        "metrics": {
+            "score": 8.7134,
+            "char_count": 10,
+            "iterations": 0
+        }
+    },
+    "30.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANNE FRANK",
+                0.9936837949306894
+            ],
+            [
+                "THE",
+                0.9965623387294619
+            ],
+            [
+                "DIARV",
+                0.9248273936077791
+            ]
+        ],
+        "metrics": {
+            "score": 17.5507,
+            "char_count": 18,
+            "iterations": 0
+        }
+    },
+    "31.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "THE TORESHADOWING",
+                0.7467613816378346
+            ]
+        ],
+        "metrics": {
+            "score": 12.6949,
+            "char_count": 17,
+            "iterations": 0
+        }
+    },
+    "32.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN",
+                0.9996598032310127
+            ],
+            [
+                "2",
+                0.866398332073004
+            ],
+            [
+                "ALDI",
+                0.992128849029541
+            ],
+            [
+                "3",
+                0.8076051225044125
+            ],
+            [
+                "`",
+                0.5262600306250285
+            ],
+            [
+                "1",
+                0.6310032356687181
+            ]
+        ],
+        "metrics": {
+            "score": 9.7988,
+            "char_count": 11,
+            "iterations": 0
+        }
+    },
+    "33.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "NNV",
+                0.9997043314424671
+            ],
+            [
+                "RINALD",
+                0.8414513749227391
+            ],
+            [
+                "1",
+                0.6656200073945371
+            ]
+        ],
+        "metrics": {
+            "score": 8.7134,
+            "char_count": 10,
+            "iterations": 0
+        }
+    },
+    "34.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN RINALDI",
+                0.8676282412904224
+            ]
+        ],
+        "metrics": {
+            "score": 9.5439,
+            "char_count": 11,
+            "iterations": 0
+        }
+    },
+    "35.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.7517543966793063
+            ],
+            [
+                "THE",
+                0.9950245442612483
+            ],
+            [
+                "SECOND",
+                0.9991948291402634
+            ],
+            [
+                "BEND",
+                0.999544084072113
+            ],
+            [
+                "IN",
+                0.9960501786396523
+            ],
+            [
+                "THE",
+                0.7584623653696642
+            ],
+            [
+                "RIVER",
+                0.8248373551851488
+            ],
+            [
+                "Ann Rinaldi",
+                0.9994681505276485
+            ]
+        ],
+        "metrics": {
+            "score": 33.116,
+            "char_count": 35,
+            "iterations": 0
+        }
+    },
+    "36.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "William",
+                0.9403616980054302
+            ],
+            [
+                "JUST",
+                0.9628251791000366
+            ],
+            [
+                "JANE",
+                0.9596726548256743
+            ],
+            [
+                "5",
+                0.968110018076004
+            ]
+        ],
+        "metrics": {
+            "score": 15.2406,
+            "char_count": 16,
+            "iterations": 0
+        }
+    },
+    "37.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN",
+                0.9993108131144861
+            ],
+            [
+                "RINALDI",
+                0.9374096831528015
+            ],
+            [
+                "1",
+                0.7358709589205006
+            ],
+            [
+                "A",
+                0.9834610748320962
+            ]
+        ],
+        "metrics": {
+            "score": 11.2791,
+            "char_count": 12,
+            "iterations": 0
+        }
+    },
+    "38.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.516934917983022
+            ],
+            [
+                "8",
+                0.9829837628932161
+            ]
+        ],
+        "metrics": {
+            "score": 1.4999,
+            "char_count": 2,
+            "iterations": 0
+        }
+    },
+    "39.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "51",
+                0.5985640603678204
+            ],
+            [
+                "1",
+                0.6603695475465798
+            ]
+        ],
+        "metrics": {
+            "score": 1.8575,
+            "char_count": 3,
+            "iterations": 0
+        }
+    },
+    "4.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN RINALDI",
+                0.8676282412904224
+            ]
+        ],
+        "metrics": {
+            "score": 9.5439,
+            "char_count": 11,
+            "iterations": 0
+        }
+    },
+    "40.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Chinese",
+                0.9999844102815634
+            ],
+            [
+                "Cinderella",
+                0.7795352313038705
+            ]
+        ],
+        "metrics": {
+            "score": 14.7952,
+            "char_count": 17,
+            "iterations": 0
+        }
+    },
+    "41.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN",
+                0.9999183733850651
+            ],
+            [
+                "RINALDI",
+                0.6834752801404956
+            ],
+            [
+                "F",
+                0.864986822495112
+            ],
+            [
+                "Quilt",
+                0.8129676650170315
+            ]
+        ],
+        "metrics": {
+            "score": 12.7139,
+            "char_count": 16,
+            "iterations": 0
+        }
+    },
+    "42.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Emperor",
+                0.965075174650686
+            ]
+        ],
+        "metrics": {
+            "score": 6.7555,
+            "char_count": 7,
+            "iterations": 0
+        }
+    },
+    "43.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Wolf by the Ears",
+                0.7801655462942237
+            ],
+            [
+                "Rinaldi",
+                0.9996048259820394
+            ]
+        ],
+        "metrics": {
+            "score": 19.4799,
+            "char_count": 23,
+            "iterations": 0
+        }
+    },
+    "44.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.5245013967136316
+            ],
+            [
+                "1",
+                0.9312416298178192
+            ],
+            [
+                "1",
+                0.8596289165554403
+            ],
+            [
+                "TREMAJN",
+                0.8638316009843148
+            ]
+        ],
+        "metrics": {
+            "score": 8.3622,
+            "char_count": 10,
+            "iterations": 0
+        }
+    },
+    "45.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "13",
+                0.683157010674064
+            ],
+            [
+                "SOLDIER'S",
+                0.8097963837413603
+            ],
+            [
+                "HEART",
+                0.9976538268815571
+            ],
+            [
+                "GARY",
+                0.9949164390563965
+            ],
+            [
+                "PAULSEN",
+                0.9997876396612878
+            ]
+        ],
+        "metrics": {
+            "score": 24.6209,
+            "char_count": 27,
+            "iterations": 0
+        }
+    },
+    "46.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Avi",
+                0.9748732089772996
+            ],
+            [
+                "4",
+                0.9991891836256492
+            ]
+        ],
+        "metrics": {
+            "score": 3.9238,
+            "char_count": 4,
+            "iterations": 0
+        }
+    },
+    "47.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "B ETTE",
+                0.5912779793092109
+            ],
+            [
+                "1",
+                0.7876336939757635
+            ],
+            [
+                "GERMAN",
+                0.9831181320047515
+            ],
+            [
+                "1",
+                0.8538279269713236
+            ]
+        ],
+        "metrics": {
+            "score": 11.0878,
+            "char_count": 14,
+            "iterations": 0
+        }
+    },
+    "48.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "CHOTJEWITZ",
+                0.9017704490041355
+            ],
+            [
+                "DANIEL HALF HUMAN}",
+                0.7869162717797094
+            ]
+        ],
+        "metrics": {
+            "score": 23.1822,
+            "char_count": 28,
+            "iterations": 0
+        }
+    },
+    "49.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "SARAH BISHOP",
+                0.6763681110296687
+            ],
+            [
+                "SCOTT ODELL",
+                0.8535183547115995
+            ]
+        ],
+        "metrics": {
+            "score": 17.5051,
+            "char_count": 23,
+            "iterations": 0
+        }
+    },
+    "5.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.7517543966793063
+            ],
+            [
+                "THE",
+                0.9950245442612483
+            ],
+            [
+                "SECOND",
+                0.9991948291402634
+            ],
+            [
+                "BEND",
+                0.999544084072113
+            ],
+            [
+                "IN",
+                0.9960501786396523
+            ],
+            [
+                "THE",
+                0.7584623653696642
+            ],
+            [
+                "RIVER",
+                0.8248373551851488
+            ],
+            [
+                "Ann Rinaldi",
+                0.9994681505276485
+            ]
+        ],
+        "metrics": {
+            "score": 33.116,
+            "char_count": 35,
+            "iterations": 0
+        }
+    },
+    "50.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "BRENAMAN",
+                0.7455814733654215
+            ],
+            [
+                "9",
+                0.9777544159428295
+            ],
+            [
+                "3",
+                0.6871020534505448
+            ]
+        ],
+        "metrics": {
+            "score": 7.6295,
+            "char_count": 10,
+            "iterations": 0
+        }
+    },
+    "51.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Muskowitz SWFET",
+                0.6238696106476441
+            ],
+            [
+                "1",
+                0.8116171698929975
+            ],
+            [
+                "Lyon",
+                0.7898815870285034
+            ],
+            [
+                "IT",
+                0.9195000246854667
+            ],
+            [
+                "RaiNEd",
+                0.6090396161340255
+            ],
+            [
+                "WARM",
+                0.9313337206840515
+            ]
+        ],
+        "metrics": {
+            "score": 22.5478,
+            "char_count": 32,
+            "iterations": 0
+        }
+    },
+    "52.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "8",
+                0.710375072465613
+            ],
+            [
+                "GATES",
+                0.8526473205086859
+            ],
+            [
+                "Bolden",
+                0.9988653951486128
+            ],
+            [
+                "DARK",
+                0.9962350130081177
+            ],
+            [
+                "RISING",
+                0.9989889257393021
+            ],
+            [
+                "RECOMSTRU",
+                0.9578183367674883
+            ],
+            [
+                "3",
+                0.9901261891708977
+            ]
+        ],
+        "metrics": {
+            "score": 30.5562,
+            "char_count": 32,
+            "iterations": 0
+        }
+    },
+    "53.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ROBINSON",
+                0.998562364297998
+            ],
+            [
+                "8",
+                0.8093469172395231
+            ],
+            [
+                "the",
+                0.837634265422821
+            ],
+            [
+                "2",
+                0.9611000641085674
+            ]
+        ],
+        "metrics": {
+            "score": 12.2718,
+            "char_count": 13,
+            "iterations": 0
+        }
+    },
+    "54.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "APPLEGATE",
+                0.9525262250330357
+            ],
+            [
+                "HOME",
+                0.9985833764076233
+            ],
+            [
+                "Jo",
+                0.939535136073898
+            ],
+            [
+                "4",
+                0.6631157486796759
+            ],
+            [
+                "BRAVE",
+                0.9994781659237781
+            ]
+        ],
+        "metrics": {
+            "score": 20.1066,
+            "char_count": 21,
+            "iterations": 0
+        }
+    },
+    "55.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.5459028419529801
+            ],
+            [
+                "With THE",
+                0.8242059890337295
+            ],
+            [
+                "Might",
+                0.9667131089940699
+            ],
+            [
+                "6",
+                0.9236156776650297
+            ],
+            [
+                "ANGELS",
+                0.996657588176945
+            ]
+        ],
+        "metrics": {
+            "score": 18.8767,
+            "char_count": 21,
+            "iterations": 0
+        }
+    },
+    "56.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Houston",
+                0.9957995602249697
+            ],
+            [
+                "6",
+                0.9862145555611193
+            ],
+            [
+                "Manzanar",
+                0.9322344198211067
+            ],
+            [
+                "2",
+                0.5275174060705154
+            ],
+            [
+                "1",
+                0.9415298982692235
+            ]
+        ],
+        "metrics": {
+            "score": 16.8837,
+            "char_count": 18,
+            "iterations": 0
+        }
+    },
+    "57.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [],
+        "metrics": {
+            "score": 0.0,
+            "char_count": 0,
+            "iterations": 0
+        }
+    },
+    "58.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "Lit CHAT",
+                0.631137952984377
+            ]
+        ],
+        "metrics": {
+            "score": 5.0491,
+            "char_count": 8,
+            "iterations": 0
+        }
+    },
+    "59.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "AGES",
+                0.9943791627883911
+            ],
+            [
+                "1",
+                0.5447362553139925
+            ]
+        ],
+        "metrics": {
+            "score": 4.5223,
+            "char_count": 5,
+            "iterations": 0
+        }
+    },
+    "6.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "William",
+                0.9403616980054302
+            ],
+            [
+                "JUST",
+                0.9628251791000366
+            ],
+            [
+                "JANE",
+                0.9596726548256743
+            ],
+            [
+                "5",
+                0.968110018076004
+            ]
+        ],
+        "metrics": {
+            "score": 15.2406,
+            "char_count": 16,
+            "iterations": 0
+        }
+    },
+    "7.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "ANN",
+                0.9993108131144861
+            ],
+            [
+                "RINALDI",
+                0.9374096831528015
+            ],
+            [
+                "1",
+                0.7358709589205006
+            ],
+            [
+                "A",
+                0.9834610748320962
+            ]
+        ],
+        "metrics": {
+            "score": 11.2791,
+            "char_count": 12,
+            "iterations": 0
+        }
+    },
+    "8.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "1",
+                0.516934917983022
+            ],
+            [
+                "8",
+                0.9829837628932161
+            ]
+        ],
+        "metrics": {
+            "score": 1.4999,
+            "char_count": 2,
+            "iterations": 0
+        }
+    },
+    "9.jpg": {
+        "best_parameters": {
+            "use_ocr": true,
+            "use_shadow_removal": true,
+            "use_color_clahe": false,
+            "use_brightness_adjustment": false,
+            "use_contrast_adjustment": false,
+            "use_image_rotation": false
+        },
+        "text_results": [
+            [
+                "51",
+                0.5985640603678204
+            ],
+            [
+                "1",
+                0.6603695475465798
+            ]
+        ],
+        "metrics": {
+            "score": 1.8575,
+            "char_count": 3,
+            "iterations": 0
+        }
+    }
+}

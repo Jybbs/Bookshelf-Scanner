@@ -12,13 +12,14 @@ from typing      import Any, Optional
 
 # -------------------- Configuration and Logging --------------------
 
-logging.basicConfig(
-    level    = logging.INFO,
-    format   = '%(asctime)s - %(levelname)s - %(message)s',
-    filename = Path(__file__).parent / 'TextExtractor.log',
-    filemode = 'w'
-)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('TextExtractor')
+logger.setLevel(logging.INFO)
+
+handler = logging.FileHandler(Path(__file__).parent / 'TextExtractor.log', mode = 'w')
+handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+logger.addHandler(handler)
+logger.propagate = False
 
 # -------------------- Data Classes --------------------
     

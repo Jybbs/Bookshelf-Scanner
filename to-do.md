@@ -1,3 +1,0 @@
-- Allow for two concurrent logging files to be written with their own logging information
-- Fix the `combinations` logic (ensuring OCR is always on), so that all combinations are actually used
-- Less verbose logging. I just want to know when a parameter change improves over the current best value for an image.
