@@ -28,6 +28,19 @@ class OptimizationConfig:
     save_frequency  : int = 10   # How often to save intermediate results
     batch_size      : int = 100  # Number of combinations to process per batch
 
+    def calculate_total_combinations(self) -> int:
+        """
+        Calculate total number of parameter combinations.
+        
+        Returns:
+            Total number of possible combinations
+        """
+        total = 1
+        for min_val, max_val, step in self.param_ranges.values():
+            num_values = int((max_val - min_val) / step) + 1
+            total *= num_values
+        return total
+
 @dataclass
 class ImageOptimizationResult:
     parameters   : dict[str, Any]           # Parameters that achieved best results
@@ -85,14 +98,14 @@ class ImageOptimizationResult:
 class OptimizerState:
     best_results   : dict[str, ImageOptimizationResult] = field(default_factory = dict)  # Best results per image
     current_batch  : int = 0  # Index of current batch being processed
-    total_batches  : int = 0  # Total number of parameter combination batches
+    total_batches  : int = 0  # Total number of parameter combinations
     iteration      : int = 0  # Current iteration number
 
-# -------------------- Main Optimizer Class --------------------optimi
+# -------------------- Main Optimizer Class --------------------
 
 class ParameterOptimizer:
     BATCH_SIZE     = 100
-    OUTPUT_FILE    = Path(__file__).parent / 'optimized_results.json',
+    OUTPUT_FILE    = Path(__file__).parent / 'optimized_results.json'
     PARAMS_FILE    = Path(__file__).resolve().parent.parent / 'config' / 'params.yml'
     SAVE_FREQUENCY = 10
 
@@ -124,9 +137,12 @@ class ParameterOptimizer:
         self.state   = OptimizerState()
         self.config  = self.load_config()
         
+        # Calculate total combinations
+        self.total_combinations = self.config.calculate_total_combinations()
         logger.info(f"Initialized optimizer with {len(self.config.enabled_steps)} enabled steps")
-
-    # -------------------- Configuration Methods --------------------
+        logger.info(f"Total parameter combinations to test: {self.total_combinations:,}")
+        for param_name, (min_val, max_val, step) in self.config.param_ranges.items():
+            logger.info(f"  - {param_name}: min={min_val}, max={max_val}, step={step}")
 
     def load_config(self) -> OptimizationConfig:
         """
@@ -147,6 +163,8 @@ class ParameterOptimizer:
             logger.error(f"Configuration file not found: {self.params_file}")
             raise
         
+        logger.info(f"Loading configuration from {self.params_file}")
+        
         # Map step definitions to enabled steps in TextExtractor
         enabled_steps = []
         param_ranges  = {}
@@ -160,6 +178,7 @@ class ParameterOptimizer:
             
             if step_name:
                 enabled_steps.append(step_name.name)
+                logger.info(f"Found enabled step: {step_name.name}")
                 
                 for param in step_def.get('parameters', []):
                     if all(k in param for k in ('name', 'min', 'max', 'step')):
@@ -168,6 +187,7 @@ class ParameterOptimizer:
                             float(param['max']),
                             float(param['step'])
                         )
+                        logger.info(f"Added parameter: {param['name']}")
         
         return OptimizationConfig(
             enabled_steps   = enabled_steps,
@@ -176,10 +196,7 @@ class ParameterOptimizer:
             batch_size      = self.batch_size
         )
 
-    # -------------------- Parameter Generation --------------------
-
-    @property
-    def valid_combinations(self) -> Iterator[dict[str, Any]]:
+    def generate_parameter_combinations(self) -> Iterator[dict[str, Any]]:
         """
         Generate valid parameter combinations based on enabled steps.
         
@@ -194,11 +211,8 @@ class ParameterOptimizer:
             if step.is_enabled:
                 for param in step.parameters:
                     param_to_step[param.name] = step.name
-                    enabled_params[param.name] = (
-                        float(param.min),
-                        float(param.max),
-                        float(param.step)
-                    )
+                    if param.name in self.config.param_ranges:
+                        enabled_params[param.name] = self.config.param_ranges[param.name]
         
         # Generate values for enabled parameters
         param_values = {
@@ -212,7 +226,9 @@ class ParameterOptimizer:
         
         # Generate combinations
         param_names = list(param_values.keys())
-        for value_combo in itertools.product(*param_values.values()):
+        combinations = itertools.product(*param_values.values())
+        
+        for value_combo in combinations:
             combo = dict(zip(param_names, value_combo))
             
             # Add enabled flags for parent steps
@@ -220,8 +236,6 @@ class ParameterOptimizer:
                 combo[f"use_{step.name}"] = step.is_enabled
             
             yield combo
-
-    # -------------------- Scoring Methods --------------------
 
     @staticmethod
     def calculate_score(text_results: list[tuple[str, float]]) -> tuple[float, int]:
@@ -248,25 +262,30 @@ class ParameterOptimizer:
             
         return total_score, char_count
 
-    # -------------------- Results Management --------------------
-
-    def save_results(self) -> None:
-        """Save current optimization results to the output file."""
+    def save_results(self):
+        """
+        Save current optimization results to the output file.
+        """
         output_dict = {
             name: result.to_dict()
             for name, result in sorted(self.state.best_results.items())
         }
         
-        with self.output_file.open('w', encoding='utf-8') as f:
+        with self.output_file.open('w', encoding = 'utf-8') as f:
             json.dump(output_dict, f, ensure_ascii = False, indent = 4)
         
         logger.info(f"Results saved to {self.output_file}")
+        
+        # Log summary of current best results
+        logger.info("Current best scores:")
+        for image_name, result in self.state.best_results.items():
+            logger.info(f"  - {image_name}: score={result.score:.2f}, chars={result.char_count}")
 
     def process_combination(
         self,
         params      : dict[str, Any],
         image_files : list[Path]
-    ) -> None:
+    ):
         """
         Process a single parameter combination across all images.
         
@@ -275,6 +294,12 @@ class ParameterOptimizer:
             image_files : List of image files to process
         """
         self.state.iteration += 1
+        
+        # Log current parameter combination
+        logger.debug(f"Testing parameter combination {self.state.iteration}/{self.total_combinations}:")
+        for param_name, value in params.items():
+            if not param_name.startswith('use_'):
+                logger.debug(f"  - {param_name}: {value}")
         
         # Run OCR with current parameters
         results = self.extractor.interactive_experiment(
@@ -285,6 +310,7 @@ class ParameterOptimizer:
         )
         
         # Update best results for each image
+        images_improved = 0
         for image_name, ocr_results in results.items():
             if image_name not in self.state.best_results:
                 score, count = self.calculate_score(ocr_results)
@@ -294,6 +320,8 @@ class ParameterOptimizer:
                     score        = score,
                     char_count   = count
                 )
+                logger.info(f"Initial score for {image_name}: {score:.2f} ({count} chars)")
+                images_improved += 1
             else:
                 if self.state.best_results[image_name].update_if_better(
                     params,
@@ -305,8 +333,16 @@ class ParameterOptimizer:
                         f"{self.state.best_results[image_name].score:.2f} "
                         f"({self.state.best_results[image_name].char_count} chars)"
                     )
-
-    # -------------------- Main Optimization Method --------------------
+                    images_improved += 1
+        
+        # Log periodic progress updates
+        if self.state.iteration % 10 == 0:
+            progress = (self.state.iteration / self.total_combinations) * 100
+            logger.info(
+                f"Progress: {progress:.1f}% "
+                f"({self.state.iteration:,}/{self.total_combinations:,} combinations)"
+            )
+            logger.info(f"Images improved this iteration: {images_improved}")
 
     def optimize(
         self,
@@ -329,6 +365,8 @@ class ParameterOptimizer:
         if not image_files:
             raise ValueError("No image files provided")
         
+        logger.info(f"Starting optimization for {len(image_files)} images")
+        
         # Load previous results if resuming
         if resume and self.output_file.exists():
             logger.info(f"Resuming optimization from {self.output_file}")
@@ -343,10 +381,11 @@ class ParameterOptimizer:
                     char_count   = result_dict["metrics"]["char_count"],
                     iterations   = result_dict["metrics"]["iterations"]
                 )
+                logger.info(f"Loaded previous results for {image_name}")
         
         try:
             # Process parameter combinations
-            for params in self.valid_combinations:
+            for params in self.generate_parameter_combinations():
                 self.process_combination(params, image_files)
                 
                 # Save progress periodically
@@ -354,8 +393,14 @@ class ParameterOptimizer:
                     self.save_results()
                     
         except KeyboardInterrupt:
-            logger.info("Optimization interrupted by user")
-        finally:
+            logger.warning("Optimization interrupted by user")
+            self.save_results()
+        except Exception as e:
+            logger.error(f"Error during optimization: {str(e)}", exc_info=True)
+            self.save_results()
+            raise
+        else:
+            logger.info("Optimization completed successfully")
             self.save_results()
         
         return self.state.best_results
@@ -363,17 +408,16 @@ class ParameterOptimizer:
 # -------------------- Main Entry Point --------------------
 
 if __name__ == "__main__":
-    # Initialize components
+
     extractor = TextExtractor(gpu_enabled = False)
     optimizer = ParameterOptimizer(extractor = extractor)
     
-    # Find image files
     image_files = sorted(
         file for file in Path("images/books").glob("*.jpg")
         if file.is_file()
     )
     if not image_files:
+        logger.error("No images found in images/books directory")
         raise FileNotFoundError("No images found in images/books directory")
     
-    # Run optimization
     optimizer.optimize(image_files)
