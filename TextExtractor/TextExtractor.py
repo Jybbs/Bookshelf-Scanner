@@ -38,8 +38,6 @@ class DisplayState:
         """
         self.image_idx = (self.image_idx + 1) % total_images
 
-# -------------------- Data Classes for Parameters --------------------
-
 @dataclass
 class Parameter:
     """
@@ -204,7 +202,7 @@ PROCESSING_FUNCTIONS = {
     'shadow_removal'        : remove_shadow,
 }
 
-# -------------------- Main TextExtractor Class --------------------
+# -------------------- TextExtractor Class --------------------
 
 class TextExtractor:
     ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
@@ -223,7 +221,8 @@ class TextExtractor:
         self,
         allowed_formats : set[str] | None = None,
         gpu_enabled     : bool            = False,
-        interactive_ui  : bool            = False,
+        headless        : bool            = False,
+        output_json     : bool            = False,
         output_file     : Path | None     = None,
         params_file     : Path | None     = None,
         window_height   : int             = DEFAULT_HEIGHT,
@@ -234,19 +233,21 @@ class TextExtractor:
         Args:
             allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
             gpu_enabled     : Whether to use GPU for OCR processing
-            interactive_ui  : Whether to run the interactive UI
+            headless        : Whether to run in headless mode
+            output_json     : Whether to output OCR results to JSON file
             output_file     : Path to save resultant strings from OCR processing
             params_file     : Optional custom path to params.yml
             window_height   : Default window height for UI display
         """
         self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
-        self.interactive_ui  = interactive_ui
+        self.headless        = headless
+        self.output_json     = output_json
         self.output_file     = output_file or self.OUTPUT_FILE
         self.params_file     = params_file or self.PARAMS_FILE
         self.reader          = Reader(['en'], gpu = gpu_enabled)
         self.steps           = []  # Will be populated by initialize_steps
 
-        if self.interactive_ui:
+        if not self.headless:
             self.state = DisplayState(window_height = window_height)
         else:
             self.state = None
@@ -266,8 +267,6 @@ class TextExtractor:
         }
         params.update({f"use_{step.name}": step.is_enabled for step in self.steps})
         return params
-
-    # -------------------- Class Utility Methods --------------------
 
     @classmethod
     def find_image_files(
@@ -306,12 +305,6 @@ class TextExtractor:
     def center_image_in_square(image: np.ndarray) -> np.ndarray:
         """
         Centers the image in a square canvas with sides equal to the longest side.
-
-        Args:
-            image : The image to center
-
-        Returns:
-            The image centered in a square canvas
         """
         height, width = image.shape[:2]
         max_side      = max(height, width)
@@ -326,22 +319,11 @@ class TextExtractor:
     def load_image(image_path: str) -> np.ndarray:
         """
         Loads an image from the specified file path.
-
-        Args:
-            image_path : The path to the image file
-
-        Returns:
-            The loaded image as a NumPy array
-
-        Raises:
-            FileNotFoundError : If the image cannot be found or loaded
         """
         image = cv2.imread(image_path)
         if image is None:
             raise FileNotFoundError(f"Image not found: {image_path}")
         return image
-
-    # -------------------- Initialization Methods --------------------
 
     def initialize_steps(self, params_override: dict | None = None) -> list[ProcessingStep]:
         """
@@ -395,8 +377,6 @@ class TextExtractor:
 
         return self.steps
 
-    # -------------------- Image Processing Methods --------------------
-
     @cache
     def process_image(
         self,
@@ -405,13 +385,6 @@ class TextExtractor:
     ) -> np.ndarray:
         """
         Processes the image according to the enabled processing steps.
-
-        Args:
-            image_path : The path to the image to process
-            params_key : A unique key representing the processing parameters
-
-        Returns:
-            The processed image
         """
         image           = self.load_image(image_path)
         processed_image = image.copy()
@@ -425,8 +398,6 @@ class TextExtractor:
                 else:
                     logger.warning(f"No processing function defined for step '{step.name}'")
         return processed_image
-
-    # -------------------- OCR and Text Extraction Methods --------------------
 
     @cache
     def annotate_image_with_text(
@@ -584,8 +555,6 @@ class TextExtractor:
         annotated_image = Image.alpha_composite(pil_image.convert('RGBA'), text_layer)
         return cv2.cvtColor(np.array(annotated_image), cv2.COLOR_RGBA2BGR)
 
-    # -------------------- UI and Visualization Methods --------------------
-
     def generate_sidebar_content(
         self,
         steps      : list[ProcessingStep],
@@ -594,13 +563,6 @@ class TextExtractor:
         """
         Generates a list of sidebar lines with text content, colors, and scaling factors.
         Used internally by render_sidebar to prepare display content.
-
-        Args:
-            steps      : List of processing steps to display
-            image_name : Name of the current image file
-
-        Returns:
-            List of tuples: (text content, RGB color, scale factor)
         """
         lines = [
             (f"[/] Current Image: {image_name}",  self.UI_COLORS['TEAL'],  0.85),
@@ -634,14 +596,6 @@ class TextExtractor:
     ) -> np.ndarray:
         """
         Renders the sidebar image with controls and settings.
-
-        Args:
-            steps         : List of processing steps to display
-            image_name    : Name of the current image file
-            window_height : Height of the window in pixels
-
-        Returns:
-            Rendered sidebar image as a NumPy array
         """
         lines             = self.generate_sidebar_content(steps, image_name)
         num_lines         = len(lines)
@@ -678,8 +632,6 @@ class TextExtractor:
 
         return sidebar
 
-    # -------------------- Headless Processing Method --------------------
-
     def extract_text_headless(self, image_files: list[Path]) -> dict:
         """
         Processes a list of images and extracts text from them in headless mode.
@@ -713,21 +665,17 @@ class TextExtractor:
             
         return results
 
-    # -------------------- Main Interactive Method --------------------
-
-    def interactive_experiment(
+    def run_headless(
         self,
         image_files     : list[Path],
-        params_override : dict | None = None,
-        output_json     : bool        = False
+        params_override : dict | None = None
     ):
         """
-        Runs the interactive experiment allowing parameter adjustment and image processing.
+        Processes images in headless mode.
 
         Args:
             image_files     : List of image file paths to process
             params_override : Optional parameter overrides
-            output_json     : Whether to output OCR results to JSON file on exit
         """
         if not image_files:
             raise ValueError("No image files provided")
@@ -736,96 +684,105 @@ class TextExtractor:
         if not self.steps or params_override:
             self.initialize_steps(params_override)
 
-        if not self.interactive_ui:
-            # Headless processing
-            results = self.extract_text_headless(image_files)
+        results = self.extract_text_headless(image_files)
 
-            if output_json:
-                with self.output_file.open('w', encoding='utf-8') as f:
-                    json.dump(results, f, ensure_ascii=False, indent=4)
-                logger.info(f"OCR results saved to {self.output_file}")
-        else:
-            # Interactive UI processing
-            cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
+        if self.output_json:
+            with self.output_file.open('w', encoding='utf-8') as f:
+                json.dump(results, f, ensure_ascii=False, indent=4)
+            logger.info(f"OCR results saved to {self.output_file}")
 
-            try:
-                while True:
-                    image_path                = image_files[self.state.image_idx]
-                    self.state.image_name     = image_path.name
-                    self.state.window_height  = self.DEFAULT_HEIGHT
+    def interactive_experiment(
+        self,
+        image_files     : list[Path],
+        params_override : dict | None = None
+    ):
+        """
+        Runs the interactive experiment allowing parameter adjustment and image processing.
 
-                    params_key     = str(hash(frozenset(self.current_parameters.items())))
-                    min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+        Args:
+            image_files     : List of image file paths to process
+            params_override : Optional parameter overrides
+        """
+        if not image_files:
+            raise ValueError("No image files provided")
 
-                    # Annotate image with OCR text if OCR is enabled
-                    ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
-                    if ocr_enabled:
-                        display_image = self.annotate_image_with_text(
-                            str(image_path),
-                            params_key,
-                            min_confidence
-                        )
-                    else:
-                        display_image = self.process_image(str(image_path), params_key)
+        # Initialize or update processing steps
+        if not self.steps or params_override:
+            self.initialize_steps(params_override)
 
-                    # Prepare image for display
-                    display_image = self.center_image_in_square(display_image)
-                    if display_image.ndim == 2:
-                        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+        cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
 
-                    # Scale image to window height
-                    display_scale = self.state.window_height / display_image.shape[0]
-                    display_image = cv2.resize(
-                        display_image,
-                        (int(display_image.shape[1] * display_scale), self.state.window_height)
+        try:
+            while True:
+                image_path                = image_files[self.state.image_idx]
+                self.state.image_name     = image_path.name
+                self.state.window_height  = self.DEFAULT_HEIGHT
+
+                params_key     = str(hash(frozenset(self.current_parameters.items())))
+                min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+
+                # Annotate image with OCR text if OCR is enabled
+                ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
+                if ocr_enabled:
+                    display_image = self.annotate_image_with_text(
+                        str(image_path),
+                        params_key,
+                        min_confidence
                     )
+                else:
+                    display_image = self.process_image(str(image_path), params_key)
 
-                    # Add sidebar and display
-                    sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
-                    combined_image = np.hstack([display_image, sidebar_image])
-                    cv2.imshow(self.WINDOW_NAME, combined_image)
-                    cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
+                # Prepare image for display
+                display_image = self.center_image_in_square(display_image)
+                if display_image.ndim == 2:
+                    display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
 
-                    # Handle user input
-                    key = cv2.waitKey(1) & 0xFF
-                    if key == 255:
-                        continue
+                # Scale image to window height
+                display_scale = self.state.window_height / display_image.shape[0]
+                display_image = cv2.resize(
+                    display_image,
+                    (int(display_image.shape[1] * display_scale), self.state.window_height)
+                )
 
-                    try:
-                        char = chr(key)
-                    except ValueError:
-                        continue  # Non-ASCII key pressed
+                # Add sidebar and display
+                sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
+                combined_image = np.hstack([display_image, sidebar_image])
+                cv2.imshow(self.WINDOW_NAME, combined_image)
+                cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
 
-                    if char == 'q':
-                        break
-                    elif char == '/':
-                        self.state.next_image(len(image_files))
-                    else:
-                        # Handle parameter adjustments
-                        for step in self.steps:
-                            if char == step.toggle_key:
-                                logger.info(step.toggle())
-                                break
+                # Handle user input
+                key = cv2.waitKey(1) & 0xFF
+                if key == 255:
+                    continue
 
-                            action = step.adjust_param(char)
-                            if action:
-                                logger.info(action)
-                                break
+                try:
+                    char = chr(key)
+                except ValueError:
+                    continue  # Non-ASCII key pressed
 
-            finally:
-                cv2.destroyAllWindows()
+                if char == 'q':
+                    break
+                elif char == '/':
+                    self.state.next_image(len(image_files))
+                else:
+                    # Handle parameter adjustments
+                    for step in self.steps:
+                        if char == step.toggle_key:
+                            logger.info(step.toggle())
+                            break
 
-                if output_json:
-                    results = self.extract_text_headless(image_files)
-                    with self.output_file.open('w', encoding = 'utf-8') as f:
-                        json.dump(results, f, ensure_ascii = False, indent = 4)
-                    logger.info(f"OCR results saved to {self.output_file}")
+                        action = step.adjust_param(char)
+                        if action:
+                            logger.info(action)
+                            break
 
+        finally:
+            cv2.destroyAllWindows()
 
 # -------------------- Main Entry Point --------------------
 
 if __name__ == "__main__":
-    extractor        = TextExtractor(interactive_ui = True)
+    extractor        = TextExtractor(headless = False)
     image_files      = extractor.find_image_files('images/books')
     params_override  = {
         'use_color_clahe'    : True,
@@ -834,8 +791,14 @@ if __name__ == "__main__":
         'use_shadow_removal' : True
     }
 
-    extractor.interactive_experiment(
-        image_files     = image_files,
-        params_override = params_override,
-        output_json     = True
-    )
+    if extractor.headless:
+        extractor.run_headless(
+            image_files     = image_files,
+            params_override = params_override
+        )
+        
+    else:
+        extractor.interactive_experiment(
+            image_files     = image_files,
+            params_override = params_override
+        )
