@@ -65,7 +65,7 @@
   parameters:
     - name         : rotation_angle
       display_name : Rotation Angle
-      value        : 0
+      value        : 90
       min          : 0
       max          : 270
       step         : 90

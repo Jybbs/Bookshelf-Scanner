@@ -272,7 +272,7 @@ class TextExtractor:
     @classmethod
     def find_image_files(
         cls,
-        target_subdirectory : str       = 'images/books',
+        target_subdirectory : str         = 'images/books',
         start_directory     : Path | None = None
     ) -> list[Path]:
         """
@@ -507,7 +507,8 @@ class TextExtractor:
             )
 
             # Filter results by confidence
-            return [result for result in ocr_results if result[2] >= min_confidence]
+            filtered_results = [result for result in ocr_results if result[2] >= min_confidence]
+            return filtered_results
 
         except Exception as e:
             logger.error(f"OCR failed for {image_path}: {e}")
@@ -695,7 +696,7 @@ class TextExtractor:
 
         for image_path in image_files:
             image_name = image_path.name
-            logger.info(f"Processing image: {image_name}")
+
             try:
                 ocr_results = self.extract_text_from_image(
                     str(image_path),
@@ -705,9 +706,11 @@ class TextExtractor:
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
                 ]
+
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
                 continue
+            
         return results
 
     # -------------------- Main Interactive Method --------------------
@@ -717,7 +720,7 @@ class TextExtractor:
         image_files     : list[Path],
         params_override : dict | None = None,
         output_json     : bool        = False
-    ) -> dict:
+    ):
         """
         Runs the interactive experiment allowing parameter adjustment and image processing.
 
@@ -725,9 +728,6 @@ class TextExtractor:
             image_files     : List of image file paths to process
             params_override : Optional parameter overrides
             output_json     : Whether to output OCR results to JSON file on exit
-
-        Returns:
-            Dictionary mapping image names to their OCR results
         """
         if not image_files:
             raise ValueError("No image files provided")
@@ -739,95 +739,88 @@ class TextExtractor:
         if not self.interactive_ui:
             # Headless processing
             results = self.extract_text_headless(image_files)
+
             if output_json:
-                with self.output_file.open('w', encoding = 'utf-8') as f:
-                    json.dump(results, f, ensure_ascii = False, indent = 4)
+                with self.output_file.open('w', encoding='utf-8') as f:
+                    json.dump(results, f, ensure_ascii=False, indent=4)
                 logger.info(f"OCR results saved to {self.output_file}")
-            return results
+        else:
+            # Interactive UI processing
+            cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
 
-        # Initialize UI
-        cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
+            try:
+                while True:
+                    image_path                = image_files[self.state.image_idx]
+                    self.state.image_name     = image_path.name
+                    self.state.window_height  = self.DEFAULT_HEIGHT
 
-        try:
-            while self.state.image_idx < len(image_files):
-                image_path                = image_files[self.state.image_idx]
-                self.state.image_name     = image_path.name
-                self.state.window_height  = self.DEFAULT_HEIGHT
+                    params_key     = str(hash(frozenset(self.current_parameters.items())))
+                    min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
 
-                params_key     = str(hash(frozenset(self.current_parameters.items())))
-                min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+                    # Annotate image with OCR text if OCR is enabled
+                    ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
+                    if ocr_enabled:
+                        display_image = self.annotate_image_with_text(
+                            str(image_path),
+                            params_key,
+                            min_confidence
+                        )
+                    else:
+                        display_image = self.process_image(str(image_path), params_key)
 
-                # Annotate image with OCR text if OCR is enabled
-                ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
-                if ocr_enabled:
-                    display_image = self.annotate_image_with_text(
-                        str(image_path),
-                        params_key,
-                        min_confidence
+                    # Prepare image for display
+                    display_image = self.center_image_in_square(display_image)
+                    if display_image.ndim == 2:
+                        display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+
+                    # Scale image to window height
+                    display_scale = self.state.window_height / display_image.shape[0]
+                    display_image = cv2.resize(
+                        display_image,
+                        (int(display_image.shape[1] * display_scale), self.state.window_height)
                     )
-                else:
-                    display_image = self.process_image(str(image_path), params_key)
 
-                # Prepare image for display
-                display_image = self.center_image_in_square(display_image)
-                if display_image.ndim == 2:
-                    display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
+                    # Add sidebar and display
+                    sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
+                    combined_image = np.hstack([display_image, sidebar_image])
+                    cv2.imshow(self.WINDOW_NAME, combined_image)
+                    cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
 
-                # Scale image to window height
-                display_scale = self.state.window_height / display_image.shape[0]
-                display_image = cv2.resize(
-                    display_image,
-                    (int(display_image.shape[1] * display_scale), self.state.window_height)
-                )
+                    # Handle user input
+                    key = cv2.waitKey(1) & 0xFF
+                    if key == 255:
+                        continue
 
-                # Add sidebar and display
-                sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
-                combined_image = np.hstack([display_image, sidebar_image])
-                cv2.imshow(self.WINDOW_NAME, combined_image)
-                cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
+                    try:
+                        char = chr(key)
+                    except ValueError:
+                        continue  # Non-ASCII key pressed
 
-                # Handle user input
-                key = cv2.waitKey(1) & 0xFF
-                if key == 255:
-                    continue
+                    if char == 'q':
+                        break
+                    elif char == '/':
+                        self.state.next_image(len(image_files))
+                    else:
+                        # Handle parameter adjustments
+                        for step in self.steps:
+                            if char == step.toggle_key:
+                                logger.info(step.toggle())
+                                break
 
-                try:
-                    char = chr(key)
-                except ValueError:
-                    continue  # Non-ASCII key pressed
+                            action = step.adjust_param(char)
+                            if action:
+                                logger.info(action)
+                                break
 
-                if char == 'q':
-                    break
-                elif char == '/':
-                    self.state.next_image(len(image_files))
-                else:
-                    # Handle parameter adjustments
-                    for step in self.steps:
-                        if char == step.toggle_key:
-                            logger.info(step.toggle())
-                            self.process_image.cache_clear()
-                            self.annotate_image_with_text.cache_clear()
-                            self.extract_text_from_image.cache_clear()
-                            break
+            finally:
+                cv2.destroyAllWindows()
 
-                        action = step.adjust_param(char)
-                        if action:
-                            logger.info(action)
-                            self.process_image.cache_clear()
-                            self.annotate_image_with_text.cache_clear()
-                            self.extract_text_from_image.cache_clear()
-                            break
+                if output_json:
+                    results = self.extract_text_headless(image_files)
+                    with self.output_file.open('w', encoding = 'utf-8') as f:
+                        json.dump(results, f, ensure_ascii = False, indent = 4)
+                    logger.info(f"OCR results saved to {self.output_file}")
 
-        finally:
-            cv2.destroyAllWindows()
-
-            if output_json:
-                results = self.extract_text_headless(image_files)
-                with self.output_file.open('w', encoding = 'utf-8') as f:
-                    json.dump(results, f, ensure_ascii = False, indent = 4)
-                logger.info(f"OCR results saved to {self.output_file}")
-
-            return {}  # Return an empty dict as interactive mode doesn't collect results
 
 # -------------------- Main Entry Point --------------------
 
@@ -835,14 +828,13 @@ if __name__ == "__main__":
     extractor        = TextExtractor(interactive_ui = True)
     image_files      = extractor.find_image_files('images/books')
     params_override  = {
-        'rotation_angle'     : 90,
         'use_color_clahe'    : True,
         'use_image_rotation' : True,
         'use_ocr'            : True,
-        'use_shadow_removal' : True,
+        'use_shadow_removal' : True
     }
 
-    results = extractor.interactive_experiment(
+    extractor.interactive_experiment(
         image_files     = image_files,
         params_override = params_override,
         output_json     = True
