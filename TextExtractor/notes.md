@@ -1,0 +1,3 @@
+- Closing the program is slow — it seems like the cache is being ignored at the time of generating the JSON or something.
+- There's some redundancy about how `interactive_ui` and `output_json` are handled at the end — we should assume that `interactive_experiment` will only be used if `interactive_ui` is true
+- Maybe we reverse this and have it be `headless` = True with a second `output_json` keyword that is False by default, and if headless is true, then orchestrate it such that it doesn't ever get to `interactive_experiment`
