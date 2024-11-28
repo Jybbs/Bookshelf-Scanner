@@ -4,67 +4,54 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true
         },
         "text_results": [
             [
                 "ANNE FRANK",
-                0.9972693309471022
+                0.9970578068784467
             ],
             [
                 "THE",
-                0.9985442070935469
+                0.9985740715975152
             ],
             [
                 "DIARY OFAYOLING GIRL",
-                0.6877848274154714
+                0.7009196762642906
             ]
         ],
         "metrics": {
-            "score": 26.724,
+            "score": 26.9847,
             "char_count": 33,
-            "iterations": 6
+            "iterations": 16
         }
     },
     "1.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "3",
-                0.85406289891489
+                "S8\"6",
+                0.6698684692382812
             ],
             [
                 "THE TORESHADOWING",
-                0.8298176018397501
-            ],
-            [
-                "1",
-                0.9467268926832482
+                0.8209290652895276
             ]
         ],
         "metrics": {
-            "score": 15.9077,
-            "char_count": 19,
-            "iterations": 3
+            "score": 16.6353,
+            "char_count": 21,
+            "iterations": 14
         }
     },
     "10.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_contrast_adjustment": true
         },
         "text_results": [
             [
@@ -97,139 +84,118 @@
     "11.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_color_clahe": true,
+            "use_brightness_adjustment": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "ANN RINALDI",
-                0.8690748123449653
+                0.7450629888768877
             ],
             [
-                "ML",
-                0.9500486490845859
+                "F",
+                0.9141812106211233
             ],
             [
                 "7",
-                0.8721874656488495
+                0.9663674755875071
             ],
             [
-                "2",
-                0.7546906886787497
+                "Quilt",
+                0.9989699492339854
             ],
             [
                 "Harcourt",
-                0.8991644138595691
+                0.8416927688811537
             ]
         ],
         "metrics": {
-            "score": 20.2801,
-            "char_count": 23,
-            "iterations": 5
+            "score": 21.8046,
+            "char_count": 26,
+            "iterations": 23
         }
     },
     "12.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_shadow_removal": true,
+            "use_color_clahe": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "Rubin",
-                0.6400337702657012
-            ],
-            [
                 "Betsy",
-                0.9958219188230091
+                0.9997731543390325
             ],
             [
-                "0",
-                0.7106712003782292
+                "Rabi",
+                0.911482572555542
             ],
             [
                 "Emperor",
-                0.9984557511952815
+                0.9991864362821745
+            ],
+            [
+                "1",
+                0.5216337615627573
             ]
         ],
         "metrics": {
-            "score": 15.8791,
-            "char_count": 18,
-            "iterations": 4
+            "score": 16.1607,
+            "char_count": 17,
+            "iterations": 18
         }
     },
     "13.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "Wolf by the Ears",
-                0.9053914398378037
+                0.9129567063520523
             ],
             [
                 "Rinaldi",
-                0.999150675874637
+                0.9957812045035512
             ]
         ],
         "metrics": {
-            "score": 21.4803,
+            "score": 21.5778,
             "char_count": 23,
-            "iterations": 5
+            "iterations": 14
         }
     },
     "14.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "1",
-                0.5302401968706683
+                "JOHNNY TREMAIN",
+                0.9893577954452548
             ],
             [
                 "1",
-                0.9299031839069052
-            ],
-            [
-                "JOHNNY",
-                0.9970585188564538
-            ],
-            [
-                "TREMAJN",
-                0.8587405511429629
+                0.9425832679799129
             ]
         ],
         "metrics": {
-            "score": 13.4537,
+            "score": 14.7936,
             "char_count": 15,
-            "iterations": 7
+            "iterations": 20
         }
     },
     "15.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -254,40 +220,34 @@
     "16.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "Avi",
-                0.9967007530822316
+                "Confessiens gf Chartotte 'Doyte",
+                0.5039440727368898
             ],
             [
-                "~",
-                0.8037176850472783
+                "Fv",
+                0.5358786167086729
             ],
             [
-                "4",
-                0.9997942553500394
+                "\"Thc STrue",
+                0.6396615464164032
             ]
         ],
         "metrics": {
-            "score": 4.7936,
-            "char_count": 5,
-            "iterations": 6
+            "score": 23.0906,
+            "char_count": 43,
+            "iterations": 23
         }
     },
     "17.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_contrast_adjustment": true
         },
         "text_results": [
             [
@@ -321,10 +281,7 @@
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -347,34 +304,34 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
                 "SARAH BISHOP",
-                0.9831436958088561
+                0.9751792124778125
             ],
             [
                 "SCOTT ODELL",
-                0.9519587302500522
+                0.9167217357445862
+            ],
+            [
+                "12",
+                0.5273648443242418
             ]
         ],
         "metrics": {
-            "score": 22.2693,
-            "char_count": 23,
-            "iterations": 6
+            "score": 22.8408,
+            "char_count": 25,
+            "iterations": 27
         }
     },
     "2.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -409,42 +366,36 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true
         },
         "text_results": [
             [
                 "BRENAMAN",
-                0.9994792195110247
+                0.9994936789563356
             ],
             [
                 "<",
-                0.5182858926629166
+                0.5173930500325383
             ],
             [
                 "Cyvys",
-                0.9175286933073531
+                0.9238703945922141
             ],
             [
                 "3",
-                0.7606035227082089
+                0.761929764486613
             ]
         ],
         "metrics": {
-            "score": 13.8624,
+            "score": 13.8946,
             "char_count": 15,
-            "iterations": 6
+            "iterations": 16
         }
     },
     "21.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_shadow_removal": true
         },
         "text_results": [
             [
@@ -481,11 +432,7 @@
     "22.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_shadow_removal": true
         },
         "text_results": [
             [
@@ -526,10 +473,6 @@
     "23.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
             "use_image_rotation": true
         },
         "text_results": [
@@ -559,11 +502,7 @@
     "24.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -596,52 +535,30 @@
     "25.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_color_clahe": true,
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "PINKNEY",
-                0.799801383887322
+                "With THE Might Of ANGELS",
+                0.8666020885219227
             ],
             [
-                "1",
-                0.9723402301909942
-            ],
-            [
-                "THE",
-                0.9974832003198719
-            ],
-            [
-                "Might",
-                0.9385106965859358
-            ],
-            [
-                "6",
-                0.9437936803601055
-            ],
-            [
-                "ANGELS",
-                0.999107844635263
+                "5",
+                0.5783899167965956
             ]
         ],
         "metrics": {
-            "score": 21.1944,
-            "char_count": 23,
-            "iterations": 4
+            "score": 21.3768,
+            "char_count": 25,
+            "iterations": 23
         }
     },
     "26.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_contrast_adjustment": true
         },
         "text_results": [
             [
@@ -679,46 +596,43 @@
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true,
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
-        "text_results": [],
+        "text_results": [
+            [
+                ":",
+                0.6890857021529797
+            ]
+        ],
         "metrics": {
-            "score": 0.0,
-            "char_count": 0,
-            "iterations": 1
+            "score": 0.6891,
+            "char_count": 1,
+            "iterations": 27
         }
     },
     "28.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
                 "Lit CHAT",
-                0.8722672366013209
+                0.9681138153137228
             ]
         ],
         "metrics": {
-            "score": 6.9781,
+            "score": 7.7449,
             "char_count": 8,
-            "iterations": 6
+            "iterations": 12
         }
     },
     "29.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
             "use_image_rotation": true
         },
         "text_results": [
@@ -740,42 +654,40 @@
     "3.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
+                "Hang",
+                0.8301152586936951
+            ],
+            [
+                "Tho % san d",
+                0.5411744827162324
+            ],
+            [
                 "NNV",
-                0.9998086675196108
+                0.9993433646475374
             ],
             [
-                "RNAL DI",
-                0.6963538186456661
-            ],
-            [
-                "Trees",
-                0.6180340355606945
-            ],
-            [
-                "Thh Rubbon",
-                0.5338392226017072
-            ],
-            [
-                "ith",
-                0.9647511306869996
+                "RINALDI",
+                0.7898639734029357
             ],
             [
                 "5",
-                0.9699059037359348
+                0.8736567587902897
+            ],
+            [
+                "Trees with Ribbons",
+                0.8347969381232703
             ]
         ],
         "metrics": {
-            "score": 20.1666,
-            "char_count": 29,
-            "iterations": 3
+            "score": 33.7005,
+            "char_count": 44,
+            "iterations": 23
         }
     },
     "30.jpg": {
@@ -783,67 +695,55 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true
         },
         "text_results": [
             [
                 "ANNE FRANK",
-                0.9972693309471022
+                0.9970578068784467
             ],
             [
                 "THE",
-                0.9985442070935469
+                0.9985740715975152
             ],
             [
                 "DIARY OFAYOLING GIRL",
-                0.6877848274154714
+                0.7009196762642906
             ]
         ],
         "metrics": {
-            "score": 26.724,
+            "score": 26.9847,
             "char_count": 33,
-            "iterations": 6
+            "iterations": 16
         }
     },
     "31.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "3",
-                0.85406289891489
+                "S8\"6",
+                0.6698684692382812
             ],
             [
                 "THE TORESHADOWING",
-                0.8298176018397501
-            ],
-            [
-                "1",
-                0.9467268926832482
+                0.8209290652895276
             ]
         ],
         "metrics": {
-            "score": 15.9077,
-            "char_count": 19,
-            "iterations": 3
+            "score": 16.6353,
+            "char_count": 21,
+            "iterations": 14
         }
     },
     "32.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -876,73 +776,68 @@
     "33.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
+                "Hang",
+                0.8301152586936951
+            ],
+            [
+                "Tho % san d",
+                0.5411744827162324
+            ],
+            [
                 "NNV",
-                0.9998086675196108
+                0.9993433646475374
             ],
             [
-                "RNAL DI",
-                0.6963538186456661
-            ],
-            [
-                "Trees",
-                0.6180340355606945
-            ],
-            [
-                "Thh Rubbon",
-                0.5338392226017072
-            ],
-            [
-                "ith",
-                0.9647511306869996
+                "RINALDI",
+                0.7898639734029357
             ],
             [
                 "5",
-                0.9699059037359348
+                0.8736567587902897
+            ],
+            [
+                "Trees with Ribbons",
+                0.8347969381232703
             ]
         ],
         "metrics": {
-            "score": 20.1666,
-            "char_count": 29,
-            "iterations": 3
+            "score": 33.7005,
+            "char_count": 44,
+            "iterations": 23
         }
     },
     "34.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
+                "1",
+                0.865194494849991
+            ],
+            [
                 "ANN RINALDI",
-                0.9097020977990465
+                0.9133109412248462
             ]
         ],
         "metrics": {
-            "score": 10.0067,
-            "char_count": 11,
-            "iterations": 7
+            "score": 10.9116,
+            "char_count": 12,
+            "iterations": 14
         }
     },
     "35.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_shadow_removal": true
         },
         "text_results": [
             [
@@ -987,106 +882,90 @@
     "36.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "William",
-                0.9955675539520485
+                "William Lavenler",
+                0.7966009678611843
             ],
             [
-                "JUST",
-                0.953717827796936
-            ],
-            [
-                "JANE",
-                0.9999781847000122
+                "JUST JANE",
+                0.9975689968993482
             ],
             [
                 "5",
-                0.9114392165053609
+                0.6820841590561031
             ]
         ],
         "metrics": {
-            "score": 15.6952,
-            "char_count": 16,
-            "iterations": 3
+            "score": 22.4058,
+            "char_count": 26,
+            "iterations": 12
         }
     },
     "37.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_shadow_removal": true,
+            "use_color_clahe": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "BREA K",
-                0.8494140417882485
+                0.8896729830482862
             ],
             [
                 "D",
-                0.8417013980973174
+                0.9364486053732577
             ],
             [
-                "ANN RINALD[",
-                0.6897196887326958
+                "ANN",
+                0.9998232581690891
+            ],
+            [
+                "RINALD [",
+                0.9041926240242648
             ],
             [
                 "witu CHARity",
-                0.727294817788578
-            ],
-            [
-                "5",
-                0.6854282668976772
+                0.6390088240875549
             ]
         ],
         "metrics": {
-            "score": 22.9381,
-            "char_count": 31,
-            "iterations": 5
+            "score": 24.1756,
+            "char_count": 30,
+            "iterations": 18
         }
     },
     "38.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "FINISHING BEGCA",
-                0.9497303467072938
+                0.9870952078342677
             ],
             [
                 "1",
-                0.8794134841838428
+                0.8761920532841749
             ]
         ],
         "metrics": {
-            "score": 15.1254,
+            "score": 15.6826,
             "char_count": 16,
-            "iterations": 5
+            "iterations": 14
         }
     },
     "39.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -1115,32 +994,29 @@
     "4.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
+                "1",
+                0.865194494849991
+            ],
+            [
                 "ANN RINALDI",
-                0.9097020977990465
+                0.9133109412248462
             ]
         ],
         "metrics": {
-            "score": 10.0067,
-            "char_count": 11,
-            "iterations": 7
+            "score": 10.9116,
+            "char_count": 12,
+            "iterations": 14
         }
     },
     "40.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_contrast_adjustment": true
         },
         "text_results": [
             [
@@ -1173,139 +1049,118 @@
     "41.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_color_clahe": true,
+            "use_brightness_adjustment": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "ANN RINALDI",
-                0.8690748123449653
+                0.7450629888768877
             ],
             [
-                "ML",
-                0.9500486490845859
+                "F",
+                0.9141812106211233
             ],
             [
                 "7",
-                0.8721874656488495
+                0.9663674755875071
             ],
             [
-                "2",
-                0.7546906886787497
+                "Quilt",
+                0.9989699492339854
             ],
             [
                 "Harcourt",
-                0.8991644138595691
+                0.8416927688811537
             ]
         ],
         "metrics": {
-            "score": 20.2801,
-            "char_count": 23,
-            "iterations": 5
+            "score": 21.8046,
+            "char_count": 26,
+            "iterations": 23
         }
     },
     "42.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_shadow_removal": true,
+            "use_color_clahe": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "Rubin",
-                0.6400337702657012
-            ],
-            [
                 "Betsy",
-                0.9958219188230091
+                0.9997731543390325
             ],
             [
-                "0",
-                0.7106712003782292
+                "Rabi",
+                0.911482572555542
             ],
             [
                 "Emperor",
-                0.9984557511952815
+                0.9991864362821745
+            ],
+            [
+                "1",
+                0.5216337615627573
             ]
         ],
         "metrics": {
-            "score": 15.8791,
-            "char_count": 18,
-            "iterations": 4
+            "score": 16.1607,
+            "char_count": 17,
+            "iterations": 18
         }
     },
     "43.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "Wolf by the Ears",
-                0.9053914398378037
+                0.9129567063520523
             ],
             [
                 "Rinaldi",
-                0.999150675874637
+                0.9957812045035512
             ]
         ],
         "metrics": {
-            "score": 21.4803,
+            "score": 21.5778,
             "char_count": 23,
-            "iterations": 5
+            "iterations": 14
         }
     },
     "44.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
             "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "1",
-                0.5302401968706683
+                "JOHNNY TREMAIN",
+                0.9893577954452548
             ],
             [
                 "1",
-                0.9299031839069052
-            ],
-            [
-                "JOHNNY",
-                0.9970585188564538
-            ],
-            [
-                "TREMAJN",
-                0.8587405511429629
+                0.9425832679799129
             ]
         ],
         "metrics": {
-            "score": 13.4537,
+            "score": 14.7936,
             "char_count": 15,
-            "iterations": 7
+            "iterations": 20
         }
     },
     "45.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -1330,40 +1185,34 @@
     "46.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "Avi",
-                0.9967007530822316
+                "Confessiens gf Chartotte 'Doyte",
+                0.5039440727368898
             ],
             [
-                "~",
-                0.8037176850472783
+                "Fv",
+                0.5358786167086729
             ],
             [
-                "4",
-                0.9997942553500394
+                "\"Thc STrue",
+                0.6396615464164032
             ]
         ],
         "metrics": {
-            "score": 4.7936,
-            "char_count": 5,
-            "iterations": 6
+            "score": 23.0906,
+            "char_count": 43,
+            "iterations": 23
         }
     },
     "47.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_contrast_adjustment": true
         },
         "text_results": [
             [
@@ -1397,10 +1246,7 @@
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -1423,34 +1269,33 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
                 "SARAH BISHOP",
-                0.9831436958088561
+                0.9751792124778125
             ],
             [
                 "SCOTT ODELL",
-                0.9519587302500522
+                0.9167217357445862
+            ],
+            [
+                "12",
+                0.5273648443242418
             ]
         ],
         "metrics": {
-            "score": 22.2693,
-            "char_count": 23,
-            "iterations": 6
+            "score": 22.8408,
+            "char_count": 25,
+            "iterations": 27
         }
     },
     "5.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_shadow_removal": true
         },
         "text_results": [
             [
@@ -1497,42 +1342,36 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_brightness_adjustment": true
         },
         "text_results": [
             [
                 "BRENAMAN",
-                0.9994792195110247
+                0.9994936789563356
             ],
             [
                 "<",
-                0.5182858926629166
+                0.5173930500325383
             ],
             [
                 "Cyvys",
-                0.9175286933073531
+                0.9238703945922141
             ],
             [
                 "3",
-                0.7606035227082089
+                0.761929764486613
             ]
         ],
         "metrics": {
-            "score": 13.8624,
+            "score": 13.8946,
             "char_count": 15,
-            "iterations": 6
+            "iterations": 16
         }
     },
     "51.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_shadow_removal": true
         },
         "text_results": [
             [
@@ -1569,11 +1408,7 @@
     "52.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_shadow_removal": true
         },
         "text_results": [
             [
@@ -1614,10 +1449,6 @@
     "53.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
             "use_image_rotation": true
         },
         "text_results": [
@@ -1647,11 +1478,7 @@
     "54.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
@@ -1684,52 +1511,30 @@
     "55.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_color_clahe": true,
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "PINKNEY",
-                0.799801383887322
+                "With THE Might Of ANGELS",
+                0.8666020885219227
             ],
             [
-                "1",
-                0.9723402301909942
-            ],
-            [
-                "THE",
-                0.9974832003198719
-            ],
-            [
-                "Might",
-                0.9385106965859358
-            ],
-            [
-                "6",
-                0.9437936803601055
-            ],
-            [
-                "ANGELS",
-                0.999107844635263
+                "5",
+                0.5783899167965956
             ]
         ],
         "metrics": {
-            "score": 21.1944,
-            "char_count": 23,
-            "iterations": 4
+            "score": 21.3768,
+            "char_count": 25,
+            "iterations": 23
         }
     },
     "56.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": true,
-            "use_image_rotation": false
+            "use_contrast_adjustment": true
         },
         "text_results": [
             [
@@ -1767,46 +1572,43 @@
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true,
+            "use_brightness_adjustment": true,
+            "use_image_rotation": true
         },
-        "text_results": [],
+        "text_results": [
+            [
+                ":",
+                0.6890857021529797
+            ]
+        ],
         "metrics": {
-            "score": 0.0,
-            "char_count": 0,
-            "iterations": 1
+            "score": 0.6891,
+            "char_count": 1,
+            "iterations": 27
         }
     },
     "58.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
             "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
                 "Lit CHAT",
-                0.8722672366013209
+                0.9681138153137228
             ]
         ],
         "metrics": {
-            "score": 6.9781,
+            "score": 7.7449,
             "char_count": 8,
-            "iterations": 6
+            "iterations": 12
         }
     },
     "59.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
             "use_image_rotation": true
         },
         "text_results": [
@@ -1828,106 +1630,90 @@
     "6.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": true,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true,
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "William",
-                0.9955675539520485
+                "William Lavenler",
+                0.7966009678611843
             ],
             [
-                "JUST",
-                0.953717827796936
-            ],
-            [
-                "JANE",
-                0.9999781847000122
+                "JUST JANE",
+                0.9975689968993482
             ],
             [
                 "5",
-                0.9114392165053609
+                0.6820841590561031
             ]
         ],
         "metrics": {
-            "score": 15.6952,
-            "char_count": 16,
-            "iterations": 3
+            "score": 22.4058,
+            "char_count": 26,
+            "iterations": 12
         }
     },
     "7.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_shadow_removal": true,
+            "use_color_clahe": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "BREA K",
-                0.8494140417882485
+                0.8896729830482862
             ],
             [
                 "D",
-                0.8417013980973174
+                0.9364486053732577
             ],
             [
-                "ANN RINALD[",
-                0.6897196887326958
+                "ANN",
+                0.9998232581690891
+            ],
+            [
+                "RINALD [",
+                0.9041926240242648
             ],
             [
                 "witu CHARity",
-                0.727294817788578
-            ],
-            [
-                "5",
-                0.6854282668976772
+                0.6390088240875549
             ]
         ],
         "metrics": {
-            "score": 22.9381,
-            "char_count": 31,
-            "iterations": 5
+            "score": 24.1756,
+            "char_count": 30,
+            "iterations": 18
         }
     },
     "8.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": false,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_image_rotation": true
         },
         "text_results": [
             [
                 "FINISHING BEGCA",
-                0.9497303467072938
+                0.9870952078342677
             ],
             [
                 "1",
-                0.8794134841838428
+                0.8761920532841749
             ]
         ],
         "metrics": {
-            "score": 15.1254,
+            "score": 15.6826,
             "char_count": 16,
-            "iterations": 5
+            "iterations": 14
         }
     },
     "9.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": false,
-            "use_color_clahe": true,
-            "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_color_clahe": true
         },
         "text_results": [
             [
