@@ -3,7 +3,7 @@
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -11,146 +11,182 @@
         "text_results": [
             [
                 "ANNE FRANK",
-                0.9936837949306894
+                0.9972693309471022
             ],
             [
                 "THE",
-                0.9965623387294619
+                0.9985442070935469
             ],
             [
-                "DIARV",
-                0.9248273936077791
+                "DIARY OFAYOLING GIRL",
+                0.6877848274154714
             ]
         ],
         "metrics": {
-            "score": 17.5507,
-            "char_count": 18,
-            "iterations": 0
+            "score": 26.724,
+            "char_count": 33,
+            "iterations": 6
         }
     },
     "1.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
+                "3",
+                0.85406289891489
+            ],
+            [
                 "THE TORESHADOWING",
-                0.7467613816378346
+                0.8298176018397501
+            ],
+            [
+                "1",
+                0.9467268926832482
             ]
         ],
         "metrics": {
-            "score": 12.6949,
-            "char_count": 17,
-            "iterations": 0
+            "score": 15.9077,
+            "char_count": 19,
+            "iterations": 3
         }
     },
     "10.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "Chinese",
-                0.9999844102815634
+                "58",
+                0.9475970485242384
             ],
             [
-                "Cinderella",
-                0.7795352313038705
+                "8",
+                0.9126595359226854
+            ],
+            [
+                "Chinese",
+                0.9999518788822722
+            ],
+            [
+                "C",
+                0.9087548646643064
+            ],
+            [
+                "inderella",
+                0.9990801284942058
             ]
         ],
         "metrics": {
-            "score": 14.7952,
-            "char_count": 17,
-            "iterations": 0
+            "score": 19.708,
+            "char_count": 20,
+            "iterations": 4
         }
     },
     "11.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "ANN",
-                0.9999183733850651
+                "ANN RINALDI",
+                0.8690748123449653
             ],
             [
-                "RINALDI",
-                0.6834752801404956
+                "ML",
+                0.9500486490845859
             ],
             [
-                "F",
-                0.864986822495112
+                "7",
+                0.8721874656488495
             ],
             [
-                "Quilt",
-                0.8129676650170315
+                "2",
+                0.7546906886787497
+            ],
+            [
+                "Harcourt",
+                0.8991644138595691
             ]
         ],
         "metrics": {
-            "score": 12.7139,
-            "char_count": 16,
-            "iterations": 0
+            "score": 20.2801,
+            "char_count": 23,
+            "iterations": 5
         }
     },
     "12.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
+                "Rubin",
+                0.6400337702657012
+            ],
+            [
+                "Betsy",
+                0.9958219188230091
+            ],
+            [
+                "0",
+                0.7106712003782292
+            ],
+            [
                 "Emperor",
-                0.965075174650686
+                0.9984557511952815
             ]
         ],
         "metrics": {
-            "score": 6.7555,
-            "char_count": 7,
-            "iterations": 0
+            "score": 15.8791,
+            "char_count": 18,
+            "iterations": 4
         }
     },
     "13.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
                 "Wolf by the Ears",
-                0.7801655462942237
+                0.9053914398378037
             ],
             [
                 "Rinaldi",
-                0.9996048259820394
+                0.999150675874637
             ]
         ],
         "metrics": {
-            "score": 19.4799,
+            "score": 21.4803,
             "char_count": 23,
-            "iterations": 0
+            "iterations": 5
         }
     },
     "14.jpg": {
@@ -158,76 +194,68 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "1",
-                0.5245013967136316
+                0.5302401968706683
             ],
             [
                 "1",
-                0.9312416298178192
+                0.9299031839069052
             ],
             [
-                "1",
-                0.8596289165554403
+                "JOHNNY",
+                0.9970585188564538
             ],
             [
                 "TREMAJN",
-                0.8638316009843148
+                0.8587405511429629
             ]
         ],
         "metrics": {
-            "score": 8.3622,
-            "char_count": 10,
-            "iterations": 0
+            "score": 13.4537,
+            "char_count": 15,
+            "iterations": 7
         }
     },
     "15.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_shadow_removal": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "13",
-                0.683157010674064
+                "2",
+                0.9944334227435014
             ],
             [
-                "SOLDIER'S",
-                0.8097963837413603
+                "SOLDIER S HEART",
+                0.8237807208224089
             ],
             [
-                "HEART",
-                0.9976538268815571
-            ],
-            [
-                "GARY",
-                0.9949164390563965
-            ],
-            [
-                "PAULSEN",
-                0.9997876396612878
+                "GARY PAULSEN",
+                0.9952728302372438
             ]
         ],
         "metrics": {
-            "score": 24.6209,
-            "char_count": 27,
-            "iterations": 0
+            "score": 25.2944,
+            "char_count": 28,
+            "iterations": 2
         }
     },
     "16.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -235,57 +263,65 @@
         "text_results": [
             [
                 "Avi",
-                0.9748732089772996
+                0.9967007530822316
+            ],
+            [
+                "~",
+                0.8037176850472783
             ],
             [
                 "4",
-                0.9991891836256492
+                0.9997942553500394
             ]
         ],
         "metrics": {
-            "score": 3.9238,
-            "char_count": 4,
-            "iterations": 0
+            "score": 4.7936,
+            "char_count": 5,
+            "iterations": 6
         }
     },
     "17.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "B ETTE",
-                0.5912779793092109
+                "B E TTE",
+                0.7932596154363244
             ],
             [
                 "1",
-                0.7876336939757635
+                0.7091364662484381
+            ],
+            [
+                "SuMMER ef My",
+                0.6502709858857688
             ],
             [
                 "GERMAN",
-                0.9831181320047515
+                0.9902663922581839
             ],
             [
-                "1",
-                0.8538279269713236
+                "SOLDIER",
+                0.8868351088514476
             ]
         ],
         "metrics": {
-            "score": 11.0878,
-            "char_count": 14,
-            "iterations": 0
+            "score": 26.2146,
+            "char_count": 33,
+            "iterations": 4
         }
     },
     "18.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -293,24 +329,24 @@
         "text_results": [
             [
                 "CHOTJEWITZ",
-                0.9017704490041355
+                0.9317674869134633
             ],
             [
-                "DANIEL HALF HUMAN}",
-                0.7869162717797094
+                "DANIEL HALF HUMAN",
+                0.9870536536154686
             ]
         ],
         "metrics": {
-            "score": 23.1822,
-            "char_count": 28,
-            "iterations": 0
+            "score": 26.0976,
+            "char_count": 27,
+            "iterations": 6
         }
     },
     "19.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -318,24 +354,24 @@
         "text_results": [
             [
                 "SARAH BISHOP",
-                0.6763681110296687
+                0.9831436958088561
             ],
             [
                 "SCOTT ODELL",
-                0.8535183547115995
+                0.9519587302500522
             ]
         ],
         "metrics": {
-            "score": 17.5051,
+            "score": 22.2693,
             "char_count": 23,
-            "iterations": 0
+            "iterations": 6
         }
     },
     "2.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -343,40 +379,36 @@
         "text_results": [
             [
                 "ANN",
-                0.9996598032310127
+                0.9998606984567576
             ],
             [
-                "2",
-                0.866398332073004
-            ],
-            [
-                "ALDI",
-                0.992128849029541
+                "RINALDI",
+                0.891159009983893
             ],
             [
                 "3",
-                0.8076051225044125
+                0.7920033237870463
             ],
             [
                 "`",
-                0.5262600306250285
+                0.9212167360220889
             ],
             [
-                "1",
-                0.6310032356687181
+                "arcour",
+                0.767709513606352
             ]
         ],
         "metrics": {
-            "score": 9.7988,
-            "char_count": 11,
-            "iterations": 0
+            "score": 15.5572,
+            "char_count": 18,
+            "iterations": 6
         }
     },
     "20.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -384,21 +416,25 @@
         "text_results": [
             [
                 "BRENAMAN",
-                0.7455814733654215
+                0.9994792195110247
             ],
             [
-                "9",
-                0.9777544159428295
+                "<",
+                0.5182858926629166
+            ],
+            [
+                "Cyvys",
+                0.9175286933073531
             ],
             [
                 "3",
-                0.6871020534505448
+                0.7606035227082089
             ]
         ],
         "metrics": {
-            "score": 7.6295,
-            "char_count": 10,
-            "iterations": 0
+            "score": 13.8624,
+            "char_count": 15,
+            "iterations": 6
         }
     },
     "21.jpg": {
@@ -439,7 +475,7 @@
         "metrics": {
             "score": 22.5478,
             "char_count": 32,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "22.jpg": {
@@ -484,47 +520,47 @@
         "metrics": {
             "score": 30.5562,
             "char_count": 32,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "23.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "ROBINSON",
-                0.998562364297998
+                "CHIDof",
+                0.9511732966412012
             ],
             [
-                "8",
-                0.8093469172395231
+                "DREAM",
+                0.9898376280646454
             ],
             [
                 "the",
-                0.837634265422821
+                0.9998598037418102
             ],
             [
-                "2",
-                0.9611000641085674
+                "ROBINSON",
+                0.9980736035062282
             ]
         ],
         "metrics": {
-            "score": 12.2718,
-            "char_count": 13,
-            "iterations": 0
+            "score": 21.6404,
+            "char_count": 22,
+            "iterations": 5
         }
     },
     "24.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_shadow_removal": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -532,103 +568,111 @@
         "text_results": [
             [
                 "APPLEGATE",
-                0.9525262250330357
+                0.8904348689886827
             ],
             [
                 "HOME",
-                0.9985833764076233
+                0.9982534050941467
             ],
             [
-                "Jo",
-                0.939535136073898
+                "of",
+                0.9080431562097865
             ],
             [
-                "4",
-                0.6631157486796759
+                "the",
+                0.8490484311867085
             ],
             [
                 "BRAVE",
-                0.9994781659237781
+                0.9991618268255809
             ]
         ],
         "metrics": {
-            "score": 20.1066,
-            "char_count": 21,
-            "iterations": 0
+            "score": 21.366,
+            "char_count": 23,
+            "iterations": 2
         }
     },
     "25.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "1",
-                0.5459028419529801
+                "PINKNEY",
+                0.799801383887322
             ],
             [
-                "With THE",
-                0.8242059890337295
+                "1",
+                0.9723402301909942
+            ],
+            [
+                "THE",
+                0.9974832003198719
             ],
             [
                 "Might",
-                0.9667131089940699
+                0.9385106965859358
             ],
             [
                 "6",
-                0.9236156776650297
+                0.9437936803601055
             ],
             [
                 "ANGELS",
-                0.996657588176945
+                0.999107844635263
             ]
         ],
         "metrics": {
-            "score": 18.8767,
-            "char_count": 21,
-            "iterations": 0
+            "score": 21.1944,
+            "char_count": 23,
+            "iterations": 4
         }
     },
     "26.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "Houston",
-                0.9957995602249697
-            ],
-            [
-                "6",
-                0.9862145555611193
-            ],
-            [
-                "Manzanar",
-                0.9322344198211067
-            ],
-            [
-                "2",
-                0.5275174060705154
+                0.9924080608612155
             ],
             [
                 "1",
-                0.9415298982692235
+                0.6995253309169271
+            ],
+            [
+                "6",
+                0.9940280933734336
+            ],
+            [
+                "Manzanar",
+                0.94278256196409
+            ],
+            [
+                "2",
+                0.934673493167427
+            ],
+            [
+                "{",
+                0.9170531211723052
             ]
         ],
         "metrics": {
-            "score": 16.8837,
-            "char_count": 18,
-            "iterations": 0
+            "score": 18.0344,
+            "char_count": 19,
+            "iterations": 4
         }
     },
     "27.jpg": {
@@ -644,14 +688,14 @@
         "metrics": {
             "score": 0.0,
             "char_count": 0,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "28.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -659,74 +703,86 @@
         "text_results": [
             [
                 "Lit CHAT",
-                0.631137952984377
+                0.8722672366013209
             ]
         ],
         "metrics": {
-            "score": 5.0491,
+            "score": 6.9781,
             "char_count": 8,
-            "iterations": 0
+            "iterations": 6
         }
     },
     "29.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "AGES",
-                0.9943791627883911
+                "BOOK",
+                0.7185816168785095
             ],
             [
-                "1",
-                0.5447362553139925
+                "The game % borrowved phrases",
+                0.6814321061036357
             ]
         ],
         "metrics": {
-            "score": 4.5223,
-            "char_count": 5,
-            "iterations": 0
+            "score": 21.9544,
+            "char_count": 32,
+            "iterations": 5
         }
     },
     "3.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "NNV",
-                0.9997043314424671
+                0.9998086675196108
             ],
             [
-                "RINALD",
-                0.8414513749227391
+                "RNAL DI",
+                0.6963538186456661
             ],
             [
-                "1",
-                0.6656200073945371
+                "Trees",
+                0.6180340355606945
+            ],
+            [
+                "Thh Rubbon",
+                0.5338392226017072
+            ],
+            [
+                "ith",
+                0.9647511306869996
+            ],
+            [
+                "5",
+                0.9699059037359348
             ]
         ],
         "metrics": {
-            "score": 8.7134,
-            "char_count": 10,
-            "iterations": 0
+            "score": 20.1666,
+            "char_count": 29,
+            "iterations": 3
         }
     },
     "30.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -734,49 +790,57 @@
         "text_results": [
             [
                 "ANNE FRANK",
-                0.9936837949306894
+                0.9972693309471022
             ],
             [
                 "THE",
-                0.9965623387294619
+                0.9985442070935469
             ],
             [
-                "DIARV",
-                0.9248273936077791
+                "DIARY OFAYOLING GIRL",
+                0.6877848274154714
             ]
         ],
         "metrics": {
-            "score": 17.5507,
-            "char_count": 18,
-            "iterations": 0
+            "score": 26.724,
+            "char_count": 33,
+            "iterations": 6
         }
     },
     "31.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
+                "3",
+                0.85406289891489
+            ],
+            [
                 "THE TORESHADOWING",
-                0.7467613816378346
+                0.8298176018397501
+            ],
+            [
+                "1",
+                0.9467268926832482
             ]
         ],
         "metrics": {
-            "score": 12.6949,
-            "char_count": 17,
-            "iterations": 0
+            "score": 15.9077,
+            "char_count": 19,
+            "iterations": 3
         }
     },
     "32.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -784,62 +848,70 @@
         "text_results": [
             [
                 "ANN",
-                0.9996598032310127
+                0.9998606984567576
             ],
             [
-                "2",
-                0.866398332073004
-            ],
-            [
-                "ALDI",
-                0.992128849029541
+                "RINALDI",
+                0.891159009983893
             ],
             [
                 "3",
-                0.8076051225044125
+                0.7920033237870463
             ],
             [
                 "`",
-                0.5262600306250285
+                0.9212167360220889
             ],
             [
-                "1",
-                0.6310032356687181
+                "arcour",
+                0.767709513606352
             ]
         ],
         "metrics": {
-            "score": 9.7988,
-            "char_count": 11,
-            "iterations": 0
+            "score": 15.5572,
+            "char_count": 18,
+            "iterations": 6
         }
     },
     "33.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "NNV",
-                0.9997043314424671
+                0.9998086675196108
             ],
             [
-                "RINALD",
-                0.8414513749227391
+                "RNAL DI",
+                0.6963538186456661
             ],
             [
-                "1",
-                0.6656200073945371
+                "Trees",
+                0.6180340355606945
+            ],
+            [
+                "Thh Rubbon",
+                0.5338392226017072
+            ],
+            [
+                "ith",
+                0.9647511306869996
+            ],
+            [
+                "5",
+                0.9699059037359348
             ]
         ],
         "metrics": {
-            "score": 8.7134,
-            "char_count": 10,
-            "iterations": 0
+            "score": 20.1666,
+            "char_count": 29,
+            "iterations": 3
         }
     },
     "34.jpg": {
@@ -847,20 +919,20 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "ANN RINALDI",
-                0.8676282412904224
+                0.9097020977990465
             ]
         ],
         "metrics": {
-            "score": 9.5439,
+            "score": 10.0067,
             "char_count": 11,
-            "iterations": 0
+            "iterations": 7
         }
     },
     "35.jpg": {
@@ -909,123 +981,135 @@
         "metrics": {
             "score": 33.116,
             "char_count": 35,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "36.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "William",
-                0.9403616980054302
+                0.9955675539520485
             ],
             [
                 "JUST",
-                0.9628251791000366
+                0.953717827796936
             ],
             [
                 "JANE",
-                0.9596726548256743
+                0.9999781847000122
             ],
             [
                 "5",
-                0.968110018076004
+                0.9114392165053609
             ]
         ],
         "metrics": {
-            "score": 15.2406,
+            "score": 15.6952,
             "char_count": 16,
-            "iterations": 0
+            "iterations": 3
         }
     },
     "37.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "ANN",
-                0.9993108131144861
+                "BREA K",
+                0.8494140417882485
             ],
             [
-                "RINALDI",
-                0.9374096831528015
+                "D",
+                0.8417013980973174
             ],
             [
-                "1",
-                0.7358709589205006
+                "ANN RINALD[",
+                0.6897196887326958
             ],
             [
-                "A",
-                0.9834610748320962
+                "witu CHARity",
+                0.727294817788578
+            ],
+            [
+                "5",
+                0.6854282668976772
             ]
         ],
         "metrics": {
-            "score": 11.2791,
-            "char_count": 12,
-            "iterations": 0
+            "score": 22.9381,
+            "char_count": 31,
+            "iterations": 5
         }
     },
     "38.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "1",
-                0.516934917983022
+                "FINISHING BEGCA",
+                0.9497303467072938
             ],
             [
-                "8",
-                0.9829837628932161
+                "1",
+                0.8794134841838428
             ]
         ],
         "metrics": {
-            "score": 1.4999,
-            "char_count": 2,
-            "iterations": 0
+            "score": 15.1254,
+            "char_count": 16,
+            "iterations": 5
         }
     },
     "39.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_shadow_removal": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "51",
-                0.5985640603678204
+                "BEYOND",
+                0.756496503001361
+            ],
+            [
+                "Jhl",
+                0.5074567993308234
+            ],
+            [
+                "BURNING",
+                0.933232040814417
             ],
             [
                 "1",
-                0.6603695475465798
+                0.9910769137719058
             ]
         ],
         "metrics": {
-            "score": 1.8575,
-            "char_count": 3,
-            "iterations": 0
+            "score": 13.5851,
+            "char_count": 17,
+            "iterations": 2
         }
     },
     "4.jpg": {
@@ -1033,124 +1117,152 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "ANN RINALDI",
-                0.8676282412904224
+                0.9097020977990465
             ]
         ],
         "metrics": {
-            "score": 9.5439,
+            "score": 10.0067,
             "char_count": 11,
-            "iterations": 0
+            "iterations": 7
         }
     },
     "40.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "Chinese",
-                0.9999844102815634
+                "58",
+                0.9475970485242384
             ],
             [
-                "Cinderella",
-                0.7795352313038705
+                "8",
+                0.9126595359226854
+            ],
+            [
+                "Chinese",
+                0.9999518788822722
+            ],
+            [
+                "C",
+                0.9087548646643064
+            ],
+            [
+                "inderella",
+                0.9990801284942058
             ]
         ],
         "metrics": {
-            "score": 14.7952,
-            "char_count": 17,
-            "iterations": 0
+            "score": 19.708,
+            "char_count": 20,
+            "iterations": 4
         }
     },
     "41.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "ANN",
-                0.9999183733850651
+                "ANN RINALDI",
+                0.8690748123449653
             ],
             [
-                "RINALDI",
-                0.6834752801404956
+                "ML",
+                0.9500486490845859
             ],
             [
-                "F",
-                0.864986822495112
+                "7",
+                0.8721874656488495
             ],
             [
-                "Quilt",
-                0.8129676650170315
+                "2",
+                0.7546906886787497
+            ],
+            [
+                "Harcourt",
+                0.8991644138595691
             ]
         ],
         "metrics": {
-            "score": 12.7139,
-            "char_count": 16,
-            "iterations": 0
+            "score": 20.2801,
+            "char_count": 23,
+            "iterations": 5
         }
     },
     "42.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
+                "Rubin",
+                0.6400337702657012
+            ],
+            [
+                "Betsy",
+                0.9958219188230091
+            ],
+            [
+                "0",
+                0.7106712003782292
+            ],
+            [
                 "Emperor",
-                0.965075174650686
+                0.9984557511952815
             ]
         ],
         "metrics": {
-            "score": 6.7555,
-            "char_count": 7,
-            "iterations": 0
+            "score": 15.8791,
+            "char_count": 18,
+            "iterations": 4
         }
     },
     "43.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
                 "Wolf by the Ears",
-                0.7801655462942237
+                0.9053914398378037
             ],
             [
                 "Rinaldi",
-                0.9996048259820394
+                0.999150675874637
             ]
         ],
         "metrics": {
-            "score": 19.4799,
+            "score": 21.4803,
             "char_count": 23,
-            "iterations": 0
+            "iterations": 5
         }
     },
     "44.jpg": {
@@ -1158,76 +1270,68 @@
             "use_ocr": true,
             "use_shadow_removal": true,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "1",
-                0.5245013967136316
+                0.5302401968706683
             ],
             [
                 "1",
-                0.9312416298178192
+                0.9299031839069052
             ],
             [
-                "1",
-                0.8596289165554403
+                "JOHNNY",
+                0.9970585188564538
             ],
             [
                 "TREMAJN",
-                0.8638316009843148
+                0.8587405511429629
             ]
         ],
         "metrics": {
-            "score": 8.3622,
-            "char_count": 10,
-            "iterations": 0
+            "score": 13.4537,
+            "char_count": 15,
+            "iterations": 7
         }
     },
     "45.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_shadow_removal": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "13",
-                0.683157010674064
+                "2",
+                0.9944334227435014
             ],
             [
-                "SOLDIER'S",
-                0.8097963837413603
+                "SOLDIER S HEART",
+                0.8237807208224089
             ],
             [
-                "HEART",
-                0.9976538268815571
-            ],
-            [
-                "GARY",
-                0.9949164390563965
-            ],
-            [
-                "PAULSEN",
-                0.9997876396612878
+                "GARY PAULSEN",
+                0.9952728302372438
             ]
         ],
         "metrics": {
-            "score": 24.6209,
-            "char_count": 27,
-            "iterations": 0
+            "score": 25.2944,
+            "char_count": 28,
+            "iterations": 2
         }
     },
     "46.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -1235,57 +1339,65 @@
         "text_results": [
             [
                 "Avi",
-                0.9748732089772996
+                0.9967007530822316
+            ],
+            [
+                "~",
+                0.8037176850472783
             ],
             [
                 "4",
-                0.9991891836256492
+                0.9997942553500394
             ]
         ],
         "metrics": {
-            "score": 3.9238,
-            "char_count": 4,
-            "iterations": 0
+            "score": 4.7936,
+            "char_count": 5,
+            "iterations": 6
         }
     },
     "47.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "B ETTE",
-                0.5912779793092109
+                "B E TTE",
+                0.7932596154363244
             ],
             [
                 "1",
-                0.7876336939757635
+                0.7091364662484381
+            ],
+            [
+                "SuMMER ef My",
+                0.6502709858857688
             ],
             [
                 "GERMAN",
-                0.9831181320047515
+                0.9902663922581839
             ],
             [
-                "1",
-                0.8538279269713236
+                "SOLDIER",
+                0.8868351088514476
             ]
         ],
         "metrics": {
-            "score": 11.0878,
-            "char_count": 14,
-            "iterations": 0
+            "score": 26.2146,
+            "char_count": 33,
+            "iterations": 4
         }
     },
     "48.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -1293,24 +1405,24 @@
         "text_results": [
             [
                 "CHOTJEWITZ",
-                0.9017704490041355
+                0.9317674869134633
             ],
             [
-                "DANIEL HALF HUMAN}",
-                0.7869162717797094
+                "DANIEL HALF HUMAN",
+                0.9870536536154686
             ]
         ],
         "metrics": {
-            "score": 23.1822,
-            "char_count": 28,
-            "iterations": 0
+            "score": 26.0976,
+            "char_count": 27,
+            "iterations": 6
         }
     },
     "49.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -1318,17 +1430,17 @@
         "text_results": [
             [
                 "SARAH BISHOP",
-                0.6763681110296687
+                0.9831436958088561
             ],
             [
                 "SCOTT ODELL",
-                0.8535183547115995
+                0.9519587302500522
             ]
         ],
         "metrics": {
-            "score": 17.5051,
+            "score": 22.2693,
             "char_count": 23,
-            "iterations": 0
+            "iterations": 6
         }
     },
     "5.jpg": {
@@ -1377,14 +1489,14 @@
         "metrics": {
             "score": 33.116,
             "char_count": 35,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "50.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -1392,21 +1504,25 @@
         "text_results": [
             [
                 "BRENAMAN",
-                0.7455814733654215
+                0.9994792195110247
             ],
             [
-                "9",
-                0.9777544159428295
+                "<",
+                0.5182858926629166
+            ],
+            [
+                "Cyvys",
+                0.9175286933073531
             ],
             [
                 "3",
-                0.6871020534505448
+                0.7606035227082089
             ]
         ],
         "metrics": {
-            "score": 7.6295,
-            "char_count": 10,
-            "iterations": 0
+            "score": 13.8624,
+            "char_count": 15,
+            "iterations": 6
         }
     },
     "51.jpg": {
@@ -1447,7 +1563,7 @@
         "metrics": {
             "score": 22.5478,
             "char_count": 32,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "52.jpg": {
@@ -1492,47 +1608,47 @@
         "metrics": {
             "score": 30.5562,
             "char_count": 32,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "53.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "ROBINSON",
-                0.998562364297998
+                "CHIDof",
+                0.9511732966412012
             ],
             [
-                "8",
-                0.8093469172395231
+                "DREAM",
+                0.9898376280646454
             ],
             [
                 "the",
-                0.837634265422821
+                0.9998598037418102
             ],
             [
-                "2",
-                0.9611000641085674
+                "ROBINSON",
+                0.9980736035062282
             ]
         ],
         "metrics": {
-            "score": 12.2718,
-            "char_count": 13,
-            "iterations": 0
+            "score": 21.6404,
+            "char_count": 22,
+            "iterations": 5
         }
     },
     "54.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_shadow_removal": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -1540,103 +1656,111 @@
         "text_results": [
             [
                 "APPLEGATE",
-                0.9525262250330357
+                0.8904348689886827
             ],
             [
                 "HOME",
-                0.9985833764076233
+                0.9982534050941467
             ],
             [
-                "Jo",
-                0.939535136073898
+                "of",
+                0.9080431562097865
             ],
             [
-                "4",
-                0.6631157486796759
+                "the",
+                0.8490484311867085
             ],
             [
                 "BRAVE",
-                0.9994781659237781
+                0.9991618268255809
             ]
         ],
         "metrics": {
-            "score": 20.1066,
-            "char_count": 21,
-            "iterations": 0
+            "score": 21.366,
+            "char_count": 23,
+            "iterations": 2
         }
     },
     "55.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "1",
-                0.5459028419529801
+                "PINKNEY",
+                0.799801383887322
             ],
             [
-                "With THE",
-                0.8242059890337295
+                "1",
+                0.9723402301909942
+            ],
+            [
+                "THE",
+                0.9974832003198719
             ],
             [
                 "Might",
-                0.9667131089940699
+                0.9385106965859358
             ],
             [
                 "6",
-                0.9236156776650297
+                0.9437936803601055
             ],
             [
                 "ANGELS",
-                0.996657588176945
+                0.999107844635263
             ]
         ],
         "metrics": {
-            "score": 18.8767,
-            "char_count": 21,
-            "iterations": 0
+            "score": 21.1944,
+            "char_count": 23,
+            "iterations": 4
         }
     },
     "56.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
-            "use_contrast_adjustment": false,
+            "use_contrast_adjustment": true,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "Houston",
-                0.9957995602249697
-            ],
-            [
-                "6",
-                0.9862145555611193
-            ],
-            [
-                "Manzanar",
-                0.9322344198211067
-            ],
-            [
-                "2",
-                0.5275174060705154
+                0.9924080608612155
             ],
             [
                 "1",
-                0.9415298982692235
+                0.6995253309169271
+            ],
+            [
+                "6",
+                0.9940280933734336
+            ],
+            [
+                "Manzanar",
+                0.94278256196409
+            ],
+            [
+                "2",
+                0.934673493167427
+            ],
+            [
+                "{",
+                0.9170531211723052
             ]
         ],
         "metrics": {
-            "score": 16.8837,
-            "char_count": 18,
-            "iterations": 0
+            "score": 18.0344,
+            "char_count": 19,
+            "iterations": 4
         }
     },
     "57.jpg": {
@@ -1652,14 +1776,14 @@
         "metrics": {
             "score": 0.0,
             "char_count": 0,
-            "iterations": 0
+            "iterations": 1
         }
     },
     "58.jpg": {
         "best_parameters": {
             "use_ocr": true,
             "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
@@ -1667,154 +1791,166 @@
         "text_results": [
             [
                 "Lit CHAT",
-                0.631137952984377
+                0.8722672366013209
             ]
         ],
         "metrics": {
-            "score": 5.0491,
+            "score": 6.9781,
             "char_count": 8,
-            "iterations": 0
+            "iterations": 6
         }
     },
     "59.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "AGES",
-                0.9943791627883911
+                "BOOK",
+                0.7185816168785095
             ],
             [
-                "1",
-                0.5447362553139925
+                "The game % borrowved phrases",
+                0.6814321061036357
             ]
         ],
         "metrics": {
-            "score": 4.5223,
-            "char_count": 5,
-            "iterations": 0
+            "score": 21.9544,
+            "char_count": 32,
+            "iterations": 5
         }
     },
     "6.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
-            "use_brightness_adjustment": false,
+            "use_brightness_adjustment": true,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
                 "William",
-                0.9403616980054302
+                0.9955675539520485
             ],
             [
                 "JUST",
-                0.9628251791000366
+                0.953717827796936
             ],
             [
                 "JANE",
-                0.9596726548256743
+                0.9999781847000122
             ],
             [
                 "5",
-                0.968110018076004
+                0.9114392165053609
             ]
         ],
         "metrics": {
-            "score": 15.2406,
+            "score": 15.6952,
             "char_count": 16,
-            "iterations": 0
+            "iterations": 3
         }
     },
     "7.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "ANN",
-                0.9993108131144861
+                "BREA K",
+                0.8494140417882485
             ],
             [
-                "RINALDI",
-                0.9374096831528015
+                "D",
+                0.8417013980973174
             ],
             [
-                "1",
-                0.7358709589205006
+                "ANN RINALD[",
+                0.6897196887326958
             ],
             [
-                "A",
-                0.9834610748320962
+                "witu CHARity",
+                0.727294817788578
+            ],
+            [
+                "5",
+                0.6854282668976772
             ]
         ],
         "metrics": {
-            "score": 11.2791,
-            "char_count": 12,
-            "iterations": 0
+            "score": 22.9381,
+            "char_count": 31,
+            "iterations": 5
         }
     },
     "8.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
+            "use_shadow_removal": false,
             "use_color_clahe": false,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
-            "use_image_rotation": false
+            "use_image_rotation": true
         },
         "text_results": [
             [
-                "1",
-                0.516934917983022
+                "FINISHING BEGCA",
+                0.9497303467072938
             ],
             [
-                "8",
-                0.9829837628932161
+                "1",
+                0.8794134841838428
             ]
         ],
         "metrics": {
-            "score": 1.4999,
-            "char_count": 2,
-            "iterations": 0
+            "score": 15.1254,
+            "char_count": 16,
+            "iterations": 5
         }
     },
     "9.jpg": {
         "best_parameters": {
             "use_ocr": true,
-            "use_shadow_removal": true,
-            "use_color_clahe": false,
+            "use_shadow_removal": false,
+            "use_color_clahe": true,
             "use_brightness_adjustment": false,
             "use_contrast_adjustment": false,
             "use_image_rotation": false
         },
         "text_results": [
             [
-                "51",
-                0.5985640603678204
+                "BEYOND",
+                0.756496503001361
+            ],
+            [
+                "Jhl",
+                0.5074567993308234
+            ],
+            [
+                "BURNING",
+                0.933232040814417
             ],
             [
                 "1",
-                0.6603695475465798
+                0.9910769137719058
             ]
         ],
         "metrics": {
-            "score": 1.8575,
-            "char_count": 3,
-            "iterations": 0
+            "score": 13.5851,
+            "char_count": 17,
+            "iterations": 2
         }
     }
 }
