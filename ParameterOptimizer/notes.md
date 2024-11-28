@@ -1,0 +1,3 @@
+- Show ProcessingSteps that are on and all their parameter values at runtime in `best_parameters`, since that's how `params_override` works
+- Improve or eliminate unnecessary I/O if possible; if the script ends early, write the best results when it ends
+- See if processing all combinations on one image at a time is more performant than cycling through all images per combination
