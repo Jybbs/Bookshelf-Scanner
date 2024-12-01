@@ -15,7 +15,7 @@ from ruamel.yaml   import YAML
 logger = logging.getLogger('TextExtractor')
 logger.setLevel(logging.INFO)
 
-handler = logging.FileHandler(Path(__file__).parent / 'TextExtractor.log', mode = 'w')
+handler = logging.FileHandler(Path(__file__).parent / 'extractor.log', mode = 'w')
 handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 
 logger.addHandler(handler)

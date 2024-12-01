@@ -10,14 +10,14 @@ from ruamel.yaml     import YAML
 from typing          import Any, Iterator
 from collections.abc import Sequence
 
-from TextExtractor import TextExtractor
+from extractor import TextExtractor
 
 # -------------------- Configuration and Logging --------------------
 
 logger = logging.getLogger('ParameterOptimizer')
 logger.setLevel(logging.INFO)
 
-handler = logging.FileHandler(Path(__file__).parent / 'ParameterOptimizer.log', mode = 'w')
+handler = logging.FileHandler(Path(__file__).parent / 'optimizer.log', mode = 'w')
 handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 
 logger.addHandler(handler)

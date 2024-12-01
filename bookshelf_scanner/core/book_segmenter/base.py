@@ -1,4 +1,4 @@
-from BookSegmenter.YOLOv8 import YOLO_model
+from .yolov8 import YOLO_model
 import cv2
 import numpy as np
 

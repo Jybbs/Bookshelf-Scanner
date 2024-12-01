@@ -2,6 +2,6 @@
 Parameter optimization for TextExtractor processing pipeline.
 """
 
-from .ParameterOptimizer import ParameterOptimizer
+from .optimizer import ParameterOptimizer
 
 __all__ = ['ParameterOptimizer']

@@ -2,7 +2,7 @@ import time
 import cv2
 import numpy as np
 import onnxruntime as ort
-from BookSegmenter.utils import sigmoid, crop_mask
+from .utils import sigmoid, crop_mask
 
 class YOLO_model:
     """
