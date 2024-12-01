@@ -125,6 +125,56 @@ class ProcessingStep:
         self.is_enabled = not self.is_enabled
         return f"Toggled '{self.display_name}' to {'On' if self.is_enabled else 'Off'}"
 
+# -------------------- ProcessingState Class --------------------
+
+@dataclass(frozen = True)
+class ProcessingState:
+    """
+    Immutable state representing all processing parameters for an image.
+    Used as a cache key for consistent image processing results.
+    """
+    steps: tuple[tuple[str, bool, tuple[tuple[str, float | int], ...]], ...]
+
+    @classmethod
+    def from_steps(cls, steps: list[ProcessingStep]) -> 'ProcessingState':
+        """
+        Creates an immutable ProcessingState from a list of ProcessingSteps.
+        Orders everything consistently for reliable caching.
+
+        Args:
+            steps: List of ProcessingStep instances
+
+        Returns:
+            ProcessingState instance suitable for cache keys
+        """
+        state_steps = tuple(
+            (
+                step.name,
+                step.is_enabled,
+                tuple(sorted(
+                    (param.name, param.value)
+                    for param in step.parameters
+                ))
+            )
+            for step in sorted(steps, key = lambda s: s.name)
+        )
+        return cls(steps = state_steps)
+
+    def to_current_parameters(self) -> dict:
+        """
+        Converts the ProcessingState to the current_parameters dictionary format.
+
+        Returns:
+            Dictionary of nested parameters organized by processing step
+        """
+        return {
+            step[0]: {
+                'enabled'    : step[1],
+                'parameters' : {param[0]: param[1] for param in step[2]}
+            }
+            for step in self.steps
+        }
+
 # -------------------- Processing Functions --------------------
 
 def adjust_brightness(image: np.ndarray, params: dict) -> np.ndarray:
@@ -255,18 +305,13 @@ class TextExtractor:
     @property
     def current_parameters(self) -> dict:
         """
-        Returns the current set of enabled parameters across all processing steps.
+        Returns the current set of parameters across all processing steps.
 
         Returns:
-            Dictionary of parameter names and values, including enabled status for each step
+            Dictionary of nested parameters organized by processing step
         """
-        params = {
-            param.name: param.value
-            for step in self.steps if step.is_enabled
-            for param in step.parameters
-        }
-        params.update({f"use_{step.name}": step.is_enabled for step in self.steps})
-        return params
+        processing_state = ProcessingState.from_steps(self.steps)
+        return processing_state.to_current_parameters()
 
     @classmethod
     def find_image_files(
@@ -330,97 +375,99 @@ class TextExtractor:
         Initializes processing steps with default parameters or overrides.
 
         Args:
-            params_override : Optional dictionary of parameters to override default settings
+            params_override : Optional dictionary of step-level overrides
 
         Returns:
             List of initialized ProcessingStep instances
-
-        Raises:
-            FileNotFoundError : If the configuration file is not found
-            Exception         : If there is an error parsing the configuration file
         """
         yaml = YAML(typ = 'safe')
 
-        try:
-            with self.params_file.open('r') as f:
-                step_definitions = yaml.load(f)
-
-        except FileNotFoundError:
-            logger.error(f"Configuration file not found: {self.params_file}")
-            raise
-
-        except Exception as e:
-            logger.error(f"Error parsing configuration file: {e}")
-            raise
+        with self.params_file.open('r') as f:
+            step_definitions = yaml.load(f)
 
         # Store steps as instance attribute
-        self.steps = [
-            ProcessingStep(
-                name         = step_def['name'],
-                display_name = step_def['display_name'],
-                toggle_key   = str(index + 1),
-                parameters   = [Parameter(**param_def) for param_def in step_def.get('parameters', [])]
+        self.steps = []
+        params_override = params_override or {}
+
+        for index, step_def in enumerate(step_definitions):
+            step_name     = step_def['name']
+            step_override = params_override.get(step_name, {})
+
+            # Create parameters list with any overrides
+            param_overrides = step_override.get('parameters', {})
+            parameters = [
+                Parameter(**{
+                    **param_def,
+                    'value' : param_overrides.get(param_def['name'], param_def['value'])
+                })
+                for param_def in step_def.get('parameters', [])
+            ]
+
+            self.steps.append(
+                ProcessingStep(
+                    name         = step_name,
+                    display_name = step_def['display_name'],
+                    toggle_key   = str(index + 1),
+                    parameters   = parameters,
+                    is_enabled   = step_override.get('enabled', step_def.get('enabled', False))
+                )
             )
-            for index, step_def in enumerate(step_definitions)
-        ]
-
-        # Apply parameter overrides if provided
-        if params_override:
-            step_map  = {f"use_{step.name}": step for step in self.steps}
-            param_map = {param.name: param for step in self.steps for param in step.parameters}
-
-            for key, value in params_override.items():
-                if key in step_map:
-                    step_map[key].is_enabled = value
-                elif key in param_map:
-                    param_map[key].value = value
 
         return self.steps
 
     @cache
     def process_image(
         self,
-        image_path : str,
-        params_key : str
+        image_path       : str,
+        processing_state : ProcessingState
     ) -> np.ndarray:
         """
         Processes the image according to the enabled processing steps.
+
+        Args:
+            image_path        : Path to the image file to process
+            processing_state  : ProcessingState instance representing current parameters
+
+        Returns:
+            Processed image as numpy array
         """
         image           = self.load_image(image_path)
         processed_image = image.copy()
 
-        for step in self.steps:
-            if step.is_enabled:
-                params              = {param.name: param.value for param in step.parameters}
-                processing_function = PROCESSING_FUNCTIONS.get(step.name)
-                if processing_function:
-                    processed_image = processing_function(processed_image, params)
-                else:
-                    logger.warning(f"No processing function defined for step '{step.name}'")
+        for step_name, is_enabled, params in processing_state.steps:
+            if not is_enabled:
+                continue
+
+            if processing_function :=  PROCESSING_FUNCTIONS.get(step_name):
+                params_dict     = {param_name: param_value for param_name, param_value in params}
+                processed_image = processing_function(processed_image, params_dict)
+            else:
+                logger.warning(f"No processing function defined for step '{step_name}'")
+
         return processed_image
 
     @cache
     def annotate_image_with_text(
         self,
-        image_path     : str,
-        params_key     : str,
-        min_confidence : float
+        image_path       : str,
+        processing_state : ProcessingState,
+        min_confidence   : float
     ) -> np.ndarray:
         """
         Annotates the image with recognized text by overlaying bounding boxes and text annotations.
         This visualization helps in verifying the OCR results and understanding where the text was detected.
 
         Args:
-            image_path     : Path to the image to annotate
-            params_key     : A unique key representing the processing parameters
-            min_confidence : Minimum confidence threshold for OCR results
+            image_path       : Path to the image to annotate
+            processing_state : ProcessingState instance representing current parameters
+            min_confidence   : Minimum confidence threshold for OCR results
 
         Returns:
             Annotated image
         """
-        processed_image = self.process_image(image_path, params_key)
+        processed_image = self.process_image(image_path, processing_state)
         annotated_image = cv2.cvtColor(processed_image, cv2.COLOR_GRAY2BGR) if processed_image.ndim == 2 else processed_image.copy()
-        ocr_results     = self.extract_text_from_image(image_path, params_key, min_confidence)
+        ocr_results     = self.extract_text_from_image(image_path, processing_state, min_confidence)
 
         for bounding_box, text, confidence in ocr_results:
             coordinates = np.array(bounding_box).astype(int)
@@ -454,22 +501,22 @@ class TextExtractor:
     @cache
     def extract_text_from_image(
         self,
-        image_path     : str,
-        params_key     : str,
-        min_confidence : float
+        image_path       : str,
+        processing_state : ProcessingState,
+        min_confidence   : float
     ) -> list[tuple]:
         """
         Extracts text from a given image using EasyOCR.
 
         Args:
-            image_path     : The path to the image to perform OCR on
-            params_key     : A unique key representing the processing parameters
-            min_confidence : Minimum confidence threshold for OCR results
+            image_path       : The path to the image to perform OCR on
+            processing_state : ProcessingState instance representing current parameters
+            min_confidence   : Minimum confidence threshold for OCR results
 
         Returns:
             List of tuples containing OCR results
         """
-        processed_image = self.process_image(image_path, params_key)
+        processed_image = self.process_image(image_path, processing_state)
         try:
             ocr_results = self.reader.readtext(
                 processed_image[..., ::-1],  # Convert BGR to RGB
@@ -547,8 +594,8 @@ class TextExtractor:
             draw.text(
                 (text_x + offset_x, text_y + offset_y),
                 spaced_text,
-                font  = font,
-                fill  = (255, 255, 255, 255)
+                font = font,
+                fill = (255, 255, 255, 255)
             )
 
         # Composite text layer onto source image
@@ -628,7 +675,7 @@ class TextExtractor:
                     thickness = font_thickness,
                     lineType  = cv2.LINE_AA
                 )
-            y_position += line_height
+            y_position +=  line_height
 
         return sidebar
 
@@ -642,9 +689,9 @@ class TextExtractor:
         Returns:
             Dictionary mapping image names to their OCR results.
         """
-        results        = {}
-        params_key     = str(hash(frozenset(self.current_parameters.items())))
-        min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+        results          = {}
+        processing_state = ProcessingState.from_steps(self.steps)
+        min_confidence   = self.current_parameters.get('ocr_confidence_threshold', 0.3)
 
         for image_path in image_files:
             image_name = image_path.name
@@ -652,7 +699,7 @@ class TextExtractor:
             try:
                 ocr_results = self.extract_text_from_image(
                     str(image_path),
-                    params_key,
+                    processing_state,
                     min_confidence
                 )
                 results[image_name] = [
@@ -662,7 +709,7 @@ class TextExtractor:
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
                 continue
-            
+
         return results
 
     def run_headless(
@@ -687,8 +734,8 @@ class TextExtractor:
         results = self.extract_text_headless(image_files)
 
         if self.output_json:
-            with self.output_file.open('w', encoding='utf-8') as f:
-                json.dump(results, f, ensure_ascii=False, indent=4)
+            with self.output_file.open('w', encoding = 'utf-8') as f:
+                json.dump(results, f, ensure_ascii = False, indent = 4)
             logger.info(f"OCR results saved to {self.output_file}")
 
     def interactive_experiment(
@@ -718,19 +765,19 @@ class TextExtractor:
                 self.state.image_name     = image_path.name
                 self.state.window_height  = self.DEFAULT_HEIGHT
 
-                params_key     = str(hash(frozenset(self.current_parameters.items())))
-                min_confidence = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+                processing_state = ProcessingState.from_steps(self.steps)
+                min_confidence   = self.current_parameters.get('ocr_confidence_threshold', 0.3)
 
                 # Annotate image with OCR text if OCR is enabled
-                ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
+                ocr_enabled = any(step.is_enabled and step.name ==  'ocr' for step in self.steps)
                 if ocr_enabled:
                     display_image = self.annotate_image_with_text(
                         str(image_path),
-                        params_key,
+                        processing_state,
                         min_confidence
                     )
                 else:
-                    display_image = self.process_image(str(image_path), params_key)
+                    display_image = self.process_image(str(image_path), processing_state)
 
                 # Prepare image for display
                 display_image = self.center_image_in_square(display_image)

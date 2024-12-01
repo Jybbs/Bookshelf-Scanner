@@ -1,6 +1,7 @@
 - name         : ocr
   display_name : OCR
-  parameters:
+  enabled      : true
+  parameters   :
     - name         : ocr_confidence_threshold
       display_name : OCR Confidence Threshold
       value        : 0.5
@@ -11,7 +12,8 @@
 
 - name         : shadow_removal
   display_name : Shadow Removal
-  parameters:
+  enabled      : false
+  parameters   :
     - name         : shadow_kernel_size
       display_name : Shadow Kernel Size
       value        : 23
@@ -29,7 +31,8 @@
 
 - name         : color_clahe
   display_name : Color CLAHE
-  parameters:
+  enabled      : false
+  parameters   :
     - name         : clahe_clip_limit
       display_name : CLAHE Clip Limit
       value        : 1.0
@@ -40,7 +43,8 @@
 
 - name         : brightness_adjustment
   display_name : Brightness Adjustment
-  parameters:
+  enabled      : false
+  parameters   :
     - name         : brightness_value
       display_name : Brightness Value
       value        : 0
@@ -51,7 +55,8 @@
 
 - name         : contrast_adjustment
   display_name : Contrast Adjustment
-  parameters:
+  enabled      : false
+  parameters   :
     - name         : contrast_value
       display_name : Contrast Value
       value        : 1.0
@@ -62,7 +67,8 @@
 
 - name         : image_rotation
   display_name : Image Rotation
-  parameters:
+  enabled      : false
+  parameters   :
     - name         : rotation_angle
       display_name : Rotation Angle
       value        : 90
