@@ -104,19 +104,70 @@ spines, bboxes, confidences = segmenter.segment(image)
 segmenter.display_segmented_books(spines, confidences)
 ```
 
-### Text Extraction
+### Text Processing & Optimization
 
-The `TextExtractor` provides an interactive interface for processing spine images. See detailed instructions in [`TextExtractor/README.md`](./TextExtractor/README.md).
+Once book spines have been segmented from the shelf images, the system processes them to extract readable text through a combination of image processing and OCR. This presents unique challenges due to varied lighting conditions, spine colors, and text styles across books.
+
+#### TextExtractor
+The TextExtractor module provides an interactive environment for processing spine images and extracting text. It implements multiple image processing techniques that can be adjusted in real-time to handle different image qualities and characteristics. The system includes:
+
+- Real-time parameter adjustment with visual feedback to quickly find effective settings
+- A configurable processing pipeline including shadow removal, contrast enhancement, and color correction
+- EasyOCR integration with confidence scoring for text extraction
+- GPU acceleration support for faster processing of large image sets
 
 ```python
-# Run the interactive text extraction process
-python TextExtractor/TextExtractor.py
+from TextExtractor import TextExtractor
+
+# Initialize with GPU support if available
+extractor = TextExtractor(gpu_enabled = True)
+
+# Process images with specific parameters
+results = extractor.interactive_experiment(
+    image_files     = spine_images,
+    params_override = {
+        'use_shadow_removal' : True,
+        'shadow_kernel_size' : 23,
+        'use_color_clahe'    : True,
+        'clahe_clip_limit'   : 2.0
+    }
+)
 ```
 
-Key features:
-- Real-time parameter adjustment for image processing
-- OCR text extraction with confidence scores
-- Results saved to `ocr_results.json`
+#### ParameterOptimizer
+Finding the right combination of processing parameters can be time-consuming, especially with multiple processing steps that interact with each other. The ParameterOptimizer automates this process by:
+
+- Systematically testing combinations of processing steps and their parameters
+- Using character-weighted confidence scoring to evaluate OCR results
+- Maintaining progress through periodic saving to enable long optimization runs
+- Intelligently generating parameter combinations based on which processing steps are enabled
+
+```python
+from ParameterOptimizer import ParameterOptimizer
+
+# Create optimizer with batch processing settings
+optimizer = ParameterOptimizer(
+    extractor      = extractor,
+    batch_size     = 100,
+    save_frequency = 10
+)
+
+# Run optimization with resume capability
+optimal_params = optimizer.optimize(
+    image_files = spine_images,
+    resume      = True
+)
+```
+
+The optimization results help improve the system over time:
+- Build processing profiles for common image characteristics
+- Identify which image qualities make text extraction challenging
+- Train models to predict effective parameters for new images
+- Fine-tune the processing pipeline for specific collections
+
+Detailed implementation information can be found in:
+- [TextExtractor Documentation](./TextExtractor/README.md)
+- [ParameterOptimizer Documentation](./TextExtractor/ParameterOptimizer/README.md)
 
 ### Text Matching *(Planned)*
 

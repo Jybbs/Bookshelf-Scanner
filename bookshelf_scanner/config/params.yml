@@ -38,32 +38,14 @@
       step         : 0.5
       increase_key : H
 
-- name         : gaussian_blur
-  display_name : Gaussian Blur
-  parameters:
-    - name         : gaussian_kernel_size
-      display_name : Gaussian Kernel Size
-      value        : 5
-      min          : 1
-      max          : 31
-      step         : 2
-      increase_key : G
-    - name         : gaussian_sigma
-      display_name : Gaussian Sigma
-      value        : 1.0
-      min          : 0.1
-      max          : 10.0
-      step         : 0.5
-      increase_key : I
-
 - name         : brightness_adjustment
   display_name : Brightness Adjustment
   parameters:
     - name         : brightness_value
       display_name : Brightness Value
       value        : 0
-      min          : -100
-      max          : 100
+      min          : -50
+      max          : 50
       step         : 5
       increase_key : B
 
@@ -83,7 +65,7 @@
   parameters:
     - name         : rotation_angle
       display_name : Rotation Angle
-      value        : 0
+      value        : 90
       min          : 0
       max          : 270
       step         : 90
