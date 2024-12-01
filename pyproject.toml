@@ -1,5 +1,5 @@
 [tool.poetry]
-name         = "Bookshelf Scanner"
+name         = "bookshelf-scanner"
 version      = "0.0.0"
 description  = "Required packages for the final project for CS5330."
 authors      = ["James Parkington <pongs.acreage.0o@icloud.com>"]

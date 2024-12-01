@@ -10,7 +10,7 @@ from ruamel.yaml     import YAML
 from typing          import Any, Iterator
 from collections.abc import Sequence
 
-from extractor import TextExtractor
+from bookshelf_scanner import TextExtractor
 
 # -------------------- Configuration and Logging --------------------
 
