@@ -6,6 +6,11 @@ authors      = ["James Parkington <pongs.acreage.0o@icloud.com>"]
 readme       = "README.md"
 packages     = [{ include = "bookshelf_scanner" }]
 
+[tool.poetry.scripts]
+book-segmenter      = "bookshelf_scanner.core.book_segmenter.__main__:main"
+text-extractor      = "bookshelf_scanner.core.text_extractor.__main__:main"
+parameter-optimizer = "bookshelf_scanner.core.parameter_optimizer.__main__:main"
+
 [tool.poetry.dependencies]
 python        = "^3.12"
 

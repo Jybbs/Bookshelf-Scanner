@@ -12,41 +12,27 @@ The system processes bookshelf images through three main stages:
 2. **Text Extraction**: Processes the segmented spine images to extract visible text using EasyOCR
 3. **Text Matching**: *(Planned)* Uses RapidFuzz to match extracted spine text against a book database
 
-## Key Features
-
-- **Automated Spine Detection**: Accurately identifies and segments individual book spines from shelf images
-- **Text Extraction**: Captures visible text from book spines including:
-  - Title information
-  - Author names
-  - Series information (*when visible*)
-- **Quality Assurance**: Confidence scoring for both spine detection and text extraction
-- **Bulk Processing**: Process entire bookshelves in a single operation
-
 ## Project Structure
 
 ```
-├── BookSegmenter/             # Core spine detection module
-│   ├── models/                # Pre-trained YOLO model directory
-│   │   └── OpenShelves8.onnx  # YOLO model optimized for spine detection
-│   ├── BookSegmenter_base.py  # Main segmentation interface
-│   ├── YOLOv8.py              # YOLO model wrapper and inference logic
-│   └── utils.py               # Segmentation utility functions
-|
-├── TextExtractor/             # OCR and text processing module
-│   ├── TextExtractor.py       # Interactive OCR processing interface
-│   ├── params.yml             # Configurable OCR and image processing parameters
-│   └── TextExtractor.log      # Processing logs and debugging information
-|
-├── DuckDB/                    # Database integration
-│   ├── books.duckdb           # Local book database for text matching
-|
-├── images/                    # Image asset directories
-│   ├── Bookcases/             # Raw, unprocessed bookshelf photos
-│   ├── Books/                 # Individual spine images after segmentation
-│   └── Shelves/               # Intermediate shelf processing results
-|
-├── poetry.lock                # Poetry dependency lock file
-└── pyproject.toml             # Project metadata and dependencies
+├── bookshelf_scanner/
+│   ├── __init__.py              # Package initialization and version info
+│   ├── config/
+│   │   └── params.yml           # Processing parameters and settings
+│   ├── core/ 
+│   │   ├── book_segmenter/      # Spine detection and segmentation
+│   │   ├── parameter_optimizer/ # Processing parameter optimization
+│   │   └── text_extractor/      # OCR and text processing
+│   ├── data/
+│   │   ├── books.duckdb         # Local book DuckDB database
+│   │   └── utils/               # Data handling utilities
+│   ├── dev/
+│   └── images/ 
+│       ├── Bookcases/           # Raw bookshelf photos
+│       ├── Books/               # Segmented spine images
+│       └── Shelves/             # Processing results
+├── poetry.lock                  # Poetry dependency lock file
+└── pyproject.toml               # Project metadata and dependencies
 ```
 
 ## Installation
@@ -86,16 +72,20 @@ poetry install
 
 ## Usage
 
-### Spine Segmentation
-
-The `BookSegmenter` class handles splitting bookshelf images into individual spine images. See detailed instructions in [`BookSegmenter/README.md`](./BookSegmenter/README.md).
+### Importing Components
 
 ```python
-from BookSegmenter import BookSegmenter
+from bookshelf_scanner import BookSegmenter, TextExtractor, ParameterOptimizer
 
-# Initialize segmenter
-segmenter = BookSegmenter()
+# Initialize components
+segmenter  = BookSegmenter()
+extractor  = TextExtractor(gpu_enabled=True)
+optimizer  = ParameterOptimizer(extractor)
+```
 
+### Spine Segmentation
+
+```python
 # Process a bookshelf image
 image = cv2.imread("path/to/bookshelf.jpg")
 spines, bboxes, confidences = segmenter.segment(image)
@@ -106,86 +96,52 @@ segmenter.display_segmented_books(spines, confidences)
 
 ### Text Processing & Optimization
 
-Once book spines have been segmented from the shelf images, the system processes them to extract readable text through a combination of image processing and OCR. This presents unique challenges due to varied lighting conditions, spine colors, and text styles across books.
-
-#### TextExtractor
-The TextExtractor module provides an interactive environment for processing spine images and extracting text. It implements multiple image processing techniques that can be adjusted in real-time to handle different image qualities and characteristics. The system includes:
-
-- Real-time parameter adjustment with visual feedback to quickly find effective settings
-- A configurable processing pipeline including shadow removal, contrast enhancement, and color correction
-- EasyOCR integration with confidence scoring for text extraction
-- GPU acceleration support for faster processing of large image sets
+The TextExtractor provides an interactive environment for processing spine images and extracting text. It implements multiple image processing techniques that can be adjusted in real-time to handle different image qualities and characteristics.
 
 ```python
-from TextExtractor import TextExtractor
-
-# Initialize with GPU support if available
-extractor = TextExtractor(gpu_enabled = True)
-
 # Process images with specific parameters
 results = extractor.interactive_experiment(
     image_files     = spine_images,
     params_override = {
-        'use_shadow_removal' : True,
-        'shadow_kernel_size' : 23,
-        'use_color_clahe'    : True,
-        'clahe_clip_limit'   : 2.0
+        'shadow_removal' : {
+            'enabled'    : True,
+            'parameters' : {
+                'shadow_kernel_size' : 23,
+                'shadow_median_blur' : 15
+            }
+        },
+
+        'color_clahe' : {
+            'enabled'    : True,
+            'parameters' : {
+                'clahe_clip_limit' : 2.0
+            }
+        }
     }
 )
 ```
 
-#### ParameterOptimizer
-Finding the right combination of processing parameters can be time-consuming, especially with multiple processing steps that interact with each other. The ParameterOptimizer automates this process by:
-
-- Systematically testing combinations of processing steps and their parameters
-- Using character-weighted confidence scoring to evaluate OCR results
-- Maintaining progress through periodic saving to enable long optimization runs
-- Intelligently generating parameter combinations based on which processing steps are enabled
+### Parameter Optimization
 
 ```python
-from ParameterOptimizer import ParameterOptimizer
-
-# Create optimizer with batch processing settings
-optimizer = ParameterOptimizer(
-    extractor      = extractor,
-    batch_size     = 100,
-    save_frequency = 10
-)
-
 # Run optimization with resume capability
 optimal_params = optimizer.optimize(
-    image_files = spine_images,
-    resume      = True
+    image_files    = spine_images,
+    batch_size     = 100,
+    save_frequency = 10,
+    resume         = True
 )
 ```
 
-The optimization results help improve the system over time:
-- Build processing profiles for common image characteristics
-- Identify which image qualities make text extraction challenging
-- Train models to predict effective parameters for new images
-- Fine-tune the processing pipeline for specific collections
-
-Detailed implementation information can be found in:
-- [TextExtractor Documentation](./TextExtractor/README.md)
-- [ParameterOptimizer Documentation](./TextExtractor/ParameterOptimizer/README.md)
-
-### Text Matching *(Planned)*
-
-Future implementation will include:
-- Fuzzy text matching using RapidFuzz for identifying books from partial spine text
-- Integration with DuckDB for book information lookup
-- Configurable matching thresholds for accuracy control
-
-## Technical Details
-
-- **Computer Vision**: Custom-trained YOLOv8 model optimized for book spine detection
-- **OCR Processing**: EasyOCR with parameters tuned for text extraction with inconsistent color and shape profiles
-- **Data Storage**: Efficient DuckDB integration for book information lookup
+For detailed component documentation, see:
+- [Book Segmenter Documentation](./bookshelf_scanner/core/book_segmenter/README.md)
+- [Text Extractor Documentation](./bookshelf_scanner/core/text_extractor/README.md)
+- [Parameter Optimizer Documentation](./bookshelf_scanner/core/parameter_optimizer/README.md)
 
 ## Configuration
 
-- Text extraction parameters can be modified in `TextExtractor/params.yml`
-- Spine detection uses the `OpenShelves8.onnx` model located in `BookSegmenter/models/`
+- Processing parameters can be modified in `bookshelf_scanner/config/params.yml`
+- Component-specific settings are documented in their respective README files
 
 ## License
 

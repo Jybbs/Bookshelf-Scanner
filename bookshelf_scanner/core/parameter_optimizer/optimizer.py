@@ -466,18 +466,3 @@ class ParameterOptimizer:
                 self.save_results()
 
         return self.state.best_results
-
-# -------------------- Main Entry Point --------------------
-
-if __name__ == "__main__":
-    extractor = TextExtractor(headless = True)
-    optimizer = ParameterOptimizer(extractor = extractor)
-
-    try:
-        image_files = extractor.find_image_files('images/books')
-        
-    except FileNotFoundError as e:
-        logger.error(str(e))
-        raise
-
-    optimizer.optimize(image_files)

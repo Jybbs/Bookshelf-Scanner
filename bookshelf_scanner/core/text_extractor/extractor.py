@@ -9,6 +9,7 @@ from functools     import cache
 from pathlib       import Path
 from PIL           import Image, ImageDraw, ImageFont
 from ruamel.yaml   import YAML
+from typing        import Any
 
 # -------------------- Configuration and Logging --------------------
 
@@ -117,13 +118,13 @@ class ProcessingStep:
 
     def toggle(self) -> str:
         """
-        Toggles the enabled state.
+        Toggles the enabled state of the processing step.
 
         Returns:
             Description of the action taken
         """
         self.is_enabled = not self.is_enabled
-        return f"Toggled '{self.display_name}' to {'On' if self.is_enabled else 'Off'}"
+        return f"'{self.display_name}' {('Enabled' if self.is_enabled else 'Disabled')}"
 
 # -------------------- ProcessingState Class --------------------
 
@@ -133,19 +134,20 @@ class ProcessingState:
     Immutable state representing all processing parameters for an image.
     Used as a cache key for consistent image processing results.
     """
-    steps: tuple[tuple[str, bool, tuple[tuple[str, float | int], ...]], ...]
+    steps: tuple[tuple[str, bool, tuple[Any, ...]], ...]
 
     @classmethod
     def from_steps(cls, steps: list[ProcessingStep]) -> 'ProcessingState':
         """
         Creates an immutable ProcessingState from a list of ProcessingSteps.
-        Orders everything consistently for reliable caching.
+        Only includes enabled steps and their parameters, with consistent ordering
+        for reliable caching.
 
         Args:
-            steps: List of ProcessingStep instances
+            steps: List of ProcessingStep instances to convert
 
         Returns:
-            ProcessingState instance suitable for cache keys
+            ProcessingState: Immutable state instance containing enabled steps and their parameters
         """
         state_steps = tuple(
             (
@@ -153,10 +155,11 @@ class ProcessingState:
                 step.is_enabled,
                 tuple(sorted(
                     (param.name, param.value)
-                    for param in step.parameters
+                    for param in sorted(step.parameters, key = lambda p: p.name)
                 ))
             )
             for step in sorted(steps, key = lambda s: s.name)
+            if step.is_enabled
         )
         return cls(steps = state_steps)
 
@@ -168,11 +171,11 @@ class ProcessingState:
             Dictionary of nested parameters organized by processing step
         """
         return {
-            step[0]: {
-                'enabled'    : step[1],
-                'parameters' : {param[0]: param[1] for param in step[2]}
+            step_name: {
+                'enabled'    : step_enabled,
+                'parameters' : dict(step_params)
             }
-            for step in self.steps
+            for step_name, step_enabled, step_params in self.steps
         }
 
 # -------------------- Processing Functions --------------------
@@ -373,9 +376,10 @@ class TextExtractor:
     def initialize_steps(self, params_override: dict | None = None) -> list[ProcessingStep]:
         """
         Initializes processing steps with default parameters or overrides.
+        Maintains consistent dictionary structure for ProcessingState compatibility.
 
         Args:
-            params_override : Optional dictionary of step-level overrides
+            params_override: Optional dictionary of step-level overrides matching params.yml structure
 
         Returns:
             List of initialized ProcessingStep instances
@@ -610,14 +614,21 @@ class TextExtractor:
         """
         Generates a list of sidebar lines with text content, colors, and scaling factors.
         Used internally by render_sidebar to prepare display content.
+
+        Args:
+            steps      : List of ProcessingStep instances
+            image_name : Name of the current image being processed
+
+        Returns:
+            List of tuples containing (text, color, scale_factor) for each line
         """
         lines = [
-            (f"[/] Current Image: {image_name}",  self.UI_COLORS['TEAL'],  0.85),
+            (f"[/] Current Image: {image_name}", self.UI_COLORS['TEAL'],  0.85),
             ("", self.UI_COLORS['WHITE'], 1.0)  # Spacer
         ]
 
         for step in steps:
-            status = 'On' if step.is_enabled else 'Off'
+            status = 'Enabled' if step.is_enabled else 'Disabled'
             lines.append((
                 f"[{step.toggle_key}] {step.display_name}: {status}",
                 self.UI_COLORS['WHITE'],
@@ -825,27 +836,3 @@ class TextExtractor:
 
         finally:
             cv2.destroyAllWindows()
-
-# -------------------- Main Entry Point --------------------
-
-if __name__ == "__main__":
-    extractor        = TextExtractor(headless = False)
-    image_files      = extractor.find_image_files('images/books')
-    params_override  = {
-        'use_color_clahe'    : True,
-        'use_image_rotation' : True,
-        'use_ocr'            : True,
-        'use_shadow_removal' : True
-    }
-
-    if extractor.headless:
-        extractor.run_headless(
-            image_files     = image_files,
-            params_override = params_override
-        )
-        
-    else:
-        extractor.interactive_experiment(
-            image_files     = image_files,
-            params_override = params_override
-        )
