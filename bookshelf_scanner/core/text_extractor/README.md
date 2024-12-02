@@ -25,14 +25,14 @@ The `TextExtractor` module focuses on text extraction from book spine images, ai
   - Structured JSON output for downstream processing
   - Rotation-invariant text detection
 
-## Usage
+## Getting Started
 
 1. **Image Preparation**
    Place segmented book spine images in the `images/books` directory. The module accepts common image formats (JPG, PNG, BMP).
 
 2. **Launch Interactive Interface**
    ```bash
-   poetry run python TextExtractor/TextExtractor.py
+   poetry run text-extractor
    ```
    The interface presents your first image alongside an intuitive control panel.
 

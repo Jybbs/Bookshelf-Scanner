@@ -262,7 +262,7 @@ class TextExtractor:
     DEFAULT_HEIGHT  = 800
     FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
     OUTPUT_FILE     = Path(__file__).parent / 'ocr_results.json'
-    PARAMS_FILE     = Path(__file__).resolve().parent.parent / 'config' / 'params.yml'
+    PARAMS_FILE     = Path(__file__).resolve().parent.parent.parent / 'config' / 'params.yml'
     UI_COLORS       = {
         'GRAY'  : (200, 200, 200),
         'TEAL'  : (255, 255, 0),

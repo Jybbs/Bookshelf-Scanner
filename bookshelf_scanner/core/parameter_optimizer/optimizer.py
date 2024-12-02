@@ -193,7 +193,7 @@ class ParameterOptimizer:
     """
     BATCH_SIZE  : int  = 100
     OUTPUT_FILE : Path = Path(__file__).parent / 'optimized_results.json'
-    PARAMS_FILE : Path = Path(__file__).resolve().parent.parent / 'config' / 'params.yml'
+    PARAMS_FILE : Path = Path(__file__).resolve().parent.parent.parent / 'config' / 'params.yml'
 
     def __init__(
         self,

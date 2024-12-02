@@ -11,7 +11,8 @@ def main():
     
     params_override = {
         'color_clahe'    : {'enabled' : True},
-        'shadow_removal' : {'enabled' : True}
+        'shadow_removal' : {'enabled' : True},
+        'image_rotation' : {'enabled' : True}
     }
     
     if extractor.headless:
