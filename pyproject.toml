@@ -15,6 +15,7 @@ matplotlib    = "^3.9.2"
 onnxruntime   = "^1.20.0"
 opencv-python = "*"
 ruamel-yaml   = "*"
+rapidfuzz     = "^3.0.0"
 torch         = "*"
 
 [tool.poetry.group.dev.dependencies]
