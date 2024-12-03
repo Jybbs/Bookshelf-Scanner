@@ -173,6 +173,7 @@ Detailed implementation information can be found in:
 
 Future implementation will include:
 - Fuzzy text matching using RapidFuzz for identifying books from partial spine text
+    -Uses fuzzy_match.py
 - Integration with DuckDB for book information lookup
 - Configurable matching thresholds for accuracy control
 

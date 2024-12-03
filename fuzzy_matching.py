@@ -5,10 +5,10 @@ from rapidfuzz import process, fuzz
 
 def main():
     # Define paths for OCR results and master book list
-    ocr_results_path = Path("bookshelf_scanner/core/text_extractor/ocr_results.json")
-    master_db_path = Path("bookshelf_scanner/data/books.duckdb")
+    ocr_results_path = Path("bookshelf_scanner/core/text_extractor/ocr_results.json") #found text from images
+    master_db_path = Path("bookshelf_scanner/data/books.duckdb") #master book list/database
 
-    # Load OCR results from JSON
+    # Load OCR results from JSON - where found text is stored
     if not ocr_results_path.exists():
         print(f"OCR results file not found at {ocr_results_path}")
         return
