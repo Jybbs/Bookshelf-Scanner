@@ -25,14 +25,14 @@ The `TextExtractor` module focuses on text extraction from book spine images, ai
   - Structured JSON output for downstream processing
   - Rotation-invariant text detection
 
-## Usage
+## Getting Started
 
 1. **Image Preparation**
    Place segmented book spine images in the `images/books` directory. The module accepts common image formats (JPG, PNG, BMP).
 
 2. **Launch Interactive Interface**
    ```bash
-   poetry run python TextExtractor/TextExtractor.py
+   poetry run text-extractor
    ```
    The interface presents your first image alongside an intuitive control panel.
 
@@ -99,27 +99,70 @@ Results are saved to `ocr_results.json` in a structured format:
 }
 ```
 
-## Programmatic Usage
+## Usage
 
-The `TextExtractor` can be integrated into automated workflows:
+### Basic Usage
 
 ```python
-from TextExtractor import TextExtractor
+from bookshelf_scanner import TextExtractor
 
-# Initialize with GPU acceleration
+# Initialize with GPU support if available
 extractor = TextExtractor(gpu_enabled = True)
 
-# Configure and process images
-results = extractor.interactive_experiment(
+# Run interactive experiment
+extractor.interactive_experiment(image_files = image_files)
+```
+
+### Headless Mode
+
+```python
+extractor = TextExtractor(
+    headless      = True,
+    gpu_enabled   = True,
+    output_json   = True,
+    output_file   = Path('custom_output.json')
+)
+
+# Process images in batch mode
+results = extractor.run_headless(
     image_files     = image_files,
     params_override = {
-        'use_shadow_removal' : True,
-        'shadow_kernel_size' : 23,
-        'shadow_median_blur' : 15,
-        'use_color_clahe'    : True,
-        'clahe_clip_limit'   : 2.0
-    },
-    output_json    = True,
-    interactive_ui = False
+        'ocr': {
+            'enabled'    : True,
+            'parameters' : {
+                'ocr_confidence_threshold' : 0.7
+            }
+        }
+    }
 )
 ```
+
+### Parameter Overrides
+
+Parameters can be overridden through the `params_override` dictionary:
+
+```python
+params_override = {
+    'shadow_removal' : {
+        'enabled'    : True,
+        'parameters' : {
+            'shadow_kernel_size' : 23,
+            'shadow_median_blur' : 15
+        }
+    },
+    'color_clahe' : {
+        'enabled'    : True,
+        'parameters' : {
+            'clahe_clip_limit' : 2.0
+        }
+    },
+    'brightness_adjustment' : {
+        'enabled'    : True,
+        'parameters' : {
+            'brightness_value' : 10
+        }
+    }
+}
+```
+
+For automated parameter optimization, see the [Parameter Optimizer](../parameter_optimizer/README.md) documentation.

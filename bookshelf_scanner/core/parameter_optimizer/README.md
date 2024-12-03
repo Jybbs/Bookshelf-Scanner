@@ -35,6 +35,17 @@ The optimizer employs the following exploration strategy:
   - Detailed progress logging
   - Memory-efficient batch processing
 
+## Getting Started
+
+1. **Image Preparation**  
+   Place your test images in the `images/books` directory. The optimizer accepts common image formats (JPG, PNG, BMP).
+
+2. **Run the Optimizer**  
+   ```bash
+   poetry run parameter-optimizer
+   ```
+   The optimizer will process your images and display progress in its dedicated log. Results will be saved automatically, including the optimal parameters discovered and detailed performance metrics.
+
 ## Implementation
 
 ```python
