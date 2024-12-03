@@ -3,7 +3,7 @@ from james_bookshelf_scanner import *
 
 def load_images():
     import os
-    image_dir = "images/shelves"
+    image_dir = "images/Shelves"
     for image_name in os.listdir(image_dir):
         image = cv2.imread(os.path.join(image_dir, image_name))
         if image is not None:
