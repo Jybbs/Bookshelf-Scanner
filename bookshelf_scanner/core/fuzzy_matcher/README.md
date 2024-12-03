@@ -1,4 +1,4 @@
-# Fuzzy Matcher
+# FuzzyMatcher
 
 The Fuzzy Matcher component performs intelligent text matching between OCR-extracted book spine text and a master database of book titles. It employs fuzzy string matching algorithms to handle OCR imperfections, text variations, and partial matches.
 

@@ -158,10 +158,11 @@ poetry run fuzzy-matcher
 ```
 
 For detailed component documentation, see:
-- [Book Segmenter Documentation](./bookshelf_scanner/core/book_segmenter/README.md)
-- [Text Extractor Documentation](./bookshelf_scanner/core/text_extractor/README.md)
-- [Parameter Optimizer Documentation](./bookshelf_scanner/core/parameter_optimizer/README.md)
-- [Fuzzy Matcher Documentation](./bookshelf_scanner/core/fuzzy_matcher/README.md)
+- [BookSegmenter Documentation](./bookshelf_scanner/core/book_segmenter/README.md)
+- [TextExtractor Documentation](./bookshelf_scanner/core/text_extractor/README.md)
+- [ParameterOptimizer Documentation](./bookshelf_scanner/core/parameter_optimizer/README.md)
+- [FuzzyMatcher Documentation](./bookshelf_scanner/core/fuzzy_matcher/README.md)
+- [ModuleLogger Documentation](./bookshelf_scanner/core/module_logger/README.md)
 
 ## Configuration
 
