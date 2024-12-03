@@ -1,7 +1,6 @@
 import cv2
 import logging
 import numpy as np
-import pytesseract
 
 from dataclasses import dataclass, field
 from pathlib     import Path
@@ -363,12 +362,6 @@ def ocr_spine(spine_image: np.ndarray, **params) -> str:
                 interpolation = cv2.INTER_AREA
             )
 
-        data = pytesseract.image_to_data(
-            spine_image, 
-            lang        = 'eng', 
-            config      = config, 
-            output_type = pytesseract.Output.DICT
-        )
 
         text    = ''
         n_boxes = len(data['text'])

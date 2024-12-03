@@ -65,7 +65,7 @@ def main():
     image_names = ['IMG_1538.JPG', 'IMG_1539.JPG', 'IMG_1346.JPG', 'IMG_1347.JPG', 'IMG_1348.JPG']
     actual_shelves = [3, 3, 4, 4, 4]
     for image_name in image_names:
-        image = cv2.imread(f'images/{image_name}')
+        image = cv2.imread(f'images/bookcases/{image_name}')
         assert image is not None
         print(f"Processing {image_name}")
         # turn image sideways
