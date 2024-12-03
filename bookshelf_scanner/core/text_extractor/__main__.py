@@ -7,7 +7,7 @@ from bookshelf_scanner import TextExtractor
 def main():
 
     extractor   = TextExtractor(headless = False)
-    image_files = extractor.find_image_files('images/books')
+    image_files = extractor.find_image_files('Books')
     
     params_override = {
         'color_clahe'    : {'enabled' : True},

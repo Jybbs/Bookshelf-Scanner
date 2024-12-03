@@ -12,6 +12,8 @@ The system processes bookshelf images through three main stages:
 2. **Text Extraction**: Processes the segmented spine images to extract visible text using EasyOCR
 3. **Text Matching**: *(Planned)* Uses RapidFuzz to match extracted spine text against a book database
 
+Each component maintains its own log file through the `ModuleLogger` system, ensuring consistent debugging and monitoring across the project.
+
 ## Project Structure
 
 ```
@@ -21,12 +23,15 @@ The system processes bookshelf images through three main stages:
 │   │   └── params.yml           # Processing parameters and settings
 │   ├── core/ 
 │   │   ├── book_segmenter/      # Spine detection and segmentation
+│   │   ├── module_logger/       # Standardized logging configuration
 │   │   ├── parameter_optimizer/ # Processing parameter optimization
-│   │   └── text_extractor/      # OCR and text processing
+│   │   ├── text_extractor/      # OCR and text processing
+│   │   └── utils/               # Core project utilities and path handling
 │   ├── data/
 │   │   ├── books.duckdb         # Local book DuckDB database
 │   │   └── utils/               # Data handling utilities
 │   ├── dev/
+│   ├── logs/                    # Component-specific log files
 │   └── images/ 
 │       ├── Bookcases/           # Raw bookshelf photos
 │       ├── Books/               # Segmented spine images

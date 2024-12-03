@@ -1,6 +1,5 @@
 import cv2
 import json
-import logging
 import numpy as np
 
 from dataclasses   import dataclass
@@ -11,16 +10,8 @@ from PIL           import Image, ImageDraw, ImageFont
 from ruamel.yaml   import YAML
 from typing        import Any
 
-# -------------------- Configuration and Logging --------------------
-
-logger = logging.getLogger('TextExtractor')
-logger.setLevel(logging.INFO)
-
-handler = logging.FileHandler(Path(__file__).parent / 'extractor.log', mode = 'w')
-handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-
-logger.addHandler(handler)
-logger.propagate = False
+from bookshelf_scanner import ModuleLogger, Utils
+logger = ModuleLogger('extractor')()
 
 # -------------------- Data Classes --------------------
 
@@ -258,11 +249,12 @@ PROCESSING_FUNCTIONS = {
 # -------------------- TextExtractor Class --------------------
 
 class TextExtractor:
+    PROJECT_ROOT    = Utils.find_root('pyproject.toml')
     ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
     DEFAULT_HEIGHT  = 800
     FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
-    OUTPUT_FILE     = Path(__file__).parent / 'ocr_results.json'
-    PARAMS_FILE     = Path(__file__).resolve().parent.parent.parent / 'config' / 'params.yml'
+    OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'text_extractor' / 'ocr_results.json'
+    PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'params.yml'
     UI_COLORS       = {
         'GRAY'  : (200, 200, 200),
         'TEAL'  : (255, 255, 0),
@@ -317,37 +309,33 @@ class TextExtractor:
         return processing_state.to_current_parameters()
 
     @classmethod
-    def find_image_files(
-        cls,
-        target_subdirectory : str         = 'images/books',
-        start_directory     : Path | None = None
-    ) -> list[Path]:
+    def find_image_files(cls, subdirectory: str = 'Books') -> list[Path]:
         """
-        Retrieves a sorted list of image files from the specified directory.
+        Retrieves a sorted list of image files from a subdirectory within the images folder.
 
         Args:
-            target_subdirectory : The subdirectory to search for images
-            start_directory     : The starting directory for the search
+            subdirectory : Name of the subdirectory within 'images' to process (e.g., 'Books', 'Bookcases', 'Shelves')
 
         Returns:
             List of image file paths
 
         Raises:
-            FileNotFoundError : If no image files are found
+            FileNotFoundError : If no image files are found in the specified subdirectory
         """
-        start_directory = start_directory or Path(__file__).resolve().parent
-
-        for directory in [start_directory, *start_directory.parents]:
-            target_dir = directory / target_subdirectory
-            if target_dir.is_dir():
-                image_files = sorted(
-                    file for file in target_dir.rglob('*')
-                    if file.is_file() and file.suffix.lower() in cls.ALLOWED_FORMATS
-                )
-                if image_files:
-                    return image_files
-
-        raise FileNotFoundError(f"No image files found in '{target_subdirectory}' directory.")
+        image_dir = cls.PROJECT_ROOT / 'bookshelf_scanner' / 'images' / subdirectory
+        
+        if not image_dir.is_dir():
+            raise FileNotFoundError(f"Image subdirectory not found: {image_dir}")
+            
+        image_files = sorted(
+            file for file in image_dir.glob('*')
+            if file.is_file() and file.suffix.lower() in cls.ALLOWED_FORMATS
+        )
+        
+        if not image_files:
+            raise FileNotFoundError(f"No image files found in {image_dir}")
+            
+        return image_files
 
     @staticmethod
     def center_image_in_square(image: np.ndarray) -> np.ndarray:
