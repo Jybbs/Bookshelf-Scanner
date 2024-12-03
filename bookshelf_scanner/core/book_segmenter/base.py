@@ -6,7 +6,7 @@ class BookSegmenter:
     """
     BookSegmenter class for segmenting an image (of a bookshelf) into individual books
     """
-    def __init__(self, model_path = 'BookSegmenter/models/OpenShelves8.onnx'):
+    def __init__(self, model_path = 'bookshelf_scanner/core/book_segmenter/models/OpenShelves8.onnx'):
         """
         Initialize the BookSegmenter
 
@@ -24,27 +24,41 @@ class BookSegmenter:
         """
         return self.yolo.check()
     
-    def segment(self, image, use_masks = True):
+    def segment(self, image: np.ndarray, use_masks: bool = True) -> list[dict]:
         """
-        Segment Image into books
+        Segment Image into books.
 
         Args:
-            image (np.array): The input image
-            use_masks (bool): Whether to use the model's masks to black out the background
+            image (np.array): The input image.
+            use_masks (bool): Whether to use the model's masks to black out the background.
+
+        Returns:
+            list[dict]: List of segments, each containing:
+                - 'image' (np.array): The segmented book image.
+                - 'bbox' (list[float]): Bounding box coordinates [x_min, y_min, x_max, y_max].
+                - 'confidence' (float): Confidence score of the detection.
         """
         detections, masks = self.yolo.detect_books(image)
         segments = []
-        bboxes = []
-        confidences = []
+
         for i, box in enumerate(detections):
+            # Extract the segment using the bounding box coordinates
             segment = image[int(box[1]):int(box[3]), int(box[0]):int(box[2])]
+            
+            # Apply mask if specified
             if use_masks:
                 mask = masks[i][int(box[1]):int(box[3]), int(box[0]):int(box[2])]
-                segment = cv2.bitwise_and(segment, segment, mask= mask.astype(np.uint8))
-            segments.append(segment)
-            bboxes.append(box[:4])
-            confidences.append(box[4])
-        return segments, bboxes, confidences
+                segment = cv2.bitwise_and(segment, segment, mask=mask.astype(np.uint8))
+            
+            # Append segment with bounding box and confidence
+            segments.append({
+                'image': segment,
+                'bbox': box[:4],
+                'confidence': box[4]
+            })
+
+        return segments
+
     
     def display_segmented_books(self, books, confidence):
         """
@@ -66,9 +80,15 @@ class BookSegmenter:
 
 def main():
     import os
+    import cv2
 
-    # Load the image(s)
-    image_dir = "images/Shelves"
+    # Load the image(s) 
+    image_dir = os.path.join(os.path.dirname(__file__), "../../images/Shelves") #edited to ensure runs from any directory
+    image_dir = os.path.abspath(image_dir)
+    
+    #debugging
+    print(f"Looking for images in: {image_dir}")
+    
     image_files = os.listdir(image_dir)
     segmenter = BookSegmenter()
     for image_file in image_files:

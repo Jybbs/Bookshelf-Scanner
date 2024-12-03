@@ -53,7 +53,7 @@ The system processes bookshelf images through three main stages:
 1. Clone the repository:
 ```bash
 git clone git@github.com:your-username/bookshelf-scanner.git
-cd bookshelf-scanner
+cd bookshelf_scanner
 ```
 
 2. Install Poetry if you haven't already:
