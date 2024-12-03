@@ -10,6 +10,7 @@ packages     = [{ include = "bookshelf_scanner" }]
 book-segmenter      = "bookshelf_scanner.core.book_segmenter.__main__:main"
 text-extractor      = "bookshelf_scanner.core.text_extractor.__main__:main"
 parameter-optimizer = "bookshelf_scanner.core.parameter_optimizer.__main__:main"
+fuzzy-matcher       = "bookshelf_scanner.core.fuzzy_matcher.__main__:main"
 
 [tool.poetry.dependencies]
 python        = "^3.12"

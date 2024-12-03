@@ -6,11 +6,12 @@ A computer vision system that detects and extracts text from book spines on book
 
 This project automates the process of capturing book information directly from bookshelf images. By processing photos of bookshelves, the system detects individual book spines and extracts visible text, enabling efficient digitization of physical book collections.
 
-The system processes bookshelf images through three main stages:
+The system processes bookshelf images through four main stages:
 
 1. **Spine Segmentation**: Uses YOLOv8 to detect and segment individual book spines from bookshelf images
 2. **Text Extraction**: Processes the segmented spine images to extract visible text using EasyOCR
-3. **Text Matching**: *(Planned)* Uses RapidFuzz to match extracted spine text against a book database
+3. **Parameter Optimization**: Fine-tunes processing parameters to maximize text extraction accuracy
+4. **Text Matching**: Uses RapidFuzz to match extracted spine text against a book database, handling OCR imperfections and variations
 
 Each component maintains its own log file through the `ModuleLogger` system, ensuring consistent debugging and monitoring across the project.
 
@@ -23,6 +24,7 @@ Each component maintains its own log file through the `ModuleLogger` system, ens
 │   │   └── params.yml           # Processing parameters and settings
 │   ├── core/ 
 │   │   ├── book_segmenter/      # Spine detection and segmentation
+│   │   ├── fuzzy_matcher/       # Text matching against book database
 │   │   ├── module_logger/       # Standardized logging configuration
 │   │   ├── parameter_optimizer/ # Processing parameter optimization
 │   │   ├── text_extractor/      # OCR and text processing
@@ -80,12 +82,13 @@ poetry install
 ### Importing Components
 
 ```python
-from bookshelf_scanner import BookSegmenter, TextExtractor, ParameterOptimizer
+from bookshelf_scanner import BookSegmenter, TextExtractor, ParameterOptimizer, FuzzyMatcher
 
 # Initialize components
-segmenter  = BookSegmenter()
-extractor  = TextExtractor(gpu_enabled=True)
-optimizer  = ParameterOptimizer(extractor)
+segmenter = BookSegmenter()
+extractor = TextExtractor(gpu_enabled = True)
+optimizer = ParameterOptimizer(extractor)
+matcher   = FuzzyMatcher(match_threshold = 85)
 ```
 
 ### Spine Segmentation
@@ -99,9 +102,9 @@ spines, bboxes, confidences = segmenter.segment(image)
 segmenter.display_segmented_books(spines, confidences)
 ```
 
-### Text Processing & Optimization
+### Pre-Processing & Text Extraction
 
-The TextExtractor provides an interactive environment for processing spine images and extracting text. It implements multiple image processing techniques that can be adjusted in real-time to handle different image qualities and characteristics.
+The `TextExtractor` provides an interactive environment for processing spine images and extracting text. It implements multiple image processing techniques that can be adjusted in real-time to handle different image qualities and characteristics.
 
 ```python
 # Process images with specific parameters
@@ -138,10 +141,27 @@ optimal_params = optimizer.optimize(
 )
 ```
 
+### Text Matching
+
+The `FuzzyMatcher` component matches the optimized OCR results against a database of known book titles:
+
+```python
+# Match extracted text to book database
+matcher = FuzzyMatcher(
+    match_threshold = 85, # Minimum score for valid matches
+    max_matches     = 3   # Maximum matches per text segment
+)
+matcher.match_books()
+
+# Run via Poetry command
+poetry run fuzzy-matcher
+```
+
 For detailed component documentation, see:
 - [Book Segmenter Documentation](./bookshelf_scanner/core/book_segmenter/README.md)
 - [Text Extractor Documentation](./bookshelf_scanner/core/text_extractor/README.md)
 - [Parameter Optimizer Documentation](./bookshelf_scanner/core/parameter_optimizer/README.md)
+- [Fuzzy Matcher Documentation](./bookshelf_scanner/core/fuzzy_matcher/README.md)
 
 ## Configuration
 

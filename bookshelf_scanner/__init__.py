@@ -10,11 +10,13 @@ from bookshelf_scanner.core.module_logger       import ModuleLogger
 from bookshelf_scanner.core.book_segmenter      import BookSegmenter
 from bookshelf_scanner.core.text_extractor      import TextExtractor
 from bookshelf_scanner.core.parameter_optimizer import ParameterOptimizer
+from bookshelf_scanner.core.fuzzy_matcher       import FuzzyMatcher
 
 __all__ = [
     'Utils',
     'ModuleLogger',
     'BookSegmenter',
     'TextExtractor', 
-    'ParameterOptimizer'
+    'ParameterOptimizer',
+    'FuzzyMatcher'
 ]
