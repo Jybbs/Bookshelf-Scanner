@@ -1,3 +1,7 @@
+"""
+Core functionality for matching OCR extracted text to book database entries.
+"""
+
 import duckdb
 import json
 
@@ -25,7 +29,7 @@ class FuzzyMatcher:
     PROJECT_ROOT     = Utils.find_root('pyproject.toml')
     MASTER_DB_PATH   = PROJECT_ROOT / 'bookshelf_scanner' / 'data'  / 'books.duckdb'
     OCR_RESULTS_PATH = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'text_extractor' / 'ocr_results.json'
-    OUTPUT_FILE      = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'matcher' / 'match_results.json'
+    OUTPUT_FILE      = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'fuzzy_matcher' / 'match_results.json'
 
     def __init__(
         self,
@@ -114,7 +118,7 @@ class FuzzyMatcher:
             limit   = self.max_matches
         )
         
-        return [(title, score) for title, score in matches if score >= self.match_threshold]
+        return [(match[0], match[1]) for match in matches if match[1] >= self.match_threshold]
 
     def match_books(self) -> None:
         """
