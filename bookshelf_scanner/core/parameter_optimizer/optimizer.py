@@ -1,5 +1,4 @@
 import json
-import logging
 import itertools
 import numpy as np
 
@@ -10,18 +9,8 @@ from ruamel.yaml     import YAML
 from typing          import Any, Iterator
 from collections.abc import Sequence
 
-from bookshelf_scanner import TextExtractor
-
-# -------------------- Configuration and Logging --------------------
-
-logger = logging.getLogger('ParameterOptimizer')
-logger.setLevel(logging.INFO)
-
-handler = logging.FileHandler(Path(__file__).parent / 'optimizer.log', mode = 'w')
-handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-
-logger.addHandler(handler)
-logger.propagate = False
+from bookshelf_scanner import ModuleLogger, TextExtractor, Utils
+logger = ModuleLogger('extractor')()
 
 # -------------------- Data Classes --------------------
 
@@ -191,9 +180,10 @@ class ParameterOptimizer:
     Optimizes the parameters for text extraction by testing various
     combinations and recording the best results.
     """
-    BATCH_SIZE  : int  = 100
-    OUTPUT_FILE : Path = Path(__file__).parent / 'optimized_results.json'
-    PARAMS_FILE : Path = Path(__file__).resolve().parent.parent.parent / 'config' / 'params.yml'
+    PROJECT_ROOT = Utils.find_root('pyproject.toml')
+    BATCH_SIZE   = 100
+    OUTPUT_FILE  = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'parameter_optimizer' / 'optimized_results.json'
+    PARAMS_FILE  = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'params.yml'
 
     def __init__(
         self,
