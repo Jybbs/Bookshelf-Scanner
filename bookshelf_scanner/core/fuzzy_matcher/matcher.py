@@ -13,7 +13,7 @@ class MatchResult:
     """
     Stores the results of a text matching operation.
     """
-    text      : str         # Text extracted from OCR
+    text       : str        # Text extracted from OCR
     confidence : float      # OCR confidence score
     matches    : list[dict] # List of {title, score} dictionaries
 
@@ -23,7 +23,7 @@ class FuzzyMatcher:
     Uses fuzzy matching to account for OCR imperfections.
     """
     PROJECT_ROOT     = Utils.find_root('pyproject.toml')
-    MASTER_DB_PATH   = PROJECT_ROOT / 'bookshelf_scanner' / 'data'  / 'books.duckdb'
+    MASTER_DB_PATH   = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'books.duckdb'
     OCR_RESULTS_PATH = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'text_extractor' / 'ocr_results.json'
     OUTPUT_FILE      = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'fuzzy_matcher' / 'match_results.json'
 
@@ -78,10 +78,10 @@ class FuzzyMatcher:
                 
                 # Perform fuzzy matching
                 matches = process.extract(
-                    query     = extracted_text,
-                    choices   = book_titles,
-                    scorer    = fuzz.ratio,
-                    limit     = self.max_matches
+                    query   = extracted_text,
+                    choices = book_titles,
+                    scorer  = fuzz.ratio,
+                    limit   = self.max_matches
                 )
                 
                 # Log the matches
