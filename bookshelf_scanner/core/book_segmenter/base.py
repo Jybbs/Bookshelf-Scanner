@@ -24,41 +24,27 @@ class BookSegmenter:
         """
         return self.yolo.check()
     
-    def segment(self, image: np.ndarray, use_masks: bool = True) -> list[dict]:
+    def segment(self, image, use_masks = True):
         """
-        Segment Image into books.
+        Segment Image into books
 
         Args:
-            image (np.array): The input image.
-            use_masks (bool): Whether to use the model's masks to black out the background.
-
-        Returns:
-            list[dict]: List of segments, each containing:
-                - 'image' (np.array): The segmented book image.
-                - 'bbox' (list[float]): Bounding box coordinates [x_min, y_min, x_max, y_max].
-                - 'confidence' (float): Confidence score of the detection.
+            image (np.array): The input image
+            use_masks (bool): Whether to use the model's masks to black out the background
         """
         detections, masks = self.yolo.detect_books(image)
         segments = []
-
+        bboxes = []
+        confidences = []
         for i, box in enumerate(detections):
-            # Extract the segment using the bounding box coordinates
             segment = image[int(box[1]):int(box[3]), int(box[0]):int(box[2])]
-            
-            # Apply mask if specified
             if use_masks:
                 mask = masks[i][int(box[1]):int(box[3]), int(box[0]):int(box[2])]
-                segment = cv2.bitwise_and(segment, segment, mask=mask.astype(np.uint8))
-            
-            # Append segment with bounding box and confidence
-            segments.append({
-                'image': segment,
-                'bbox': box[:4],
-                'confidence': box[4]
-            })
-
-        return segments
-
+                segment = cv2.bitwise_and(segment, segment, mask= mask.astype(np.uint8))
+            segments.append(segment)
+            bboxes.append(box[:4])
+            confidences.append(box[4])
+        return segments, bboxes, confidences
     
     def display_segmented_books(self, books, confidence):
         """
