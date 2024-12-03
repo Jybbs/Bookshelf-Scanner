@@ -1,4 +1,4 @@
-from BookSegmenter.YOLOv8 import YOLO_model
+from .yolov8 import YOLO_model
 import cv2
 import numpy as np
 
@@ -6,7 +6,7 @@ class BookSegmenter:
     """
     BookSegmenter class for segmenting an image (of a bookshelf) into individual books
     """
-    def __init__(self, model_path = 'BookSegmenter/models/OpenShelves8.onnx'):
+    def __init__(self, model_path = 'bookshelf_scanner/core/book_segmenter/models/OpenShelves8.onnx'):
         """
         Initialize the BookSegmenter
 
@@ -66,9 +66,15 @@ class BookSegmenter:
 
 def main():
     import os
+    import cv2
 
-    # Load the image(s)
-    image_dir = "images/Shelves"
+    # Load the image(s) 
+    image_dir = os.path.join(os.path.dirname(__file__), "../../images/Shelves") #edited to ensure runs from any directory
+    image_dir = os.path.abspath(image_dir)
+    
+    #debugging
+    print(f"Looking for images in: {image_dir}")
+    
     image_files = os.listdir(image_dir)
     segmenter = BookSegmenter()
     for image_file in image_files:

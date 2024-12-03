@@ -1,10 +1,10 @@
 [tool.poetry]
-name         = "Bookshelf Scanner"
+name         = "bookshelf-scanner"
 version      = "0.0.0"
 description  = "Required packages for the final project for CS5330."
 authors      = ["James Parkington <pongs.acreage.0o@icloud.com>"]
 readme       = "README.md"
-package-mode = false
+packages     = [{ include = "bookshelf_scanner" }]
 
 [tool.poetry.dependencies]
 python        = "^3.12"
@@ -15,6 +15,7 @@ matplotlib    = "^3.9.2"
 onnxruntime   = "^1.20.0"
 opencv-python = "*"
 ruamel-yaml   = "*"
+rapidfuzz     = "^3.0.0"
 torch         = "*"
 
 [tool.poetry.group.dev.dependencies]

@@ -2,19 +2,23 @@ import time
 import cv2
 import numpy as np
 import onnxruntime as ort
-from BookSegmenter.utils import sigmoid, crop_mask
+from .utils import sigmoid, crop_mask
 
 class YOLO_model:
     """
     YOLO model class for book detection
     """
     def __init__(self, model_path):
+        import os
+        if model_path is None:
+            model_path = os.path.join(os.path.dirname(__file__), "models/OpenShelves8.onnx") #dynamic compute of path  to ONNX model
+            model_path = os.path.abspath(model_path)
         self.init_model(model_path)
         self.confidence_threshold = 0.3
         self.iou_threshold = 0.5
 
 
-    def init_model(self, model_path):
+    def init_model(self, model_path=None):
         self.ort_session = ort.InferenceSession(model_path)
         self.input_name = self.ort_session.get_inputs()[0].name
         self.output0_name = self.ort_session.get_outputs()[0].name

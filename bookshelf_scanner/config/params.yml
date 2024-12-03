@@ -7,54 +7,36 @@
       min          : 0.0
       max          : 1.0
       step         : 0.05
-      increase_key : R
+      increase_key : O
 
 - name         : shadow_removal
   display_name : Shadow Removal
   parameters:
     - name         : shadow_kernel_size
       display_name : Shadow Kernel Size
+      value        : 23
+      min          : 1
+      max          : 45
+      step         : 2
+      increase_key : S
+    - name         : shadow_median_blur
+      display_name : Shadow Median Blur
       value        : 15
       min          : 1
       max          : 45
       step         : 2
-      increase_key : K
-    - name         : shadow_median_blur
-      display_name : Shadow Median Blur
-      value        : 21
-      min          : 1
-      max          : 45
-      step         : 2
-      increase_key : B
+      increase_key : M
 
 - name         : color_clahe
   display_name : Color CLAHE
   parameters:
     - name         : clahe_clip_limit
       display_name : CLAHE Clip Limit
-      value        : 2.0
+      value        : 1.0
       min          : 0.0
       max          : 10.0
       step         : 0.5
       increase_key : H
-
-- name         : gaussian_blur
-  display_name : Gaussian Blur
-  parameters:
-    - name         : gaussian_kernel_size
-      display_name : Gaussian Kernel Size
-      value        : 5
-      min          : 1
-      max          : 31
-      step         : 2
-      increase_key : M
-    - name         : gaussian_sigma
-      display_name : Gaussian Sigma
-      value        : 1.0
-      min          : 0.1
-      max          : 10.0
-      step         : 0.5
-      increase_key : N
 
 - name         : brightness_adjustment
   display_name : Brightness Adjustment
@@ -62,10 +44,10 @@
     - name         : brightness_value
       display_name : Brightness Value
       value        : 0
-      min          : -100
-      max          : 100
+      min          : -50
+      max          : 50
       step         : 5
-      increase_key : F
+      increase_key : B
 
 - name         : contrast_adjustment
   display_name : Contrast Adjustment
@@ -76,22 +58,15 @@
       min          : 0.1
       max          : 3.0
       step         : 0.1
-      increase_key : L
-
-- name         : adaptive_thresholding
-  display_name : Adaptive Thresholding
-  parameters:
-    - name         : adaptive_block_size
-      display_name : Adaptive Block Size
-      value        : 11
-      min          : 3
-      max          : 45
-      step         : 2
-      increase_key : Z
-    - name         : adaptive_c
-      display_name : Adaptive C
-      value        : 2
-      min          : -10
-      max          : 10
-      step         : 1
       increase_key : C
+
+- name         : image_rotation
+  display_name : Image Rotation
+  parameters:
+    - name         : rotation_angle
+      display_name : Rotation Angle
+      value        : 90
+      min          : 0
+      max          : 270
+      step         : 90
+      increase_key : R

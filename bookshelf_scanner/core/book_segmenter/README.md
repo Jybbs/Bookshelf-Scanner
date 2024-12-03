@@ -9,7 +9,7 @@ I managed to get the ONNX model, and implement a custom inference class so it do
 Do the following from the project root to quickly check if the BookSegmenter is working on your machine:
 
 ```bash
-PYTHON_PATH=$(pwd) python BookSegmenter/BookSegmenter_base.py
+PYTHON_PATH=$(pwd) python bookshelf_scanner/core/book_segmenter/base.py
 ```
 
 ## Usage
