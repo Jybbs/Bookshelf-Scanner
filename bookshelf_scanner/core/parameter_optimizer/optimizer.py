@@ -1,304 +1,281 @@
 import json
-import itertools
 import numpy as np
 
-from dataclasses     import dataclass, field
-from pathlib         import Path
-from ruamel.yaml     import YAML
-from typing          import Any
-from collections.abc import Iterator
+from dataclasses import dataclass
+from functools   import cache
+from itertools   import product
+from pathlib     import Path
+from typing      import Any, Iterator
 
 from bookshelf_scanner import ModuleLogger, TextExtractor, Utils
 logger = ModuleLogger('optimizer')()
 
 # -------------------- Data Classes --------------------
 
-@dataclass
-class OptimizationResult:
+@dataclass(frozen = True)
+class ParameterRange:
     """
-    Stores the best optimization results for a single image,
-    including the parameters used and the resulting OCR text and metrics.
+    Defines the valid range and step size for a processing parameter.
     """
-    parameters   : dict[str, Any]          # Parameters that achieved best results
-    text_results : list[tuple[str, float]] # OCR results for the image
-    score        : float                   # Total character-weighted confidence score
-    char_count   : int                     # Total number of characters recognized
-    iterations   : int                     # Number of optimization iterations run
+    name     : str
+    min_val  : float
+    max_val  : float
+    step_val : float
+    value    : float
 
-    def update_if_better(
-        self,
-        new_params    : dict[str, Any],
-        new_results   : list[tuple[str, float]],
-        iteration_num : int
-    ) -> bool:
-        """
-        Updates result if new parameters achieve better score.
-
-        Args:
-            new_params    : New parameter set to evaluate
-            new_results   : New OCR results to evaluate
-            iteration_num : Current optimization iteration
-
-        Returns:
-            True if results were updated, False otherwise
-        """
-        new_score, new_count = ParameterOptimizer.calculate_score(new_results)
-
-        if new_score > self.score:
-            self.parameters   = new_params
-            self.text_results = new_results
-            self.score        = new_score
-            self.char_count   = new_count
-            self.iterations   = iteration_num
-            return True
-        return False
-
-    def to_dict(self) -> dict[str, Any]:
-        """
-        Converts optimization result to dictionary format.
-
-        Returns:
-            Dictionary containing optimization results and metrics
-        """
-        return {
-            "best_parameters": self.parameters,
-            "text_results"   : self.text_results,
-            "metrics"        : {
-                "score"      : round(self.score, 4),
-                "char_count" : self.char_count,
-                "iterations" : self.iterations
-            }
-        }
+@dataclass(frozen = True)
+class ProcessingStep:
+    """
+    Defines a processing step and its configurable parameters.
+    """
+    name       : str
+    parameters : tuple[ParameterRange, ...]
 
 @dataclass
-class OptimizerState:
+class OCRResult:
     """
-    Maintains the state of the optimization process, including the best
-    results per image and tracking of current iteration and batch.
+    Stores parameter evaluation results for a single image.
     """
-    best_results : dict[str, OptimizationResult] = field(default_factory = dict)
-    iteration    : int = 0   # Current iteration number
-    _modified    : bool = field(default = False, init = False)
-
-    def update_result(
-        self,
-        image_name   : str,
-        params       : dict[str, Any],
-        ocr_results  : list[tuple[str, float]],
-        iteration    : int
-    ) -> bool:
-        """
-        Updates results for an image if the new score is better.
-
-        Args:
-            image_name  : Name of the image being processed
-            params      : Parameter settings used
-            ocr_results : OCR results for the image
-            iteration   : Current iteration number
-
-        Returns:
-            True if results were updated, False otherwise
-        """
-        if image_name not in self.best_results:
-            score, count = ParameterOptimizer.calculate_score(ocr_results)
-            self.best_results[image_name] = OptimizationResult(
-                parameters   = params,
-                text_results = ocr_results,
-                score        = score,
-                char_count   = count,
-                iterations   = iteration
-            )
-            self._modified = True
-            return True
-
-        if self.best_results[image_name].update_if_better(params, ocr_results, iteration):
-            self._modified = True
-            return True
-
-        return False
-
-    @property
-    def modified(self) -> bool:
-        """
-        Checks if state has been modified since last access.
-
-        Returns:
-            True if state has been modified, False otherwise
-        """
-        was_modified = self._modified
-        self._modified = False
-        return was_modified
+    parameters   : dict[str, dict]
+    ocr_results  : list[tuple[str, float]]
+    score        : float
+    improvements : dict[str, Any]
 
 # -------------------- ParameterOptimizer Class --------------------
 
 class ParameterOptimizer:
     """
-    Optimizes the parameters for text extraction by testing various
-    combinations and recording the best results.
+    Tests parameter combinations to find optimal OCR configurations.
+    Evaluates each combination against individual images to maximize
+    character-level confidence scores.
     """
+    
+    # -------------------- Class Constants --------------------
+    
     PROJECT_ROOT = Utils.find_root('pyproject.toml')
-    OUTPUT_FILE  = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'optimizer.json'
-    PARAMS_FILE  = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'params.yml'
-
-    def __init__(
-        self,
-        extractor   : TextExtractor,
-        output_file : Path | None = None,
-        params_file : Path | None = None,
-    ):
+    RESULTS_DIR  = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results'
+    OUTPUT_FILE  = RESULTS_DIR / 'optimizer_results.json'
+    
+    def __init__(self, extractor: TextExtractor):
         """
-        Initializes the ParameterOptimizer instance.
-
+        Initialize the parameter optimizer.
+        
         Args:
-            extractor   : An instance of TextExtractor to perform OCR
-            output_file : Path to save optimization results
-            params_file : Path to parameter configuration file
+            extractor : TextExtractor instance to optimize
         """
-        self.extractor   = extractor
-        self.output_file = output_file or self.OUTPUT_FILE
-        self.params_file = params_file or self.PARAMS_FILE
-
-        self.state = OptimizerState()
-        self.steps = self.extractor.initialize_processing_steps()
-        logger.info("Initialized ParameterOptimizer.")
-
-    def generate_parameter_combinations(self) -> Iterator[dict[str, Any]]:
+        self.extractor = extractor
+        self.results   = {}
+    
+    # -------------------- Parameter Space Generation --------------------
+    
+    def extract_step_definitions(self) -> list[ProcessingStep]:
         """
-        Generates all possible parameter combinations for OCR processing.
-
-        The function follows these rules:
-        1. OCR is always enabled.
-        2. For all other steps, we test every on/off combination.
-        3. When a step is on, we test every possible value of its parameters.
-        4. When a step is off, we don't include its parameters at all.
-
-        Yields:
-            Dictionary containing parameter combinations.
-        """
-        # First, build our parameter space for each step
-        step_parameters = {}
-        for step in self.steps:
-            if step.name == 'ocr':
-                continue  # OCR is always enabled
-            
-            params = {}
-            for param in step.parameters:
-                param_values = np.arange(param.min, param.max + param.step/2, param.step).tolist()
-                params[param.name] = param_values
-            step_parameters[step.name] = {
-                'parameters': params
-            }
-
-        # Now generate all possible step on/off combinations (excluding OCR)
-        step_names = list(step_parameters.keys())
-        step_states = list(itertools.product([True, False], repeat=len(step_names)))
-
-        for state_combo in step_states:
-            params_override = {}
-            # Set enabled/disabled states
-            for step_name, is_enabled in zip(step_names, state_combo):
-                params_override[step_name] = {'enabled': is_enabled}
-
-                if is_enabled:
-                    # For enabled steps, generate all combinations of parameters
-                    step_params  = step_parameters[step_name]['parameters']
-                    param_names  = list(step_params.keys())
-                    param_values = list(step_params.values())
-
-                    for values_combo in itertools.product(*param_values):
-                        param_dict = dict(zip(param_names, values_combo))
-                        params_override[step_name]['parameters'] = param_dict
-                        yield params_override.copy()
-                else:
-                    yield params_override.copy()
-
-    @staticmethod
-    def calculate_score(text_results: list[tuple[str, float]]) -> tuple[float, int]:
-        """
-        Calculates confidence-weighted character score for OCR results.
-
-        Args:
-            text_results: List of (text, confidence) tuples from OCR
-
+        Creates immutable processing step definitions from extractor configuration.
+        
         Returns:
-            Tuple of (total_score, total_character_count)
+            List of ProcessingStep instances containing parameter ranges
         """
-        if not text_results:
-            return 0.0, 0
-
-        char_count  = sum(len(text.strip()) for text, _ in text_results)
-        total_score = sum(len(text.strip()) * conf for text, conf in text_results)
-
-        return total_score, char_count
-
-    def save_results(self):
+        steps           = self.extractor.initialize_processing_steps()
+        processing_steps = []
+        
+        for step in steps:
+            if step.parameters and step.is_pipeline:
+                param_ranges = tuple(
+                    ParameterRange(
+                        name     = p.name,
+                        min_val  = float(p.min),
+                        max_val  = float(p.max),
+                        step_val = float(p.step),
+                        value    = float(p.value)
+                    )
+                    for p in step.parameters
+                )
+                processing_steps.append(ProcessingStep(name = step.name, parameters = param_ranges))
+        
+        return processing_steps
+    
+    @cache
+    def map_step_variations(self, step: ProcessingStep) -> list[dict[str, float]]:
         """
-        Saves current optimization results to the output file.
+        Maps all valid parameter variations for a single processing step.
+        
+        Args:
+            step : ProcessingStep containing parameter definitions
+            
+        Returns:
+            List of parameter value combinations for the step
         """
-        output_dict = {
-            name: result.to_dict()
-            for name, result in sorted(self.state.best_results.items())
-        }
-
-        with self.output_file.open('w', encoding='utf-8') as f:
-            json.dump(output_dict, f, ensure_ascii=False, indent=4)
-
-        logger.info(f"Results saved to {self.output_file}")
-
+        param_ranges = []
+        for param in step.parameters:
+            values = np.arange(param.min_val, param.max_val + param.step_val, param.step_val)
+            if isinstance(param.value, int):
+                values = [int(v) for v in values]
+            param_ranges.append((param.name, values))
+        
+        variations = []
+        for value_combo in product(*(values for _, values in param_ranges)):
+            param_dict = {
+                name: value
+                for (name, _), value in zip(param_ranges, value_combo)
+            }
+            variations.append({
+                'parameters' : param_dict,
+                'enabled'    : True
+            })
+        
+        return variations
+    
+    def build_parameter_grid(self) -> Iterator[dict[str, dict]]:
+        """
+        Builds complete grid of parameter combinations across processing steps.
+        
+        Returns:
+            Iterator of complete parameter configurations to test
+        """
+        processing_steps   = self.extract_step_definitions()
+        step_variations    = []
+        total_combinations = 1
+        
+        # Calculate variations per step and total
+        for step in processing_steps:
+            step_params = self.map_step_variations(step)
+            step_variations.append((step.name, step_params))
+            total_combinations *= len(step_params)
+            
+        logger.info(f"Testing {total_combinations} parameter combinations")
+        
+        # Generate and yield each complete combination
+        current = 0
+        for step_combo in product(*[params for _, params in step_variations]):
+            current += 1
+            if current % 1000 == 0:
+                logger.info(f"Testing combination {current} of {total_combinations}")
+            
+            yield {
+                name: params
+                for name, params in zip([s[0] for s in step_variations], step_combo)
+            }
+    
+    # -------------------- Parameter Evaluation --------------------
+    
+    def identify_improvements(
+        self,
+        new_params : dict,
+        old_params : dict
+    ) -> dict:
+        """
+        Identifies which parameters changed from the previous best configuration.
+        
+        Args:
+            new_params : New parameter configuration
+            old_params : Previous best parameter configuration
+            
+        Returns:
+            Dictionary of parameter improvements
+        """
+        improvements = {}
+        
+        for step_name, step_config in new_params.items():
+            if step_name not in old_params:
+                improvements[step_name] = step_config
+                continue
+            
+            old_config = old_params[step_name]
+            if step_config.get('enabled') != old_config.get('enabled'):
+                improvements[step_name] = {'enabled': step_config.get('enabled')}
+                continue
+            
+            new_values = step_config.get('parameters', {})
+            old_values = old_config.get('parameters', {})
+            
+            changed_values = {
+                key: value
+                for key, value in new_values.items()
+                if key not in old_values or old_values[key] != value
+            }
+            
+            if changed_values:
+                improvements[step_name] = {'parameters': changed_values}
+        
+        return improvements
+    
+    # -------------------- Primary Methods --------------------
+    
+    def evaluate_image(self, image_path: Path) -> OCRResult:
+        """
+        Tests parameter combinations systematically to find the highest scoring configuration.
+        
+        Args:
+            image_path : Path to the image being evaluated
+            
+        Returns:
+            OCRResult containing best parameters and scores
+        """
+        logger.info(f"Evaluating parameters for {image_path.name}")
+        best_score  = 0.0
+        best_params = None
+        best_ocr    = []
+        current     = 0
+        
+        for params in self.build_parameter_grid():
+            current += 1
+            
+            # Process image and calculate score
+            results = self.extractor.perform_ocr_headless([image_path])
+            ocr_results = results.get(image_path.name, [])
+            score = round(sum(len(text) * conf for text, conf in ocr_results), 3)
+            
+            # Update if score improved
+            if score > best_score:
+                improvements = {}
+                if best_params:
+                    improvements = self.identify_improvements(params, best_params)
+                    logger.info(f"Parameter improvements: {json.dumps(improvements, indent = 2)}")
+                
+                best_score  = score
+                best_params = params
+                best_ocr    = ocr_results
+                
+                logger.info(f"New best score {score:.3f} on combination {current}")
+        
+        # Store final results
+        result = OCRResult(
+            parameters   = best_params,
+            ocr_results  = best_ocr,
+            score        = best_score,
+            improvements = improvements
+        )
+        
+        self.results[str(image_path)] = result
+        return result
+    
     def optimize(self, image_files: list[Path]):
         """
-        Runs the optimization process on the provided image files.
-
+        Searches for optimal parameters across all provided images.
+        Saves comprehensive results including parameters, OCR outputs, and scores.
+        
         Args:
-            image_files : List of image file paths to process
+            image_files : List of images to evaluate
         """
-        if not image_files:
-            raise ValueError("No image files provided")
-
-        logger.info(f"Starting optimization for {len(image_files)} images")
-
-        total_combinations = sum(1 for _ in self.generate_parameter_combinations())
-        logger.info(f"Total parameter combinations to test: {total_combinations}")
-
-        try:
-            # Process parameter combinations
-            for params_override in self.generate_parameter_combinations():
-                self.state.iteration += 1
-
-                # Set parameters in extractor
-                self.extractor.initialize_processing_steps(params_override=params_override)
-
-                # Perform OCR on images
-                results = self.extractor.perform_ocr_headless(image_files)
-
-                # Track improvements
-                improvements = sum(
-                    1 for image_name, ocr_results in results.items()
-                    if self.state.update_result(
-                        image_name  = image_name,
-                        params       = params_override,
-                        ocr_results  = ocr_results,
-                        iteration    = self.state.iteration
-                    )
-                )
-
-                # Only log progress periodically or when improvements occur
-                if improvements > 0 or self.state.iteration % 100 == 0:
-                    progress = (self.state.iteration / total_combinations) * 100
-                    logger.info(
-                        f"Progress: {progress:.1f}% - "
-                        f"Combination {self.state.iteration:,}/{total_combinations:,} "
-                        f"improved {improvements} images"
-                    )
-
-        except KeyboardInterrupt:
-            logger.warning("Optimization interrupted by user")
-
-        except Exception as e:
-            logger.error(f"Error during optimization: {str(e)}", exc_info=True)
-            raise
-
-        finally:
-            if self.state.modified:
-                self.save_results()
-
+        logger.info(f"Beginning parameter search for {len(image_files)} images")
+        
+        for image_path in image_files:
+            self.evaluate_image(image_path)
+        
+        # Prepare and save results
+        output = {
+            path: {
+                'parameters'   : result.parameters,
+                'texts'        : result.ocr_results,
+                'score'        : result.score,
+                'char_count'   : sum(len(text) for text, _ in result.ocr_results),
+                'improvements' : result.improvements
+            }
+            for path, result in self.results.items()
+        }
+        
+        self.OUTPUT_FILE.parent.mkdir(exist_ok = True, parents = True)
+        with self.OUTPUT_FILE.open('w') as f:
+            json.dump(output, f, indent = 2)
+        
+        logger.info(f"Search results saved to {self.OUTPUT_FILE}")

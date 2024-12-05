@@ -176,21 +176,6 @@ class ProcessingState:
         
         return cls(steps = state_steps, ocr_enabled = ocr_enabled)
 
-    def to_nested_dict(self) -> dict:
-        """
-        Converts the ProcessingState to the current_parameters dictionary format.
-
-        Returns:
-            Dictionary of nested parameters organized by processing step
-        """
-        return {
-            step_name: {
-                'enabled'    : step_enabled,
-                'parameters' : dict(step_params)
-            }
-            for step_name, step_enabled, step_params in self.steps
-        }
-
 # -------------------- Processing Functions --------------------
 
 def adjust_brightness(image: np.ndarray, params: dict) -> np.ndarray:
@@ -342,7 +327,7 @@ class TextExtractor:
         self.params_file     = params_file or self.PARAMS_FILE
         self.reader          = Reader(['en'], gpu=gpu_enabled)
         self.steps           = []
-        self.state           = DisplayState(window_height=window_height) if not headless else None
+        self.state           = DisplayState(window_height = window_height) if not headless else None
 
     # -------------------- Image Loading and Preparation --------------------
 
@@ -445,12 +430,12 @@ class TextExtractor:
 
             self.steps.append(
                 ProcessingStep(
-                    name          = step_name,
-                    display_name  = step_def['display_name'],
-                    toggle_key    = str(index + 1),
-                    parameters    = parameters,
-                    is_enabled    = step_override.get('enabled', step_def.get('enabled', False)),
-                    is_pipeline   = is_pipeline
+                    name         = step_name,
+                    display_name = step_def['display_name'],
+                    toggle_key   = str(index + 1),
+                    parameters   = parameters,
+                    is_enabled   = step_override.get('enabled', step_def.get('enabled', False)),
+                    is_pipeline  = is_pipeline
                 )
             )
 
@@ -515,7 +500,6 @@ class TextExtractor:
             logger.error(f"OCR failed for {image_path}: {e}")
             return []
 
-    @cache
     def perform_ocr_headless(self, image_files: list[Path]) -> dict:
         """
         Processes a list of images and extracts text from them in headless mode.
@@ -540,7 +524,6 @@ class TextExtractor:
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
                 ]
-                logger.info(f"Processed image '{image_name}' in headless mode.")
 
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
