@@ -439,47 +439,6 @@ class TextExtractor:
         return processed_image
 
     @cache
-    def annotate_image_with_text(
-        self,
-        image_path       : str,
-        processing_state : ProcessingState
-    ) -> np.ndarray:
-        """
-        Annotates the image with recognized text by overlaying bounding boxes and text annotations.
-        This visualization helps in verifying the OCR results and understanding where the text was detected.
-
-        Args:
-            image_path       : Path to the image to annotate
-            processing_state : ProcessingState instance representing current parameters
-
-        Returns:
-            Annotated image
-        """
-        processed_image = self.process_image(image_path, processing_state)
-        annotated_image = cv2.cvtColor(processed_image, cv2.COLOR_GRAY2BGR) if processed_image.ndim == 2 else processed_image.copy()
-        ocr_results     = self.extract_text_from_image(image_path, processing_state)
-
-        for bounding_box, text, confidence in ocr_results:
-            coordinates = np.array(bounding_box).astype(int)
-
-            # Draw bounding box around detected text
-            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
-            logger.info(f"OCR Text: '{text}' with confidence {confidence:.2f}")
-
-            # Set text position above the bounding box
-            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
-            text_position = (int(np.mean(x_coords)), int(np.min(y_coords) - 10))
-
-            # Draw the text annotation
-            annotated_image = self.draw_text(
-                source_image = annotated_image,
-                text         = f"{text} ({confidence * 100:.1f}%)",
-                position     = text_position
-            )
-
-        return annotated_image
-
-    @cache
     def extract_text_from_image(
         self,
         image_path       : str,
@@ -717,6 +676,98 @@ class TextExtractor:
                 json.dump(results, f, ensure_ascii = False, indent = 4)
             logger.info(f"OCR results saved to {self.output_file}")
 
+    def prepare_display_image(self, processed_image: np.ndarray) -> tuple[np.ndarray, float]:
+        """
+        Centers the image, scales it to the window height, and converts it to BGR if needed.
+
+        Args:
+            processed_image: The image to prepare for display.
+
+        Returns:
+            A tuple containing the prepared display image and the scaling factor.
+        """
+        centered_image = self.center_image_in_square(processed_image)
+        if centered_image.ndim == 2:
+            centered_image = cv2.cvtColor(centered_image, cv2.COLOR_GRAY2BGR)
+
+        # Scale image to window height
+        display_scale = self.state.window_height / centered_image.shape[0]
+        display_image = cv2.resize(
+            centered_image,
+            (int(centered_image.shape[1] * display_scale), self.state.window_height)
+        )
+        return display_image, display_scale
+
+    def adjust_ocr_coordinates(
+        self,
+        ocr_results    : list[tuple],
+        orig_size      : tuple[int, int],
+        display_size   : tuple[int, int],
+        display_scale  : float
+    ) -> list[tuple]:
+        """
+        Adjust OCR coordinates to match the display image.
+
+        Args:
+            ocr_results   : List of OCR results (bounding_box, text, confidence).
+            orig_size     : Original image size (height, width).
+            display_size  : Display image size (height, width).
+            display_scale : Scale factor used for the display image.
+
+        Returns:
+            List of adjusted OCR results.
+        """
+        orig_height, orig_width = orig_size
+        max_side = max(orig_height, orig_width)
+
+        # Calculate offsets due to centering in a square
+        y_offset = (max_side - orig_height) // 2
+        x_offset = (max_side - orig_width)  // 2
+
+        adjusted_ocr_results = []
+        for bounding_box, text, confidence in ocr_results:
+            adjusted_box = []
+            for x, y in bounding_box:
+                x = (x + x_offset) * display_scale
+                y = (y + y_offset) * display_scale
+                adjusted_box.append([x, y])
+            adjusted_ocr_results.append((adjusted_box, text, confidence))
+        return adjusted_ocr_results
+
+    def annotate_display_image(
+        self,
+        display_image        : np.ndarray,
+        adjusted_ocr_results : list[tuple]
+    ) -> np.ndarray:
+        """
+        Annotate the display image with OCR results.
+
+        Args:
+            display_image        : The image to annotate.
+            adjusted_ocr_results : List of adjusted OCR results.
+
+        Returns:
+            Annotated image.
+        """
+        annotated_image = display_image.copy()
+        for coordinates, text, confidence in adjusted_ocr_results:
+            coordinates = np.array(coordinates).astype(int)
+
+            # Draw bounding box
+            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
+
+            # Set text position above the bounding box
+            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
+            text_position = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
+
+            # Draw the text annotation
+            annotated_image = self.draw_text(
+                source_image = annotated_image,
+                text         = f"{text} ({confidence * 100:.1f}%)",
+                position     = text_position
+            )
+        return annotated_image
+
     def interactive_experiment(
         self,
         image_files     : list[Path],
@@ -740,33 +791,30 @@ class TextExtractor:
 
         try:
             while True:
-                image_path                = image_files[self.state.image_idx]
-                self.state.image_name     = image_path.name
-                self.state.window_height  = self.DEFAULT_HEIGHT
+                image_path            = image_files[self.state.image_idx]
+                self.state.image_name = image_path.name
 
                 processing_state = ProcessingState.from_steps(self.steps)
+                processed_image  = self.process_image(str(image_path), processing_state)
 
-                # Annotate image with OCR text if OCR is enabled
-                ocr_enabled = any(step.is_enabled and step.name ==  'ocr' for step in self.steps)
+                # Perform OCR if enabled
+                ocr_results = []
+                ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
                 if ocr_enabled:
-                    display_image = self.annotate_image_with_text(
-                        str(image_path),
-                        processing_state
+                    ocr_results = self.extract_text_from_image(str(image_path), processing_state)
+
+                # Prepare the display image
+                display_image, display_scale = self.prepare_display_image(processed_image)
+
+                # Annotate the display image with OCR results
+                if ocr_results:
+                    adjusted_ocr_results = self.adjust_ocr_coordinates(
+                        ocr_results,
+                        processed_image.shape[:2],
+                        display_image.shape[:2],
+                        display_scale
                     )
-                else:
-                    display_image = self.process_image(str(image_path), processing_state)
-
-                # Prepare image for display
-                display_image = self.center_image_in_square(display_image)
-                if display_image.ndim == 2:
-                    display_image = cv2.cvtColor(display_image, cv2.COLOR_GRAY2BGR)
-
-                # Scale image to window height
-                display_scale = self.state.window_height / display_image.shape[0]
-                display_image = cv2.resize(
-                    display_image,
-                    (int(display_image.shape[1] * display_scale), self.state.window_height)
-                )
+                    display_image = self.annotate_display_image(display_image, adjusted_ocr_results)
 
                 # Add sidebar and display
                 sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
