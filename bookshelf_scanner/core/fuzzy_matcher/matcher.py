@@ -1,8 +1,8 @@
 import duckdb
-import itertools
 import json
 
 from dataclasses import dataclass
+from functools   import cache
 from pathlib     import Path
 from rapidfuzz   import fuzz, process, utils as fuzz_utils
 from typing      import Any, NamedTuple
@@ -22,15 +22,13 @@ class MatchResult:
     """
     Stores the results of a text matching operation.
     """
-    texts      : list[str]   # Combined texts extracted from OCR
-    confidence : float       # Average OCR confidence score
-    matches    : list[dict]  # List of {title, author, score} dictionaries
+    texts   : list[str]   # Combined texts extracted from OCR
+    matches : list[dict]  # List of {title, author, score} dictionaries
 
 class FuzzyMatcher:
     """
     Matches OCR-extracted text against a reference database of book titles.
-    Uses fuzzy matching to account for OCR imperfections and considers
-    permutations of all text segments as potential parts of the same title.
+    Uses fuzzy matching to account for OCR imperfections.
     """
     PROJECT_ROOT      = Utils.find_root('pyproject.toml')
     REFERENCE_DB_PATH = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'books.duckdb'
@@ -42,9 +40,9 @@ class FuzzyMatcher:
         reference_db_path  : Path | None = None,
         ocr_results_path   : Path | None = None,
         output_file        : Path | None = None,
-        max_matches        : int         = 5,
-        min_ocr_confidence : float       = 0.5,
-        min_match_score    : float       = 0.7
+        max_matches        : int         = 3,
+        min_ocr_confidence : float       = 0.1,
+        min_match_score    : float       = 0.8
     ):
         """
         Initializes the FuzzyMatcher instance.
@@ -63,10 +61,10 @@ class FuzzyMatcher:
         self.max_matches        = max_matches
         self.min_ocr_confidence = min_ocr_confidence
         self.min_match_score    = min_match_score
-        self.candidate_strings  = []
         self.book_records       = []
+        self.candidate_strings  = []
 
-    def load_book_records(self) -> None:
+    def load_book_records(self):
         """
         Loads book records from the database into memory and prepares candidate strings for matching.
         """
@@ -75,51 +73,41 @@ class FuzzyMatcher:
         conn.close()
 
         self.book_records = [BookRecord(title = title, author = author) for title, author in records]
+        logger.info(f"Loaded {len(self.book_records)} book records from database")
 
-        # Prepare candidate strings for matching
+        # For each book record, create combinations of title and author
         self.candidate_strings = [
-            self.preprocess_text(s)
+            self.preprocess_text(f"{record.title} {record.author}")
             for record in self.book_records
-            for s in [
-                f"{record.title} {record.author}",
-                f"{record.author} {record.title}",
-                record.title,
-                record.author
-            ]
         ]
 
-    def preprocess_text(self, text : str) -> str:
+    @staticmethod
+    @cache
+    def preprocess_text(text : str) -> str:
         """
         Preprocesses text for fuzzy matching by normalizing whitespace,
         removing punctuation, and converting to lowercase.
         """
         return fuzz_utils.default_process(text)
 
-    def combine_texts(self, texts : list[tuple[str, float]]) -> list[tuple[list[str], float]]:
+    def combine_texts(self, texts : list[tuple[str, float]]) -> list[str]:
         """
-        Generates all permutations of the text strings,
-        using all texts, and calculates average confidence.
+        Combines all texts into a single string, filtering by confidence threshold.
 
         Args:
             texts : List of (text, confidence) tuples from OCR
 
         Returns:
-            List of (combined_texts, avg_confidence) tuples
+            List of text strings that passed the confidence threshold
         """
         filtered_texts = [
-            (text, conf) for text, conf in texts
+            text for text, conf in texts
             if conf >= self.min_ocr_confidence
         ]
-
-        combinations = []
+        
         if filtered_texts:
-            all_texts        = filtered_texts
-            perms            = list(itertools.permutations(all_texts))
-            avg_confidence   = sum(conf for _, conf in filtered_texts) / len(filtered_texts)
-            combinations     = [
-                ([text for text, _ in perm], avg_confidence) for perm in perms
-            ]
-        return combinations
+            logger.info(f"Combined {len(filtered_texts)} text segments: {filtered_texts}")
+        return filtered_texts
 
     def match_text(self, texts : list[str]) -> list[dict[str, Any]]:
         """
@@ -134,31 +122,43 @@ class FuzzyMatcher:
         """
         search_string = ' '.join(texts)
         search_string = self.preprocess_text(search_string)
+        logger.info(f"Matching preprocessed string: '{search_string}'")
 
+        # Use fuzz.token_set_ratio to reduce sensitivity to word order
         matches = process.extract(
             query   = search_string,
             choices = self.candidate_strings,
-            scorer  = fuzz.token_sort_ratio,
-            limit   = self.max_matches * 2  # Get more matches to filter later
+            scorer  = fuzz.token_set_ratio,
+            limit   = self.max_matches * self.max_matches # Get more matches to filter later
         )
 
-        results = []
-        for match_string, score, idx in matches:
-            match_score = score / 100.0
+        # Build results using list comprehension
+        results = [
+            {
+                "title"  : self.book_records[idx].title,
+                "author" : self.book_records[idx].author,
+                "score"  : score / 100.0
+            }
+            for _, score, idx in matches
+            if (score / 100.0) >= self.min_match_score
+        ][:self.max_matches]
 
-            if match_score >= self.min_match_score:
-                book_record = self.book_records[idx % len(self.book_records)]
-                results.append({
-                    "title"  : book_record.title,
-                    "author" : book_record.author,
-                    "score"  : match_score
-                })
-        return results[:self.max_matches]
+        # Log each match in detail
+        if results:
+            for match in results:
+                logger.info(
+                    f"  Match found: '{match['title']}' by {match['author']} "
+                    f"(Score: {match['score']:.3f})"
+                )
+        else:
+            logger.info("  No matches found above score threshold")
 
-    def match_books(self) -> None:
+        return results
+
+    def match_books(self):
         """
         Processes all OCR results and finds matching book titles.
-        Combines multiple detected strings and saves results to JSON file.
+        Combines detected strings and saves results to JSON file.
         """
         if not self.ocr_results_path.exists():
             logger.error(f"OCR results file not found at {self.ocr_results_path}")
@@ -168,47 +168,27 @@ class FuzzyMatcher:
             ocr_results = json.load(f)
 
         self.load_book_records()
-
         match_results = {}
+        total_images  = len(ocr_results)
 
-        for image_name, ocr_texts in ocr_results.items():
-            logger.info(f"Processing image: {image_name}")
-            image_match_dict  = {}  # {(title, author): {'score': score, 'texts': texts, 'confidence': confidence}}
-            text_combinations = self.combine_texts(ocr_texts)
-            num_permutations  = len(text_combinations)
-            logger.info(f"Number of permutations to explore: {num_permutations}")
+        logger.info(f"Processing {total_images} images")
 
-            for texts, confidence in text_combinations:
-                logger.info(f"Matching with combined texts: {texts} (Confidence: {confidence:.2f})")
-                matches = self.match_text(texts)
-                for match in matches:
-                    key = (match['title'], match['author'])
-                    if key not in image_match_dict or match['score'] > image_match_dict[key]['score']:
-                        image_match_dict[key] = {
-                            'score'      : match['score'],
-                            'texts'      : texts,
-                            'confidence' : confidence
-                        }
-                        logger.info(f"Found match: {match['title']} by {match['author']} (Score: {match['score']:.2f})")
+        for image_num, (image_name, ocr_texts) in enumerate(ocr_results.items(), 1):
+            logger.info(f"\nProcessing image {image_num}/{total_images}: {image_name}")
+            
+            texts = self.combine_texts(ocr_texts)
+            if not texts:
+                logger.info("No valid texts found")
+                continue
 
-            if image_match_dict:
-                # Convert the match dict to a list
-                image_matches = [
-                    {
-                        'title'      : title,
-                        'author'     : author,
-                        'score'      : info['score'],
-                        'texts'      : info['texts'],
-                        'confidence' : info['confidence']
-                    }
-                    for (title, author), info in image_match_dict.items()
-                ]
-                # Sort matches by score
-                image_matches.sort(key = lambda x: x['score'], reverse = True)
-                match_results[image_name] = image_matches
-                logger.info(f"Found {len(image_matches)} matches for image {image_name}")
-            else:
-                logger.info(f"No matches found for image {image_name}")
+            matches = self.match_text(texts)
+            if matches:
+                match_results[image_name] = {
+                    'texts'   : texts,
+                    'matches' : matches
+                }
+            
+        logger.info(f"\nProcessing complete. Found matches for {len(match_results)} images")
 
         with self.output_file.open('w', encoding = 'utf-8') as f:
             json.dump(match_results, f, ensure_ascii = False, indent = 4)
