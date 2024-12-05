@@ -468,24 +468,15 @@ class TextExtractor:
             cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
             logger.info(f"OCR Text: '{text}' with confidence {confidence:.2f}")
 
+            # Set text position above the bounding box
             x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
-            top_edge_length    = np.hypot(x_coords[1] - x_coords[0], y_coords[1] - y_coords[0])
-            right_edge_length  = np.hypot(x_coords[2] - x_coords[1], y_coords[2] - y_coords[1])
+            text_position = (int(np.mean(x_coords)), int(np.min(y_coords) - 10))
 
-            # Determine text position and angle based on orientation
-            if right_edge_length > top_edge_length:
-                angle         = 270
-                text_position = (int(np.max(x_coords) + 10), int(np.mean(y_coords)))
-            else:
-                angle         = 0
-                text_position = (int(np.mean(x_coords)), int(np.min(y_coords) - 10))
-
-            # Draw the rotated text annotation
-            annotated_image = self.draw_rotated_text(
+            # Draw the text annotation
+            annotated_image = self.draw_text(
                 source_image = annotated_image,
                 text         = f"{text} ({confidence * 100:.1f}%)",
-                position     = text_position,
-                angle        = angle
+                position     = text_position
             )
 
         return annotated_image
@@ -525,7 +516,7 @@ class TextExtractor:
             return []
 
     @staticmethod
-    def draw_rotated_text(
+    def draw_text(
         source_image : np.ndarray,
         text         : str,
         position     : tuple[int, int],
@@ -688,7 +679,8 @@ class TextExtractor:
         """
         results          = {}
         processing_state = ProcessingState.from_steps(self.steps)
-        min_confidence   = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+        ocr_parameters   = self.current_parameters.get('ocr', {}).get('parameters', {})
+        min_confidence   = ocr_parameters.get('confidence_threshold', 0.3)
 
         for image_path in image_files:
             image_name = image_path.name
@@ -763,7 +755,8 @@ class TextExtractor:
                 self.state.window_height  = self.DEFAULT_HEIGHT
 
                 processing_state = ProcessingState.from_steps(self.steps)
-                min_confidence   = self.current_parameters.get('ocr_confidence_threshold', 0.3)
+                ocr_parameters   = self.current_parameters.get('ocr', {}).get('parameters', {})
+                min_confidence   = ocr_parameters.get('confidence_threshold', 0.3)
 
                 # Annotate image with OCR text if OCR is enabled
                 ocr_enabled = any(step.is_enabled and step.name ==  'ocr' for step in self.steps)
