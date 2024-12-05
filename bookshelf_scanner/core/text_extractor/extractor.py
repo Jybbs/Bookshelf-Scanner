@@ -2,13 +2,13 @@ import cv2
 import json
 import numpy as np
 
-from dataclasses   import dataclass
-from easyocr       import Reader
-from functools     import cache
-from pathlib       import Path
-from PIL           import Image, ImageDraw, ImageFont
-from ruamel.yaml   import YAML
-from typing        import Any
+from dataclasses import dataclass
+from easyocr     import Reader
+from functools   import cache
+from pathlib     import Path
+from PIL         import Image, ImageDraw, ImageFont
+from ruamel.yaml import YAML
+from typing      import Any
 
 from bookshelf_scanner import ModuleLogger, Utils
 logger = ModuleLogger('extractor')()
@@ -206,7 +206,7 @@ def adjust_contrast(image: np.ndarray, params: dict) -> np.ndarray:
         Contrast-adjusted image.
     """
     alpha = params['contrast_value']
-    return cv2.convertScaleAbs(image, alpha=alpha, beta=0)
+    return cv2.convertScaleAbs(image, alpha = alpha, beta = 0)
 
 def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
     """
@@ -221,7 +221,7 @@ def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
     """
     clip_limit = params['clahe_clip_limit']
     lab_image  = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
-    clahe      = cv2.createCLAHE(clipLimit=clip_limit)
+    clahe      = cv2.createCLAHE(clipLimit = clip_limit)
 
     lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
     return cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
@@ -268,11 +268,11 @@ def rotate_image(image: np.ndarray, params: dict) -> np.ndarray:
     return image
 
 PROCESSING_FUNCTIONS = {
-    'brightness_adjustment' : adjust_brightness,
-    'color_clahe'           : apply_clahe,
-    'contrast_adjustment'   : adjust_contrast,
     'image_rotation'        : rotate_image,
     'shadow_removal'        : remove_shadow,
+    'color_clahe'           : apply_clahe,
+    'brightness_adjustment' : adjust_brightness,
+    'contrast_adjustment'   : adjust_contrast
 }
 
 # -------------------- TextExtractor Class --------------------

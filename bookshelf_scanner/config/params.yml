@@ -2,6 +2,18 @@
   display_name : OCR
   enabled      : true
 
+- name         : image_rotation
+  display_name : Image Rotation
+  enabled      : false
+  parameters   :
+    - name         : rotation_angle
+      display_name : Rotation Angle
+      value        : 90
+      min          : 0
+      max          : 270
+      step         : 90
+      increase_key : R
+
 - name         : shadow_removal
   display_name : Shadow Removal
   enabled      : false
@@ -12,7 +24,7 @@
       min          : 3
       max          : 30
       step         : 2
-      increase_key : S
+      increase_key : K
     - name         : shadow_median_blur
       display_name : Shadow Median Blur
       value        : 15
@@ -31,7 +43,7 @@
       min          : 0.0
       max          : 5.0
       step         : 0.5
-      increase_key : H
+      increase_key : L
 
 - name         : brightness_adjustment
   display_name : Brightness Adjustment
@@ -56,15 +68,3 @@
       max          : 3.0
       step         : 0.2
       increase_key : C
-
-- name         : image_rotation
-  display_name : Image Rotation
-  enabled      : false
-  parameters   :
-    - name         : rotation_angle
-      display_name : Rotation Angle
-      value        : 90
-      min          : 0
-      max          : 270
-      step         : 90
-      increase_key : R
