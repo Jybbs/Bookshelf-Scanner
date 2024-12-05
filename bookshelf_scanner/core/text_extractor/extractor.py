@@ -405,7 +405,7 @@ class TextExtractor:
         Returns:
             List of initialized ProcessingStep instances
         """
-        yaml = YAML(typ='safe')
+        yaml = YAML(typ = 'safe')
 
         with self.params_file.open('r') as f:
             step_definitions = yaml.load(f)
@@ -863,9 +863,10 @@ class TextExtractor:
         results = self.perform_ocr_headless(image_files)
 
         if self.output_json:
-            with self.output_file.open('w', encoding='utf-8') as f:
-                json.dump(results, f, ensure_ascii=False, indent=4)
+            with self.output_file.open('w', encoding = 'utf-8') as f:
+                json.dump(results, f, ensure_ascii = False, indent = 4)
             logger.info(f"OCR results saved to {self.output_file}")
+        
 
     # -------------------- Interactive Mode Operations --------------------
 

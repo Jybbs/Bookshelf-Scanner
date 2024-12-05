@@ -1,6 +1,7 @@
 import json
 import numpy as np
 
+from contextlib  import contextmanager
 from dataclasses import dataclass
 from functools   import cache
 from itertools   import product
@@ -54,7 +55,7 @@ class ParameterOptimizer:
     
     PROJECT_ROOT = Utils.find_root('pyproject.toml')
     RESULTS_DIR  = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results'
-    OUTPUT_FILE  = RESULTS_DIR / 'optimizer_results.json'
+    OUTPUT_FILE  = RESULTS_DIR / 'optimizer.json'
     
     def __init__(self, extractor: TextExtractor):
         """
@@ -65,6 +66,25 @@ class ParameterOptimizer:
         """
         self.extractor = extractor
         self.results   = {}
+
+    @contextmanager
+    def graceful_exit(self):
+        """
+        Context manager to ensure results are saved even if optimization is interrupted.
+        Catches KeyboardInterrupt and saves current results before re-raising.
+        """
+        try:
+            yield
+
+        except KeyboardInterrupt:
+            logger.info("\nOptimization interrupted. Saving current results...")
+            self.save_results()
+            raise
+
+        except Exception as e:
+            logger.error(f"Optimization failed: {e}")
+            self.save_results()
+            raise
     
     # -------------------- Parameter Space Generation --------------------
     
@@ -98,6 +118,7 @@ class ParameterOptimizer:
     def map_step_variations(self, step: ProcessingStep) -> list[dict[str, float]]:
         """
         Maps all valid parameter variations for a single processing step.
+        Ensures parameter values maintain 1 decimal place precision.
         
         Args:
             step : ProcessingStep containing parameter definitions
@@ -105,25 +126,25 @@ class ParameterOptimizer:
         Returns:
             List of parameter value combinations for the step
         """
-        param_ranges = []
-        for param in step.parameters:
-            values = np.arange(param.min_val, param.max_val + param.step_val, param.step_val)
-            if isinstance(param.value, int):
-                values = [int(v) for v in values]
-            param_ranges.append((param.name, values))
+        param_ranges = [
+            (param.name, [
+                int(v) if isinstance(param.value, int) else round(v, 1)
+                for v in np.arange(param.min_val, param.max_val + param.step_val, param.step_val)
+            ])
+            for param in step.parameters
+        ]
         
-        variations = []
-        for value_combo in product(*(values for _, values in param_ranges)):
-            param_dict = {
-                name: value
-                for (name, _), value in zip(param_ranges, value_combo)
-            }
-            variations.append({
-                'parameters' : param_dict,
-                'enabled'    : True
-            })
+        parameter_variations = [{
+            'parameters' : {
+                name: value for name, value in zip(
+                    [name for name, _ in param_ranges],
+                    value_combo
+                )
+            },
+            'enabled'    : True
+        } for value_combo in product(*(values for _, values in param_ranges))]
         
-        return variations
+        return parameter_variations
     
     def build_parameter_grid(self) -> Iterator[dict[str, dict]]:
         """
@@ -142,19 +163,18 @@ class ParameterOptimizer:
             step_variations.append((step.name, step_params))
             total_combinations *= len(step_params)
             
-        logger.info(f"Testing {total_combinations} parameter combinations")
+        logger.info(f"Generated {total_combinations} parameter combinations to test")
         
-        # Generate and yield each complete combination
-        current = 0
-        for step_combo in product(*[params for _, params in step_variations]):
-            current += 1
-            if current % 1000 == 0:
-                logger.info(f"Testing combination {current} of {total_combinations}")
-            
-            yield {
+        # Generate each complete combination
+        parameter_grid = (
+            {
                 name: params
                 for name, params in zip([s[0] for s in step_variations], step_combo)
             }
+            for step_combo in product(*[params for _, params in step_variations])
+        )
+        
+        return parameter_grid
     
     # -------------------- Parameter Evaluation --------------------
     
@@ -201,6 +221,28 @@ class ParameterOptimizer:
     
     # -------------------- Primary Methods --------------------
     
+    def save_results(self):
+        """
+        Saves current optimization results to JSON file.
+        Creates output directory if it doesn't exist.
+        """
+        output = {
+            str(Path(path).name): {
+                'parameters'   : result.parameters,
+                'texts'        : result.ocr_results,
+                'score'        : result.score,
+                'char_count'   : sum(len(text) for text, _ in result.ocr_results),
+                'improvements' : result.improvements
+            }
+            for path, result in self.results.items()
+        }
+        
+        self.OUTPUT_FILE.parent.mkdir(exist_ok = True, parents = True)
+        with self.OUTPUT_FILE.open('w') as f:
+            json.dump(output, f, indent = 2)
+            
+        logger.info(f"Results saved to {self.OUTPUT_FILE}")
+
     def evaluate_image(self, image_path: Path) -> OCRResult:
         """
         Tests parameter combinations systematically to find the highest scoring configuration.
@@ -215,15 +257,20 @@ class ParameterOptimizer:
         best_score  = 0.0
         best_params = None
         best_ocr    = []
-        current     = 0
         
-        for params in self.build_parameter_grid():
-            current += 1
+        for current, params in enumerate(self.build_parameter_grid(), 1):
+
+            # Initialize extractor with current parameter combination
+            self.extractor.initialize_processing_steps(params_override = params)
             
             # Process image and calculate score
-            results = self.extractor.perform_ocr_headless([image_path])
+            results     = self.extractor.perform_ocr_headless([image_path])
             ocr_results = results.get(image_path.name, [])
-            score = round(sum(len(text) * conf for text, conf in ocr_results), 3)
+            score       = round(sum(len(text) * conf for text, conf in ocr_results), 3)
+            
+            # Log progress at intervals
+            if current % 100000 == 0:
+                logger.info(f"Testing combination {current}")
             
             # Update if score improved
             if score > best_score:
@@ -253,29 +300,17 @@ class ParameterOptimizer:
         """
         Searches for optimal parameters across all provided images.
         Saves comprehensive results including parameters, OCR outputs, and scores.
+        Handles interruptions gracefully by saving partial results.
         
         Args:
             image_files : List of images to evaluate
         """
         logger.info(f"Beginning parameter search for {len(image_files)} images")
         
-        for image_path in image_files:
-            self.evaluate_image(image_path)
-        
-        # Prepare and save results
-        output = {
-            path: {
-                'parameters'   : result.parameters,
-                'texts'        : result.ocr_results,
-                'score'        : result.score,
-                'char_count'   : sum(len(text) for text, _ in result.ocr_results),
-                'improvements' : result.improvements
-            }
-            for path, result in self.results.items()
-        }
-        
-        self.OUTPUT_FILE.parent.mkdir(exist_ok = True, parents = True)
-        with self.OUTPUT_FILE.open('w') as f:
-            json.dump(output, f, indent = 2)
-        
-        logger.info(f"Search results saved to {self.OUTPUT_FILE}")
+        with self.graceful_exit():
+            for image_path in image_files:
+                self.evaluate_image(image_path)
+            
+            self.save_results()
+            
+        logger.info("Parameter optimization complete")
