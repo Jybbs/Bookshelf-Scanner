@@ -771,6 +771,56 @@ class TextExtractor:
             )
         return annotated_image
     
+    def log_ocr_results(self, ocr_results: list[tuple[list, str, float]]) -> None:
+        """
+        Log OCR results in a consistent format.
+
+        Args:
+            ocr_results: List of OCR results (bounding_box, text, confidence)
+        """
+        if ocr_results:
+            logger.info(f"OCR Results for image '{self.state.image_name}':")
+            for _, text, confidence in ocr_results:
+                logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
+
+    def handle_user_input(self, char: str, ocr_results: list, total_images: int) -> bool:
+        """
+        Process user input and perform corresponding actions.
+
+        Args:
+            char         : Input character
+            ocr_results  : Current OCR results for logging after changes
+            total_images : Total number of images for navigation
+
+        Returns:
+            bool: True if should quit, False otherwise
+        """
+        if char == 'q':
+            logger.info("Quitting interactive experiment.")
+            return True
+        
+        elif char == '/':
+            old_name = self.state.image_name
+            self.state.next_image(total_images)
+            logger.info(f"Switched from '{old_name}' to '{self.state.image_name}'")
+            return False
+
+        # Handle parameter adjustments
+        for step in self.steps:
+            if char == step.toggle_key:
+                action = step.toggle()
+                logger.info(action)
+                self.log_ocr_results(ocr_results)
+                break
+
+            action = step.adjust_param(char)
+            if action:
+                logger.info(action)
+                self.log_ocr_results(ocr_results)
+                break
+
+        return False
+
     def interactive_experiment(
         self,
         image_files     : list[Path],
@@ -794,8 +844,6 @@ class TextExtractor:
         logger.info("Starting interactive experiment.")
         
         try:
-            current_image : int = -1  # Force first image to be recognized as new
-            
             while True:
                 image_path            = image_files[self.state.image_idx]
                 self.state.image_name = image_path.name
@@ -803,16 +851,12 @@ class TextExtractor:
                 processing_state = ProcessingState.from_steps(self.steps)
                 processed_image  = self.process_image(str(image_path), processing_state)
 
-                # Perform OCR if enabled and log results for new images
+                # Perform OCR if enabled
                 ocr_results = []
                 if processing_state.ocr_enabled:
                     ocr_results = self.extract_text_from_image(str(image_path), processing_state)
-                    if current_image != self.state.image_idx and ocr_results:
-                        logger.info(f"OCR Results for image '{self.state.image_name}':")
-                        for _, text, confidence in ocr_results:
-                            logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
-
-                current_image = self.state.image_idx
+                    if self.state.is_new_image():
+                        self.log_ocr_results(ocr_results)
 
                 # Prepare the display image
                 display_image, display_scale = self.prepare_display_image(processed_image)
@@ -842,34 +886,8 @@ class TextExtractor:
                 except ValueError:
                     continue  # Non-ASCII key pressed
 
-                if char == 'q':
-                    logger.info("Quitting interactive experiment.")
+                if self.handle_user_input(char, ocr_results, len(image_files)):
                     break
-                elif char == '/':
-                    self.state.next_image(len(image_files))
-                    logger.info(f"Switched to image '{self.state.image_name}'.")
-                else:
-                    # Handle parameter adjustments
-                    for step in self.steps:
-                        if char == step.toggle_key:
-                            action = step.toggle()
-                            logger.info(action)
-                            # Log OCR results after toggle if OCR is enabled
-                            if ocr_results:
-                                logger.info(f"OCR Results for image '{self.state.image_name}':")
-                                for _, text, confidence in ocr_results:
-                                    logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
-                            break
-
-                        action = step.adjust_param(char)
-                        if action:
-                            logger.info(action)
-                            # Log OCR results after parameter change if OCR is enabled
-                            if ocr_results:
-                                logger.info(f"OCR Results for image '{self.state.image_name}':")
-                                for _, text, confidence in ocr_results:
-                                    logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
-                            break
 
         finally:
             cv2.destroyAllWindows()
