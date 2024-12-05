@@ -124,17 +124,7 @@ extractor = TextExtractor(
 )
 
 # Process images in batch mode
-results = extractor.run_headless(
-    image_files     = image_files,
-    params_override = {
-        'ocr': {
-            'enabled'    : True,
-            'parameters' : {
-                'ocr_confidence_threshold' : 0.7
-            }
-        }
-    }
-)
+results = extractor.run_headless(image_files = image_files)
 ```
 
 ### Parameter Overrides

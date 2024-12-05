@@ -442,8 +442,7 @@ class TextExtractor:
     def annotate_image_with_text(
         self,
         image_path       : str,
-        processing_state : ProcessingState,
-        min_confidence   : float
+        processing_state : ProcessingState
     ) -> np.ndarray:
         """
         Annotates the image with recognized text by overlaying bounding boxes and text annotations.
@@ -452,14 +451,13 @@ class TextExtractor:
         Args:
             image_path       : Path to the image to annotate
             processing_state : ProcessingState instance representing current parameters
-            min_confidence   : Minimum confidence threshold for OCR results
 
         Returns:
             Annotated image
         """
         processed_image = self.process_image(image_path, processing_state)
         annotated_image = cv2.cvtColor(processed_image, cv2.COLOR_GRAY2BGR) if processed_image.ndim == 2 else processed_image.copy()
-        ocr_results     = self.extract_text_from_image(image_path, processing_state, min_confidence)
+        ocr_results     = self.extract_text_from_image(image_path, processing_state)
 
         for bounding_box, text, confidence in ocr_results:
             coordinates = np.array(bounding_box).astype(int)
@@ -485,8 +483,7 @@ class TextExtractor:
     def extract_text_from_image(
         self,
         image_path       : str,
-        processing_state : ProcessingState,
-        min_confidence   : float
+        processing_state : ProcessingState
     ) -> list[tuple]:
         """
         Extracts text from a given image using EasyOCR.
@@ -494,7 +491,6 @@ class TextExtractor:
         Args:
             image_path       : The path to the image to perform OCR on
             processing_state : ProcessingState instance representing current parameters
-            min_confidence   : Minimum confidence threshold for OCR results
 
         Returns:
             List of tuples containing OCR results
@@ -506,10 +502,7 @@ class TextExtractor:
                 decoder       = 'greedy',
                 rotation_info = [90, 180, 270]
             )
-
-            # Filter results by confidence
-            filtered_results = [result for result in ocr_results if result[2] >= min_confidence]
-            return filtered_results
+            return ocr_results
 
         except Exception as e:
             logger.error(f"OCR failed for {image_path}: {e}")
@@ -679,8 +672,6 @@ class TextExtractor:
         """
         results          = {}
         processing_state = ProcessingState.from_steps(self.steps)
-        ocr_parameters   = self.current_parameters.get('ocr', {}).get('parameters', {})
-        min_confidence   = ocr_parameters.get('confidence_threshold', 0.3)
 
         for image_path in image_files:
             image_name = image_path.name
@@ -688,8 +679,7 @@ class TextExtractor:
             try:
                 ocr_results = self.extract_text_from_image(
                     str(image_path),
-                    processing_state,
-                    min_confidence
+                    processing_state
                 )
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
@@ -755,16 +745,13 @@ class TextExtractor:
                 self.state.window_height  = self.DEFAULT_HEIGHT
 
                 processing_state = ProcessingState.from_steps(self.steps)
-                ocr_parameters   = self.current_parameters.get('ocr', {}).get('parameters', {})
-                min_confidence   = ocr_parameters.get('confidence_threshold', 0.3)
 
                 # Annotate image with OCR text if OCR is enabled
                 ocr_enabled = any(step.is_enabled and step.name ==  'ocr' for step in self.steps)
                 if ocr_enabled:
                     display_image = self.annotate_image_with_text(
                         str(image_path),
-                        processing_state,
-                        min_confidence
+                        processing_state
                     )
                 else:
                     display_image = self.process_image(str(image_path), processing_state)
