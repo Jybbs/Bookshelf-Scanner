@@ -6,22 +6,21 @@ from bookshelf_scanner import TextExtractor
 
 def main():
 
-    extractor   = TextExtractor(headless = False)
-    image_files = extractor.find_image_files('Books')
-    
+    extractor       = TextExtractor(headless = False)
+    image_files     = extractor.find_image_files('Books')
     params_override = {
-        'color_clahe'    : {'enabled' : True},
-        'shadow_removal' : {'enabled' : True},
-        'image_rotation' : {'enabled' : True}
+        'color_clahe'    : {'enabled': True},
+        'shadow_removal' : {'enabled': True},
+        'image_rotation' : {'enabled': True}
     }
     
     if extractor.headless:
-        extractor.run_headless(
+        extractor.run_headless_mode(
             image_files     = image_files,
             params_override = params_override
         )
     else:
-        extractor.interactive_experiment(
+        extractor.interactive_mode(
             image_files     = image_files,
             params_override = params_override
         )
