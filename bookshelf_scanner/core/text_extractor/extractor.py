@@ -529,7 +529,6 @@ class TextExtractor:
         source_image : np.ndarray,
         text         : str,
         position     : tuple[int, int],
-        angle        : float,
         scale        : float = 1.0,
         opacity      : float = 0.75
     ) -> np.ndarray:
@@ -540,7 +539,6 @@ class TextExtractor:
             source_image : Image to draw on
             text         : Text to draw
             position     : (x,y) center position for text box
-            angle        : Rotation angle in degrees
             scale        : Text size multiplier (1.0 = default size)
             opacity      : Background opacity (0.0 to 1.0)
         """

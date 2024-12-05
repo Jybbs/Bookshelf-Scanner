@@ -1,2854 +1,1651 @@
 {
     "0.jpg": [
         {
-            "text": "ANNE FRANK: THE DIARY OFAYOUING GIRL",
-            "confidence": 0.6978228820894559,
-            "matches": [
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 40.74074074074075
-                },
-                {
-                    "title": "THE GOAT AND THE STOAT AND THE BOAT",
-                    "score": 39.43661971830986
-                },
-                {
-                    "title": "The STORY of MAINE for YOUNG READERS",
-                    "score": 38.888888888888886
-                }
-            ]
-        }
-    ],
-    "1.jpg": [
-        {
-            "text": "8",
-            "confidence": 0.5268096611628472,
-            "matches": [
-                {
-                    "title": "800",
-                    "score": 50.0
-                },
-                {
-                    "title": "1984",
-                    "score": 40.0
-                },
-                {
-                    "title": "IQ84",
-                    "score": 40.0
-                }
-            ]
+            "title": "The Diary of a Young Girl",
+            "author": "Anne Frank",
+            "score": 0.7887323943661972,
+            "texts": [
+                "ANNE FRANK: THE DIARV OFAYOUING GIRL"
+            ],
+            "confidence": 0.5741049251782034
         },
         {
-            "text": "THE FORESHADOWING",
-            "confidence": 0.7593242341147268,
-            "matches": [
-                {
-                    "title": "THE FIRST TO DIE AT THE END",
-                    "score": 45.45454545454546
-                },
-                {
-                    "title": "The LIGHTHOUSE HANDBOOK  NEW ENGLAND",
-                    "score": 41.509433962264154
-                },
-                {
-                    "title": "TOTAL OUTDOORSMAN",
-                    "score": 41.17647058823529
-                }
-            ]
+            "title": "Anne Frank: the Diary of a Young Girl",
+            "author": "Anne Frank",
+            "score": 0.7887323943661972,
+            "texts": [
+                "ANNE FRANK: THE DIARV OFAYOUING GIRL"
+            ],
+            "confidence": 0.5741049251782034
+        },
+        {
+            "title": "Reading the Diary of Anne Frank",
+            "author": "Neil Heims",
+            "score": 0.7878787878787878,
+            "texts": [
+                "ANNE FRANK: THE DIARV OFAYOUING GIRL"
+            ],
+            "confidence": 0.5741049251782034
+        },
+        {
+            "title": "Teaching the Diary of Anne Frank",
+            "author": "Susan Moger",
+            "score": 0.7761194029850746,
+            "texts": [
+                "ANNE FRANK: THE DIARV OFAYOUING GIRL"
+            ],
+            "confidence": 0.5741049251782034
         }
     ],
     "10.jpg": [
         {
-            "text": "Chinese Cinderella",
-            "confidence": 0.6756085584708966,
-            "matches": [
-                {
-                    "title": "Chinese Cinderella",
-                    "score": 100.0
-                },
-                {
-                    "title": "Seeing Cinderella",
-                    "score": 74.28571428571429
-                },
-                {
-                    "title": "Seeing Cinderella",
-                    "score": 74.28571428571429
-                }
-            ]
-        },
-        {
-            "text": "3",
-            "confidence": 0.8160216155284274,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Chinese Cinderella",
+            "author": "Adeline Yen Mah",
+            "score": 0.9473684210526316,
+            "texts": [
+                "Chinese Cinderella",
+                "3"
+            ],
+            "confidence": 0.8668753592485725
         }
     ],
     "11.jpg": [
         {
-            "text": "ANN RINALDI",
-            "confidence": 0.7273740067304191,
-            "matches": [
-                {
-                    "title": "A My Name Is ALICE",
-                    "score": 48.275862068965516
-                },
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 41.379310344827594
-                },
-                {
-                    "title": "Navy SEAL Dogs",
-                    "score": 40.0
-                }
-            ]
+            "title": "Or Give Me Death",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
         },
         {
-            "text": "F",
-            "confidence": 0.7675694934961399,
-            "matches": [
-                {
-                    "title": "NFL",
-                    "score": 50.0
-                },
-                {
-                    "title": "BFF",
-                    "score": 50.0
-                },
-                {
-                    "title": "Flu",
-                    "score": 50.0
-                }
-            ]
+            "title": "Nine Days a Queen",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
         },
         {
-            "text": "7",
-            "confidence": 0.9363121404626362,
-            "matches": [
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1776",
-                    "score": 40.0
-                }
-            ]
+            "title": "The Color of Fire",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
         },
         {
-            "text": "J",
-            "confidence": 0.7883974140166892,
-            "matches": [
-                {
-                    "title": "MJ",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Jo",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Jip",
-                    "score": 50.0
-                }
-            ]
+            "title": "The Redheaded Princess",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
         },
         {
-            "text": "[",
-            "confidence": 0.7487295451719547,
-            "matches": [
-                {
-                    "title": "[Babymouse].",
-                    "score": 15.384615384615385
-                },
-                {
-                    "title": "[Babymouse].",
-                    "score": 15.384615384615385
-                },
-                {
-                    "title": "[Scott Pilgrim",
-                    "score": 13.33333333333333
-                }
-            ]
+            "title": "Amelia's War",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "An Acquaintance with Darkness",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Fifth Of March",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Come Juneteenth",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Second Bend in the River",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Cast Two Shadows",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Education of Mary",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Broken Days",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "A Break with Charity",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Mine Eyes Have Seen",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Time Enough for Drums",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Staircase",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Last Silk Dress",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Brooklyn Rose",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "An Unlikely Friendship",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Mutiny's Daughter",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Ever-After Bird",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Finishing Becca",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Letter Writer",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Wolf by the Ears",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Blue Door",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Leigh Ann's Civil War",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Keep Smiling Through",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Coffin Quilt",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "My Heart is on the Ground",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Sarah's Ground",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Taking Liberty",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Girl in Blue",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Journal of Jasper Jonathan Pierce",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Hang a Thousand Trees with Ribbons",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Juliet's Moon",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Numbering All the Bones",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "The Secret of Sarah Revere",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "My Vicksburg",
+            "author": "Ann Rinaldi",
+            "score": 0.7857142857142857,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
+        },
+        {
+            "title": "Dear America: My Heart Is on the Ground",
+            "author": "Anne Rinaldi",
+            "score": 0.7586206896551724,
+            "texts": [
+                "ANN RINALDI",
+                "F",
+                "7",
+                "2",
+                "["
+            ],
+            "confidence": 0.7987789814207091
         }
     ],
     "12.jpg": [
         {
-            "text": "Betsy",
-            "confidence": 0.9997731543390325,
-            "matches": [
-                {
-                    "title": "Bitsy",
-                    "score": 80.0
-                },
-                {
-                    "title": "Beauty",
-                    "score": 72.72727272727273
-                },
-                {
-                    "title": "Beauty",
-                    "score": 72.72727272727273
-                }
-            ]
+            "title": "The Story of Religion",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
         },
         {
-            "text": "Rabi",
-            "confidence": 0.911482572555542,
-            "matches": [
-                {
-                    "title": "Rabbit",
-                    "score": 80.0
-                },
-                {
-                    "title": "Rabbit",
-                    "score": 80.0
-                },
-                {
-                    "title": "Rabbit",
-                    "score": 80.0
-                }
-            ]
+            "title": "Taxi : a Book of City Words",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
         },
         {
-            "text": "Emperor",
-            "confidence": 0.9991864362821745,
-            "matches": [
-                {
-                    "title": "Emperor Mage",
-                    "score": 73.6842105263158
-                },
-                {
-                    "title": "Evermore",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Camp Terror",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Exploration and Conquest",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
         },
         {
-            "text": "1",
-            "confidence": 0.5216337615627573,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "A More Perfect Union",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "Liberty or Death",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "The New Americans",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "The Story of Clocks and Calendars",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "Coming to America",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "The Story of Money",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "The Discovery of the Americas",
+            "author": "Betsy Maestro",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "Betsy and the Emperor",
+            "author": "Staton Rabin,Larry Rostant",
+            "score": 0.7647058823529411,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "Mother Teresa",
+            "author": "Betsy Lee",
+            "score": 0.7272727272727273,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
+        },
+        {
+            "title": "The Forest for the Trees: An Editor's Advice to Writers",
+            "author": "Betsy Lerner",
+            "score": 0.72,
+            "texts": [
+                "Betsy",
+                "Emperor"
+            ],
+            "confidence": 0.9969956647834126
         }
     ],
     "13.jpg": [
         {
-            "text": "Wolf by the Ears",
-            "confidence": 0.6425932038574311,
-            "matches": [
-                {
-                    "title": "Wolf by the Ears",
-                    "score": 100.0
-                },
-                {
-                    "title": "Wolf at the Door",
-                    "score": 68.75
-                },
-                {
-                    "title": "Stolen by the Sea",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Rinaldi",
-            "confidence": 0.9847961446461122,
-            "matches": [
-                {
-                    "title": "Radio",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Rewilding",
-                    "score": 62.5
-                },
-                {
-                    "title": "Ruin Road",
-                    "score": 62.5
-                }
-            ]
+            "title": "Wolf by the Ears",
+            "author": "Ann Rinaldi",
+            "score": 0.923076923076923,
+            "texts": [
+                "Wolf by the Ears",
+                "Rinaldi"
+            ],
+            "confidence": 0.8397349080949754
         }
     ],
     "14.jpg": [
         {
-            "text": "JOHNNY TREMAIN",
-            "confidence": 0.7867960222132394,
-            "matches": [
-                {
-                    "title": "TOTAL OUTDOORSMAN",
-                    "score": 45.16129032258065
-                },
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 45.16129032258065
-                },
-                {
-                    "title": "FAIRY TAIL 1",
-                    "score": 38.46153846153846
-                }
-            ]
+            "title": "Johnny Tremain",
+            "author": "Esther Forbes",
+            "score": 0.9333333333333332,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
         },
         {
-            "text": "1",
-            "confidence": 0.5199868899016025,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Johnny Tremain",
+            "author": "Esther Hoskins Forbes",
+            "score": 0.9333333333333332,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
         },
         {
-            "text": "1",
-            "confidence": 0.95998348423349,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Amazing Card Tricks",
+            "author": "Jon Tremaine",
+            "score": 0.7857142857142857,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
+        },
+        {
+            "title": "Chess for Beginners",
+            "author": "Jon Tremaine",
+            "score": 0.7857142857142857,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
+        },
+        {
+            "title": "Reading Johnny Tremain",
+            "author": "Neil Heims",
+            "score": 0.736842105263158,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
+        },
+        {
+            "title": "Johnny Stand",
+            "author": "Harry W. Paige",
+            "score": 0.7142857142857143,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
+        },
+        {
+            "title": "Target: Earth",
+            "author": "Johnny Marciano",
+            "score": 0.7096774193548387,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
+        },
+        {
+            "title": "The Spacedog Cometh",
+            "author": "Johnny Marciano",
+            "score": 0.7096774193548387,
+            "texts": [
+                "JOHNNY TREMAIN",
+                "1"
+            ],
+            "confidence": 0.9771193570187034
         }
     ],
     "15.jpg": [
         {
-            "text": "SOLDIER S HEART",
-            "confidence": 0.5439734703052753,
-            "matches": [
-                {
-                    "title": "WONDER STRUCK",
-                    "score": 50.0
-                },
-                {
-                    "title": "RETURN OF THE NATIVE.",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "SECRETS of a SEASHORE",
-                    "score": 44.44444444444444
-                }
-            ]
-        },
-        {
-            "text": "GARY PAULSEN",
-            "confidence": 0.9985585148312345,
-            "matches": [
-                {
-                    "title": "FAIRY TAIL 1",
-                    "score": 50.0
-                },
-                {
-                    "title": "WARRIOR CATS COLLECTION",
-                    "score": 40.0
-                },
-                {
-                    "title": "THE ASPARAGUS BUNCH",
-                    "score": 38.70967741935484
-                }
-            ]
-        }
-    ],
-    "16.jpg": [
-        {
-            "text": "Confessiens gf Chartolte",
-            "confidence": 0.5123847912703043,
-            "matches": [
-                {
-                    "title": "The True Confessions of Charlotte Doyle",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Confessions of a Serial Kisser",
-                    "score": 62.96296296296296
-                },
-                {
-                    "title": "Confessions of a Gym-Class Dropout",
-                    "score": 62.06896551724138
-                }
-            ]
-        },
-        {
-            "text": "7",
-            "confidence": 0.5091304253998175,
-            "matches": [
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1776",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "4",
-            "confidence": 0.7481598485824748,
-            "matches": [
-                {
-                    "title": "T4",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "T4",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "1984",
-                    "score": 40.0
-                }
-            ]
+            "title": "Soldier's Heart",
+            "author": "Gary Paulsen",
+            "score": 0.9655172413793103,
+            "texts": [
+                "SOLDIER S HEART",
+                "0",
+                "GARY PAULSEN"
+            ],
+            "confidence": 0.7108544807702253
         }
     ],
     "17.jpg": [
         {
-            "text": "SuMMER",
-            "confidence": 0.9668199104127692,
-            "matches": [
-                {
-                    "title": "STRiKERS",
-                    "score": 42.85714285714286
-                },
-                {
-                    "title": "Shug",
-                    "score": 40.0
-                },
-                {
-                    "title": "Sula",
-                    "score": 40.0
-                }
-            ]
+            "title": "Summer of My German Soldier",
+            "author": "Bette Greene",
+            "score": 0.875,
+            "texts": [
+                "SuMMER",
+                "GERMAN SOLDIER"
+            ],
+            "confidence": 0.9087939838100985
         },
         {
-            "text": "GERMAN SOLDIER",
-            "confidence": 0.7308360120008838,
-            "matches": [
-                {
-                    "title": "SOLD",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "RETURN OF THE NATIVE.",
-                    "score": 40.0
-                },
-                {
-                    "title": "AVENGERS: BEYOND",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "18.jpg": [
+            "title": "Summer Soldiers",
+            "author": "Susan Hart Lindquist",
+            "score": 0.7777777777777779,
+            "texts": [
+                "SuMMER",
+                "GERMAN SOLDIER"
+            ],
+            "confidence": 0.9087939838100985
+        },
         {
-            "text": "1",
-            "confidence": 0.6161485892619254,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "A Summer Life",
+            "author": "Gary Soto",
+            "score": 0.7058823529411764,
+            "texts": [
+                "SuMMER",
+                "GERMAN SOLDIER"
+            ],
+            "confidence": 0.9087939838100985
         }
     ],
     "19.jpg": [
         {
-            "text": "SARAH BISHOP",
-            "confidence": 0.976306200286907,
-            "matches": [
-                {
-                    "title": "SARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "SARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "SARS",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "SCOTT ODELL",
-            "confidence": 0.9268951462256767,
-            "matches": [
-                {
-                    "title": "TRUTH BE COLD",
-                    "score": 41.666666666666664
-                },
-                {
-                    "title": "SOLD",
-                    "score": 40.0
-                },
-                {
-                    "title": "STDs",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "2.jpg": [
-        {
-            "text": "3",
-            "confidence": 0.8656744652385306,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.6333362994747063,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.6348385013647864,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.987439744585572,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9034885704108007,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "20.jpg": [
-        {
-            "text": "BRENAMAN",
-            "confidence": 0.9525232528635361,
-            "matches": [
-                {
-                    "title": "BEASTARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "BEASTARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "FEMA",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9298290392219002,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Sarah Bishop",
+            "author": "Scott O'Dell",
+            "score": 0.9387755102040817,
+            "texts": [
+                "SARAH BISHOP",
+                "SCOTT ODELL"
+            ],
+            "confidence": 0.9356614093588305
         }
     ],
     "21.jpg": [
         {
-            "text": "WARM BREAD",
-            "confidence": 0.5691803091324402,
-            "matches": [
-                {
-                    "title": "AVENGERS: BEYOND",
-                    "score": 46.15384615384615
-                },
-                {
-                    "title": "TRUTH BE COLD",
-                    "score": 43.47826086956522
-                },
-                {
-                    "title": "EASTERN TREES",
-                    "score": 43.47826086956522
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.7752302158331901,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9561934591340027,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Lyon",
-            "confidence": 0.946015477180481,
-            "matches": [
-                {
-                    "title": "Lynx",
-                    "score": 75.0
-                },
-                {
-                    "title": "Lion",
-                    "score": 75.0
-                },
-                {
-                    "title": "Lions",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Moskowiiz SWFET",
-            "confidence": 0.5939772070788748,
-            "matches": [
-                {
-                    "title": "Lost Girl King SKT",
-                    "score": 42.42424242424242
-                },
-                {
-                    "title": "Moccasin Trail",
-                    "score": 41.379310344827594
-                },
-                {
-                    "title": "Monsoon Summer",
-                    "score": 41.379310344827594
-                }
-            ]
+            "title": "It Rained Warm Bread",
+            "author": "Gloria Moskowitz-Sweet",
+            "score": 0.717948717948718,
+            "texts": [
+                "WARM BREAD",
+                "1",
+                "Moskowitz SWFET",
+                "1",
+                "Lyon"
+            ],
+            "confidence": 0.7948671293102763
         }
     ],
     "22.jpg": [
         {
-            "text": "3",
-            "confidence": 0.634378301580174,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Reconstruction",
+            "author": "Katie Marsico",
+            "score": 0.7777777777777779,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
         },
         {
-            "text": "0",
-            "confidence": 0.877323454097624,
-            "matches": [
-                {
-                    "title": "800",
-                    "score": 50.0
-                },
-                {
-                    "title": "2001",
-                    "score": 40.0
-                },
-                {
-                    "title": "2095",
-                    "score": 40.0
-                }
-            ]
+            "title": "Reconstruction",
+            "author": "Tim McNeese",
+            "score": 0.7777777777777779,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
+        },
+        {
+            "title": "Reconstruction",
+            "author": "Zak Mettger",
+            "score": 0.7777777777777779,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
+        },
+        {
+            "title": "Reconstruction and Reform",
+            "author": "Joy Hakim",
+            "score": 0.7659574468085107,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
+        },
+        {
+            "title": "Civil War and Reconstruction",
+            "author": "Rodney P. Carlisle",
+            "score": 0.72,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
+        },
+        {
+            "title": "Civil War and Reconstruction",
+            "author": "Michael Weber",
+            "score": 0.72,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
+        },
+        {
+            "title": "Construction and Trades",
+            "author": "Ken Mondschein",
+            "score": 0.7111111111111111,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
+        },
+        {
+            "title": "Construction and Trades",
+            "author": "Deborah Porterfield",
+            "score": 0.7111111111111111,
+            "texts": [
+                "1",
+                "RECONSTRUCTION AnD",
+                "2"
+            ],
+            "confidence": 0.7037745347110462
         }
     ],
     "23.jpg": [
         {
-            "text": "8",
-            "confidence": 0.9698589435686245,
-            "matches": [
-                {
-                    "title": "800",
-                    "score": 50.0
-                },
-                {
-                    "title": "1984",
-                    "score": 40.0
-                },
-                {
-                    "title": "IQ84",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "2",
-            "confidence": 0.7691658602085774,
-            "matches": [
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "H2o",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "the",
-            "confidence": 0.9958245621454838,
-            "matches": [
-                {
-                    "title": "Tithe",
-                    "score": 75.0
-                },
-                {
-                    "title": "Scythe",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Anthem",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "ROBINSON",
-            "confidence": 0.9993347046088605,
-            "matches": [
-                {
-                    "title": "DORIS",
-                    "score": 46.15384615384615
-                },
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 40.0
-                },
-                {
-                    "title": "ISS",
-                    "score": 36.36363636363637
-                }
-            ]
+            "title": "Vampire Crush",
+            "author": "A. M. Robinson",
+            "score": 0.7692307692307692,
+            "texts": [
+                "8",
+                "2",
+                "8",
+                "ROBINSON"
+            ],
+            "confidence": 0.9572867563381764
         }
     ],
     "24.jpg": [
         {
-            "text": "HOME % the BRAVE",
-            "confidence": 0.7756851252780282,
-            "matches": [
-                {
-                    "title": "On the Run",
-                    "score": 53.84615384615385
-                },
-                {
-                    "title": "On the Run",
-                    "score": 53.84615384615385
-                },
-                {
-                    "title": "On the Run",
-                    "score": 53.84615384615385
-                }
-            ]
+            "title": "Home of the Brave",
+            "author": "Katherine Applegate",
+            "score": 0.8484848484848484,
+            "texts": [
+                "HOME % the BRAVE",
+                "1"
+            ],
+            "confidence": 0.7768859750260264
         },
         {
-            "text": "1",
-            "confidence": 0.8759924372800612,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Home of the Braves",
+            "author": "David Klass",
+            "score": 0.8235294117647058,
+            "texts": [
+                "HOME % the BRAVE",
+                "1"
+            ],
+            "confidence": 0.7768859750260264
+        },
+        {
+            "title": "The Bridge Home",
+            "author": "Padma Venkatraman",
+            "score": 0.7741935483870968,
+            "texts": [
+                "HOME % the BRAVE",
+                "1"
+            ],
+            "confidence": 0.7768859750260264
+        },
+        {
+            "title": "Brave the Page",
+            "author": "Rebecca Stern",
+            "score": 0.7333333333333334,
+            "texts": [
+                "HOME % the BRAVE",
+                "1"
+            ],
+            "confidence": 0.7768859750260264
+        },
+        {
+            "title": "The Brave",
+            "author": "James Bird",
+            "score": 0.7222222222222221,
+            "texts": [
+                "HOME % the BRAVE",
+                "1"
+            ],
+            "confidence": 0.7768859750260264
         }
     ],
     "25.jpg": [
         {
-            "text": "With THE Might Of ANGELS",
-            "confidence": 0.7792424600073825,
-            "matches": [
-                {
-                    "title": "With the Might of Angels",
-                    "score": 62.5
-                },
-                {
-                    "title": "Witch Light",
-                    "score": 51.42857142857142
-                },
-                {
-                    "title": "Withering Tights",
-                    "score": 50.0
-                }
-            ]
+            "title": "With the Might of Angels",
+            "author": "Andrea Davis Pinkney",
+            "score": 1.0,
+            "texts": [
+                "With THE Might Of ANGELS"
+            ],
+            "confidence": 0.7277740486997578
+        },
+        {
+            "title": "The Edge of the Light",
+            "author": "Elizabeth George",
+            "score": 0.7555555555555555,
+            "texts": [
+                "With THE Might Of ANGELS"
+            ],
+            "confidence": 0.7277740486997578
+        },
+        {
+            "title": "Curse of the Night Witch",
+            "author": "Alex Aster",
+            "score": 0.75,
+            "texts": [
+                "With THE Might Of ANGELS"
+            ],
+            "confidence": 0.7277740486997578
+        },
+        {
+            "title": "With the Fire on High",
+            "author": "Elizabeth Acevedo",
+            "score": 0.7111111111111111,
+            "texts": [
+                "With THE Might Of ANGELS"
+            ],
+            "confidence": 0.7277740486997578
+        },
+        {
+            "title": "Night of the Twisters",
+            "author": "Ivy Ruckman",
+            "score": 0.7111111111111111,
+            "texts": [
+                "With THE Might Of ANGELS"
+            ],
+            "confidence": 0.7277740486997578
         }
     ],
     "26.jpg": [
         {
-            "text": "Houston",
-            "confidence": 0.6901686389430577,
-            "matches": [
-                {
-                    "title": "Sam Houston",
-                    "score": 77.77777777777779
-                },
-                {
-                    "title": "Hudson",
-                    "score": 76.92307692307692
-                },
-                {
-                    "title": "Boston",
-                    "score": 76.92307692307692
-                }
-            ]
+            "title": "Sam Houston",
+            "author": "William R. Sanford",
+            "score": 0.7777777777777779,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
+        },
+        {
+            "title": "Hudson",
+            "author": "Robin S. Doak",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
+        },
+        {
+            "title": "Boston",
+            "author": "Susan Lee",
+            "score": 0.7692307692307692,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
+        },
+        {
+            "title": "Bulu, African Wonder Dog",
+            "author": "Dick Houston",
+            "score": 0.736842105263158,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
+        },
+        {
+            "title": "Stone Soup",
+            "author": "Heather Forest",
+            "score": 0.7058823529411764,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
+        },
+        {
+            "title": "Stone Soup",
+            "author": "Marcia Brown",
+            "score": 0.7058823529411764,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
+        },
+        {
+            "title": "Stone Soup",
+            "author": "Jon J. Muth",
+            "score": 0.7058823529411764,
+            "texts": [
+                "Houston"
+            ],
+            "confidence": 0.6854248701126512
         }
     ],
     "28.jpg": [
         {
-            "text": "Lit CHAT",
-            "confidence": 0.6948007373905344,
-            "matches": [
-                {
-                    "title": "Little Tree",
-                    "score": 52.63157894736843
-                },
-                {
-                    "title": "Little Tree",
-                    "score": 52.63157894736843
-                },
-                {
-                    "title": "Little Tree",
-                    "score": 52.63157894736843
-                }
-            ]
-        }
-    ],
-    "29.jpg": [
-        {
-            "text": "IBOOK",
-            "confidence": 0.600277909052033,
-            "matches": [
-                {
-                    "title": "BOO!",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "XOXO",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "Ida B",
-                    "score": 40.0
-                }
-            ]
+            "title": "Hate List",
+            "author": "Jennifer Brown",
+            "score": 0.8235294117647058,
+            "texts": [
+                "Lit CHAT"
+            ],
+            "confidence": 0.8904399540531306
         },
         {
-            "text": "2",
-            "confidence": 0.9759647008802439,
-            "matches": [
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "H2o",
-                    "score": 50.0
-                }
-            ]
+            "title": "Lost Cat",
+            "author": "C Roger Mader",
+            "score": 0.75,
+            "texts": [
+                "Lit CHAT"
+            ],
+            "confidence": 0.8904399540531306
         },
         {
-            "text": "3",
-            "confidence": 0.8438544735857114,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Hit It!",
+            "author": "Michael Hardcastle",
+            "score": 0.7142857142857143,
+            "texts": [
+                "Lit CHAT"
+            ],
+            "confidence": 0.8904399540531306
         },
         {
-            "text": "The game % borrowed phrases",
-            "confidence": 0.5684542949581051,
-            "matches": [
-                {
-                    "title": "The Borrowers",
-                    "score": 60.0
-                },
-                {
-                    "title": "The Borrowers",
-                    "score": 60.0
-                },
-                {
-                    "title": "The Standerbred Horse",
-                    "score": 58.33333333333333
-                }
-            ]
+            "title": "Change It!",
+            "author": "Adrienne Mason",
+            "score": 0.7058823529411764,
+            "texts": [
+                "Lit CHAT"
+            ],
+            "confidence": 0.8904399540531306
+        },
+        {
+            "title": "The Cheat",
+            "author": "Amy Goldman Koss",
+            "score": 0.7058823529411764,
+            "texts": [
+                "Lit CHAT"
+            ],
+            "confidence": 0.8904399540531306
         }
     ],
     "3.jpg": [
         {
-            "text": "Hang",
-            "confidence": 0.9089410305023193,
-            "matches": [
-                {
-                    "title": "Fang",
-                    "score": 75.0
-                },
-                {
-                    "title": "Hanged!",
-                    "score": 72.72727272727273
-                },
-                {
-                    "title": "Hearing",
-                    "score": 72.72727272727273
-                }
-            ]
-        },
-        {
-            "text": "NNV",
-            "confidence": 0.9995064685483417,
-            "matches": [
-                {
-                    "title": "Nil",
-                    "score": 33.333333333333336
-                },
-                {
-                    "title": "No-No Boy",
-                    "score": 33.333333333333336
-                },
-                {
-                    "title": "NFL",
-                    "score": 33.333333333333336
-                }
-            ]
-        },
-        {
-            "text": "RINALDI",
-            "confidence": 0.788826728796022,
-            "matches": [
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 41.666666666666664
-                },
-                {
-                    "title": "NFL",
-                    "score": 40.0
-                },
-                {
-                    "title": "NBA",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "5",
-            "confidence": 0.9924214966065534,
-            "matches": [
-                {
-                    "title": "2095",
-                    "score": 40.0
-                },
-                {
-                    "title": "1500",
-                    "score": 40.0
-                },
-                {
-                    "title": "2095",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "Trees with Ribbons",
-            "confidence": 0.614238232272645,
-            "matches": [
-                {
-                    "title": "Hang a Thousand Trees with Ribbons",
-                    "score": 69.23076923076923
-                },
-                {
-                    "title": "Travels with Louis",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Words with Wings",
-                    "score": 64.70588235294117
-                }
-            ]
-        }
-    ],
-    "30.jpg": [
-        {
-            "text": "ANNE FRANK: THE DIARY OFAYOUING GIRL",
-            "confidence": 0.6978228820894559,
-            "matches": [
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 40.74074074074075
-                },
-                {
-                    "title": "THE GOAT AND THE STOAT AND THE BOAT",
-                    "score": 39.43661971830986
-                },
-                {
-                    "title": "The STORY of MAINE for YOUNG READERS",
-                    "score": 38.888888888888886
-                }
-            ]
-        }
-    ],
-    "31.jpg": [
-        {
-            "text": "8",
-            "confidence": 0.5268096611628472,
-            "matches": [
-                {
-                    "title": "800",
-                    "score": 50.0
-                },
-                {
-                    "title": "1984",
-                    "score": 40.0
-                },
-                {
-                    "title": "IQ84",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "THE FORESHADOWING",
-            "confidence": 0.7593242341147268,
-            "matches": [
-                {
-                    "title": "THE FIRST TO DIE AT THE END",
-                    "score": 45.45454545454546
-                },
-                {
-                    "title": "The LIGHTHOUSE HANDBOOK  NEW ENGLAND",
-                    "score": 41.509433962264154
-                },
-                {
-                    "title": "TOTAL OUTDOORSMAN",
-                    "score": 41.17647058823529
-                }
-            ]
-        }
-    ],
-    "32.jpg": [
-        {
-            "text": "3",
-            "confidence": 0.8656744652385306,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.6333362994747063,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.6348385013647864,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.987439744585572,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9034885704108007,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "33.jpg": [
-        {
-            "text": "Hang",
-            "confidence": 0.9089410305023193,
-            "matches": [
-                {
-                    "title": "Fang",
-                    "score": 75.0
-                },
-                {
-                    "title": "Hanged!",
-                    "score": 72.72727272727273
-                },
-                {
-                    "title": "Hearing",
-                    "score": 72.72727272727273
-                }
-            ]
-        },
-        {
-            "text": "NNV",
-            "confidence": 0.9995064685483417,
-            "matches": [
-                {
-                    "title": "Nil",
-                    "score": 33.333333333333336
-                },
-                {
-                    "title": "No-No Boy",
-                    "score": 33.333333333333336
-                },
-                {
-                    "title": "NFL",
-                    "score": 33.333333333333336
-                }
-            ]
-        },
-        {
-            "text": "RINALDI",
-            "confidence": 0.788826728796022,
-            "matches": [
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 41.666666666666664
-                },
-                {
-                    "title": "NFL",
-                    "score": 40.0
-                },
-                {
-                    "title": "NBA",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "5",
-            "confidence": 0.9924214966065534,
-            "matches": [
-                {
-                    "title": "2095",
-                    "score": 40.0
-                },
-                {
-                    "title": "1500",
-                    "score": 40.0
-                },
-                {
-                    "title": "2095",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "Trees with Ribbons",
-            "confidence": 0.614238232272645,
-            "matches": [
-                {
-                    "title": "Hang a Thousand Trees with Ribbons",
-                    "score": 69.23076923076923
-                },
-                {
-                    "title": "Travels with Louis",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Words with Wings",
-                    "score": 64.70588235294117
-                }
-            ]
-        }
-    ],
-    "34.jpg": [
-        {
-            "text": "ANN RINALDI",
-            "confidence": 0.7572622300456178,
-            "matches": [
-                {
-                    "title": "A My Name Is ALICE",
-                    "score": 48.275862068965516
-                },
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 41.379310344827594
-                },
-                {
-                    "title": "Navy SEAL Dogs",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "35.jpg": [
-        {
-            "text": "ThE SECOND BEND IN THE RIVER",
-            "confidence": 0.5786461155231921,
-            "matches": [
-                {
-                    "title": "THE FIRST TO DIE AT THE END",
-                    "score": 50.90909090909091
-                },
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 48.88888888888889
-                },
-                {
-                    "title": "THE GOAT AND THE STOAT AND THE BOAT",
-                    "score": 47.61904761904761
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.7525665004364015,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Ann Rinaldi",
-            "confidence": 0.9887148911926497,
-            "matches": [
-                {
-                    "title": "Ann Richards",
-                    "score": 69.56521739130434
-                },
-                {
-                    "title": "Animalia",
-                    "score": 63.1578947368421
-                },
-                {
-                    "title": "Annapolis",
-                    "score": 60.0
-                }
-            ]
-        }
-    ],
-    "36.jpg": [
-        {
-            "text": "William Lavenler",
-            "confidence": 0.5189853384845421,
-            "matches": [
-                {
-                    "title": "William Kunstler",
-                    "score": 75.0
-                },
-                {
-                    "title": "William Faulkner",
-                    "score": 75.0
-                },
-                {
-                    "title": "William Harvey",
-                    "score": 73.33333333333334
-                }
-            ]
-        },
-        {
-            "text": "JUST",
-            "confidence": 0.9722065329551697,
-            "matches": [
-                {
-                    "title": "USSR",
-                    "score": 50.0
-                },
-                {
-                    "title": "STDs",
-                    "score": 50.0
-                },
-                {
-                    "title": "SIGHT",
-                    "score": 44.44444444444444
-                }
-            ]
-        },
-        {
-            "text": "JANE",
-            "confidence": 0.9999880194664001,
-            "matches": [
-                {
-                    "title": "JLA",
-                    "score": 57.14285714285714
-                },
-                {
-                    "title": "NERDS",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "NERDS",
-                    "score": 44.44444444444444
-                }
-            ]
-        }
-    ],
-    "37.jpg": [
-        {
-            "text": "BREA K",
-            "confidence": 0.8896729830482862,
-            "matches": [
-                {
-                    "title": "NBA 2K",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Be Kind",
-                    "score": 46.15384615384615
-                },
-                {
-                    "title": "NBA",
-                    "score": 44.44444444444444
-                }
-            ]
-        },
-        {
-            "text": "D",
-            "confidence": 0.9364486053732577,
-            "matches": [
-                {
-                    "title": "Dry",
-                    "score": 50.0
-                },
-                {
-                    "title": "Dry",
-                    "score": 50.0
-                },
-                {
-                    "title": "Dry",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "ANN",
-            "confidence": 0.9998232581690891,
-            "matches": [
-                {
-                    "title": "A New Nation",
-                    "score": 40.0
-                },
-                {
-                    "title": "YA Novel",
-                    "score": 36.36363636363637
-                },
-                {
-                    "title": "¡¡MANU!!",
-                    "score": 36.36363636363637
-                }
-            ]
-        },
-        {
-            "text": "RINALD [",
-            "confidence": 0.9041926240242648,
-            "matches": [
-                {
-                    "title": "I Am J",
-                    "score": 42.85714285714286
-                },
-                {
-                    "title": "NBA 2K",
-                    "score": 42.85714285714286
-                },
-                {
-                    "title": "I Am Me",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "witu CHARity",
-            "confidence": 0.6390088240875549,
-            "matches": [
-                {
-                    "title": "Misfit City",
-                    "score": 60.86956521739131
-                },
-                {
-                    "title": "Mud City",
-                    "score": 60.0
-                },
-                {
-                    "title": "Virtual Reality",
-                    "score": 59.25925925925925
-                }
-            ]
-        }
-    ],
-    "38.jpg": [
-        {
-            "text": "FINISHING BECCA",
-            "confidence": 0.7793235049330633,
-            "matches": [
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 42.42424242424242
-                },
-                {
-                    "title": "NASCAR",
-                    "score": 38.095238095238095
-                },
-                {
-                    "title": "NASCAR",
-                    "score": 38.095238095238095
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9123883971450972,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "39.jpg": [
-        {
-            "text": "1",
-            "confidence": 0.5738535578822201,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Hang a Thousand Trees with Ribbons",
+            "author": "Ann Rinaldi",
+            "score": 0.7710843373493976,
+            "texts": [
+                "Hang",
+                "NNV",
+                "RINALDI",
+                "5",
+                "Trees with Ribbons"
+            ],
+            "confidence": 0.8828352842273521
         }
     ],
     "4.jpg": [
         {
-            "text": "ANN RINALDI",
-            "confidence": 0.7572622300456178,
-            "matches": [
-                {
-                    "title": "A My Name Is ALICE",
-                    "score": 48.275862068965516
-                },
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 41.379310344827594
-                },
-                {
-                    "title": "Navy SEAL Dogs",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "40.jpg": [
-        {
-            "text": "Chinese Cinderella",
-            "confidence": 0.6756085584708966,
-            "matches": [
-                {
-                    "title": "Chinese Cinderella",
-                    "score": 100.0
-                },
-                {
-                    "title": "Seeing Cinderella",
-                    "score": 74.28571428571429
-                },
-                {
-                    "title": "Seeing Cinderella",
-                    "score": 74.28571428571429
-                }
-            ]
+            "title": "Or Give Me Death",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "3",
-            "confidence": 0.8160216155284274,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "41.jpg": [
-        {
-            "text": "ANN RINALDI",
-            "confidence": 0.7273740067304191,
-            "matches": [
-                {
-                    "title": "A My Name Is ALICE",
-                    "score": 48.275862068965516
-                },
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 41.379310344827594
-                },
-                {
-                    "title": "Navy SEAL Dogs",
-                    "score": 40.0
-                }
-            ]
+            "title": "Nine Days a Queen",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "F",
-            "confidence": 0.7675694934961399,
-            "matches": [
-                {
-                    "title": "NFL",
-                    "score": 50.0
-                },
-                {
-                    "title": "BFF",
-                    "score": 50.0
-                },
-                {
-                    "title": "Flu",
-                    "score": 50.0
-                }
-            ]
+            "title": "The Color of Fire",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "7",
-            "confidence": 0.9363121404626362,
-            "matches": [
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1776",
-                    "score": 40.0
-                }
-            ]
+            "title": "The Redheaded Princess",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "J",
-            "confidence": 0.7883974140166892,
-            "matches": [
-                {
-                    "title": "MJ",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Jo",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Jip",
-                    "score": 50.0
-                }
-            ]
+            "title": "Amelia's War",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "[",
-            "confidence": 0.7487295451719547,
-            "matches": [
-                {
-                    "title": "[Babymouse].",
-                    "score": 15.384615384615385
-                },
-                {
-                    "title": "[Babymouse].",
-                    "score": 15.384615384615385
-                },
-                {
-                    "title": "[Scott Pilgrim",
-                    "score": 13.33333333333333
-                }
-            ]
-        }
-    ],
-    "42.jpg": [
-        {
-            "text": "Betsy",
-            "confidence": 0.9997731543390325,
-            "matches": [
-                {
-                    "title": "Bitsy",
-                    "score": 80.0
-                },
-                {
-                    "title": "Beauty",
-                    "score": 72.72727272727273
-                },
-                {
-                    "title": "Beauty",
-                    "score": 72.72727272727273
-                }
-            ]
+            "title": "An Acquaintance with Darkness",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "Rabi",
-            "confidence": 0.911482572555542,
-            "matches": [
-                {
-                    "title": "Rabbit",
-                    "score": 80.0
-                },
-                {
-                    "title": "Rabbit",
-                    "score": 80.0
-                },
-                {
-                    "title": "Rabbit",
-                    "score": 80.0
-                }
-            ]
+            "title": "The Fifth Of March",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "Emperor",
-            "confidence": 0.9991864362821745,
-            "matches": [
-                {
-                    "title": "Emperor Mage",
-                    "score": 73.6842105263158
-                },
-                {
-                    "title": "Evermore",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Camp Terror",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Come Juneteenth",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "1",
-            "confidence": 0.5216337615627573,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "43.jpg": [
-        {
-            "text": "Wolf by the Ears",
-            "confidence": 0.6425932038574311,
-            "matches": [
-                {
-                    "title": "Wolf by the Ears",
-                    "score": 100.0
-                },
-                {
-                    "title": "Wolf at the Door",
-                    "score": 68.75
-                },
-                {
-                    "title": "Stolen by the Sea",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Second Bend in the River",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "Rinaldi",
-            "confidence": 0.9847961446461122,
-            "matches": [
-                {
-                    "title": "Radio",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Rewilding",
-                    "score": 62.5
-                },
-                {
-                    "title": "Ruin Road",
-                    "score": 62.5
-                }
-            ]
-        }
-    ],
-    "44.jpg": [
-        {
-            "text": "JOHNNY TREMAIN",
-            "confidence": 0.7867960222132394,
-            "matches": [
-                {
-                    "title": "TOTAL OUTDOORSMAN",
-                    "score": 45.16129032258065
-                },
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 45.16129032258065
-                },
-                {
-                    "title": "FAIRY TAIL 1",
-                    "score": 38.46153846153846
-                }
-            ]
+            "title": "Cast Two Shadows",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "1",
-            "confidence": 0.5199868899016025,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "The Education of Mary",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "1",
-            "confidence": 0.95998348423349,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "45.jpg": [
-        {
-            "text": "SOLDIER S HEART",
-            "confidence": 0.5439734703052753,
-            "matches": [
-                {
-                    "title": "WONDER STRUCK",
-                    "score": 50.0
-                },
-                {
-                    "title": "RETURN OF THE NATIVE.",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "SECRETS of a SEASHORE",
-                    "score": 44.44444444444444
-                }
-            ]
+            "title": "Broken Days",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "GARY PAULSEN",
-            "confidence": 0.9985585148312345,
-            "matches": [
-                {
-                    "title": "FAIRY TAIL 1",
-                    "score": 50.0
-                },
-                {
-                    "title": "WARRIOR CATS COLLECTION",
-                    "score": 40.0
-                },
-                {
-                    "title": "THE ASPARAGUS BUNCH",
-                    "score": 38.70967741935484
-                }
-            ]
-        }
-    ],
-    "46.jpg": [
-        {
-            "text": "Confessiens gf Chartolte",
-            "confidence": 0.5123847912703043,
-            "matches": [
-                {
-                    "title": "The True Confessions of Charlotte Doyle",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Confessions of a Serial Kisser",
-                    "score": 62.96296296296296
-                },
-                {
-                    "title": "Confessions of a Gym-Class Dropout",
-                    "score": 62.06896551724138
-                }
-            ]
+            "title": "A Break with Charity",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "7",
-            "confidence": 0.5091304253998175,
-            "matches": [
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1607",
-                    "score": 40.0
-                },
-                {
-                    "title": "1776",
-                    "score": 40.0
-                }
-            ]
+            "title": "Mine Eyes Have Seen",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "4",
-            "confidence": 0.7481598485824748,
-            "matches": [
-                {
-                    "title": "T4",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "T4",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "1984",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "47.jpg": [
-        {
-            "text": "SuMMER",
-            "confidence": 0.9668199104127692,
-            "matches": [
-                {
-                    "title": "STRiKERS",
-                    "score": 42.85714285714286
-                },
-                {
-                    "title": "Shug",
-                    "score": 40.0
-                },
-                {
-                    "title": "Sula",
-                    "score": 40.0
-                }
-            ]
+            "title": "Time Enough for Drums",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "GERMAN SOLDIER",
-            "confidence": 0.7308360120008838,
-            "matches": [
-                {
-                    "title": "SOLD",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "RETURN OF THE NATIVE.",
-                    "score": 40.0
-                },
-                {
-                    "title": "AVENGERS: BEYOND",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "48.jpg": [
-        {
-            "text": "1",
-            "confidence": 0.6161485892619254,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "49.jpg": [
-        {
-            "text": "SARAH BISHOP",
-            "confidence": 0.976306200286907,
-            "matches": [
-                {
-                    "title": "SARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "SARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "SARS",
-                    "score": 50.0
-                }
-            ]
+            "title": "The Staircase",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         },
         {
-            "text": "SCOTT ODELL",
-            "confidence": 0.9268951462256767,
-            "matches": [
-                {
-                    "title": "TRUTH BE COLD",
-                    "score": 41.666666666666664
-                },
-                {
-                    "title": "SOLD",
-                    "score": 40.0
-                },
-                {
-                    "title": "STDs",
-                    "score": 40.0
-                }
-            ]
+            "title": "The Last Silk Dress",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Brooklyn Rose",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "An Unlikely Friendship",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Mutiny's Daughter",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Ever-After Bird",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Finishing Becca",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Letter Writer",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Wolf by the Ears",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Blue Door",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Leigh Ann's Civil War",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Keep Smiling Through",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Coffin Quilt",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "My Heart is on the Ground",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Sarah's Ground",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Taking Liberty",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Girl in Blue",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Journal of Jasper Jonathan Pierce",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Hang a Thousand Trees with Ribbons",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Juliet's Moon",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Numbering All the Bones",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Secret of Sarah Revere",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "My Vicksburg",
+            "author": "Ann Rinaldi",
+            "score": 1.0,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Dear America: My Heart Is on the Ground",
+            "author": "Anne Rinaldi",
+            "score": 0.9565217391304348,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Boy Who Invented the Popsicle",
+            "author": "Anne Renaud",
+            "score": 0.7272727272727273,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The True Tale of a Giantess",
+            "author": "Anne Renaud",
+            "score": 0.7272727272727273,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Mr. Crum's Potato Predicament",
+            "author": "Anne Renaud",
+            "score": 0.7272727272727273,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Little Piano Girl",
+            "author": "Ann Ingalls",
+            "score": 0.7272727272727273,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "Flyaway Girl",
+            "author": "Ann Grifalconi",
+            "score": 0.72,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
+        },
+        {
+            "title": "The Village of Round and Square Houses",
+            "author": "Ann Grifalconi",
+            "score": 0.72,
+            "texts": [
+                "ANN RINALDI"
+            ],
+            "confidence": 0.7694476921916305
         }
     ],
     "5.jpg": [
         {
-            "text": "ThE SECOND BEND IN THE RIVER",
-            "confidence": 0.5786461155231921,
-            "matches": [
-                {
-                    "title": "THE FIRST TO DIE AT THE END",
-                    "score": 50.90909090909091
-                },
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 48.88888888888889
-                },
-                {
-                    "title": "THE GOAT AND THE STOAT AND THE BOAT",
-                    "score": 47.61904761904761
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.7525665004364015,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Ann Rinaldi",
-            "confidence": 0.9887148911926497,
-            "matches": [
-                {
-                    "title": "Ann Richards",
-                    "score": 69.56521739130434
-                },
-                {
-                    "title": "Animalia",
-                    "score": 63.1578947368421
-                },
-                {
-                    "title": "Annapolis",
-                    "score": 60.0
-                }
-            ]
-        }
-    ],
-    "50.jpg": [
-        {
-            "text": "BRENAMAN",
-            "confidence": 0.9525232528635361,
-            "matches": [
-                {
-                    "title": "BEASTARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "BEASTARS",
-                    "score": 50.0
-                },
-                {
-                    "title": "FEMA",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9298290392219002,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "51.jpg": [
-        {
-            "text": "WARM BREAD",
-            "confidence": 0.5691803091324402,
-            "matches": [
-                {
-                    "title": "AVENGERS: BEYOND",
-                    "score": 46.15384615384615
-                },
-                {
-                    "title": "TRUTH BE COLD",
-                    "score": 43.47826086956522
-                },
-                {
-                    "title": "EASTERN TREES",
-                    "score": 43.47826086956522
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.7752302158331901,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9561934591340027,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Lyon",
-            "confidence": 0.946015477180481,
-            "matches": [
-                {
-                    "title": "Lynx",
-                    "score": 75.0
-                },
-                {
-                    "title": "Lion",
-                    "score": 75.0
-                },
-                {
-                    "title": "Lions",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "Moskowiiz SWFET",
-            "confidence": 0.5939772070788748,
-            "matches": [
-                {
-                    "title": "Lost Girl King SKT",
-                    "score": 42.42424242424242
-                },
-                {
-                    "title": "Moccasin Trail",
-                    "score": 41.379310344827594
-                },
-                {
-                    "title": "Monsoon Summer",
-                    "score": 41.379310344827594
-                }
-            ]
-        }
-    ],
-    "52.jpg": [
-        {
-            "text": "3",
-            "confidence": 0.634378301580174,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "0",
-            "confidence": 0.877323454097624,
-            "matches": [
-                {
-                    "title": "800",
-                    "score": 50.0
-                },
-                {
-                    "title": "2001",
-                    "score": 40.0
-                },
-                {
-                    "title": "2095",
-                    "score": 40.0
-                }
-            ]
-        }
-    ],
-    "53.jpg": [
-        {
-            "text": "8",
-            "confidence": 0.9698589435686245,
-            "matches": [
-                {
-                    "title": "800",
-                    "score": 50.0
-                },
-                {
-                    "title": "1984",
-                    "score": 40.0
-                },
-                {
-                    "title": "IQ84",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "2",
-            "confidence": 0.7691658602085774,
-            "matches": [
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "H2o",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "the",
-            "confidence": 0.9958245621454838,
-            "matches": [
-                {
-                    "title": "Tithe",
-                    "score": 75.0
-                },
-                {
-                    "title": "Scythe",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Anthem",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "ROBINSON",
-            "confidence": 0.9993347046088605,
-            "matches": [
-                {
-                    "title": "DORIS",
-                    "score": 46.15384615384615
-                },
-                {
-                    "title": "CROSSING THE LINE",
-                    "score": 40.0
-                },
-                {
-                    "title": "ISS",
-                    "score": 36.36363636363637
-                }
-            ]
-        }
-    ],
-    "54.jpg": [
-        {
-            "text": "HOME % the BRAVE",
-            "confidence": 0.7756851252780282,
-            "matches": [
-                {
-                    "title": "On the Run",
-                    "score": 53.84615384615385
-                },
-                {
-                    "title": "On the Run",
-                    "score": 53.84615384615385
-                },
-                {
-                    "title": "On the Run",
-                    "score": 53.84615384615385
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.8759924372800612,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "55.jpg": [
-        {
-            "text": "With THE Might Of ANGELS",
-            "confidence": 0.7792424600073825,
-            "matches": [
-                {
-                    "title": "With the Might of Angels",
-                    "score": 62.5
-                },
-                {
-                    "title": "Witch Light",
-                    "score": 51.42857142857142
-                },
-                {
-                    "title": "Withering Tights",
-                    "score": 50.0
-                }
-            ]
-        }
-    ],
-    "56.jpg": [
-        {
-            "text": "Houston",
-            "confidence": 0.6901686389430577,
-            "matches": [
-                {
-                    "title": "Sam Houston",
-                    "score": 77.77777777777779
-                },
-                {
-                    "title": "Hudson",
-                    "score": 76.92307692307692
-                },
-                {
-                    "title": "Boston",
-                    "score": 76.92307692307692
-                }
-            ]
-        }
-    ],
-    "58.jpg": [
-        {
-            "text": "Lit CHAT",
-            "confidence": 0.6948007373905344,
-            "matches": [
-                {
-                    "title": "Little Tree",
-                    "score": 52.63157894736843
-                },
-                {
-                    "title": "Little Tree",
-                    "score": 52.63157894736843
-                },
-                {
-                    "title": "Little Tree",
-                    "score": 52.63157894736843
-                }
-            ]
-        }
-    ],
-    "59.jpg": [
-        {
-            "text": "IBOOK",
-            "confidence": 0.600277909052033,
-            "matches": [
-                {
-                    "title": "BOO!",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "XOXO",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "Ida B",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "2",
-            "confidence": 0.9759647008802439,
-            "matches": [
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "U2",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "H2o",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "3",
-            "confidence": 0.8438544735857114,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        },
-        {
-            "text": "The game % borrowed phrases",
-            "confidence": 0.5684542949581051,
-            "matches": [
-                {
-                    "title": "The Borrowers",
-                    "score": 60.0
-                },
-                {
-                    "title": "The Borrowers",
-                    "score": 60.0
-                },
-                {
-                    "title": "The Standerbred Horse",
-                    "score": 58.33333333333333
-                }
-            ]
+            "title": "Second Bend in the River",
+            "author": "Ann Rinaldi",
+            "score": 0.8571428571428572,
+            "texts": [
+                "ThE SECOND BEND IN THE RIVER",
+                "1",
+                "1"
+            ],
+            "confidence": 0.7283695471648927
         }
     ],
     "6.jpg": [
         {
-            "text": "William Lavenler",
-            "confidence": 0.5189853384845421,
-            "matches": [
-                {
-                    "title": "William Kunstler",
-                    "score": 75.0
-                },
-                {
-                    "title": "William Faulkner",
-                    "score": 75.0
-                },
-                {
-                    "title": "William Harvey",
-                    "score": 73.33333333333334
-                }
-            ]
-        },
-        {
-            "text": "JUST",
-            "confidence": 0.9722065329551697,
-            "matches": [
-                {
-                    "title": "USSR",
-                    "score": 50.0
-                },
-                {
-                    "title": "STDs",
-                    "score": 50.0
-                },
-                {
-                    "title": "SIGHT",
-                    "score": 44.44444444444444
-                }
-            ]
-        },
-        {
-            "text": "JANE",
-            "confidence": 0.9999880194664001,
-            "matches": [
-                {
-                    "title": "JLA",
-                    "score": 57.14285714285714
-                },
-                {
-                    "title": "NERDS",
-                    "score": 44.44444444444444
-                },
-                {
-                    "title": "NERDS",
-                    "score": 44.44444444444444
-                }
-            ]
+            "title": "Just Jane",
+            "author": "William Lavender",
+            "score": 0.9259259259259259,
+            "texts": [
+                "William Lavenler",
+                "JUST",
+                "JANE",
+                "5"
+            ],
+            "confidence": 0.8165804369169426
         }
     ],
     "7.jpg": [
         {
-            "text": "BREA K",
-            "confidence": 0.8896729830482862,
-            "matches": [
-                {
-                    "title": "NBA 2K",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "Be Kind",
-                    "score": 46.15384615384615
-                },
-                {
-                    "title": "NBA",
-                    "score": 44.44444444444444
-                }
-            ]
-        },
-        {
-            "text": "D",
-            "confidence": 0.9364486053732577,
-            "matches": [
-                {
-                    "title": "Dry",
-                    "score": 50.0
-                },
-                {
-                    "title": "Dry",
-                    "score": 50.0
-                },
-                {
-                    "title": "Dry",
-                    "score": 50.0
-                }
-            ]
-        },
-        {
-            "text": "ANN",
-            "confidence": 0.9998232581690891,
-            "matches": [
-                {
-                    "title": "A New Nation",
-                    "score": 40.0
-                },
-                {
-                    "title": "YA Novel",
-                    "score": 36.36363636363637
-                },
-                {
-                    "title": "¡¡MANU!!",
-                    "score": 36.36363636363637
-                }
-            ]
-        },
-        {
-            "text": "RINALD [",
-            "confidence": 0.9041926240242648,
-            "matches": [
-                {
-                    "title": "I Am J",
-                    "score": 42.85714285714286
-                },
-                {
-                    "title": "NBA 2K",
-                    "score": 42.85714285714286
-                },
-                {
-                    "title": "I Am Me",
-                    "score": 40.0
-                }
-            ]
-        },
-        {
-            "text": "witu CHARity",
-            "confidence": 0.6390088240875549,
-            "matches": [
-                {
-                    "title": "Misfit City",
-                    "score": 60.86956521739131
-                },
-                {
-                    "title": "Mud City",
-                    "score": 60.0
-                },
-                {
-                    "title": "Virtual Reality",
-                    "score": 59.25925925925925
-                }
-            ]
+            "title": "A Break with Charity",
+            "author": "Ann Rinaldi",
+            "score": 0.8787878787878788,
+            "texts": [
+                "BREA K",
+                "D",
+                "ANN",
+                "RINALD [",
+                "with CHARity",
+                "5"
+            ],
+            "confidence": 0.8526347139083584
         }
     ],
     "8.jpg": [
         {
-            "text": "FINISHING BECCA",
-            "confidence": 0.7793235049330633,
-            "matches": [
-                {
-                    "title": "A SEAFARING LEGACY",
-                    "score": 42.42424242424242
-                },
-                {
-                    "title": "NASCAR",
-                    "score": 38.095238095238095
-                },
-                {
-                    "title": "NASCAR",
-                    "score": 38.095238095238095
-                }
-            ]
-        },
-        {
-            "text": "1",
-            "confidence": 0.9123883971450972,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
-        }
-    ],
-    "9.jpg": [
-        {
-            "text": "1",
-            "confidence": 0.5738535578822201,
-            "matches": [
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                },
-                {
-                    "title": "13",
-                    "score": 66.66666666666667
-                }
-            ]
+            "title": "Finishing Becca",
+            "author": "Ann Rinaldi",
+            "score": 0.9375,
+            "texts": [
+                "FINISHING BECCA",
+                "1"
+            ],
+            "confidence": 0.9465789648859226
         }
     ]
 }
