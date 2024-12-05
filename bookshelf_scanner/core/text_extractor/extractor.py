@@ -134,7 +134,7 @@ class ProcessingStep:
 
 # -------------------- ProcessingState Class --------------------
 
-@dataclass(frozen=True)
+@dataclass(frozen = True)
 class ProcessingState:
     """
     Immutable state representing all processing parameters for an image.
@@ -174,7 +174,7 @@ class ProcessingState:
             for step in steps
         )
         
-        return cls(steps=state_steps, ocr_enabled=ocr_enabled)
+        return cls(steps = state_steps, ocr_enabled = ocr_enabled)
 
     def to_nested_dict(self) -> dict:
         """
