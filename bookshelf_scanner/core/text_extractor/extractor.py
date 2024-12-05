@@ -88,6 +88,7 @@ class ProcessingStep:
     toggle_key   : str                # Key to toggle this processing step
     parameters   : list[Parameter]    # List of parameter instances
     is_enabled   : bool = False       # Whether the step is enabled
+    is_pipeline  : bool = True        # Whether this step performs image processing
 
     def adjust_param(self, key_char: str) -> str | None:
         """
@@ -119,13 +120,14 @@ class ProcessingStep:
 
 # -------------------- ProcessingState Class --------------------
 
-@dataclass(frozen = True)
+@dataclass(frozen=True)
 class ProcessingState:
     """
     Immutable state representing all processing parameters for an image.
     Used as a cache key for consistent image processing results.
     """
-    steps: tuple[tuple[str, bool, tuple[Any, ...]], ...]
+    steps       : tuple[tuple[str, bool, tuple[Any, ...]], ...]
+    ocr_enabled : bool
 
     @classmethod
     def from_steps(cls, steps: list[ProcessingStep]) -> 'ProcessingState':
@@ -146,13 +148,19 @@ class ProcessingState:
                 step.is_enabled,
                 tuple(sorted(
                     (param.name, param.value)
-                    for param in sorted(step.parameters, key = lambda p: p.name)
+                    for param in sorted(step.parameters, key=lambda p: p.name)
                 ))
             )
-            for step in sorted(steps, key = lambda s: s.name)
-            if step.is_enabled
+            for step in sorted(steps, key=lambda s: s.name)
+            if step.is_enabled and step.is_pipeline
         )
-        return cls(steps = state_steps)
+        
+        ocr_enabled = any(
+            step.name == 'ocr' and step.is_enabled 
+            for step in steps
+        )
+        
+        return cls(steps=state_steps, ocr_enabled=ocr_enabled)
 
     def to_current_parameters(self) -> dict:
         """
@@ -201,13 +209,6 @@ def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
     lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
     return cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
 
-def ocr_processing(image: np.ndarray, params: dict) -> np.ndarray:
-    """
-    Placeholder function for OCR processing step.
-    This function does not modify the image but ensures that 'ocr' is treated as a valid processing step.
-    """
-    return image
-
 def remove_shadow(image: np.ndarray, params: dict) -> np.ndarray:
     """
     Removes shadows from the image, which is essential for OCR when shadows obscure parts
@@ -242,7 +243,6 @@ PROCESSING_FUNCTIONS = {
     'color_clahe'           : apply_clahe,
     'contrast_adjustment'   : adjust_contrast,
     'image_rotation'        : rotate_image,
-    'ocr'                   : ocr_processing,
     'shadow_removal'        : remove_shadow,
 }
 
@@ -368,7 +368,7 @@ class TextExtractor:
         Returns:
             List of initialized ProcessingStep instances
         """
-        yaml = YAML(typ = 'safe')
+        yaml = YAML(typ='safe')
 
         with self.params_file.open('r') as f:
             step_definitions = yaml.load(f)
@@ -380,6 +380,7 @@ class TextExtractor:
         for index, step_def in enumerate(step_definitions):
             step_name     = step_def['name']
             step_override = params_override.get(step_name, {})
+            is_pipeline   = step_name != 'ocr'  # OCR is not part of the image processing pipeline
 
             # Create parameters list with any overrides
             param_overrides = step_override.get('parameters', {})
@@ -397,7 +398,8 @@ class TextExtractor:
                     display_name = step_def['display_name'],
                     toggle_key   = str(index + 1),
                     parameters   = parameters,
-                    is_enabled   = step_override.get('enabled', step_def.get('enabled', False))
+                    is_enabled   = step_override.get('enabled', step_def.get('enabled', False)),
+                    is_pipeline  = is_pipeline
                 )
             )
 
@@ -768,7 +770,7 @@ class TextExtractor:
                 position     = text_position
             )
         return annotated_image
-
+    
     def interactive_experiment(
         self,
         image_files     : list[Path],
@@ -790,20 +792,27 @@ class TextExtractor:
 
         cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
         logger.info("Starting interactive experiment.")
-
+        
         try:
+            current_image : int = -1  # Force first image to be recognized as new
+            
             while True:
                 image_path            = image_files[self.state.image_idx]
                 self.state.image_name = image_path.name
-
+                
                 processing_state = ProcessingState.from_steps(self.steps)
                 processed_image  = self.process_image(str(image_path), processing_state)
 
-                # Perform OCR if enabled
+                # Perform OCR if enabled and log results for new images
                 ocr_results = []
-                ocr_enabled = any(step.is_enabled and step.name == 'ocr' for step in self.steps)
-                if ocr_enabled:
+                if processing_state.ocr_enabled:
                     ocr_results = self.extract_text_from_image(str(image_path), processing_state)
+                    if current_image != self.state.image_idx and ocr_results:
+                        logger.info(f"OCR Results for image '{self.state.image_name}':")
+                        for _, text, confidence in ocr_results:
+                            logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
+
+                current_image = self.state.image_idx
 
                 # Prepare the display image
                 display_image, display_scale = self.prepare_display_image(processed_image)
@@ -841,25 +850,26 @@ class TextExtractor:
                     logger.info(f"Switched to image '{self.state.image_name}'.")
                 else:
                     # Handle parameter adjustments
-                    action_taken = False
                     for step in self.steps:
                         if char == step.toggle_key:
                             action = step.toggle()
                             logger.info(action)
-                            action_taken = True
+                            # Log OCR results after toggle if OCR is enabled
+                            if ocr_results:
+                                logger.info(f"OCR Results for image '{self.state.image_name}':")
+                                for _, text, confidence in ocr_results:
+                                    logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
                             break
 
                         action = step.adjust_param(char)
                         if action:
                             logger.info(action)
-                            action_taken = True
+                            # Log OCR results after parameter change if OCR is enabled
+                            if ocr_results:
+                                logger.info(f"OCR Results for image '{self.state.image_name}':")
+                                for _, text, confidence in ocr_results:
+                                    logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
                             break
-
-                    # If action was taken, log OCR texts once
-                    if action_taken and ocr_results:
-                        logger.info(f"OCR Results for image '{self.state.image_name}':")
-                        for _, text, confidence in ocr_results:
-                            logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
 
         finally:
             cv2.destroyAllWindows()
