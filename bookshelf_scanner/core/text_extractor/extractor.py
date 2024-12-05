@@ -2,13 +2,13 @@ import cv2
 import json
 import numpy as np
 
-from dataclasses   import dataclass
-from easyocr       import Reader
-from functools     import cache
-from pathlib       import Path
-from PIL           import Image, ImageDraw, ImageFont
-from ruamel.yaml   import YAML
-from typing        import Any
+from dataclasses import dataclass
+from easyocr     import Reader
+from functools   import cache
+from pathlib     import Path
+from PIL         import Image, ImageDraw, ImageFont
+from ruamel.yaml import YAML
+from typing      import Any
 
 from bookshelf_scanner import ModuleLogger, Utils
 logger = ModuleLogger('extractor')()
@@ -134,7 +134,7 @@ class ProcessingStep:
 
 # -------------------- ProcessingState Class --------------------
 
-@dataclass(frozen=True)
+@dataclass(frozen = True)
 class ProcessingState:
     """
     Immutable state representing all processing parameters for an image.
@@ -174,22 +174,7 @@ class ProcessingState:
             for step in steps
         )
         
-        return cls(steps=state_steps, ocr_enabled=ocr_enabled)
-
-    def to_nested_dict(self) -> dict:
-        """
-        Converts the ProcessingState to the current_parameters dictionary format.
-
-        Returns:
-            Dictionary of nested parameters organized by processing step
-        """
-        return {
-            step_name: {
-                'enabled'    : step_enabled,
-                'parameters' : dict(step_params)
-            }
-            for step_name, step_enabled, step_params in self.steps
-        }
+        return cls(steps = state_steps, ocr_enabled = ocr_enabled)
 
 # -------------------- Processing Functions --------------------
 
@@ -221,7 +206,7 @@ def adjust_contrast(image: np.ndarray, params: dict) -> np.ndarray:
         Contrast-adjusted image.
     """
     alpha = params['contrast_value']
-    return cv2.convertScaleAbs(image, alpha=alpha, beta=0)
+    return cv2.convertScaleAbs(image, alpha = alpha, beta = 0)
 
 def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
     """
@@ -236,7 +221,7 @@ def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
     """
     clip_limit = params['clahe_clip_limit']
     lab_image  = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
-    clahe      = cv2.createCLAHE(clipLimit=clip_limit)
+    clahe      = cv2.createCLAHE(clipLimit = clip_limit)
 
     lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
     return cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
@@ -283,11 +268,11 @@ def rotate_image(image: np.ndarray, params: dict) -> np.ndarray:
     return image
 
 PROCESSING_FUNCTIONS = {
-    'brightness_adjustment' : adjust_brightness,
-    'color_clahe'           : apply_clahe,
-    'contrast_adjustment'   : adjust_contrast,
     'image_rotation'        : rotate_image,
     'shadow_removal'        : remove_shadow,
+    'color_clahe'           : apply_clahe,
+    'brightness_adjustment' : adjust_brightness,
+    'contrast_adjustment'   : adjust_contrast
 }
 
 # -------------------- TextExtractor Class --------------------
@@ -342,7 +327,7 @@ class TextExtractor:
         self.params_file     = params_file or self.PARAMS_FILE
         self.reader          = Reader(['en'], gpu=gpu_enabled)
         self.steps           = []
-        self.state           = DisplayState(window_height=window_height) if not headless else None
+        self.state           = DisplayState(window_height = window_height) if not headless else None
 
     # -------------------- Image Loading and Preparation --------------------
 
@@ -420,7 +405,7 @@ class TextExtractor:
         Returns:
             List of initialized ProcessingStep instances
         """
-        yaml = YAML(typ='safe')
+        yaml = YAML(typ = 'safe')
 
         with self.params_file.open('r') as f:
             step_definitions = yaml.load(f)
@@ -445,12 +430,12 @@ class TextExtractor:
 
             self.steps.append(
                 ProcessingStep(
-                    name          = step_name,
-                    display_name  = step_def['display_name'],
-                    toggle_key    = str(index + 1),
-                    parameters    = parameters,
-                    is_enabled    = step_override.get('enabled', step_def.get('enabled', False)),
-                    is_pipeline   = is_pipeline
+                    name         = step_name,
+                    display_name = step_def['display_name'],
+                    toggle_key   = str(index + 1),
+                    parameters   = parameters,
+                    is_enabled   = step_override.get('enabled', step_def.get('enabled', False)),
+                    is_pipeline  = is_pipeline
                 )
             )
 
@@ -515,7 +500,6 @@ class TextExtractor:
             logger.error(f"OCR failed for {image_path}: {e}")
             return []
 
-    @cache
     def perform_ocr_headless(self, image_files: list[Path]) -> dict:
         """
         Processes a list of images and extracts text from them in headless mode.
@@ -540,7 +524,6 @@ class TextExtractor:
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
                 ]
-                logger.info(f"Processed image '{image_name}' in headless mode.")
 
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
@@ -880,9 +863,10 @@ class TextExtractor:
         results = self.perform_ocr_headless(image_files)
 
         if self.output_json:
-            with self.output_file.open('w', encoding='utf-8') as f:
-                json.dump(results, f, ensure_ascii=False, indent=4)
+            with self.output_file.open('w', encoding = 'utf-8') as f:
+                json.dump(results, f, ensure_ascii = False, indent = 4)
             logger.info(f"OCR results saved to {self.output_file}")
+        
 
     # -------------------- Interactive Mode Operations --------------------
 
