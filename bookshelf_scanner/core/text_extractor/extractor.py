@@ -253,7 +253,7 @@ class TextExtractor:
     ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
     DEFAULT_HEIGHT  = 800
     FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
-    OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'core' / 'text_extractor' / 'ocr_results.json'
+    OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
     PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'params.yml'
     UI_COLORS       = {
         'GRAY'  : (200, 200, 200),
