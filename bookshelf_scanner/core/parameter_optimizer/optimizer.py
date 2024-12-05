@@ -180,6 +180,7 @@ class ParameterOptimizer:
         for step in self.steps:
             if step.name == 'ocr':
                 continue  # OCR is always enabled
+            
             params = {}
             for param in step.parameters:
                 param_values = np.arange(param.min, param.max + param.step/2, param.step).tolist()
@@ -197,11 +198,13 @@ class ParameterOptimizer:
             # Set enabled/disabled states
             for step_name, is_enabled in zip(step_names, state_combo):
                 params_override[step_name] = {'enabled': is_enabled}
+
                 if is_enabled:
                     # For enabled steps, generate all combinations of parameters
-                    step_params = step_parameters[step_name]['parameters']
-                    param_names = list(step_params.keys())
+                    step_params  = step_parameters[step_name]['parameters']
+                    param_names  = list(step_params.keys())
                     param_values = list(step_params.values())
+
                     for values_combo in itertools.product(*param_values):
                         param_dict = dict(zip(param_names, values_combo))
                         params_override[step_name]['parameters'] = param_dict
