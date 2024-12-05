@@ -9,15 +9,15 @@
     - name         : shadow_kernel_size
       display_name : Shadow Kernel Size
       value        : 23
-      min          : 1
-      max          : 45
+      min          : 3
+      max          : 30
       step         : 2
       increase_key : S
     - name         : shadow_median_blur
       display_name : Shadow Median Blur
       value        : 15
-      min          : 1
-      max          : 45
+      min          : 3
+      max          : 30
       step         : 2
       increase_key : M
 
@@ -29,7 +29,7 @@
       display_name : CLAHE Clip Limit
       value        : 1.0
       min          : 0.0
-      max          : 10.0
+      max          : 5.0
       step         : 0.5
       increase_key : H
 
@@ -52,9 +52,9 @@
     - name         : contrast_value
       display_name : Contrast Value
       value        : 1.0
-      min          : 0.1
+      min          : 0.0
       max          : 3.0
-      step         : 0.1
+      step         : 0.2
       increase_key : C
 
 - name         : image_rotation
