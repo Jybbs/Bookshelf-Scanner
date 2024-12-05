@@ -1,6 +1,6 @@
 # Bookshelf Scanner
 
-A computer vision system that detects and extracts text from book spines on bookshelves, built for Northeastern University's CS5330 Pattern Recognition & Computer Vision course.
+A computer vision system that detects and extracts text from book spines on bookshelves, built for Northeastern University's CS5330 Computer Vision course.
 
 ## Overview
 
@@ -11,7 +11,7 @@ The system processes bookshelf images through four main stages:
 1. **Spine Segmentation**: Uses YOLOv8 to detect and segment individual book spines from bookshelf images
 2. **Text Extraction**: Processes the segmented spine images to extract visible text using EasyOCR
 3. **Parameter Optimization**: Fine-tunes processing parameters to maximize text extraction accuracy
-4. **Text Matching**: Uses RapidFuzz to match extracted spine text against a book database, handling OCR imperfections and variations
+4. **Text Matching**: Uses RapidFuzz's token set ratio matching to compare extracted spine text against a book database, accounting for OCR imperfections, word order variations, and partial matches
 
 Each component maintains its own log file through the `ModuleLogger` system, ensuring consistent debugging and monitoring across the project.
 
@@ -30,8 +30,9 @@ Each component maintains its own log file through the `ModuleLogger` system, ens
 │   │   ├── text_extractor/      # OCR and text processing
 │   │   └── utils/               # Core project utilities and path handling
 │   ├── data/
+│   │   ├── results/             # JSON outputs from applicable core modules
 │   │   ├── books.duckdb         # Local book DuckDB database
-│   │   └── utils/               # Data handling utilities
+│   │   └── utils/               # Database handling utilities
 │   ├── dev/
 │   ├── logs/                    # Component-specific log files
 │   └── images/ 
@@ -148,11 +149,13 @@ The `FuzzyMatcher` component matches the optimized OCR results against a databas
 ```python
 # Match extracted text to book database
 matcher = FuzzyMatcher(
-    match_threshold = 85, # Minimum score for valid matches
-    max_matches     = 3   # Maximum matches per text segment
+    min_match_score    = 0.8,  # Minimum score for valid matches (0.0 to 1.0)
+    max_matches        = 3,    # Maximum matches per text segment
+    min_ocr_confidence = 0.1   # Minimum confidence for OCR results
 )
 matcher.match_books()
-
+```
+```sh
 # Run via Poetry command
 poetry run fuzzy-matcher
 ```

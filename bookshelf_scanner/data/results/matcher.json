@@ -1,0 +1,391 @@
+{
+    "0.jpg": {
+        "texts": [
+            "ANNE FRANK: THE DIARV OFAYOUING GIRL"
+        ],
+        "matches": [
+            {
+                "title": "Anne Frank",
+                "author": "Anne Frank",
+                "score": 1.0
+            },
+            {
+                "title": "Anne Frank",
+                "author": "Anne Frank",
+                "score": 1.0
+            },
+            {
+                "title": "The Diary of a Young Girl",
+                "author": "Anne Frank",
+                "score": 0.9014084507042253
+            }
+        ]
+    },
+    "10.jpg": {
+        "texts": [
+            "Chinese Cinderella",
+            "3"
+        ],
+        "matches": [
+            {
+                "title": "Chinese Cinderella",
+                "author": "Adeline Yen Mah",
+                "score": 0.9473684210526315
+            },
+            {
+                "title": "Chinese Cinderella and the Secret Dragon Society",
+                "author": "Adeline Yen Mah",
+                "score": 0.9473684210526315
+            }
+        ]
+    },
+    "13.jpg": {
+        "texts": [
+            "Wolf by the Ears",
+            "Rinaldi"
+        ],
+        "matches": [
+            {
+                "title": "Wolf by the Ears",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            }
+        ]
+    },
+    "14.jpg": {
+        "texts": [
+            "JOHNNY TREMAIN",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Hoskins Forbes",
+                "score": 0.9333333333333332
+            },
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Forbes",
+                "score": 0.9333333333333332
+            },
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Forbes",
+                "score": 0.9333333333333332
+            }
+        ]
+    },
+    "15.jpg": {
+        "texts": [
+            "SOLDIER S HEART",
+            "0",
+            "GARY PAULSEN"
+        ],
+        "matches": [
+            {
+                "title": "Soldier's Heart",
+                "author": "Gary Paulsen",
+                "score": 1.0
+            },
+            {
+                "title": "Soldier's Heart",
+                "author": "Gary Paulsen",
+                "score": 1.0
+            },
+            {
+                "title": "Liar, Liar",
+                "author": "Gary Paulsen",
+                "score": 0.8275862068965517
+            }
+        ]
+    },
+    "17.jpg": {
+        "texts": [
+            "SuMMER",
+            "GERMAN SOLDIER"
+        ],
+        "matches": [
+            {
+                "title": "Summer of My German Soldier",
+                "author": "Bette Greene",
+                "score": 1.0
+            }
+        ]
+    },
+    "18.jpg": {
+        "texts": [
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Beautiful Volume 1",
+                "author": "Marie D'Abreo",
+                "score": 1.0
+            },
+            {
+                "title": "Fly to the Rescue (Tiny Geniuses #1)",
+                "author": "Megan E. Bryant",
+                "score": 1.0
+            },
+            {
+                "title": "Island Trilogy Volume 1-3",
+                "author": "Gordon Korman",
+                "score": 1.0
+            }
+        ]
+    },
+    "19.jpg": {
+        "texts": [
+            "SARAH BISHOP",
+            "SCOTT ODELL",
+            "42"
+        ],
+        "matches": [
+            {
+                "title": "Sarah Bishop",
+                "author": "Scott O'Dell",
+                "score": 0.8846153846153847
+            }
+        ]
+    },
+    "2.jpg": {
+        "texts": [
+            "3",
+            "1",
+            "1",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Island Trilogy Volume 1-3",
+                "author": "Gordon Korman",
+                "score": 1.0
+            },
+            {
+                "title": "Dragon Ball (3-in-1 Edition) Vol. 1",
+                "author": "Akira Toriyama",
+                "score": 1.0
+            },
+            {
+                "title": "Cupcake Diaries 3 Books in 1! #3",
+                "author": "Coco Simon",
+                "score": 1.0
+            }
+        ]
+    },
+    "20.jpg": {
+        "texts": [
+            "Cvvys Civil War",
+            "BRENAMAN",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Evvy's Civil War",
+                "author": "Miriam Brenaman",
+                "score": 0.8181818181818181
+            }
+        ]
+    },
+    "22.jpg": {
+        "texts": [
+            "1",
+            "RECONSTRUCTION AnD",
+            "2"
+        ],
+        "matches": [
+            {
+                "title": "Reconstruction and Reform",
+                "author": "Joy Hakim",
+                "score": 0.9
+            },
+            {
+                "title": "Reconstruction and Reform",
+                "author": "Joy Hakim",
+                "score": 0.9
+            },
+            {
+                "title": "Reconstruction and Reform",
+                "author": "Joy Hakim",
+                "score": 0.9
+            }
+        ]
+    },
+    "23.jpg": {
+        "texts": [
+            "8",
+            "2",
+            "8",
+            "ROBINSON"
+        ],
+        "matches": [
+            {
+                "title": "The 3-2-3 Detective Agency in the Disappearance of Dave Warthog",
+                "author": "Fiona Robinson",
+                "score": 0.9090909090909091
+            },
+            {
+                "title": "The 3-2-3 Detective Agency in the Disappearance of Dave Warthog",
+                "author": "Fiona Robinson",
+                "score": 0.9090909090909091
+            },
+            {
+                "title": "The 3-2-3 Detective Agency in the Disappearance of Dave Warthog",
+                "author": "Fiona Robinson",
+                "score": 0.9090909090909091
+            }
+        ]
+    },
+    "24.jpg": {
+        "texts": [
+            "HOME % the BRAVE",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Home of the Brave",
+                "author": "Katherine Applegate",
+                "score": 0.9333333333333332
+            },
+            {
+                "title": "Home of the Brave: An American History Book for Kids: 15 Immigrants Who Shaped U.S. History (Biographies for Kids)",
+                "author": "Brooke Khan",
+                "score": 0.9333333333333332
+            }
+        ]
+    },
+    "25.jpg": {
+        "texts": [
+            "With THE Might Of ANGELS"
+        ],
+        "matches": [
+            {
+                "title": "With the Might of Angels",
+                "author": "Andrea Davis Pinkney",
+                "score": 1.0
+            }
+        ]
+    },
+    "3.jpg": {
+        "texts": [
+            "Hang",
+            "Tho % S4n d",
+            "NNV",
+            "RINALDI",
+            "5",
+            "Trees with Ribbons"
+        ],
+        "matches": [
+            {
+                "title": "Hang a Thousand Trees with Ribbons",
+                "author": "Ann Rinaldi",
+                "score": 0.8387096774193549
+            }
+        ]
+    },
+    "4.jpg": {
+        "texts": [
+            "ANN RINALDI"
+        ],
+        "matches": [
+            {
+                "title": "Girl in Blue",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            },
+            {
+                "title": "Amelia's War",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            },
+            {
+                "title": "Numbering All the Bones",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            }
+        ]
+    },
+    "5.jpg": {
+        "texts": [
+            "ThE SECOND BEND IN THE RIVER",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Second Bend in the River",
+                "author": "Ann Rinaldi",
+                "score": 0.96
+            }
+        ]
+    },
+    "6.jpg": {
+        "texts": [
+            "William Lavenler",
+            "JUST",
+            "JANE",
+            "5"
+        ],
+        "matches": [
+            {
+                "title": "Just Jane",
+                "author": "William Lavender",
+                "score": 0.9259259259259259
+            }
+        ]
+    },
+    "7.jpg": {
+        "texts": [
+            "BREA K",
+            "D",
+            "ANN",
+            "RINALD [",
+            "with CHARity",
+            "5"
+        ],
+        "matches": [
+            {
+                "title": "A Break with Charity",
+                "author": "Ann Rinaldi",
+                "score": 0.9090909090909091
+            }
+        ]
+    },
+    "8.jpg": {
+        "texts": [
+            "FINISHING BECCA",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Finishing Becca",
+                "author": "Ann Rinaldi",
+                "score": 0.9375
+            }
+        ]
+    },
+    "9.jpg": {
+        "texts": [
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Beautiful Volume 1",
+                "author": "Marie D'Abreo",
+                "score": 1.0
+            },
+            {
+                "title": "Fly to the Rescue (Tiny Geniuses #1)",
+                "author": "Megan E. Bryant",
+                "score": 1.0
+            },
+            {
+                "title": "Island Trilogy Volume 1-3",
+                "author": "Gordon Korman",
+                "score": 1.0
+            }
+        ]
+    }
+}
