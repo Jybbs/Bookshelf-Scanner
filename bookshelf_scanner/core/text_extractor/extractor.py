@@ -290,12 +290,8 @@ class TextExtractor:
         self.output_file     = output_file or self.OUTPUT_FILE
         self.params_file     = params_file or self.PARAMS_FILE
         self.reader          = Reader(['en'], gpu = gpu_enabled)
-        self.steps           = []  # Will be populated by initialize_steps
-
-        if not self.headless:
-            self.state = DisplayState(window_height = window_height)
-        else:
-            self.state = None
+        self.steps           = []
+        self.state           = DisplayState(window_height = window_height) if not headless else None
 
     @property
     def current_parameters(self) -> dict:
@@ -433,6 +429,7 @@ class TextExtractor:
             if processing_function :=  PROCESSING_FUNCTIONS.get(step_name):
                 params_dict     = {param_name: param_value for param_name, param_value in params}
                 processed_image = processing_function(processed_image, params_dict)
+                logger.debug(f"Applied '{step_name}' step.")
             else:
                 logger.warning(f"No processing function defined for step '{step_name}'")
 
@@ -461,6 +458,7 @@ class TextExtractor:
                 decoder       = 'greedy',
                 rotation_info = [90, 180, 270]
             )
+            logger.debug(f"Extracted text from image '{image_path}'.")
             return ocr_results
 
         except Exception as e:
@@ -643,6 +641,7 @@ class TextExtractor:
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
                 ]
+                logger.info(f"Processed image '{image_name}' in headless mode.")
 
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
@@ -702,7 +701,6 @@ class TextExtractor:
         self,
         ocr_results    : list[tuple],
         orig_size      : tuple[int, int],
-        display_size   : tuple[int, int],
         display_scale  : float
     ) -> list[tuple]:
         """
@@ -726,12 +724,15 @@ class TextExtractor:
 
         adjusted_ocr_results = []
         for bounding_box, text, confidence in ocr_results:
-            adjusted_box = []
-            for x, y in bounding_box:
-                x = (x + x_offset) * display_scale
-                y = (y + y_offset) * display_scale
-                adjusted_box.append([x, y])
+            adjusted_box = [
+                [
+                    (x + x_offset) * display_scale,
+                    (y + y_offset) * display_scale
+                ]
+                for x, y in bounding_box
+            ]
             adjusted_ocr_results.append((adjusted_box, text, confidence))
+
         return adjusted_ocr_results
 
     def annotate_display_image(
@@ -788,6 +789,7 @@ class TextExtractor:
             self.initialize_steps(params_override)
 
         cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
+        logger.info("Starting interactive experiment.")
 
         try:
             while True:
@@ -811,7 +813,6 @@ class TextExtractor:
                     adjusted_ocr_results = self.adjust_ocr_coordinates(
                         ocr_results,
                         processed_image.shape[:2],
-                        display_image.shape[:2],
                         display_scale
                     )
                     display_image = self.annotate_display_image(display_image, adjusted_ocr_results)
@@ -833,20 +834,32 @@ class TextExtractor:
                     continue  # Non-ASCII key pressed
 
                 if char == 'q':
+                    logger.info("Quitting interactive experiment.")
                     break
                 elif char == '/':
                     self.state.next_image(len(image_files))
+                    logger.info(f"Switched to image '{self.state.image_name}'.")
                 else:
                     # Handle parameter adjustments
+                    action_taken = False
                     for step in self.steps:
                         if char == step.toggle_key:
-                            logger.info(step.toggle())
+                            action = step.toggle()
+                            logger.info(action)
+                            action_taken = True
                             break
 
                         action = step.adjust_param(char)
                         if action:
                             logger.info(action)
+                            action_taken = True
                             break
+
+                    # If action was taken, log OCR texts once
+                    if action_taken and ocr_results:
+                        logger.info(f"OCR Results for image '{self.state.image_name}':")
+                        for _, text, confidence in ocr_results:
+                            logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
 
         finally:
             cv2.destroyAllWindows()
