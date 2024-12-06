@@ -289,7 +289,7 @@ class TextExtractor:
     DEFAULT_HEIGHT  = 800
     FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
     OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
-    PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'params.yml'
+    PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'extractor.yml'
     UI_COLORS       = {
         'GRAY'  : (200, 200, 200),
         'TEAL'  : (255, 255, 0),
@@ -401,7 +401,7 @@ class TextExtractor:
         Maintains consistent dictionary structure for ProcessingState compatibility.
 
         Args:
-            params_override: Optional dictionary of step-level overrides matching params.yml structure
+            params_override: Optional dictionary of step-level overrides matching params structure from YML
 
         Returns:
             List of initialized ProcessingStep instances
