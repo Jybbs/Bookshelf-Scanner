@@ -122,9 +122,9 @@ class MetaLearningState:
         score_scaling        : Tuple tracking (min, max) scores encountered.
     """
     model                : MetaLearningModel
-    optimization_history : list[OptimizationRecord]       = None
-    parameter_clusters   : dict[int, list[ClusterMember]] = None
-    score_scaling        : tuple[float, float]            = (0.0, 1.0)
+    optimization_history : list[OptimizationRecord]  = None
+    parameter_clusters   : dict[int, dict[str, Any]] = None
+    score_scaling        : tuple[float, float]        = (0.0, 1.0)
 
     def __post_init__(self):
         if self.optimization_history is None:
@@ -332,17 +332,18 @@ class ParameterOptimizer:
             ]
 
             # Restore parameter clusters
-            parameter_clusters = defaultdict(list)
+            parameter_clusters = defaultdict(lambda: {'members': [], 'center': None})
             for cluster_id, members in checkpoint['parameter_clusters'].items():
                 cluster_id_int = int(cluster_id)
+
                 for member in members:
-                    parameter_clusters[cluster_id_int].append(
-                        ClusterMember(
-                            parameter_vector  = torch.tensor(member['parameters'], dtype = torch.float32),
-                            performance_score = member['score'],
-                            latent_vector     = torch.tensor(member['latent'], dtype = torch.float32)
-                        )
+                    cluster_member = ClusterMember(
+                        parameter_vector  = torch.tensor(member['parameters'], dtype = torch.float32),
+                        performance_score = member['score'],
+                        latent_vector     = torch.tensor(member['latent'], dtype = torch.float32)
                     )
+                    parameter_clusters[cluster_id_int]['members'].append(cluster_member)
+
             self.optimizer_state.parameter_clusters = parameter_clusters
 
             # Restore score scaling
@@ -377,8 +378,8 @@ class ParameterOptimizer:
                         'parameters' : member.parameter_vector.tolist(),
                         'score'      : member.performance_score,
                         'latent'     : member.latent_vector.tolist()
-                    } for member in members
-                ] for cluster_id, members in self.optimizer_state.parameter_clusters.items()
+                    } for member in cluster_info['members']
+                ] for cluster_id, cluster_info in self.optimizer_state.parameter_clusters.items()
             },
 
             'score_scaling': self.optimizer_state.score_scaling
@@ -512,7 +513,7 @@ class ParameterOptimizer:
         Optimizes OCR parameters for a single image.
         """
         logger.info(f"Optimizing parameters for {image_path.name}")
-        best_score         = 0.0
+        best_score         = -float('inf')
         best_parameters    = None
         best_latent_vector = None
 
@@ -551,6 +552,20 @@ class ParameterOptimizer:
 
             # Update parameter clusters with the current evaluation
             self.update_parameter_clusters(parameter_vector, performance_score)
+
+        # -------------------- Safety Check --------------------
+
+        if best_parameters is None:
+            logger.warning(
+                f"No parameter vectors improved the score for {image_path.name}. "
+                f"Using a random parameter vector as a fallback."
+            )
+
+            # Fallback: Use a random parameter vector
+            best_parameters       = torch.rand(len(self.parameter_boundaries)).to(self.device_type)
+            best_score            = 0.0  # Or some default score
+            best_latent_vector, _ = self.optimizer_state.model(best_parameters.unsqueeze(0))
+            self.update_parameter_clusters(best_parameters, best_score)
 
         # -------------------- Iterative Refinement --------------------
 
@@ -701,7 +716,7 @@ class ParameterOptimizer:
 
         # Initialize training state
         best_valid_loss  = float('inf')
-        patience         = 10  # Number of epochs to wait for improvement
+        patience         = 5  # Number of epochs to wait for improvement
         patience_counter = 0
         max_epochs       = 100
         
@@ -725,7 +740,7 @@ class ParameterOptimizer:
                 latent_representations, predicted_scores = self.optimizer_state.model(batch_parameters)
                 
                 # Compute MSE loss
-                prediction_loss = mse_loss(predicted_scores.squeeze(), batch_scores)
+                prediction_loss = mse_loss(predicted_scores.squeeze(-1), batch_scores)
                 
                 # Add diversity loss if batch has multiple samples
                 if batch_parameters.size(0) > 1:
@@ -773,7 +788,6 @@ class ParameterOptimizer:
                 logger.info(f"Epoch {epoch}: New best validation loss: {best_valid_loss:.4f}")
             else:
                 patience_counter += 1
-                logger.info(f"Epoch {epoch}: No improvement in validation loss.")
             
             # Update learning rate scheduler
             self.learning_rate_scheduler.step(average_valid_loss)

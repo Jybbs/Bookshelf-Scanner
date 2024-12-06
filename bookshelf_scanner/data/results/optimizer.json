@@ -1,0 +1,1082 @@
+{
+  "0.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 185.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 18.0,
+          "shadow_median_blur": 23.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.2
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -17.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.2
+        }
+      }
+    },
+    "score": 32.96766572729999
+  },
+  "1.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 184.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 21.0,
+          "shadow_median_blur": 25.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.9
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -12.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.6
+        }
+      }
+    },
+    "score": 16.68406452051043
+  },
+  "10.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 130.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 17.0,
+          "shadow_median_blur": 27.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.2
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -34.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.2
+        }
+      }
+    },
+    "score": 18.88508662560176
+  },
+  "11.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 213.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 19.0,
+          "shadow_median_blur": 24.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.0
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -24.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.2
+        }
+      }
+    },
+    "score": 23.889869990577857
+  },
+  "12.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 127.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 22.0,
+          "shadow_median_blur": 23.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.5
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -3.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.6
+        }
+      }
+    },
+    "score": 15.736271092949368
+  },
+  "13.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 170.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 23.0,
+          "shadow_median_blur": 21.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.4
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -21.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.1
+        }
+      }
+    },
+    "score": 22.811164949828473
+  },
+  "14.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 204.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 17.0,
+          "shadow_median_blur": 26.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.8
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -18.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.9
+        }
+      }
+    },
+    "score": 15.080397504498038
+  },
+  "15.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 214.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 17.0,
+          "shadow_median_blur": 13.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 2.3
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -44.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.5
+        }
+      }
+    },
+    "score": 27.6719933635098
+  },
+  "16.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 227.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 16.0,
+          "shadow_median_blur": 18.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.0
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -1.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.2
+        }
+      }
+    },
+    "score": 17.104980024661444
+  },
+  "17.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 140.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 17.0,
+          "shadow_median_blur": 15.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 2.2
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -21.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.3
+        }
+      }
+    },
+    "score": 24.986018746250135
+  },
+  "18.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 189.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 20.0,
+          "shadow_median_blur": 25.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.1
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -27.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.7
+        }
+      }
+    },
+    "score": 25.650116811132214
+  },
+  "19.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 143.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 13.0,
+          "shadow_median_blur": 21.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.1
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -32.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.4
+        }
+      }
+    },
+    "score": 22.52720931209077
+  },
+  "2.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 184.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 16.0,
+          "shadow_median_blur": 24.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.0
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -27.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.7
+        }
+      }
+    },
+    "score": 17.742115317255205
+  },
+  "20.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 151.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 22.0,
+          "shadow_median_blur": 27.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 0.3
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": 9.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.7
+        }
+      }
+    },
+    "score": 16.05135012023141
+  },
+  "21.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 195.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 20.0,
+          "shadow_median_blur": 24.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 2.0
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -23.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.1
+        }
+      }
+    },
+    "score": 25.807486384269428
+  },
+  "22.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 242.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 18.0,
+          "shadow_median_blur": 25.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.4
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -39.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.4
+        }
+      }
+    },
+    "score": 47.128075846958765
+  },
+  "23.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 259.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 26.0,
+          "shadow_median_blur": 27.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.6
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -40.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.1
+        }
+      }
+    },
+    "score": 21.62009050298848
+  },
+  "24.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 254.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 16.0,
+          "shadow_median_blur": 27.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.0
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -22.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.4
+        }
+      }
+    },
+    "score": 22.750802231799724
+  },
+  "25.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 270.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 15.0,
+          "shadow_median_blur": 22.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.0
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -31.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.5
+        }
+      }
+    },
+    "score": 21.89191480383352
+  },
+  "26.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 262.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 16.0,
+          "shadow_median_blur": 26.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.2
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -32.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.2
+        }
+      }
+    },
+    "score": 14.743661387405805
+  },
+  "27.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 266.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 18.0,
+          "shadow_median_blur": 29.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.3
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -48.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.3
+        }
+      }
+    },
+    "score": 3.252205139426766
+  },
+  "28.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 250.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 17.0,
+          "shadow_median_blur": 23.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 2.6
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -40.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.1
+        }
+      }
+    },
+    "score": 7.7597843862541875
+  },
+  "29.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 270.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 13.0,
+          "shadow_median_blur": 22.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 2.4
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -22.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 1.4
+        }
+      }
+    },
+    "score": 24.25374387153695
+  },
+  "3.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 270.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 19.0,
+          "shadow_median_blur": 28.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 3.3
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -46.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.5
+        }
+      }
+    },
+    "score": 38.95799560591024
+  },
+  "4.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 270.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 23.0,
+          "shadow_median_blur": 23.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.6
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -33.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.3
+        }
+      }
+    },
+    "score": 17.75863147412779
+  },
+  "5.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 268.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 22.0,
+          "shadow_median_blur": 30.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 0.7
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -49.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.9
+        }
+      }
+    },
+    "score": 34.45612386355444
+  },
+  "6.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 270.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 20.0,
+          "shadow_median_blur": 24.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 3.6
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -34.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 1.1
+        }
+      }
+    },
+    "score": 25.184591913705596
+  },
+  "7.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 270.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 26.0,
+          "shadow_median_blur": 23.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.5
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -42.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.7
+        }
+      }
+    },
+    "score": 26.608412946357973
+  },
+  "8.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 245.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 24.0,
+          "shadow_median_blur": 22.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 2.6
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -36.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.5
+        }
+      }
+    },
+    "score": 14.94552909290863
+  },
+  "9.jpg": {
+    "parameters": {
+      "image_rotation": {
+        "enabled": true,
+        "parameters": {
+          "rotation_angle": 217.0
+        }
+      },
+      "shadow_removal": {
+        "enabled": true,
+        "parameters": {
+          "shadow_kernel_size": 16.0,
+          "shadow_median_blur": 25.0
+        }
+      },
+      "color_clahe": {
+        "enabled": true,
+        "parameters": {
+          "clahe_clip_limit": 1.9
+        }
+      },
+      "brightness_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "brightness_value": -39.0
+        }
+      },
+      "contrast_adjustment": {
+        "enabled": true,
+        "parameters": {
+          "contrast_value": 0.8
+        }
+      }
+    },
+    "score": 12.238788074634876
+  }
+}
