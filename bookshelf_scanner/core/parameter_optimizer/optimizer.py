@@ -1,13 +1,13 @@
 import json
+import numpy    as np
 import torch
 import torch.nn as nn
 
 from collections         import defaultdict
-from contextlib          import contextmanager
 from dataclasses         import dataclass
 from pathlib             import Path
 from torch.nn.functional import mse_loss
-from torch.utils.data    import Dataset, DataLoader
+from torch.utils.data    import DataLoader, random_split, TensorDataset
 from typing              import Any
 
 from bookshelf_scanner   import ModuleLogger, TextExtractor, Utils
@@ -78,35 +78,21 @@ class MetaLearningModel(nn.Module):
         performance_score     = self.performance_predictor(latent_representation)
         return latent_representation, performance_score
 
-# -------------------- Dataset --------------------
-
-class OptimizationHistoryDataset(Dataset):
-    """
-    Dataset of historical parameter configurations and their OCR scores.
-
-    Each record contains:
-        - 'parameters' : Parameter vector (torch.Tensor).
-        - 'score'      : Observed OCR performance score (float).
-
-    This dataset is used to train the MetaLearningModel.
-    """
-    def __init__(self, records: list[dict[str, Any]]):
-        self.parameter_vectors  = [
-            torch.tensor(record['parameters'], dtype=torch.float32) 
-            for record in records
-        ]
-        self.performance_scores = [
-            torch.tensor(record['score'], dtype=torch.float32) 
-            for record in records
-        ]
-
-    def __len__(self) -> int:
-        return len(self.parameter_vectors)
-        
-    def __getitem__(self, index: int):
-        return self.parameter_vectors[index], self.performance_scores[index]
-
 # -------------------- Data Classes --------------------
+
+@dataclass
+class ClusterMember:
+    """
+    Represents a member within a parameter cluster.
+    
+    Attributes:
+        parameter_vector  : The parameter configuration vector.
+        performance_score : The OCR performance score achieved with this configuration.
+        latent_vector     : The latent representation of the parameter vector.
+    """
+    parameter_vector  : torch.Tensor
+    performance_score : float
+    latent_vector     : torch.Tensor
 
 @dataclass
 class OptimizationRecord:
@@ -136,15 +122,16 @@ class MetaLearningState:
         score_scaling        : Tuple tracking (min, max) scores encountered.
     """
     model                : MetaLearningModel
-    optimization_history : list[OptimizationRecord]                                  = None
-    parameter_clusters   : dict[int, list[tuple[torch.Tensor, float, torch.Tensor]]] = None
-    score_scaling        : tuple[float, float]                                       = (0.0, 1.0)
+    optimization_history : list[OptimizationRecord]       = None
+    parameter_clusters   : dict[int, list[ClusterMember]] = None
+    score_scaling        : tuple[float, float]            = (0.0, 1.0)
 
     def __post_init__(self):
         if self.optimization_history is None:
             self.optimization_history = []
+
         if self.parameter_clusters is None:
-            self.parameter_clusters = defaultdict(list)
+            self.parameter_clusters = defaultdict(lambda: {'members': [], 'center': None})
         
     def update_scaling(self, new_score: float):
         """
@@ -195,33 +182,37 @@ class ParameterOptimizer:
     
     def __init__(
         self,
-        extractor            : TextExtractor,
-        device_type          : str   = 'cuda' if torch.cuda.is_available() else 'cpu',
-        initial_points_count : int   = 10,
-        iteration_count      : int   = 40,
-        training_batch_size  : int   = 32,
-        learning_rate_value  : float = 1e-3,
-        ucb_beta             : float = 0.1
+        extractor                  : TextExtractor,
+        device_type                : str   = 'cuda' if torch.cuda.is_available() else 'cpu',
+        initial_points_count       : int   = 10,
+        iteration_count            : int   = 40,
+        training_batch_size        : int   = 16,
+        learning_rate_value        : float = 1e-3,
+        ucb_beta                   : float = 0.1,
+        cluster_distance_threshold : float = 2.0,
     ):
         """
         Initializes the MetaLearningOptimizer.
 
         Args:
-            extractor            : TextExtractor instance to optimize.
-            device_type          : Device for computations ('cpu' or 'cuda').
-            initial_points_count : Number of initial parameter suggestions.
-            iteration_count      : Number of refinement steps per image.
-            training_batch_size  : Batch size for training.
-            learning_rate_value  : Learning rate for the optimizer.
-            ucb_beta             : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
+            extractor                  : TextExtractor instance to optimize.
+            device_type                : Device for computations ('cpu' or 'cuda').
+            initial_points_count       : Number of initial parameter suggestions.
+            iteration_count            : Number of refinement steps per image.
+            training_batch_size        : Batch size for training.
+            learning_rate_value        : Learning rate for the optimizer.
+            ucb_beta                   : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
+            cluster_distance_threshold : Distance threshold for clustering.
         """
-        self.extractor            = extractor
-        self.device_type          = device_type
-        self.initial_points_count = initial_points_count
-        self.iteration_count      = iteration_count
-        self.training_batch_size  = training_batch_size
-        self.learning_rate_value  = learning_rate_value
-        self.ucb_beta             = ucb_beta
+        self.extractor                  = extractor
+        self.device_type                = device_type
+        self.initial_points_count       = initial_points_count
+        self.iteration_count            = iteration_count
+        self.training_batch_size        = training_batch_size
+        self.learning_rate_value        = learning_rate_value
+        self.ucb_beta                   = ucb_beta
+        self.cluster_distance_threshold = cluster_distance_threshold
+
         self.parameter_boundaries = self.extract_parameter_boundaries()
         
         input_dimension      = len(self.parameter_boundaries)
@@ -232,7 +223,7 @@ class ParameterOptimizer:
         # Initialize optimizer and scheduler
         self.model_optimizer = torch.optim.Adam(
             self.optimizer_state.model.parameters(), 
-            lr=self.learning_rate_value
+            lr = self.learning_rate_value
         )
         self.learning_rate_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             self.model_optimizer, 
@@ -295,28 +286,24 @@ class ParameterOptimizer:
             Dictionary structured for the extractor's parameter override.
         """
         parameter_dictionary = {}
-        vector_numpy         = parameter_vector.cpu().numpy()
+        vector_numpy = parameter_vector.cpu().numpy()
 
-        for index, boundary in enumerate(self.parameter_boundaries):
-            step_name, parameter_name = boundary['name'].split('.')
-            
-            # Initialize step in dictionary if not present
+        names = [boundary['name'] for boundary in self.parameter_boundaries]
+        min_values = np.array([boundary['min_value']  for boundary in self.parameter_boundaries])
+        max_values = np.array([boundary['max_value']  for boundary in self.parameter_boundaries])
+        is_integer = np.array([boundary['is_integer'] for boundary in self.parameter_boundaries])
+
+        scaled_values = vector_numpy * (max_values - min_values) + min_values
+        scaled_values = np.where(is_integer, np.round(scaled_values).astype(int), np.round(scaled_values, 1))
+
+        for name, value in zip(names, scaled_values):
+            step_name, parameter_name = name.split('.')
             if step_name not in parameter_dictionary:
                 parameter_dictionary[step_name] = {
-                    'enabled'    : True,
-                    'parameters' : {}
+                    'enabled': True,
+                    'parameters': {}
                 }
-
-            # Scale the parameter value
-            scaled_value = (
-                vector_numpy[index] * 
-                (boundary['max_value'] - boundary['min_value']) + 
-                boundary['min_value']
-            )
-            scaled_value = int(round(scaled_value)) if boundary['is_integer'] else round(scaled_value, 1)
-            
-            # Assign the scaled value to the parameter dictionary
-            parameter_dictionary[step_name]['parameters'][parameter_name] = scaled_value
+            parameter_dictionary[step_name]['parameters'][parameter_name] = value
 
         return parameter_dictionary
     
@@ -329,7 +316,7 @@ class ParameterOptimizer:
         Restores the model's weights, optimization history, and parameter clusters.
         """
         if self.MODEL_PYTORCH_FILE.exists():
-            checkpoint = torch.load(self.MODEL_PYTORCH_FILE, map_location=self.device_type)
+            checkpoint = torch.load(self.MODEL_PYTORCH_FILE, map_location = self.device_type)
             
             # Load model state
             self.optimizer_state.model.load_state_dict(checkpoint['model_state_dict'])
@@ -338,9 +325,9 @@ class ParameterOptimizer:
             self.optimizer_state.optimization_history = [
                 OptimizationRecord(
                     image_path    = Path(record['image_path']),
-                    parameters    = torch.tensor(record['parameters'], dtype=torch.float32),
+                    parameters    = torch.tensor(record['parameters'], dtype = torch.float32),
                     score         = record['score'],
-                    latent_vector = torch.tensor(record['latent_vector'], dtype=torch.float32)
+                    latent_vector = torch.tensor(record['latent_vector'], dtype = torch.float32)
                 ) for record in checkpoint['optimization_history']
             ]
 
@@ -349,14 +336,17 @@ class ParameterOptimizer:
             for cluster_id, members in checkpoint['parameter_clusters'].items():
                 cluster_id_int = int(cluster_id)
                 for member in members:
-                    parameter_clusters[cluster_id_int].append((
-                        torch.tensor(member['parameters'], dtype = torch.float32),
-                        member['score'],
-                        torch.tensor(member['latent'], dtype = torch.float32)
-                    ))
-
+                    parameter_clusters[cluster_id_int].append(
+                        ClusterMember(
+                            parameter_vector  = torch.tensor(member['parameters'], dtype = torch.float32),
+                            performance_score = member['score'],
+                            latent_vector     = torch.tensor(member['latent'], dtype = torch.float32)
+                        )
+                    )
             self.optimizer_state.parameter_clusters = parameter_clusters
-            self.optimizer_state.score_scaling      = tuple(checkpoint['score_scaling'])
+
+            # Restore score scaling
+            self.optimizer_state.score_scaling = tuple(checkpoint['score_scaling'])
             
             logger.info(f"State loaded from {self.MODEL_PYTORCH_FILE}")
     
@@ -384,10 +374,10 @@ class ParameterOptimizer:
             'parameter_clusters': {
                 cluster_id: [
                     {
-                        'parameters' : parameter.tolist(),
-                        'score'      : score,
-                        'latent'     : latent.tolist()
-                    } for parameter, score, latent in members
+                        'parameters' : member.parameter_vector.tolist(),
+                        'score'      : member.performance_score,
+                        'latent'     : member.latent_vector.tolist()
+                    } for member in members
                 ] for cluster_id, members in self.optimizer_state.parameter_clusters.items()
             },
 
@@ -397,7 +387,7 @@ class ParameterOptimizer:
         # Save the checkpoint
         torch.save(checkpoint_data, self.MODEL_PYTORCH_FILE)
         logger.info(f"Model and state saved to {self.MODEL_PYTORCH_FILE}")
-    
+
     def save_optimization_results(self):
         """
         Saves the optimization results to a JSON file.
@@ -407,22 +397,21 @@ class ParameterOptimizer:
         output_data = {
             Path(image_path).name: {
                 'parameters' : optimization_record['parameters'],
-                'score'      : optimization_record['score']
+                'score'      : float(optimization_record['score'])
             }
             for image_path, optimization_record in self.optimization_results.items()
         }
         
-        # Ensure the output directory exists
-        self.OUTPUT_JSON_FILE.parent.mkdir(exist_ok=True, parents=True)
+        self.OUTPUT_JSON_FILE.parent.mkdir(exist_ok = True, parents = True)
         
-        # Write the results to a JSON file
         with self.OUTPUT_JSON_FILE.open('w') as output_file:
-            json.dump(output_data, output_file, indent=2)
+            json.dump(output_data, output_file, indent = 2)
         
         logger.info(f"Results saved to {self.OUTPUT_JSON_FILE}")
-    
+   
     # -------------------- Parameter Clustering & Suggestion --------------------
     
+    @torch.inference_mode()
     def suggest_initial_parameters(self) -> list[torch.Tensor]:
         """
         Suggests initial parameter configurations for evaluation.
@@ -434,19 +423,21 @@ class ParameterOptimizer:
             List of parameter vectors (torch.Tensor) to evaluate.
         """
         suggested_parameters = []
-        
+
         # Extract best parameters from existing clusters
-        for cluster_members in self.optimizer_state.parameter_clusters.values():
-            if cluster_members:
-                best_member = max(cluster_members, key=lambda member: member[1])[0]
-                suggested_parameters.append(best_member)
+        for cluster_info in self.optimizer_state.parameter_clusters.values():
+            members = cluster_info['members']
+            if members:
+                # Select the member with the highest performance_score
+                best_member = max(members, key=lambda member: member.performance_score)
+                suggested_parameters.append(best_member.parameter_vector)
 
         # If there are existing suggestions, add slight variations
         if suggested_parameters:
             best_parameter_vector = suggested_parameters[0]
-            
+
             while len(suggested_parameters) < self.initial_points_count:
-                noise                = torch.randn_like(best_parameter_vector) * 0.1
+                noise = torch.randn_like(best_parameter_vector) * 0.1
                 new_parameter_vector = torch.clamp(best_parameter_vector + noise, 0, 1)
                 suggested_parameters.append(new_parameter_vector)
         else:
@@ -455,8 +446,12 @@ class ParameterOptimizer:
                 suggested_parameters.append(torch.rand(len(self.parameter_boundaries)))
 
         return suggested_parameters
-    
-    def update_parameter_clusters(self, parameter_vector: torch.Tensor, performance_score: float):
+
+    @torch.inference_mode()
+    def update_parameter_clusters(self, 
+        parameter_vector  : torch.Tensor, 
+        performance_score : float
+    ):
         """
         Assigns parameter configurations to latent clusters.
 
@@ -464,81 +459,75 @@ class ParameterOptimizer:
         creates a new cluster if no close match exists.
 
         Args:
-            parameter_vector : Parameter vector (torch.Tensor).
-            performance_score : OCR performance score (float).
+            parameter_vector  : Parameter configuration vector.
+            performance_score : OCR performance score achieved with this configuration.
         """
         self.optimizer_state.model.eval()
         
         # Encode the parameter vector to latent space
-        with torch.no_grad():
-            latent_representation, _ = self.optimizer_state.model(parameter_vector.unsqueeze(0))
-
-        latent_representation = latent_representation.squeeze().cpu()
+        latent_representation, _ = self.optimizer_state.model(parameter_vector.unsqueeze(0))
+        latent_representation = latent_representation.squeeze().cpu()  # Shape: (latent_dim,)
         
         # If no clusters exist, create the first cluster
         if not self.optimizer_state.parameter_clusters:
-            self.optimizer_state.parameter_clusters[0] = [
-                (parameter_vector, performance_score, latent_representation)
-            ]
+            self.optimizer_state.parameter_clusters[0]['members'].append(
+                ClusterMember(parameter_vector, performance_score, latent_representation)
+            )
+            self.optimizer_state.parameter_clusters[0]['center'] = latent_representation
             return
         
-        # Find the nearest cluster based on latent representation
-        minimum_distance   = float('inf')
-        nearest_cluster_id = None
+        # Collect existing cluster centers
+        cluster_ids = list(self.optimizer_state.parameter_clusters.keys())
+        cluster_centers = torch.stack([cluster_info['center'] for cluster_info in self.optimizer_state.parameter_clusters.values()])
         
-        for cluster_id, cluster_members in self.optimizer_state.parameter_clusters.items():
-            cluster_center = torch.stack([member[2] for member in cluster_members]).mean(0)
-            distance       = torch.norm(latent_representation - cluster_center)
-            
-            if distance < minimum_distance:
-                minimum_distance  = distance
-                nearest_cluster_id = cluster_id
-
-        # Define a threshold to decide whether to create a new cluster
-        if minimum_distance > 2.0:
-            new_cluster_id = (
-                max(self.optimizer_state.parameter_clusters.keys()) + 1 
-                if self.optimizer_state.parameter_clusters 
-                else 0
+        # Vectorized distance computation between new latent vector and all cluster centers
+        distances = torch.norm(cluster_centers - latent_representation, dim=1)  # Shape: (num_clusters,)
+        
+        # Find the nearest cluster
+        min_distance, min_idx = torch.min(distances, dim=0)
+        nearest_cluster_id = cluster_ids[min_idx.item()]
+        
+        # Use a threshold to decide whether to create a new cluster
+        if min_distance.item() > self.cluster_distance_threshold:
+            new_cluster_id = max(cluster_ids) + 1
+            self.optimizer_state.parameter_clusters[new_cluster_id]['members'].append(
+                ClusterMember(parameter_vector, performance_score, latent_representation)
             )
-            self.optimizer_state.parameter_clusters[new_cluster_id] = [
-                (parameter_vector, performance_score, latent_representation)
-            ]
+            self.optimizer_state.parameter_clusters[new_cluster_id]['center'] = latent_representation
 
         else:
-            self.optimizer_state.parameter_clusters[nearest_cluster_id].append(
-                (parameter_vector, performance_score, latent_representation)
+            # Append to the nearest cluster and update the center incrementally
+            cluster_info = self.optimizer_state.parameter_clusters[nearest_cluster_id]
+            cluster_info['members'].append(
+                ClusterMember(parameter_vector, performance_score, latent_representation)
             )
+            # Update the running average for the cluster center
+            n = len(cluster_info['members'])
+            cluster_info['center'] = (cluster_info['center'] * (n - 1) + latent_representation) / n
     
     # -------------------- Optimization & Training --------------------
     
     def evaluate_image(self, image_path: Path) -> dict[str, Any]:
         """
         Optimizes OCR parameters for a single image.
-
-        Performs initial evaluations and iterative refinements to find the best
-        parameter configuration that maximizes OCR performance.
-
-        Args:
-            image_path: Path to the image to optimize.
-
-        Returns:
-            Dictionary containing the best parameters and achieved score.
         """
         logger.info(f"Optimizing parameters for {image_path.name}")
         best_score         = 0.0
         best_parameters    = None
         best_latent_vector = None
 
+        # Set model to eval mode for initial evaluation
+        self.optimizer_state.model.eval()
+
         # -------------------- Initial Evaluation --------------------
-        
+
         for parameter_vector in self.suggest_initial_parameters():
             # Convert vector to parameter dictionary
             parameter_dictionary = self.vector_to_parameter_dictionary(parameter_vector)
             
             # Initialize processing steps with the suggested parameters
             self.extractor.initialize_processing_steps(
-                params_override=parameter_dictionary
+                params_override = parameter_dictionary
             )
             
             # Perform OCR and calculate performance score
@@ -547,64 +536,75 @@ class ParameterOptimizer:
                 len(text) * count 
                 for text, count in ocr_results.get(image_path.name, [])
             )
+            
+            # Ensure performance_score is a native float
+            performance_score = float(performance_score)
 
             # Update best score and parameters if current score is better
             if performance_score > best_score:
                 best_score      = performance_score
                 best_parameters = parameter_vector
                 
-                with torch.no_grad():
+                # Encode the parameter vector
+                with torch.inference_mode():
                     best_latent_vector, _ = self.optimizer_state.model(parameter_vector.unsqueeze(0))
-            
+
             # Update parameter clusters with the current evaluation
             self.update_parameter_clusters(parameter_vector, performance_score)
 
         # -------------------- Iterative Refinement --------------------
-        
+
         for iteration in range(self.iteration_count):
-            candidate_parameter_vectors = []
-
             # Generate candidate parameter vectors with decreasing noise
-            for _ in range(10):
-                noise            = torch.randn_like(best_parameters) * (1.0 - iteration / self.iteration_count) * 0.1
-                candidate_vector = torch.clamp(best_parameters + noise, 0, 1)
-                candidate_parameter_vectors.append(candidate_vector)
+            candidate_parameter_vectors = [
+                torch.clamp(best_parameters + torch.randn_like(best_parameters) * 
+                            (1.0 - iteration / self.iteration_count) * 0.1, 0, 1)
+                for _ in range(10)
+            ]
 
-            # Instead of a single deterministic prediction, use uncertainty estimation
+            # Stack candidates into a tensor
             candidate_tensor = torch.stack(candidate_parameter_vectors).to(self.device_type)
-            means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples = 10)
+
+            # Predict means and stds with uncertainty estimation
+            means, stds = self.predict_with_uncertainty(candidate_tensor, num_samples = 10)
 
             # Compute UCB acquisition values and select the best candidate
             ucb_values              = means + self.ucb_beta * stds
             best_candidate_index    = ucb_values.argmax()
             chosen_parameter_vector = candidate_parameter_vectors[best_candidate_index]
-            
+
             # Convert chosen vector to parameter dictionary
             chosen_parameter_dictionary = self.vector_to_parameter_dictionary(chosen_parameter_vector)
-            
-            # Perform OCR and calculate performance score
+
+            # Initialize processing steps with the chosen parameters
             self.extractor.initialize_processing_steps(params_override = chosen_parameter_dictionary)
-            ocr_results = self.extractor.perform_ocr_headless([image_path])
+
+            # Perform OCR and calculate performance score
+            ocr_results       = self.extractor.perform_ocr_headless([image_path])
             performance_score = sum(
                 len(text) * count 
                 for text, count in ocr_results.get(image_path.name, [])
             )
-            
+
+            # Ensure performance_score is a native float
+            performance_score = float(performance_score)
+
             # Update best score and parameters if current score is better
             if performance_score > best_score:
                 best_score      = performance_score
                 best_parameters = chosen_parameter_vector
                 
-                with torch.no_grad():
+                # Encode the chosen parameter vector
+                with torch.inference_mode():
                     best_latent_vector, _ = self.optimizer_state.model(chosen_parameter_vector.unsqueeze(0))
                 
                 logger.info(f"New best score {performance_score:.3f} on iteration {iteration + 1}")
-            
+
             # Update parameter clusters with the current evaluation
             self.update_parameter_clusters(chosen_parameter_vector, performance_score)
 
         # -------------------- Record Optimization Outcome --------------------
-        
+
         self.optimizer_state.optimization_history.append(
             OptimizationRecord(
                 image_path    = image_path,
@@ -647,74 +647,154 @@ class ParameterOptimizer:
         """
         logger.info(f"Beginning meta-learning parameter search for {len(image_file_paths)} images")
         
-        # Use context manager to handle graceful exit
-        with self.graceful_exit():
-            for image_path in image_file_paths:
-                self.evaluate_image(image_path)
-            
-            # Save all optimization results and current state
-            self.save_optimization_results()
-            self.save_optimizer_state()
+        # Remove graceful exit handling
+        for image_path in image_file_paths:
+            self.evaluate_image(image_path)
+        
+        # Save all optimization results and current state
+        self.save_optimization_results()
+        self.save_optimizer_state()
         
         logger.info("Meta-learning parameter optimization complete")
     
     def train_meta_learner(self):
         """
-        Trains the meta-learning model on historical optimization data.
-
-        Uses past parameter configurations and their scores to refine the model,
-        enhancing its ability to predict performance and guide future optimizations.
+        Trains the meta-learning model on historical optimization data with essential stability features.
+        
+        Features:
+        1. Train/validation split using torch.utils.data.random_split.
+        2. Early stopping to prevent overfitting.
+        3. Gradient clipping to manage exploding gradients.
+        4. Efficient gradient zeroing with set_to_none=True.
+        5. Basic logging for monitoring.
         """
         # Check if there is enough data to train
-        if len(self.optimizer_state.optimization_history) < self.training_batch_size:
+        history_length = len(self.optimizer_state.optimization_history)
+        if history_length < self.training_batch_size:
+            logger.info(f"Insufficient data for training. Need at least {self.training_batch_size} samples.")
             return
-        
-        # Create dataset from optimization history
-        dataset = OptimizationHistoryDataset([
-            {
-                'parameters' : record.parameters.tolist(),
-                'score'      : record.score
-            } for record in self.optimizer_state.optimization_history
-        ])
-        
-        # Initialize data loader
-        data_loader = DataLoader(dataset, batch_size=self.training_batch_size, shuffle=True)
-        self.optimizer_state.model.train()
-        total_loss = 0.0
-        
-        # Iterate over batches
-        for batch_parameters, batch_scores in data_loader:
-            batch_parameters = batch_parameters.to(self.device_type)
-            batch_scores     = batch_scores.to(self.device_type)
-            
-            # Zero gradients
-            self.model_optimizer.zero_grad()
-            
-            # Forward pass
-            latent_representations, predicted_scores = self.optimizer_state.model(batch_parameters)
-            
-            # Compute loss
-            loss = mse_loss(predicted_scores.squeeze(), batch_scores)
-            
-            # Encourage latent diversity if batch has multiple samples
-            if batch_parameters.size(0) > 1:
-                latent_pairwise_distances = torch.pdist(latent_representations)
-                diversity_loss            = -latent_pairwise_distances.mean()
-                loss += 0.1 * diversity_loss
-            
-            # Backward pass and optimization step
-            loss.backward()
-            self.model_optimizer.step()
-            
-            # Accumulate loss
-            total_loss += loss.item()
-        
-        # Calculate average loss and update scheduler
-        average_loss = total_loss / len(data_loader)
-        self.learning_rate_scheduler.step(average_loss)
-        
-        logger.info(f"Meta-learner training loss: {average_loss:.4f}")
 
+        # Prepare training data
+        parameters = torch.stack([r.parameters for r in self.optimizer_state.optimization_history])
+        scores     = torch.tensor([r.score     for r in self.optimizer_state.optimization_history], dtype = torch.float32)
+        dataset    = TensorDataset(parameters, scores)
+
+        # Split data into training and validation sets (80/20 split)
+        train_size = int(0.8 * history_length)
+        valid_size = history_length - train_size
+        train_dataset, valid_dataset = random_split(dataset, [train_size, valid_size])
+
+        # Create data loaders
+        train_loader = DataLoader(
+            train_dataset,
+            batch_size = self.training_batch_size,
+            shuffle    = True,
+            pin_memory = True if self.device_type == 'cuda' else False
+        )
+        
+        valid_loader = DataLoader(
+            valid_dataset,
+            batch_size = self.training_batch_size,
+            shuffle    = False,
+            pin_memory = True if self.device_type == 'cuda' else False
+        )
+
+        # Initialize training state
+        best_valid_loss  = float('inf')
+        patience         = 10  # Number of epochs to wait for improvement
+        patience_counter = 0
+        max_epochs       = 100
+        
+        # Training constants
+        diversity_weight = 0.1
+        grad_clip_norm   = 1.0
+        min_improvement  = 1e-4  # Minimum improvement to reset patience
+
+        self.optimizer_state.model.train()
+
+        for epoch in range(1, max_epochs + 1):
+            # Training phase
+            train_loss = 0.0
+            for batch_parameters, batch_scores in train_loader:
+                batch_parameters = batch_parameters.to(self.device_type)
+                batch_scores     = batch_scores.to(self.device_type)
+
+                self.model_optimizer.zero_grad(set_to_none = True)
+
+                # Forward pass
+                latent_representations, predicted_scores = self.optimizer_state.model(batch_parameters)
+                
+                # Compute MSE loss
+                prediction_loss = mse_loss(predicted_scores.squeeze(), batch_scores)
+                
+                # Add diversity loss if batch has multiple samples
+                if batch_parameters.size(0) > 1:
+                    pairwise_distances = torch.pdist(latent_representations)
+                    diversity_loss     = -pairwise_distances.mean()  # Negative to maximize distances
+                    total_loss         = prediction_loss + diversity_weight * diversity_loss
+                else:
+                    total_loss = prediction_loss
+
+                # Backward pass with gradient clipping
+                total_loss.backward()
+                torch.nn.utils.clip_grad_norm_(
+                    self.optimizer_state.model.parameters(),
+                    max_norm = grad_clip_norm
+                )
+                self.model_optimizer.step()
+
+                train_loss += total_loss.item()
+
+            average_train_loss = train_loss / len(train_loader)
+
+            # Validation phase
+            self.optimizer_state.model.eval()
+            valid_loss = 0.0
+            with torch.inference_mode():
+                for batch_parameters, batch_scores in valid_loader:
+                    batch_parameters = batch_parameters.to(self.device_type)
+                    batch_scores     = batch_scores.to(self.device_type)
+                    
+                    # Forward pass
+                    _, predicted_scores = self.optimizer_state.model(batch_parameters)
+                    loss        = mse_loss(predicted_scores.squeeze(), batch_scores)
+                    valid_loss += loss.item()
+
+            average_valid_loss = valid_loss / len(valid_loader)
+
+            logger.info(
+                f"Epoch {epoch}: Train Loss = {average_train_loss:.4f}, Validation Loss = {average_valid_loss:.4f}"
+            )
+
+            # Early stopping check
+            if average_valid_loss < best_valid_loss - min_improvement:
+                best_valid_loss  = average_valid_loss
+                patience_counter = 0
+                logger.info(f"Epoch {epoch}: New best validation loss: {best_valid_loss:.4f}")
+            else:
+                patience_counter += 1
+                logger.info(f"Epoch {epoch}: No improvement in validation loss.")
+            
+            # Update learning rate scheduler
+            self.learning_rate_scheduler.step(average_valid_loss)
+            
+            # Check early stopping condition
+            if patience_counter >= patience:
+                logger.info(
+                    f"Early stopping triggered after {epoch} epochs. "
+                    f"Best validation loss: {best_valid_loss:.4f}"
+                )
+                break
+
+            self.optimizer_state.model.train()
+
+        # Final training summary
+        logger.info(
+            f"Training completed. Best validation loss: {best_valid_loss:.4f} "
+            f"after {epoch} epochs."
+        )
+
+    @torch.inference_mode()
     def predict_with_uncertainty(self, 
         candidate_tensor : torch.Tensor, 
         num_samples      : int = 10
@@ -733,45 +813,20 @@ class ParameterOptimizer:
         """
         # Set the model to train mode to enable dropout for stochastic passes
         self.optimizer_state.model.train()
-        predictions_list = []
-
+        
+        # Preallocate tensor for predictions
+        predictions = torch.zeros((num_samples, candidate_tensor.size(0)), device = self.device_type)
+        
         # Perform multiple forward passes to gather predictions
-        for _ in range(num_samples):
-            with torch.no_grad():
-                _, predicted_scores = self.optimizer_state.model(candidate_tensor)
-                predictions_list.append(predicted_scores.squeeze())
+        for i in range(num_samples):
+            _, predicted_scores = self.optimizer_state.model(candidate_tensor)
+            predictions[i] = predicted_scores.squeeze()
 
-        # Stack all predictions to compute mean and standard deviation
-        all_predictions = torch.stack(predictions_list, dim = 0)
-        means = all_predictions.mean(dim = 0)
-        stds  = all_predictions.std(dim = 0)
+        # Compute mean and standard deviation
+        means = predictions.mean(dim = 0)
+        stds  = predictions.std(dim = 0)
 
         # Switch back to evaluation mode after uncertainty estimation
         self.optimizer_state.model.eval()
 
         return means, stds
-
-    # -------------------- User Input Handling --------------------
-    
-    @contextmanager
-    def graceful_exit(self):
-        """
-        Ensures graceful shutdown by saving state upon interruption.
-
-        If a KeyboardInterrupt or exception occurs, the current state and results
-        are saved before re-raising the exception.
-        """
-        try:
-            yield
-
-        except KeyboardInterrupt:
-            logger.info("\nOptimization interrupted. Saving current results and state...")
-            self.save_optimization_results()
-            self.save_optimizer_state()
-            raise
-
-        except Exception as exception:
-            logger.error(f"Optimization failed: {exception}")
-            self.save_optimization_results()
-            self.save_optimizer_state()
-            raise

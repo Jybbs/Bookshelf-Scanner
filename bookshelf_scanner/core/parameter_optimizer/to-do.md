@@ -1,0 +1,2 @@
+- Extract out all hyperparameters into a config
+- Ensure models checkpoints write to a location inside of `parameter-optimizer`
