@@ -15,7 +15,6 @@ logger = ModuleLogger('optimizer')()
 
 # -------------------- Neural Network Components --------------------
 
-
 class ParameterEncoder(nn.Module):
     """
     Encodes parameter vectors into latent representations for performance prediction.
@@ -81,7 +80,6 @@ class MetaLearningModel(nn.Module):
 
 # -------------------- Dataset --------------------
 
-
 class OptimizationHistoryDataset(Dataset):
     """
     Dataset of historical parameter configurations and their OCR scores.
@@ -109,7 +107,6 @@ class OptimizationHistoryDataset(Dataset):
         return self.parameter_vectors[index], self.performance_scores[index]
 
 # -------------------- Data Classes --------------------
-
 
 @dataclass
 class OptimizationRecord:
@@ -164,8 +161,7 @@ class MetaLearningState:
 
 # -------------------- Meta-Learning Optimizer Class --------------------
 
-
-class MetaLearningOptimizer:
+class ParameterOptimizer:
     """
     Coordinates meta-learning guided parameter optimization for OCR.
 
@@ -204,7 +200,8 @@ class MetaLearningOptimizer:
         initial_points_count  : int   = 10,
         iteration_count       : int   = 40,
         training_batch_size   : int   = 32,
-        learning_rate_value   : float = 1e-3
+        learning_rate_value   : float = 1e-3,
+        ucb_beta              : float = 0.1
     ):
         """
         Initializes the MetaLearningOptimizer.
@@ -216,6 +213,7 @@ class MetaLearningOptimizer:
             iteration_count       : Number of refinement steps per image.
             training_batch_size   : Batch size for training.
             learning_rate_value   : Learning rate for the optimizer.
+            ucb_beta              : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
         """
         self.extractor_instance      = extractor_instance
         self.device_type             = device_type
@@ -223,6 +221,7 @@ class MetaLearningOptimizer:
         self.iteration_count         = iteration_count
         self.training_batch_size     = training_batch_size
         self.learning_rate_value     = learning_rate_value
+        self.ucb_beta                = ucb_beta
         self.parameter_boundaries    = self.extract_parameter_boundaries()
         
         input_dimension               = len(self.parameter_boundaries)
@@ -565,22 +564,20 @@ class MetaLearningOptimizer:
         
         for iteration in range(self.iteration_count):
             candidate_parameter_vectors = []
-            
+
             # Generate candidate parameter vectors with decreasing noise
             for _ in range(10):
-                noise                = torch.randn_like(best_parameters) * (1.0 - iteration / self.iteration_count) * 0.1
-                candidate_vector     = torch.clamp(best_parameters + noise, 0, 1)
+                noise            = torch.randn_like(best_parameters) * (1.0 - iteration / self.iteration_count) * 0.1
+                candidate_vector = torch.clamp(best_parameters + noise, 0, 1)
                 candidate_parameter_vectors.append(candidate_vector)
-            
-            self.optimizer_state.model.eval()
-            
-            # Predict performance scores for candidate parameters
-            with torch.no_grad():
-                candidate_tensor = torch.stack(candidate_parameter_vectors).to(self.device_type)
-                _, predictions   = self.optimizer_state.model(candidate_tensor)
-            
-            # Select the best candidate based on predicted scores
-            best_candidate_index    = predictions.squeeze().argmax()
+
+            # Instead of a single deterministic prediction, use uncertainty estimation
+            candidate_tensor = torch.stack(candidate_parameter_vectors).to(self.device_type)
+            means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples = 10)
+
+            # Compute UCB acquisition values and select the best candidate
+            ucb_values              = means + self.ucb_beta * stds
+            best_candidate_index    = ucb_values.argmax()
             chosen_parameter_vector = candidate_parameter_vectors[best_candidate_index]
             
             # Convert chosen vector to parameter dictionary
@@ -722,7 +719,43 @@ class MetaLearningOptimizer:
         self.learning_rate_scheduler.step(average_loss)
         
         logger.info(f"Meta-learner training loss: {average_loss:.4f}")
-    
+
+    def predict_with_uncertainty(self, 
+        candidate_tensor : torch.Tensor, 
+        num_samples      : int = 10
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """
+        Performs multiple stochastic forward passes (with dropout enabled) to estimate
+        mean and standard deviation of predictions. This simulates uncertainty estimation.
+
+        Args:
+            candidate_tensor : A batch of parameter vectors to evaluate.
+            num_samples      : Number of forward passes to approximate uncertainty. Default is 10.
+
+        Returns:
+            Two torch.Tensors containing the mean and standard deviation of the predicted scores 
+            for each candidate in candidate_tensor.
+        """
+        # Set the model to train mode to enable dropout for stochastic passes
+        self.optimizer_state.model.train()
+        predictions_list = []
+
+        # Perform multiple forward passes to gather predictions
+        for _ in range(num_samples):
+            with torch.no_grad():
+                _, predicted_scores = self.optimizer_state.model(candidate_tensor)
+                predictions_list.append(predicted_scores.squeeze())
+
+        # Stack all predictions to compute mean and std
+        all_predictions = torch.stack(predictions_list, dim=0)
+        means = all_predictions.mean(dim=0)
+        stds  = all_predictions.std(dim=0)
+
+        # Switch back to evaluation mode after uncertainty estimation
+        self.optimizer_state.model.eval()
+
+        return means, stds
+
     # -------------------- User Input Handling --------------------
     
     @contextmanager
