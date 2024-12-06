@@ -406,7 +406,7 @@ class ParameterOptimizer:
             parameter_vector: Normalized parameter vector (torch.Tensor).
 
         Returns:
-            Dictionary structured for the extractor's parameter override.
+            Dictionary structured for the extractor's config override.
         """
         parameter_dictionary = {}
         vector_numpy = parameter_vector.cpu().numpy()
@@ -423,8 +423,8 @@ class ParameterOptimizer:
             step_name, parameter_name = name.split('.')
             if step_name not in parameter_dictionary:
                 parameter_dictionary[step_name] = {
-                    'enabled': True,
-                    'parameters': {}
+                    'enabled'    : True,
+                    'parameters' : {}
                 }
             parameter_dictionary[step_name]['parameters'][parameter_name] = value
 
