@@ -350,9 +350,9 @@ class ParameterOptimizer:
                 cluster_id_int = int(cluster_id)
                 for member in members:
                     parameter_clusters[cluster_id_int].append((
-                        torch.tensor(member['parameters'], dtype=torch.float32),
+                        torch.tensor(member['parameters'], dtype = torch.float32),
                         member['score'],
-                        torch.tensor(member['latent'], dtype=torch.float32)
+                        torch.tensor(member['latent'], dtype = torch.float32)
                     ))
 
             self.optimizer_state.parameter_clusters = parameter_clusters
@@ -366,7 +366,7 @@ class ParameterOptimizer:
 
         Includes model weights, optimization history, parameter clusters, and score scaling.
         """
-        self.MODEL_PYTORCH_FILE.parent.mkdir(exist_ok=True, parents=True)
+        self.MODEL_PYTORCH_FILE.parent.mkdir(exist_ok = True, parents = True)
         
         # Prepare data for saving
         checkpoint_data = {
