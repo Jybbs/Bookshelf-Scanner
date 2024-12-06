@@ -292,7 +292,7 @@ class ParameterOptimizer:
     
     PROJECT_ROOT_DIRECTORY = Utils.find_root('pyproject.toml')
     RESULTS_DIRECTORY      = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'data' / 'results'
-    MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'models'
+    MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'parameter_optimizer' / 'models'
     OUTPUT_JSON_FILE       = RESULTS_DIRECTORY / 'optimizer.json'
     MODEL_PYTORCH_FILE     = MODEL_DIRECTORY / 'meta_learner.pt'
     

@@ -2,3 +2,4 @@
 - Ensure models checkpoints write to a location inside of `parameter-optimizer`
 - Update READMEs to reflect new approach (use mathematics and explain novelty)
 - Ensure `ParameterOptimizer` uses pre-trained model if it exists
+- Still need the actual text values for parameters (not the OptimizationRecord tensor conversion)
