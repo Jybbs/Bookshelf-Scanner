@@ -124,18 +124,18 @@ class ProcessingStep:
         Returns:
             Action description string or None if no action taken
         """
-        for param in self.parameters:
-            if key_char in (param.increase_key, param.decrease_key):
-                increase    = key_char == param.increase_key
-                old_value   = param.adjust(increase)
+        for p in self.parameters:
+            if key_char in (p.increase_key, p.decrease_key):
+                increase    = key_char == p.increase_key
+                old_value   = p.adjust(increase)
                 action_type = 'Increased' if increase else 'Decreased'
-                return f"{action_type} '{param.display_name}' from {old_value} to {param.value}"
+                return f"{action_type} '{p.display_name}' from {old_value} to {p.value}"
         return None
 
-# -------------------- ProcessingState Class --------------------
+# -------------------- ConfigState Class --------------------
 
 @dataclass(frozen = True)
-class ProcessingState:
+class ConfigState:
     """
     Immutable state representing all processing parameters for an image.
     Used as a cache key for consistent image processing results.
@@ -144,9 +144,9 @@ class ProcessingState:
     ocr_enabled : bool
 
     @classmethod
-    def from_processing_steps(cls, steps: list[ProcessingStep]) -> 'ProcessingState':
+    def from_processing_steps(cls, steps: list[ProcessingStep]) -> 'ConfigState':
         """
-        Creates an immutable ProcessingState from a list of ProcessingSteps.
+        Creates an immutable ConfigState from a list of ProcessingSteps.
         Only includes enabled steps and their parameters, with consistent ordering
         for reliable caching.
 
@@ -154,7 +154,7 @@ class ProcessingState:
             steps: List of ProcessingStep instances to convert
 
         Returns:
-            ProcessingState: Immutable state instance containing enabled steps and their parameters
+            ConfigState: Immutable state instance containing enabled steps and their parameters
         """
         state_steps = tuple(
             (
@@ -162,10 +162,10 @@ class ProcessingState:
                 step.is_enabled,
                 tuple(sorted(
                     (param.name, param.value)
-                    for param in sorted(step.parameters, key=lambda p: p.name)
+                    for param in sorted(step.parameters, key = lambda p: p.name)
                 ))
             )
-            for step in sorted(steps, key=lambda s: s.name)
+            for step in sorted(steps, key = lambda s: s.name)
             if step.is_enabled and step.is_pipeline
         )
         
@@ -178,67 +178,39 @@ class ProcessingState:
 
 # -------------------- Processing Functions --------------------
 
-def adjust_brightness(image: np.ndarray, params: dict) -> np.ndarray:
+def adjust_brightness(image: np.ndarray, config: dict) -> np.ndarray:
     """
     Adjusts the brightness of the image, enhancing text visibility.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'brightness_value'.
-
-    Returns:
-        Brightness-adjusted image.
     """
-    value     = params['brightness_value']
+    value     = config['brightness_value']
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     hsv_image[:, :, 2] = cv2.add(hsv_image[:, :, 2], value)
     return cv2.cvtColor(hsv_image, cv2.COLOR_HSV2BGR)
 
-def adjust_contrast(image: np.ndarray, params: dict) -> np.ndarray:
+def adjust_contrast(image: np.ndarray, config: dict) -> np.ndarray:
     """
     Adjusts the contrast of the image to enhance text-background distinction.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'contrast_value'.
-
-    Returns:
-        Contrast-adjusted image.
     """
-    alpha = params['contrast_value']
+    alpha = config['contrast_value']
     return cv2.convertScaleAbs(image, alpha = alpha, beta = 0)
 
-def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
+def apply_clahe(image: np.ndarray, config: dict) -> np.ndarray:
     """
     Applies CLAHE to enhance local contrast and reveal text details.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'clahe_clip_limit'.
-
-    Returns:
-        CLAHE-enhanced image.
     """
-    clip_limit = params['clahe_clip_limit']
+    clip_limit = config['clahe_clip_limit']
     lab_image  = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
     clahe      = cv2.createCLAHE(clipLimit = clip_limit)
 
     lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
     return cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
 
-def remove_shadow(image: np.ndarray, params: dict) -> np.ndarray:
+def remove_shadow(image: np.ndarray, config: dict) -> np.ndarray:
     """
-    Removes shadows from the image to improve OCR accuracy.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'shadow_kernel_size' and 'shadow_median_blur'.
-
-    Returns:
-        Shadow-removed image.
+    Removes shadows from the image to improve text isolation.
     """
-    kernel_size = int(params['shadow_kernel_size']) | 1
-    median_blur = int(params['shadow_median_blur']) | 1
+    kernel_size = int(config['shadow_kernel_size']) | 1
+    median_blur = int(config['shadow_median_blur']) | 1
     kernel      = np.ones((kernel_size, kernel_size), np.uint8)
     channels    = list(cv2.split(image))
 
@@ -250,18 +222,11 @@ def remove_shadow(image: np.ndarray, params: dict) -> np.ndarray:
 
     return cv2.merge(channels)
 
-def rotate_image(image: np.ndarray, params: dict) -> np.ndarray:
+def rotate_image(image: np.ndarray, config: dict) -> np.ndarray:
     """
     Rotates the image by a specified angle to correct text orientation.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'rotation_angle'.
-
-    Returns:
-        Rotated image.
     """
-    angle = params['rotation_angle']
+    angle = config['rotation_angle']
     if angle % 360 != 0:
         k = int(angle / 90) % 4
         return np.rot90(image, k)
@@ -306,7 +271,7 @@ class TextExtractor:
         headless        : bool            = False,
         output_json     : bool            = False,
         output_file     : Path | None     = None,
-        params_file     : Path | None     = None,
+        config_file     : Path | None     = None,
         window_height   : int             = DEFAULT_HEIGHT,
     ):
         """
@@ -318,14 +283,14 @@ class TextExtractor:
             headless        : Whether to run in headless mode
             output_json     : Whether to output OCR results to JSON file
             output_file     : Path to save resultant strings from OCR processing
-            params_file     : Optional custom path to params.yml
+            config_file     : Optional custom path to config.yml
             window_height   : Default window height for UI display
         """
         self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
         self.headless        = headless
         self.output_json     = output_json
         self.output_file     = output_file or self.OUTPUT_FILE
-        self.params_file     = params_file or self.PARAMS_FILE
+        self.config_file     = config_file or self.PARAMS_FILE
         self.reader          = Reader(['en'], gpu=gpu_enabled)
         self.steps           = []
         self.state           = DisplayState(window_height = window_height) if not headless else None
@@ -395,31 +360,31 @@ class TextExtractor:
 
     # -------------------- Processing Steps Initialization --------------------
 
-    def initialize_processing_steps(self, params_override: dict | None = None) -> list[ProcessingStep]:
+    def initialize_processing_steps(self, config_override: dict | None = None) -> list[ProcessingStep]:
         """
         Initializes processing steps with default parameters or overrides.
-        Maintains consistent dictionary structure for ProcessingState compatibility.
+        Maintains consistent dictionary structure for ConfigState compatibility.
 
         Args:
-            params_override: Optional dictionary of step-level overrides matching params structure from YML
+            config_override: Optional dictionary of step-level overrides matching config structure from YML
 
         Returns:
             List of initialized ProcessingStep instances
         """
         yaml = YAML(typ = 'safe')
 
-        with self.params_file.open('r') as f:
+        with self.config_file.open('r') as f:
             step_definitions = yaml.load(f)
 
         self.steps = []
-        params_override = params_override or {}
+        config_override = config_override or {}
 
         for index, step_def in enumerate(step_definitions):
             step_name     = step_def['name']
-            step_override = params_override.get(step_name, {})
+            step_override = config_override.get(step_name, {})
             is_pipeline   = step_name != 'ocr'  # OCR is not part of the image processing pipeline
 
-            # Create parameters list with any overrides
+            # Create config list with any overrides
             param_overrides = step_override.get('parameters', {})
             parameters = [
                 Parameter(**{
@@ -445,13 +410,13 @@ class TextExtractor:
     # -------------------- Image Processing --------------------
 
     @cache
-    def process_image(self, image_path: str, processing_state: ProcessingState) -> np.ndarray:
+    def process_image(self, image_path: str, config_state: ConfigState) -> np.ndarray:
         """
         Processes the image according to the enabled processing steps.
 
         Args:
-            image_path       : Path to the image file to process
-            processing_state : ProcessingState instance representing current parameters
+            image_path   : Path to the image file to process
+            config_state : ConfigState instance representing current parameters
 
         Returns:
             Processed image as numpy array
@@ -459,14 +424,14 @@ class TextExtractor:
         image = self.load_image(image_path)
         processed_image = image.copy()
 
-        for step_name, is_enabled, params in processing_state.steps:
+        for step_name, is_enabled, config in config_state.steps:
             if not is_enabled:
                 continue
 
             processing_function = PROCESSING_FUNCTIONS.get(step_name)
             if processing_function:
-                params_dict     = {param_name: param_value for param_name, param_value in params}
-                processed_image = processing_function(processed_image, params_dict)
+                config_dict     = {name: value for name, value in config}
+                processed_image = processing_function(processed_image, config_dict)
                 logger.debug(f"Applied '{step_name}' step.")
             else:
                 logger.warning(f"No processing function defined for step '{step_name}'")
@@ -476,18 +441,18 @@ class TextExtractor:
     # -------------------- OCR Operations --------------------
 
     @cache
-    def perform_ocr(self, image_path: str, processing_state: ProcessingState) -> list[tuple]:
+    def perform_ocr(self, image_path: str, config_state: ConfigState) -> list[tuple]:
         """
         Extracts text from a given image using EasyOCR.
 
         Args:
-            image_path       : The path to the image to perform OCR on
-            processing_state : ProcessingState instance representing current parameters
+            image_path   : The path to the image to perform OCR on
+            config_state : ConfigState instance representing current parameters
 
         Returns:
             List of tuples containing OCR results
         """
-        processed_image = self.process_image(image_path, processing_state)
+        processed_image = self.process_image(image_path, config_state)
         try:
             ocr_results = self.reader.readtext(
                 processed_image[..., ::-1],  # Convert BGR to RGB
@@ -511,8 +476,8 @@ class TextExtractor:
         Returns:
             Dictionary mapping image names to their OCR results.
         """
-        results          = {}
-        processing_state = ProcessingState.from_processing_steps(self.steps)
+        results      = {}
+        config_state = ConfigState.from_processing_steps(self.steps)
 
         for image_path in image_files:
             image_name = image_path.name
@@ -520,7 +485,7 @@ class TextExtractor:
             try:
                 ocr_results = self.perform_ocr(
                     str(image_path),
-                    processing_state
+                    config_state
                 )
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
@@ -846,20 +811,20 @@ class TextExtractor:
 
     # -------------------- Headless Mode Operations --------------------
 
-    def run_headless_mode(self, image_files: list[Path], params_override: dict | None = None):
+    def run_headless_mode(self, image_files: list[Path], config_override: dict | None = None):
         """
         Processes images in headless mode.
 
         Args:
             image_files     : List of image file paths to process
-            params_override : Optional parameter overrides
+            config_override : Optional parameter overrides
         """
         if not image_files:
             raise ValueError("No image files provided")
 
         # Initialize or update processing steps
-        if not self.steps or params_override:
-            self.initialize_processing_steps(params_override)
+        if not self.steps or config_override:
+            self.initialize_processing_steps(config_override)
 
         results = self.perform_ocr_headless(image_files)
 
@@ -871,20 +836,20 @@ class TextExtractor:
 
     # -------------------- Interactive Mode Operations --------------------
 
-    def interactive_mode(self, image_files: list[Path], params_override: dict | None = None):
+    def interactive_mode(self, image_files: list[Path], config_override: dict | None = None):
         """
         Runs the interactive experiment allowing parameter adjustment and image processing.
 
         Args:
             image_files     : List of image file paths to process
-            params_override : Optional parameter overrides
+            config_override : Optional parameter overrides
         """
         if not image_files:
             raise ValueError("No image files provided")
 
         # Initialize or update processing steps
-        if not self.steps or params_override:
-            self.initialize_processing_steps(params_override)
+        if not self.steps or config_override:
+            self.initialize_processing_steps(config_override)
 
         cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
         logger.info("Starting interactive experiment.")
@@ -894,13 +859,13 @@ class TextExtractor:
                 image_path            = image_files[self.state.image_idx]
                 self.state.image_name = image_path.name
                 
-                processing_state = ProcessingState.from_processing_steps(self.steps)
-                processed_image  = self.process_image(str(image_path), processing_state)
+                config_state = ConfigState.from_processing_steps(self.steps)
+                processed_image  = self.process_image(str(image_path), config_state)
 
                 # Perform OCR if enabled
                 ocr_results = []
-                if processing_state.ocr_enabled:
-                    ocr_results = self.perform_ocr(str(image_path), processing_state)
+                if config_state.ocr_enabled:
+                    ocr_results = self.perform_ocr(str(image_path), config_state)
                     if self.state.check_and_reset_new_image_flag():
                         self.log_ocr_results(ocr_results)
 
