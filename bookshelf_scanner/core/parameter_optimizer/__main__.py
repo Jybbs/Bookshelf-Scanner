@@ -6,8 +6,8 @@ from bookshelf_scanner import ParameterOptimizer, TextExtractor
 
 def main():
 
-    extractor   = TextExtractor(headless=True)
-    optimizer   = ParameterOptimizer(extractor=extractor)
+    extractor   = TextExtractor(headless = True)
+    optimizer   = ParameterOptimizer(extractor = extractor)
     image_files = TextExtractor.find_image_files(subdirectory = 'Books')
 
     # Run the optimization process

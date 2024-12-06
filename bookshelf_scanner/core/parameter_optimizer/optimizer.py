@@ -170,7 +170,7 @@ class ParameterOptimizer:
     model, clusters parameter configurations, and handles training and persistence.
 
     Attributes:
-        extractor_instance      : Instance of TextExtractor being optimized.
+        extractor               : Instance of TextExtractor being optimized.
         device_type             : Computation device ('cpu' or 'cuda').
         initial_points_count    : Number of initial parameter suggestions.
         iteration_count         : Number of refinement iterations per image.
@@ -195,53 +195,52 @@ class ParameterOptimizer:
     
     def __init__(
         self,
-        extractor_instance    : TextExtractor,
-        device_type           : str   = 'cuda' if torch.cuda.is_available() else 'cpu',
-        initial_points_count  : int   = 10,
-        iteration_count       : int   = 40,
-        training_batch_size   : int   = 32,
-        learning_rate_value   : float = 1e-3,
-        ucb_beta              : float = 0.1
+        extractor            : TextExtractor,
+        device_type          : str   = 'cuda' if torch.cuda.is_available() else 'cpu',
+        initial_points_count : int   = 10,
+        iteration_count      : int   = 40,
+        training_batch_size  : int   = 32,
+        learning_rate_value  : float = 1e-3,
+        ucb_beta             : float = 0.1
     ):
         """
         Initializes the MetaLearningOptimizer.
 
         Args:
-            extractor_instance    : TextExtractor instance to optimize.
-            device_type           : Device for computations ('cpu' or 'cuda').
-            initial_points_count  : Number of initial parameter suggestions.
-            iteration_count       : Number of refinement steps per image.
-            training_batch_size   : Batch size for training.
-            learning_rate_value   : Learning rate for the optimizer.
-            ucb_beta              : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
+            extractor            : TextExtractor instance to optimize.
+            device_type          : Device for computations ('cpu' or 'cuda').
+            initial_points_count : Number of initial parameter suggestions.
+            iteration_count      : Number of refinement steps per image.
+            training_batch_size  : Batch size for training.
+            learning_rate_value  : Learning rate for the optimizer.
+            ucb_beta             : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
         """
-        self.extractor_instance      = extractor_instance
-        self.device_type             = device_type
-        self.initial_points_count    = initial_points_count
-        self.iteration_count         = iteration_count
-        self.training_batch_size     = training_batch_size
-        self.learning_rate_value     = learning_rate_value
-        self.ucb_beta                = ucb_beta
-        self.parameter_boundaries    = self.extract_parameter_boundaries()
+        self.extractor            = extractor
+        self.device_type          = device_type
+        self.initial_points_count = initial_points_count
+        self.iteration_count      = iteration_count
+        self.training_batch_size  = training_batch_size
+        self.learning_rate_value  = learning_rate_value
+        self.ucb_beta             = ucb_beta
+        self.parameter_boundaries = self.extract_parameter_boundaries()
         
-        input_dimension               = len(self.parameter_boundaries)
-        self.optimizer_state          = MetaLearningState(
-            model=self.initialize_meta_learning_model(input_dimension)
+        input_dimension      = len(self.parameter_boundaries)
+        self.optimizer_state = MetaLearningState(
+            model = self.initialize_meta_learning_model(input_dimension)
         )
         
         # Initialize optimizer and scheduler
-        self.model_optimizer          = torch.optim.Adam(
+        self.model_optimizer = torch.optim.Adam(
             self.optimizer_state.model.parameters(), 
             lr=self.learning_rate_value
         )
-        self.learning_rate_scheduler  = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        self.learning_rate_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             self.model_optimizer, 
-            factor=0.5, 
-            patience=5, 
-            verbose=False
+            factor   = 0.5, 
+            patience = 5
         )
         
-        self.optimization_results     = {}
+        self.optimization_results = {}
         
         # Load existing state if available
         self.load_optimizer_state()
@@ -267,18 +266,18 @@ class ParameterOptimizer:
         Returns:
             List of dictionaries defining each parameter's bounds and type.
         """
-        processing_steps      = self.extractor_instance.initialize_processing_steps()
-        parameter_boundaries  = []
+        processing_steps     = self.extractor.initialize_processing_steps()
+        parameter_boundaries = []
         
         for processing_step in processing_steps:
             if processing_step.parameters and processing_step.is_pipeline:
                 for parameter in processing_step.parameters:
                     parameter_boundaries.append({
-                        'name'        : f"{processing_step.name}.{parameter.name}",
-                        'min_value'   : float(parameter.min),
-                        'max_value'   : float(parameter.max),
-                        'step_value'  : float(parameter.step),
-                        'is_integer'  : isinstance(parameter.value, int)
+                        'name'       : f"{processing_step.name}.{parameter.name}",
+                        'min_value'  : float(parameter.min),
+                        'max_value'  : float(parameter.max),
+                        'step_value' : float(parameter.step),
+                        'is_integer' : isinstance(parameter.value, int)
                     })
 
         return parameter_boundaries
@@ -304,8 +303,8 @@ class ParameterOptimizer:
             # Initialize step in dictionary if not present
             if step_name not in parameter_dictionary:
                 parameter_dictionary[step_name] = {
-                    'enabled'   : True,
-                    'parameters': {}
+                    'enabled'    : True,
+                    'parameters' : {}
                 }
 
             # Scale the parameter value
@@ -371,9 +370,9 @@ class ParameterOptimizer:
         
         # Prepare data for saving
         checkpoint_data = {
-            'model_state_dict'     : self.optimizer_state.model.state_dict(),
+            'model_state_dict': self.optimizer_state.model.state_dict(),
 
-            'optimization_history' : [
+            'optimization_history': [
                 {
                     'image_path'    : str(record.image_path),
                     'parameters'    : record.parameters.tolist(),
@@ -382,7 +381,7 @@ class ParameterOptimizer:
                 } for record in self.optimizer_state.optimization_history
             ],
 
-            'parameter_clusters'   : {
+            'parameter_clusters': {
                 cluster_id: [
                     {
                         'parameters' : parameter.tolist(),
@@ -392,7 +391,7 @@ class ParameterOptimizer:
                 ] for cluster_id, members in self.optimizer_state.parameter_clusters.items()
             },
 
-            'score_scaling'        : self.optimizer_state.score_scaling
+            'score_scaling': self.optimizer_state.score_scaling
         }
         
         # Save the checkpoint
@@ -527,9 +526,9 @@ class ParameterOptimizer:
             Dictionary containing the best parameters and achieved score.
         """
         logger.info(f"Optimizing parameters for {image_path.name}")
-        best_score           = 0.0
-        best_parameters      = None
-        best_latent_vector   = None
+        best_score         = 0.0
+        best_parameters    = None
+        best_latent_vector = None
 
         # -------------------- Initial Evaluation --------------------
         
@@ -538,12 +537,12 @@ class ParameterOptimizer:
             parameter_dictionary = self.vector_to_parameter_dictionary(parameter_vector)
             
             # Initialize processing steps with the suggested parameters
-            self.extractor_instance.initialize_processing_steps(
+            self.extractor.initialize_processing_steps(
                 params_override=parameter_dictionary
             )
             
             # Perform OCR and calculate performance score
-            ocr_results       = self.extractor_instance.perform_ocr_headless([image_path])
+            ocr_results       = self.extractor.perform_ocr_headless([image_path])
             performance_score = sum(
                 len(text) * count 
                 for text, count in ocr_results.get(image_path.name, [])
@@ -551,8 +550,8 @@ class ParameterOptimizer:
 
             # Update best score and parameters if current score is better
             if performance_score > best_score:
-                best_score         = performance_score
-                best_parameters    = parameter_vector
+                best_score      = performance_score
+                best_parameters = parameter_vector
                 
                 with torch.no_grad():
                     best_latent_vector, _ = self.optimizer_state.model(parameter_vector.unsqueeze(0))
@@ -583,13 +582,9 @@ class ParameterOptimizer:
             # Convert chosen vector to parameter dictionary
             chosen_parameter_dictionary = self.vector_to_parameter_dictionary(chosen_parameter_vector)
             
-            # Initialize processing steps with the chosen parameters
-            self.extractor_instance.initialize_processing_steps(
-                params_override=chosen_parameter_dictionary
-            )
-            
             # Perform OCR and calculate performance score
-            ocr_results       = self.extractor_instance.perform_ocr_headless([image_path])
+            self.extractor.initialize_processing_steps(params_override = chosen_parameter_dictionary)
+            ocr_results = self.extractor.perform_ocr_headless([image_path])
             performance_score = sum(
                 len(text) * count 
                 for text, count in ocr_results.get(image_path.name, [])
@@ -597,8 +592,8 @@ class ParameterOptimizer:
             
             # Update best score and parameters if current score is better
             if performance_score > best_score:
-                best_score          = performance_score
-                best_parameters     = chosen_parameter_vector
+                best_score      = performance_score
+                best_parameters = chosen_parameter_vector
                 
                 with torch.no_grad():
                     best_latent_vector, _ = self.optimizer_state.model(chosen_parameter_vector.unsqueeze(0))
@@ -746,10 +741,10 @@ class ParameterOptimizer:
                 _, predicted_scores = self.optimizer_state.model(candidate_tensor)
                 predictions_list.append(predicted_scores.squeeze())
 
-        # Stack all predictions to compute mean and std
-        all_predictions = torch.stack(predictions_list, dim=0)
-        means = all_predictions.mean(dim=0)
-        stds  = all_predictions.std(dim=0)
+        # Stack all predictions to compute mean and standard deviation
+        all_predictions = torch.stack(predictions_list, dim = 0)
+        means = all_predictions.mean(dim = 0)
+        stds  = all_predictions.std(dim = 0)
 
         # Switch back to evaluation mode after uncertainty estimation
         self.optimizer_state.model.eval()
