@@ -283,6 +283,7 @@ class TextExtractor:
     """
 
     # -------------------- Class Constants --------------------
+    
     PROJECT_ROOT    = Utils.find_root('pyproject.toml')
     ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
     DEFAULT_HEIGHT  = 800

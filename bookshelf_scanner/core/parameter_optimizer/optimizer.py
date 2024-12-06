@@ -94,6 +94,70 @@ class ClusterMember:
     performance_score : float
     latent_vector     : torch.Tensor
 
+    @classmethod
+    def from_dict(cls, data: dict) -> 'ClusterMember':
+        """
+        Creates a ClusterMember instance from a dictionary.
+
+        Args:
+            data: Dictionary containing 'parameters', 'score', and 'latent' keys.
+
+        Returns:
+            ClusterMember instance.
+        """
+        return cls(
+            parameter_vector  = torch.tensor(data['parameters'], dtype = torch.float32),
+            performance_score = data['score'],
+            latent_vector     = torch.tensor(data['latent'], dtype = torch.float32)
+        )
+
+@dataclass
+class OCRResult:
+    """
+    Represents a single OCR (Optical Character Recognition) result.
+
+    Attributes:
+        text       : The extracted text string from the image.
+        confidence : The confidence score associated with the extracted text.
+    """
+    text       : str
+    confidence : float
+
+    def to_dict(self) -> dict:
+        """
+        Converts the OCRResult instance into a dictionary suitable for JSON serialization.
+        """
+        return {
+            'text'       : self.text,
+            'confidence' : self.confidence
+        }
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> 'OCRResult':
+        """
+        Creates an OCRResult instance from a dictionary.
+
+        Args:
+            data: A dictionary containing 'text' and 'confidence' keys.
+
+        Returns:
+            OCRResult: An instance of OCRResult populated with the provided data.
+        """
+        return cls(text = data['text'], confidence = data['confidence'])
+    
+    @classmethod
+    def from_tuples(cls, ocr_tuples: list[tuple[str, float]]) -> list['OCRResult']:
+        """
+        Creates a list of OCRResult instances from a list of (text, confidence) tuples.
+
+        Args:
+            ocr_tuples: List of tuples containing (text, confidence).
+
+        Returns:
+            List of OCRResult instances.
+        """
+        return [cls(text = text, confidence = confidence) for text, confidence in ocr_tuples]
+
 @dataclass
 class OptimizationRecord:
     """
@@ -104,11 +168,65 @@ class OptimizationRecord:
         parameters    : Best-found parameter vector (torch.Tensor).
         score         : OCR performance score achieved (float).
         latent_vector : Latent representation of the parameters (torch.Tensor).
+        ocr_results   : List of tuples containing (text, confidence score).
     """
     image_path    : Path
     parameters    : torch.Tensor
     score         : float
     latent_vector : torch.Tensor
+    ocr_results   : list[OCRResult]
+
+    def to_dict(self) -> dict:
+        """
+        Converts the OptimizationRecord instance into a dictionary suitable for JSON serialization.
+
+        Returns:
+            dict: A dictionary containing image path, parameters, score, latent vector, and OCR results.
+        """
+        return {
+            'image_path'    : str(self.image_path),
+            'parameters'    : self.parameters.tolist(),
+            'score'         : self.score,
+            'latent_vector' : self.latent_vector.tolist(),
+            'ocr_results'   : [ocr.to_dict() for ocr in self.ocr_results]
+        }
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> 'OptimizationRecord':
+        """
+        Creates an OptimizationRecord instance from a dictionary.
+
+        Args:
+            data : A dictionary containing 'image_path', 'parameters', 'score', 'latent_vector', and 'ocr_results' keys.
+
+        Returns:
+            OptimizationRecord: An instance of OptimizationRecord populated with the provided data.
+        """
+        return cls(
+            image_path    = Path(data['image_path']),
+            parameters    = torch.tensor(data['parameters'], dtype = torch.float32),
+            score         = data['score'],
+            latent_vector = torch.tensor(data['latent_vector'], dtype = torch.float32),
+            ocr_results   = [OCRResult.from_dict(ocr) for ocr in data.get('ocr_results', [])]
+        )
+    
+    def update_if_better(self, other: 'OptimizationRecord') -> bool:
+        """
+        Updates the current record with another record if the other has a better score.
+
+        Args:
+            other: Another OptimizationRecord to compare with.
+
+        Returns:
+            bool: True if the current record was updated, False otherwise.
+        """
+        if other.score > self.score:
+            self.parameters    = other.parameters
+            self.score         = other.score
+            self.latent_vector = other.latent_vector
+            self.ocr_results   = other.ocr_results
+            return True
+        return False
 
 @dataclass
 class MetaLearningState:
@@ -313,22 +431,18 @@ class ParameterOptimizer:
         """
         Loads the meta-learning state from disk if available.
 
-        Restores the model's weights, optimization history, and parameter clusters.
+        Restores the model's weights, optimization history (including OCR results), parameter clusters, and score scaling.
         """
         if self.MODEL_PYTORCH_FILE.exists():
             checkpoint = torch.load(self.MODEL_PYTORCH_FILE, map_location = self.device_type)
-            
+
             # Load model state
             self.optimizer_state.model.load_state_dict(checkpoint['model_state_dict'])
-            
+
             # Restore optimization history
             self.optimizer_state.optimization_history = [
-                OptimizationRecord(
-                    image_path    = Path(record['image_path']),
-                    parameters    = torch.tensor(record['parameters'], dtype = torch.float32),
-                    score         = record['score'],
-                    latent_vector = torch.tensor(record['latent_vector'], dtype = torch.float32)
-                ) for record in checkpoint['optimization_history']
+                OptimizationRecord.from_dict(record)
+                for record in checkpoint['optimization_history']
             ]
 
             # Restore parameter clusters
@@ -337,11 +451,7 @@ class ParameterOptimizer:
                 cluster_id_int = int(cluster_id)
 
                 for member in members:
-                    cluster_member = ClusterMember(
-                        parameter_vector  = torch.tensor(member['parameters'], dtype = torch.float32),
-                        performance_score = member['score'],
-                        latent_vector     = torch.tensor(member['latent'], dtype = torch.float32)
-                    )
+                    cluster_member = ClusterMember.from_dict(member)
                     parameter_clusters[cluster_id_int]['members'].append(cluster_member)
 
             self.optimizer_state.parameter_clusters = parameter_clusters
@@ -355,24 +465,19 @@ class ParameterOptimizer:
         """
         Saves the current meta-learning state and model to disk.
 
-        Includes model weights, optimization history, parameter clusters, and score scaling.
+        Includes model weights, optimization history (with OCR results), parameter clusters, and score scaling.
         """
         self.MODEL_PYTORCH_FILE.parent.mkdir(exist_ok = True, parents = True)
         
         # Prepare data for saving
         checkpoint_data = {
-            'model_state_dict': self.optimizer_state.model.state_dict(),
+            'model_state_dict' : self.optimizer_state.model.state_dict(),
 
-            'optimization_history': [
-                {
-                    'image_path'    : str(record.image_path),
-                    'parameters'    : record.parameters.tolist(),
-                    'score'         : record.score,
-                    'latent_vector' : record.latent_vector.tolist()
-                } for record in self.optimizer_state.optimization_history
+            'optimization_history' : [
+                record.to_dict() for record in self.optimizer_state.optimization_history
             ],
 
-            'parameter_clusters': {
+            'parameter_clusters' : {
                 cluster_id: [
                     {
                         'parameters' : member.parameter_vector.tolist(),
@@ -382,7 +487,7 @@ class ParameterOptimizer:
                 ] for cluster_id, cluster_info in self.optimizer_state.parameter_clusters.items()
             },
 
-            'score_scaling': self.optimizer_state.score_scaling
+            'score_scaling' : self.optimizer_state.score_scaling
         }
         
         # Save the checkpoint
@@ -393,20 +498,17 @@ class ParameterOptimizer:
         """
         Saves the optimization results to a JSON file.
 
-        Records the best parameters and scores for each processed image.
+        Records the best parameters, scores, and OCR results for each processed image.
         """
         output_data = {
-            Path(image_path).name: {
-                'parameters' : optimization_record['parameters'],
-                'score'      : float(optimization_record['score'])
-            }
-            for image_path, optimization_record in self.optimization_results.items()
+            str(record.image_path): record.to_dict()
+            for record in self.optimizer_state.optimization_history
         }
         
         self.OUTPUT_JSON_FILE.parent.mkdir(exist_ok = True, parents = True)
         
-        with self.OUTPUT_JSON_FILE.open('w') as output_file:
-            json.dump(output_data, output_file, indent = 2)
+        with self.OUTPUT_JSON_FILE.open('w', encoding = 'utf-8') as output_file:
+            json.dump(output_data, output_file, indent = 2, ensure_ascii = False)
         
         logger.info(f"Results saved to {self.OUTPUT_JSON_FILE}")
    
@@ -478,8 +580,11 @@ class ParameterOptimizer:
             return
         
         # Collect existing cluster centers
-        cluster_ids = list(self.optimizer_state.parameter_clusters.keys())
-        cluster_centers = torch.stack([cluster_info['center'] for cluster_info in self.optimizer_state.parameter_clusters.values()])
+        cluster_ids     = list(self.optimizer_state.parameter_clusters.keys())
+        cluster_centers = torch.stack([
+            cluster_info['center'] 
+            for cluster_info in self.optimizer_state.parameter_clusters.values()
+        ])
         
         # Vectorized distance computation between new latent vector and all cluster centers
         distances = torch.norm(cluster_centers - latent_representation, dim=1)  # Shape: (num_clusters,)
@@ -511,146 +616,122 @@ class ParameterOptimizer:
     def evaluate_image(self, image_path: Path) -> dict[str, Any]:
         """
         Optimizes OCR parameters for a single image.
+
+        Args:
+            image_path : Path to the image file to evaluate.
+
+        Returns:
+            dict[str, Any]: A dictionary containing the best parameters, score, and OCR results.
         """
         logger.info(f"Optimizing parameters for {image_path.name}")
-        best_score         = -float('inf')
-        best_parameters    = None
-        best_latent_vector = None
+        
+        # Initialize best_record with default values
+        best_record = OptimizationRecord(
+            image_path    = image_path,
+            parameters    = torch.zeros(len(self.parameter_boundaries)).to(self.device_type),
+            score         = -float('inf'),
+            latent_vector = torch.zeros(64).to(self.device_type),
+            ocr_results   = []
+        )
 
-        # Set model to eval mode for initial evaluation
         self.optimizer_state.model.eval()
+
+        def evaluate_parameter_vector(parameter_vector: torch.Tensor) -> OptimizationRecord:
+            """
+            Evaluates a single parameter vector by performing OCR and calculating the performance score.
+            """
+            # Convert vector to parameter dictionary
+            self.extractor.initialize_processing_steps(
+                params_override = self.vector_to_parameter_dictionary(parameter_vector)
+            )
+            
+            # Perform OCR and calculate performance score
+            ocr_results_raw   = self.extractor.perform_ocr_headless([image_path])
+            ocr_results       = ocr_results_raw.get(image_path.name, [])
+            performance_score = sum(len(text) * count for text, count in ocr_results)
+            
+            # Encode the parameter vector
+            with torch.inference_mode():
+                latent_representation, _ = self.optimizer_state.model(parameter_vector.unsqueeze(0))
+                latent_representation    = latent_representation.squeeze()
+            
+            # Convert raw OCR results to OCRResult instances
+            ocr_results_instances = OCRResult.from_tuples(ocr_results)
+            
+            return OptimizationRecord(
+                image_path    = image_path,
+                parameters    = parameter_vector,
+                score         = float(performance_score),
+                ocr_results   = ocr_results_instances,
+                latent_vector = latent_representation 
+                    if latent_representation is not None 
+                    else torch.zeros(len(self.parameter_boundaries)).to(self.device_type)
+            )
 
         # -------------------- Initial Evaluation --------------------
 
         for parameter_vector in self.suggest_initial_parameters():
-            # Convert vector to parameter dictionary
-            parameter_dictionary = self.vector_to_parameter_dictionary(parameter_vector)
-            
-            # Initialize processing steps with the suggested parameters
-            self.extractor.initialize_processing_steps(
-                params_override = parameter_dictionary
-            )
-            
-            # Perform OCR and calculate performance score
-            ocr_results       = self.extractor.perform_ocr_headless([image_path])
-            performance_score = sum(
-                len(text) * count 
-                for text, count in ocr_results.get(image_path.name, [])
-            )
-            
-            # Ensure performance_score is a native float
-            performance_score = float(performance_score)
-
-            # Update best score and parameters if current score is better
-            if performance_score > best_score:
-                best_score      = performance_score
-                best_parameters = parameter_vector
-                
-                # Encode the parameter vector
-                with torch.inference_mode():
-                    best_latent_vector, _ = self.optimizer_state.model(parameter_vector.unsqueeze(0))
-
-            # Update parameter clusters with the current evaluation
-            self.update_parameter_clusters(parameter_vector, performance_score)
+            current_record = evaluate_parameter_vector(parameter_vector)
+            best_record.update_if_better(current_record)
+            self.update_parameter_clusters(parameter_vector, current_record.score)
 
         # -------------------- Safety Check --------------------
-
-        if best_parameters is None:
+        
+        if best_record.score == -float('inf'):
             logger.warning(
                 f"No parameter vectors improved the score for {image_path.name}. "
                 f"Using a random parameter vector as a fallback."
             )
-
             # Fallback: Use a random parameter vector
-            best_parameters       = torch.rand(len(self.parameter_boundaries)).to(self.device_type)
-            best_score            = 0.0  # Or some default score
-            best_latent_vector, _ = self.optimizer_state.model(best_parameters.unsqueeze(0))
-            self.update_parameter_clusters(best_parameters, best_score)
+            best_parameters = torch.rand(len(self.parameter_boundaries)).to(self.device_type)
+            fallback_record = evaluate_parameter_vector(best_parameters)
+            fallback_record.score = 0.0
+            
+            best_record.update_if_better(fallback_record)
+            self.update_parameter_clusters(best_parameters, fallback_record.score)
 
         # -------------------- Iterative Refinement --------------------
 
         for iteration in range(self.iteration_count):
             # Generate candidate parameter vectors with decreasing noise
             candidate_parameter_vectors = [
-                torch.clamp(best_parameters + torch.randn_like(best_parameters) * 
-                            (1.0 - iteration / self.iteration_count) * 0.1, 0, 1)
+                torch.clamp(
+                    input = best_record.parameters + torch.randn_like(best_record.parameters) * 
+                            (1.0 - iteration / self.iteration_count) * 0.1, 
+                    min   = 0, 
+                    max   = 1
+                )
                 for _ in range(10)
             ]
 
-            # Stack candidates into a tensor
+            # Stack candidates into a tensor and predict means/stds
             candidate_tensor = torch.stack(candidate_parameter_vectors).to(self.device_type)
-
-            # Predict means and stds with uncertainty estimation
-            means, stds = self.predict_with_uncertainty(candidate_tensor, num_samples = 10)
+            means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples=10)
 
             # Compute UCB acquisition values and select the best candidate
             ucb_values              = means + self.ucb_beta * stds
             best_candidate_index    = ucb_values.argmax()
             chosen_parameter_vector = candidate_parameter_vectors[best_candidate_index]
 
-            # Convert chosen vector to parameter dictionary
-            chosen_parameter_dictionary = self.vector_to_parameter_dictionary(chosen_parameter_vector)
+            chosen_record = evaluate_parameter_vector(chosen_parameter_vector)
 
-            # Initialize processing steps with the chosen parameters
-            self.extractor.initialize_processing_steps(params_override = chosen_parameter_dictionary)
-
-            # Perform OCR and calculate performance score
-            ocr_results       = self.extractor.perform_ocr_headless([image_path])
-            performance_score = sum(
-                len(text) * count 
-                for text, count in ocr_results.get(image_path.name, [])
-            )
-
-            # Ensure performance_score is a native float
-            performance_score = float(performance_score)
-
-            # Update best score and parameters if current score is better
-            if performance_score > best_score:
-                best_score      = performance_score
-                best_parameters = chosen_parameter_vector
-                
-                # Encode the chosen parameter vector
-                with torch.inference_mode():
-                    best_latent_vector, _ = self.optimizer_state.model(chosen_parameter_vector.unsqueeze(0))
-                
-                logger.info(f"New best score {performance_score:.3f} on iteration {iteration + 1}")
+            if best_record.update_if_better(chosen_record):
+                logger.info(f"New best score {chosen_record.score:.3f} on iteration {iteration + 1}")
 
             # Update parameter clusters with the current evaluation
-            self.update_parameter_clusters(chosen_parameter_vector, performance_score)
+            self.update_parameter_clusters(chosen_parameter_vector, chosen_record.score)
 
         # -------------------- Record Optimization Outcome --------------------
 
-        self.optimizer_state.optimization_history.append(
-            OptimizationRecord(
-                image_path    = image_path,
-                parameters    = best_parameters,
-                score         = best_score,
-                latent_vector = (
-                    best_latent_vector.squeeze() 
-                    if best_latent_vector is not None 
-                    else torch.zeros(len(self.parameter_boundaries))
-                )
-            )
-        )
+        self.optimizer_state.optimization_history.append(best_record)
         
-        # Update score scaling based on the new score
-        self.optimizer_state.update_scaling(best_score)
-        
-        # Train the meta-learning model with updated history
+        # Update scoring, tune the meta-learning model, and store the final optimization results
+        self.optimizer_state.update_scaling(best_record.score)
         self.train_meta_learner()
-
-        # Store the final parameters and score in results
-        final_parameter_dictionary = self.vector_to_parameter_dictionary(best_parameters)
-        self.optimization_results[str(image_path)] = {
-            'parameters' : final_parameter_dictionary,
-            'score'      : best_score
-        }
+        self.optimization_results[str(image_path)] = best_record.to_dict()
         
-        return {
-            'parameters' : final_parameter_dictionary,
-            'score'      : best_score
-        }
-    
+        return best_record.to_dict()
+
     def optimize(self, image_file_paths: list[Path]):
         """
         Optimizes parameters for a batch of images.
