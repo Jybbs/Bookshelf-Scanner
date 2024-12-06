@@ -42,7 +42,7 @@ class PerformancePredictor(nn.Module):
 
     This predictor estimates the OCR performance score based on latent embeddings produced
     by the ParameterEncoder. It uses a series of linear layers with ReLU activations and
-    dropout, culminating in a Sigmoid activation to output a normalized score.
+    dropout, culminating in an output layer without activation to allow unrestricted score ranges.
     """
     def __init__(self, latent_dimension: int = 64):
         super().__init__()
@@ -53,8 +53,7 @@ class PerformancePredictor(nn.Module):
             nn.Linear(128, 64),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(64, 1),
-            nn.Sigmoid()
+            nn.Linear(64, 1)
         )
         
     def forward(self, latent_tensor: torch.Tensor) -> torch.Tensor:
@@ -308,6 +307,7 @@ class ParameterOptimizer:
         learning_rate_value        : float = 1e-3,
         ucb_beta                   : float = 0.1,
         cluster_distance_threshold : float = 2.0,
+        training_buffer_size       : int   = 30,
     ):
         """
         Initializes the MetaLearningOptimizer.
@@ -321,6 +321,7 @@ class ParameterOptimizer:
             learning_rate_value        : Learning rate for the optimizer.
             ucb_beta                   : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
             cluster_distance_threshold : Distance threshold for clustering.
+            training_buffer_size       : Number of samples to accumulate before training the model.
         """
         self.extractor                  = extractor
         self.device_type                = device_type
@@ -330,6 +331,7 @@ class ParameterOptimizer:
         self.learning_rate_value        = learning_rate_value
         self.ucb_beta                   = ucb_beta
         self.cluster_distance_threshold = cluster_distance_threshold
+        self.training_buffer_size       = training_buffer_size
 
         self.parameter_boundaries = self.extract_parameter_boundaries()
         
@@ -353,7 +355,10 @@ class ParameterOptimizer:
         
         # Load existing state if available
         self.load_optimizer_state()
-    
+        
+        # Initialize training buffer to accumulate OptimizationRecords
+        self.training_buffer = []
+
     def initialize_meta_learning_model(self, input_dimension: int) -> MetaLearningModel:
         """
         Initializes the MetaLearningModel with the given input dimension.
@@ -724,10 +729,17 @@ class ParameterOptimizer:
         # -------------------- Record Optimization Outcome --------------------
 
         self.optimizer_state.optimization_history.append(best_record)
-        
-        # Update scoring, tune the meta-learning model, and store the final optimization results
+        self.training_buffer.append(best_record)  # Add to training buffer
+
+        # Update scoring
         self.optimizer_state.update_scaling(best_record.score)
-        self.train_meta_learner()
+
+        # Check if training buffer is full
+        if len(self.training_buffer) >= self.training_buffer_size:
+            self.train_meta_learner()
+            self.training_buffer = []  # Reset training buffer
+
+        # Store the final optimization results
         self.optimization_results[str(image_path)] = best_record.to_dict()
         
         return best_record.to_dict()
@@ -747,6 +759,11 @@ class ParameterOptimizer:
         for image_path in image_file_paths:
             self.evaluate_image(image_path)
         
+        # After processing all images, ensure any remaining data in the training buffer is used for training
+        if self.training_buffer:
+            self.train_meta_learner()
+            self.training_buffer = []  # Reset training buffer
+        
         # Save all optimization results and current state
         self.save_optimization_results()
         self.save_optimizer_state()
@@ -763,6 +780,7 @@ class ParameterOptimizer:
         3. Gradient clipping to manage exploding gradients.
         4. Efficient gradient zeroing with set_to_none=True.
         5. Basic logging for monitoring.
+        6. Score Scaling: Normalizes performance scores based on observed min and max.
         """
         # Check if there is enough data to train
         history_length = len(self.optimizer_state.optimization_history)
@@ -773,7 +791,16 @@ class ParameterOptimizer:
         # Prepare training data
         parameters = torch.stack([r.parameters for r in self.optimizer_state.optimization_history])
         scores     = torch.tensor([r.score     for r in self.optimizer_state.optimization_history], dtype = torch.float32)
-        dataset    = TensorDataset(parameters, scores)
+        
+        # Implement score scaling
+        min_score, max_score = self.optimizer_state.score_scaling
+        if max_score - min_score == 0:
+            logger.warning("All scores are the same. Skipping score scaling.")
+            scaled_scores = scores
+        else:
+            scaled_scores = (scores - min_score) / (max_score - min_score)
+        
+        dataset    = TensorDataset(parameters, scaled_scores)
 
         # Split data into training and validation sets (80/20 split)
         train_size = int(0.8 * history_length)
@@ -888,7 +915,7 @@ class ParameterOptimizer:
             f"Training completed. Best validation loss: {best_valid_loss:.4f} "
             f"after {epoch} epochs."
         )
-
+    
     @torch.inference_mode()
     def predict_with_uncertainty(self, 
         candidate_tensor : torch.Tensor, 
