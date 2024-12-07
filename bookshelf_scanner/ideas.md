@@ -1,0 +1,4 @@
+- Albumentations for image processing?
+- Concurrent futures for parallel processing of images?
+- Hydra for config?
+- botorch for Bayesian Optimization
