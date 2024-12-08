@@ -1,4 +1,3 @@
-```markdown
 # ConfigOptimizer
 
 The **ConfigOptimizer** module introduces a **meta-learning and Bayesian optimization-inspired approach** to identifying optimal OCR processing configurations. By translating each pipeline configuration into a continuous vector representation and employing a learned model to predict OCR performance, we can efficiently navigate the complex parameter space. This stands in contrast to brute-force or exhaustive search methods, which quickly become infeasible as the number of parameters grows.
