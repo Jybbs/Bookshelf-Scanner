@@ -15,12 +15,14 @@ The system operates in stages:
 
 2. **Preprocessing & Text Extraction**:  
    The `TextExtractor` module applies a series of adjustable image enhancements to these spine images before running OCR:
+
    - **Shadow Removal**: Attempts to correct uneven illumination, often caused by bookshelf shadows or uneven lighting. By normalizing brightness, text stands out more clearly.
    - **Color CLAHE (*Contrast Limited Adaptive Histogram Equalization*)**: Improves local contrast without excessively boosting noise. This is helpful for faint text and subtle color variations.
    - **Brightness/Contrast Adjustments**: Allows fine-tuning of overall image intensity and dynamic range. Underexposed or low-contrast text can become more legible.
    - **Rotation**: Correcting the image orientation ensures text lines are horizontal or vertical, aiding OCR tools in reading characters accurately.
 
    This module can run in:
+   
    - **Interactive Mode**: A graphical interface lets you enable/disable steps (*like shadow removal or CLAHE*) and adjust parameters (*like brightness increments*) on-the-fly. As you tweak values, you immediately see changes reflected in OCR results. This helps understand parameter sensitivity and guides initial parameter guesses.
    - **Headless Mode**: Processes images in batches without a UI, using given parameters or previously found good configurations. Suitable for large-scale or automated runs once you’ve established settings that generally work well.
 
@@ -28,6 +30,7 @@ The system operates in stages:
 
 3. **Parameter Configuration Optimization**:  
    Choosing effective preprocessing parameters can be challenging. The `ConfigOptimizer` helps automate this search:
+
    - **Parameter Space**: Each preprocessing step has parameters (*e.g., kernel sizes for shadow removal, clip limits for CLAHE, brightness offsets, rotation angles*). The combination forms a multi-dimensional parameter space.
    - **Model-Based Search**: Instead of brute-forcing every parameter combination or manually guessing, the optimizer learns a surrogate model that approximates how parameters affect OCR performance.  
    - **Uncertainty Estimation**: It estimates uncertainty in predictions by performing multiple stochastic forward passes (*e.g., with dropout*) to obtain a distribution of predicted OCR quality.  
@@ -48,17 +51,20 @@ Throughout, a `ModuleLogger` system provides consistent, module-specific logging
   Utilizes a trained model to identify bounding boxes around spines. The model’s accuracy and generalization depend on the training data. This step transforms a complex scene into a set of targeted sub-images.
 
 - **Preprocessing Steps Detail**:
+
   - **Shadow Removal**: Involves morphological operations and median filters. For example, a dilate-then-subtract approach can highlight text while minimizing shadow gradients.
   - **CLAHE**: Applied to the luminance channel in a LAB color space, CLAHE avoids global overexposure. Parameters like `clip_limit` control how aggressively contrast is stretched.
   - **Brightness/Contrast**: Simple arithmetic and scaling on pixel intensities. Incrementing brightness shifts intensity upward, while contrast scaling widens or narrows the intensity distribution.
   - **Rotation**: Usually done in multiples of 90°, making it straightforward and lossless. Automatically trying multiple rotations increases the chance of readable text lines.
 
 - **ConfigOptimizer Mechanics**:
+
   - **Surrogate Model**: Gathers data (*parameter sets and resulting OCR scores*) as it goes. With each evaluation, it updates an internal model (*often a neural network*) that predicts OCR performance from parameters.
   - **Sampling with Uncertainty**: By enabling dropout or similar techniques at inference time, the model produces different predictions per pass, approximating a distribution of possible outcomes. This helps gauge which regions of parameter space are well-understood (*low uncertainty*) and which might still hold potential (*high uncertainty*).
   - **UCB Acquisition**: The optimizer picks parameters to try next based on both mean predicted performance and uncertainty. It may try parameter settings in unexplored regions if uncertainty is high, aiming to discover better configurations.
 
 - **Fuzzy Matching**:
+
   - Uses tokenization and character-based similarity metrics to handle OCR's partial errors.
   - Maps extracted strings (*which may be incomplete or slightly misspelled*) to known book titles with a similarity score. Higher scores indicate closer matches.
 
@@ -128,7 +134,8 @@ spines, bboxes, confidences = segmenter.segment(image)
 segmenter.display_segmented_books(spines, confidences)
 ```
 
-**What This Does**:  
+**What This Does**: 
+
 - Detects each spine and crops it out as a separate image in `spines`.  
 - Provides bounding boxes `bboxes` and detection `confidences`.  
 - After this step, you have a list of spine images ready for preprocessing and OCR.
@@ -174,7 +181,8 @@ extractor.initialize_processing_steps(config_override = config_override)
 extractor.run_headless_mode(image_files = image_files)
 ```
 
-**What This Does**:  
+**What This Does**: 
+
 - Preprocesses each spine image to improve OCR accuracy.
 - Extracts text using EasyOCR.
 - (*Interactive mode*) Lets you visually refine parameters.
@@ -193,7 +201,8 @@ config_optimizer = ConfigOptimizer(extractor = extractor)
 optimal_params = config_optimizer.optimize(image_files = image_files)
 ```
 
-**How It Works**:  
+**What This Does**: 
+
 - Instead of manually guessing parameters or relying on trial-and-error, this optimizer leverages a learned model.
 - It performs multiple stochastic forward passes to estimate mean and variance of OCR performance, using them to choose new parameter sets that balance exploration (*trying new parameter regions*) and exploitation (*focusing on known good parameter areas*).
 - Over several iterations, it converges to high-quality parameters with fewer evaluations than brute-force searching.
@@ -213,6 +222,7 @@ matcher.match_books()
 ```
 
 **What This Does**:  
+
 - Takes the extracted text (*from OCR*) and queries a local DuckDB database of known book titles.
 - Uses fuzzy string matching to accommodate OCR noise, partial strings, or different word orders.
 - Outputs a ranked list of likely book matches for each extracted text snippet, aiding in automatically cataloging bookshelves.
@@ -222,6 +232,7 @@ matcher.match_books()
 ## Additional Documentation
 
 - [Spine Segmentation](./bookshelf_scanner/core/book_segmenter/README.md)
+
 - [Text Extraction (TextExtractor)](./bookshelf_scanner/core/text_extractor/README.md)
 - [Configuration Optimization (ConfigOptimizer)](./bookshelf_scanner/core/config_optimizer/README.md)
 - [Fuzzy Matching (FuzzyMatcher)](./bookshelf_scanner/core/fuzzy_matcher/README.md)
