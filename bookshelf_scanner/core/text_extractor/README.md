@@ -112,11 +112,9 @@ This output is suitable for further analysis, record-keeping, or integration wit
 ```python
 from bookshelf_scanner import TextExtractor
 
-extractor = TextExtractor(
-    gpu_enabled = True  # Utilize GPU if available for faster OCR
-)
+extractor = TextExtractor(headless = False)
 
-image_files = extractor.find_image_files(subdirectory='Books')
+image_files = extractor.find_image_files(subdirectory = 'Books')
 extractor.interactive_mode(image_files = image_files)
 ```
 
@@ -132,12 +130,11 @@ from bookshelf_scanner import TextExtractor
 
 extractor = TextExtractor(
     headless     = True,
-    gpu_enabled  = True,
     output_json  = True,
     output_file  = Path('custom_output.json')
 )
 
-image_files = extractor.find_image_files(subdirectory='Books')
+image_files = extractor.find_image_files(subdirectory = 'Books')
 extractor.run_headless_mode(image_files = image_files)
 ```
 

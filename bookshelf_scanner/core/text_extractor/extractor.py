@@ -277,7 +277,6 @@ class TextExtractor:
         self,
         allowed_formats : set[str] | None = None,
         config_file     : Path | None     = None,
-        gpu_enabled     : bool            = False,
         headless        : bool            = False,
         output_file     : Path | None     = None,
         output_json     : bool            = False,
@@ -289,7 +288,6 @@ class TextExtractor:
         Args:
             allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
             config_file     : Optional custom path to config.yml
-            gpu_enabled     : Whether to use GPU for OCR processing
             headless        : Whether to run in headless mode
             output_file     : Path to save resultant strings from OCR processing
             output_json     : Whether to output OCR results to JSON file
@@ -319,12 +317,8 @@ class TextExtractor:
 
         # Store easyocr configuration for easier access
         self.easyocr_config = self.config_state.config_dict["easyocr"]
-        device_type         = self.easyocr_config["device_type"]
-        gpu_enabled         = self.easyocr_config["gpu_enabled"]
         language_list       = self.easyocr_config["language_list"]
-
-        use_gpu     = (device_type == "cuda" and gpu_enabled == True)
-        self.reader = Reader(language_list, gpu = use_gpu)
+        self.reader         = Reader(language_list, gpu = True)
 
     # -------------------- Headless Mode Operations --------------------
 
