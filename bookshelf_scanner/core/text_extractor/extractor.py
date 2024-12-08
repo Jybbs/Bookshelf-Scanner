@@ -52,60 +52,16 @@ class ConfigState:
     Used as a cache key for consistent image processing results.
     """
     config_dict    : dict = field(compare = False, hash = False)
-    config_str     : str
+    config_tuple   : tuple
     param_key_map  : dict[str, tuple[str, str, bool]] = field(compare = False, hash = False)
     step_index_map : dict[int, str]                   = field(compare = False, hash = False)
-
-    @classmethod
-    def from_config(cls, config: Any) -> 'ConfigState':
-        """
-        Convert the OmegaConf config into a stable structure, storing both
-        a hashable string and the direct dictionary for easy access.
-
-        Args:
-            config : The OmegaConf config object.
-
-        Returns:
-            ConfigState: Immutable state instance.
-        """
-        config_dict = OmegaConf.to_container(config, resolve=True)
-        return cls.from_dict(config_dict = config_dict)
-
-    @classmethod
-    def from_dict(cls, config_dict: dict) -> 'ConfigState':
-        """
-        Creates a ConfigState instance directly from a configuration dictionary.
-
-        Args:
-            config_dict: A dictionary representing the configuration.
-
-        Returns:
-            ConfigState: Immutable state instance created from the given dictionary.
-        """
-        config_str     = json.dumps(config_dict)
-        step_index_map = {i+1: step_name for i, step_name in enumerate(config_dict["steps"].keys())}
-        param_key_map  = {}
-
-        for step_name, step_definition in config_dict["steps"].items():
-            if "parameters" in step_definition and step_definition["parameters"] is not None:
-                for param_name, param_definition in step_definition["parameters"].items():
-                    inc_key = param_definition["increase_key"]
-                    param_key_map[inc_key]         = (step_name, param_name, True)
-                    param_key_map[inc_key.lower()] = (step_name, param_name, False)
-
-        return cls(
-            config_dict    = config_dict,
-            config_str     = config_str,
-            param_key_map  = param_key_map,
-            step_index_map = step_index_map
-        )
 
     def adjust_parameter(self, key_char: str) -> tuple['ConfigState', str | None]:
         """
         Returns a new ConfigState with the specified parameter adjusted, if applicable.
 
         Args:
-            key_char : The character representing the key pressed
+            key_char: The character representing the key pressed
 
         Returns:
             tuple: (new ConfigState, action description or None)
@@ -136,12 +92,78 @@ class ConfigState:
         action      = f"{action_type} '{param_definition['display_name']}' from {old_value} to {param_definition['value']}"
         return new_state, action
 
+    def convert_to_hashable_tuple(self, value: Any) -> Any:
+        """
+        Converts a nested dictionary/list structure into a nested tuple structure
+        that is deterministic and hashable, ensuring that ConfigState instances
+        can serve as stable cache keys.
+
+        Args:
+            value: The input data (dict, list, or primitive) to convert.
+
+        Returns:
+            A hashable tuple-based structure representing the input value.
+        """
+        if isinstance(value, dict):
+            return tuple(sorted((k, self.convert_to_hashable_tuple(v)) for k, v in value.items()))
+        elif isinstance(value, list):
+            return tuple(self.convert_to_hashable_tuple(x) for x in value)
+        return value
+
+    @classmethod
+    def from_config(cls, config: Any) -> 'ConfigState':
+        """
+        Convert the OmegaConf config into a stable structure, storing both
+        a hashable tuple and the direct dictionary for easy access.
+
+        Args:
+            config : The OmegaConf config object.
+
+        Returns:
+            ConfigState: Immutable state instance.
+        """
+        config_dict = OmegaConf.to_container(config, resolve=True)
+        return cls.from_dict(config_dict = config_dict)
+
+    @classmethod
+    def from_dict(cls, config_dict: dict) -> 'ConfigState':
+        """
+        Creates a ConfigState instance directly from a configuration dictionary.
+
+        Args:
+            config_dict: A dictionary representing the configuration.
+
+        Returns:
+            ConfigState: Immutable state instance created from the given dictionary.
+        """
+        # We remove JSON serialization entirely and rely on a stable hashable tuple structure.
+        # Create a temporary instance to call convert_to_hashable_tuple for hashing:
+        temp = object.__new__(cls)
+        tuple_representation = cls.convert_to_hashable_tuple(temp, config_dict)
+
+        step_index_map = {i+1: step_name for i, step_name in enumerate(config_dict["steps"].keys())}
+        param_key_map  = {}
+
+        for step_name, step_definition in config_dict["steps"].items():
+            if "parameters" in step_definition and step_definition["parameters"] is not None:
+                for param_name, param_definition in step_definition["parameters"].items():
+                    inc_key = param_definition["increase_key"]
+                    param_key_map[inc_key]         = (step_name, param_name, True)
+                    param_key_map[inc_key.lower()] = (step_name, param_name, False)
+
+        return cls(
+            config_dict    = config_dict,
+            config_tuple   = tuple_representation,
+            param_key_map  = param_key_map,
+            step_index_map = step_index_map
+        )
+
     def toggle_step_enabled(self, step_index: int) -> tuple['ConfigState', str]:
         """
         Returns a new ConfigState with the enabled state of the specified step toggled.
 
         Args:
-            step_index : Index of the step (1-based)
+            step_index: Index of the step (1-based)
 
         Returns:
             tuple: (new ConfigState, action description)
@@ -158,6 +180,9 @@ class ConfigState:
         step_definition = new_state.config_dict["steps"][step_name]
         action          = f"'{step_definition['display_name']}' {'Enabled' if step_definition['enabled'] else 'Disabled'}"
         return new_state, action
+
+    def __hash__(self):
+        return hash(self.config_tuple)
 
 # -------------------- Processing Functions --------------------
 
