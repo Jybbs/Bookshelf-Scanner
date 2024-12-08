@@ -3,14 +3,15 @@ import numpy    as np
 import torch
 import torch.nn as nn
 
+from bookshelf_scanner   import ModuleLogger, TextExtractor, Utils
 from collections         import defaultdict
 from dataclasses         import dataclass
+from omegaconf           import OmegaConf
 from pathlib             import Path
 from torch.nn.functional import mse_loss
 from torch.utils.data    import DataLoader, random_split, TensorDataset
 from typing              import Any
 
-from bookshelf_scanner   import ModuleLogger, TextExtractor, Utils
 logger = ModuleLogger('optimizer')()
 
 # -------------------- Neural Network Components --------------------
@@ -23,13 +24,18 @@ class ConfigEncoder(nn.Module):
     and their associated parameters. It captures essential features that influence OCR performance.
     The architecture consists of two linear layers with ReLU activations and dropout for regularization.
     """
-    def __init__(self, input_dimension: int, latent_dimension: int = 64):
+    def __init__(
+        self, 
+        input_dimension    : int, 
+        latent_dimension   : int = 64, 
+        encoder_hidden_dim : int = 128
+    ):
         super().__init__()
         self.network = nn.Sequential(
-            nn.Linear(input_dimension, 128),
+            nn.Linear(input_dimension, encoder_hidden_dim),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(128, latent_dimension),
+            nn.Linear(encoder_hidden_dim, latent_dimension),
             nn.ReLU()
         )
 
@@ -44,16 +50,21 @@ class PerformancePredictor(nn.Module):
     by the ConfigEncoder. It uses a series of linear layers with ReLU activations and dropout,
     culminating in an output layer without activation to allow unrestricted score ranges.
     """
-    def __init__(self, latent_dimension: int = 64):
+    def __init__(
+        self, 
+        latent_dimension       : int = 64, 
+        predictor_hidden_dim_1 : int = 128, 
+        predictor_hidden_dim_2 : int = 64
+    ):
         super().__init__()
         self.network = nn.Sequential(
-            nn.Linear(latent_dimension, 128),
+            nn.Linear(latent_dimension, predictor_hidden_dim_1),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(128, 64),
+            nn.Linear(predictor_hidden_dim_1, predictor_hidden_dim_2),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Linear(64, 1)
+            nn.Linear(predictor_hidden_dim_2, 1)
         )
         
     def forward(self, latent_representation: torch.Tensor) -> torch.Tensor:
@@ -67,10 +78,17 @@ class MetaLearningModel(nn.Module):
     into latent vectors and predicts their corresponding OCR performance scores.
     The modular design allows for separate training and fine-tuning of the encoder and predictor.
     """
-    def __init__(self, input_dimension: int, latent_dimension: int = 64):
+    def __init__(
+        self,
+        input_dimension        : int,
+        latent_dimension       : int = 64,
+        encoder_hidden_dim     : int = 128,
+        predictor_hidden_dim_1 : int = 128,
+        predictor_hidden_dim_2 : int = 64
+    ):
         super().__init__()
-        self.config_encoder        = ConfigEncoder(input_dimension, latent_dimension)
-        self.performance_predictor = PerformancePredictor(latent_dimension)
+        self.config_encoder        = ConfigEncoder(input_dimension, latent_dimension, encoder_hidden_dim)
+        self.performance_predictor = PerformancePredictor(latent_dimension, predictor_hidden_dim_1, predictor_hidden_dim_2)
         
     def forward(self, config_vector: torch.Tensor):
         latent_representation = self.config_encoder(config_vector)
@@ -270,21 +288,10 @@ class ConfigOptimizer:
     Coordinates meta-learning guided configuration optimization for OCR.
     
     This optimizer leverages historical optimization data to suggest and refine
-    configurations (composed of steps and their parameters) that maximize OCR performance.
-    It manages the meta-learning model, clusters configurations, and handles training and persistence.
+    configurations that maximize OCR performance. It manages the meta-learning model,
+    clusters configurations, and handles training and persistence.
 
-    Attributes:
-        extractor               : Instance of TextExtractor being optimized.
-        device_type             : Computation device ('cpu' or 'cuda').
-        initial_points_count    : Number of initial configuration suggestions.
-        iteration_count         : Number of refinement iterations per image.
-        training_batch_size     : Batch size for training the meta-learning model.
-        learning_rate_value     : Learning rate for the optimizer.
-        config_space_boundaries : Definitions of configuration ranges.
-        optimizer_state         : Instance of MetaLearningState.
-        model_optimizer         : Optimizer for training the meta-learning model.
-        learning_rate_scheduler : Learning rate scheduler.
-        optimization_results    : Dictionary to store optimization results.
+    All parameters are now loaded from a YAML file using OmegaConf.
     """
 
     # -------------------- Project & File Directories --------------------
@@ -292,50 +299,56 @@ class ConfigOptimizer:
     RESULTS_DIRECTORY      = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'data' / 'results'
     MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'core' / 'config_optimizer' / 'models'
     OUTPUT_JSON_FILE       = RESULTS_DIRECTORY / 'optimizer.json'
+    PARAMS_FILE            = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'config' / 'optimizer.yml'
     MODEL_PYTORCH_FILE     = MODEL_DIRECTORY / 'meta_learner.pt'
 
-    # -------------------- Initialization & Setup --------------------
-    
-    def __init__(
-        self,
-        extractor                  : TextExtractor,
-        cluster_distance_threshold : float = 2.0,
-        device_type                : str   = 'cuda' if torch.cuda.is_available() else 'cpu',
-        initial_points_count       : int   = 10,
-        iteration_count            : int   = 40,
-        learning_rate_value        : float = 1e-3,
-        training_batch_size        : int   = 16,
-        training_buffer_size       : int   = 30,
-        ucb_beta                   : float = 0.1,
-    ):
+    def __init__(self, extractor: TextExtractor):
         """
-        Initializes the ConfigOptimizer.
+        Initializes the ConfigOptimizer, loading all configuration parameters from optimizer.yml.
 
         Args:
-            extractor                  : TextExtractor instance to optimize (required).
-            cluster_distance_threshold : Distance threshold for clustering latent representations of configs.
-            device_type                : Device for computations ('cpu' or 'cuda').
-            initial_points_count       : Number of initial configuration suggestions.
-            iteration_count            : Number of refinement steps per image.
-            learning_rate_value        : Learning rate for the optimizer.
-            training_batch_size        : Batch size for training.
-            training_buffer_size       : Number of samples to accumulate before training the model.
-            ucb_beta                   : Exploration parameter for Upper Confidence Bound (UCB) acquisition.
+            extractor: TextExtractor instance to optimize (required).
         """
-        self.extractor                  = extractor
-        self.cluster_distance_threshold = cluster_distance_threshold
-        self.device_type                = device_type
-        self.initial_points_count       = initial_points_count
-        self.iteration_count            = iteration_count
-        self.learning_rate_value        = learning_rate_value
-        self.training_batch_size        = training_batch_size
-        self.training_buffer_size       = training_buffer_size
-        self.ucb_beta                   = ucb_beta
+        # Load configuration from YAML file
+        config = OmegaConf.load(self.PARAMS_FILE)
+
+        # Optimization parameters
+        self.extractor                      = extractor
+        self.cluster_distance_threshold     = config.optimization.cluster_distance_threshold
+        self.device_type                    = config.optimization.device_type
+        self.initial_points_count           = config.optimization.initial_points_count
+        self.iteration_count                = config.optimization.iteration_count
+        self.learning_rate_value            = config.optimization.learning_rate_value
+        self.training_batch_size            = config.optimization.training_batch_size
+        self.training_buffer_size           = config.optimization.training_buffer_size
+        self.ucb_beta                       = config.optimization.ucb_beta
+        self.initial_suggestion_noise_scale = config.optimization.initial_suggestion_noise_scale
+        self.refinement_noise_scale         = config.optimization.refinement_noise_scale
+        self.refinement_candidate_count     = config.optimization.refinement_candidate_count
+
+        # Training parameters
+        self.max_epochs                     = config.training.max_epochs
+        self.diversity_weight               = config.training.diversity_weight
+        self.grad_clip_norm                 = config.training.grad_clip_norm
+        self.min_improvement                = config.training.min_improvement
+        self.early_stopping_patience        = config.training.early_stopping_patience
+        self.lr_scheduler_factor            = config.training.lr_scheduler_factor
+        self.lr_scheduler_patience          = config.training.lr_scheduler_patience
+        self.train_valid_split_ratio        = config.training.train_valid_split_ratio
+
+        # Architecture parameters
+        self.latent_dimension               = config.architecture.latent_dimension
+        self.encoder_hidden_dim             = config.architecture.encoder_hidden_dim
+        self.predictor_hidden_dim_1         = config.architecture.predictor_hidden_dim_1
+        self.predictor_hidden_dim_2         = config.architecture.predictor_hidden_dim_2
+
+        # Uncertainty parameters
+        self.uncertainty_num_samples        = config.uncertainty.uncertainty_num_samples
 
         # Ensure extractor config_state is initialized
         self.extractor.initialize_processing_steps()
         
-        # Extract configuration space (ranges and types of each parameter within steps)
+        # Extract configuration space
         self.config_space_boundaries = self.extract_config_space()
         
         input_dimension      = len(self.config_space_boundaries)
@@ -350,8 +363,8 @@ class ConfigOptimizer:
         )
         self.learning_rate_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             self.model_optimizer, 
-            factor   = 0.5, 
-            patience = 5
+            factor   = self.lr_scheduler_factor, 
+            patience = self.lr_scheduler_patience
         )
         
         self.optimization_results = {}
@@ -364,7 +377,7 @@ class ConfigOptimizer:
 
     def initialize_meta_learning_model(self, input_dimension: int) -> MetaLearningModel:
         """
-        Initializes the MetaLearningModel with the given input dimension (size of config vector).
+        Initializes the MetaLearningModel with the given input dimension and architecture parameters.
 
         Args:
             input_dimension: The dimension of the configuration vector.
@@ -372,7 +385,13 @@ class ConfigOptimizer:
         Returns:
             An instance of MetaLearningModel.
         """
-        return MetaLearningModel(input_dimension).to(self.device_type)
+        return MetaLearningModel(
+            input_dimension,
+            latent_dimension       = self.latent_dimension,
+            encoder_hidden_dim     = self.encoder_hidden_dim,
+            predictor_hidden_dim_1 = self.predictor_hidden_dim_1,
+            predictor_hidden_dim_2 = self.predictor_hidden_dim_2
+        ).to(self.device_type)
 
     # -------------------- Configuration Space & Conversion --------------------
 
@@ -567,7 +586,7 @@ class ConfigOptimizer:
             best_config_vector = suggested_configs[0]
             needed = self.initial_points_count - len(suggested_configs)
             for _ in range(needed):
-                noise = torch.randn_like(best_config_vector) * 0.1
+                noise = torch.randn_like(best_config_vector) * self.initial_suggestion_noise_scale
                 suggested_configs.append(torch.clamp(best_config_vector + noise, 0, 1))
         else:
             # If no existing suggestions, generate purely random configuration vectors
@@ -587,8 +606,7 @@ class ConfigOptimizer:
         Assigns configuration vectors to latent clusters in the learned latent space.
         
         Encodes the configuration vector to a latent space, then assigns it to the nearest cluster or
-        creates a new cluster if no close match exists. This helps structure the explored
-        configuration space, aiding future suggestions.
+        creates a new cluster if no close match exists.
         
         Args:
             config_vector     : Configuration vector.
@@ -659,7 +677,7 @@ class ConfigOptimizer:
             image_path    = image_path,
             config_vector = torch.zeros(len(self.config_space_boundaries)).to(self.device_type),
             score         = -float('inf'),
-            latent_vector = torch.zeros(64).to(self.device_type),
+            latent_vector = torch.zeros(self.latent_dimension).to(self.device_type),
             ocr_results   = []
         )
 
@@ -679,7 +697,7 @@ class ConfigOptimizer:
             config_override = self.vector_to_config_dictionary(config_vector)
             self.extractor.initialize_processing_steps(config_override = config_override)
             
-            # Perform OCR and evaluate performance (longer text, repeated multiple times = higher score)
+            # Perform OCR and evaluate performance
             ocr_results_raw = self.extractor.perform_ocr_headless([image_path])
             ocr_results     = ocr_results_raw.get(image_path.name, [])
             performance_score = sum(len(text) * count for text, count in ocr_results)
@@ -729,19 +747,19 @@ class ConfigOptimizer:
             candidate_config_vectors = [
                 torch.clamp(
                     best_record.config_vector + torch.randn_like(best_record.config_vector) *
-                    (1.0 - iteration / self.iteration_count) * 0.1,
+                    (1.0 - iteration / self.iteration_count) * self.refinement_noise_scale,
                     min = 0,
                     max = 1
-                ) for _ in range(10)
+                ) for _ in range(self.refinement_candidate_count)
             ]
 
             candidate_tensor = torch.stack(candidate_config_vectors).to(self.device_type)
-            means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples = 10)
+            means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples = self.uncertainty_num_samples)
 
             # Use UCB to pick the candidate balancing exploitation (mean) and exploration (std)
-            ucb_values              = means + self.ucb_beta * stds
-            best_candidate_index    = ucb_values.argmax()
-            chosen_config_vector    = candidate_config_vectors[best_candidate_index]
+            ucb_values           = means + self.ucb_beta * stds
+            best_candidate_index = ucb_values.argmax()
+            chosen_config_vector = candidate_config_vectors[best_candidate_index]
 
             chosen_record = evaluate_config_vector(chosen_config_vector)
 
@@ -824,8 +842,8 @@ class ConfigOptimizer:
         
         dataset = TensorDataset(config_vectors, scaled_scores)
 
-        # Split dataset into training and validation sets (80/20)
-        train_size = int(0.8 * history_length)
+        # Split dataset into training and validation sets
+        train_size = int(self.train_valid_split_ratio * history_length)
         valid_size = history_length - train_size
         train_dataset, valid_dataset = random_split(dataset, [train_size, valid_size])
 
@@ -843,18 +861,12 @@ class ConfigOptimizer:
             pin_memory = True if self.device_type == 'cuda' else False
         )
 
-        # Training parameters
         best_valid_loss  = float('inf')
-        patience         = 5
         patience_counter = 0
-        max_epochs       = 100
-        diversity_weight = 0.1
-        grad_clip_norm   = 1.0
-        min_improvement  = 1e-4
 
         self.optimizer_state.model.train()
 
-        for epoch in range(1, max_epochs + 1):
+        for epoch in range(1, self.max_epochs + 1):
             train_loss = 0.0
             for batch_configs, batch_scores in train_loader:
                 batch_configs = batch_configs.to(self.device_type)
@@ -872,7 +884,7 @@ class ConfigOptimizer:
                 if batch_configs.size(0) > 1:
                     pairwise_distances = torch.pdist(latent_representations)
                     diversity_loss     = -pairwise_distances.mean()
-                    total_loss         = prediction_loss + diversity_weight * diversity_loss
+                    total_loss         = prediction_loss + self.diversity_weight * diversity_loss
                 else:
                     total_loss = prediction_loss
 
@@ -880,7 +892,7 @@ class ConfigOptimizer:
                 total_loss.backward()
                 torch.nn.utils.clip_grad_norm_(
                     self.optimizer_state.model.parameters(),
-                    max_norm = grad_clip_norm
+                    max_norm = self.grad_clip_norm
                 )
                 self.model_optimizer.step()
 
@@ -907,7 +919,7 @@ class ConfigOptimizer:
             )
 
             # Early stopping logic
-            if average_valid_loss < best_valid_loss - min_improvement:
+            if average_valid_loss < best_valid_loss - self.min_improvement:
                 best_valid_loss  = average_valid_loss
                 patience_counter = 0
                 logger.info(f"Epoch {epoch}: New best validation loss: {best_valid_loss:.4f}")
@@ -916,7 +928,7 @@ class ConfigOptimizer:
             
             self.learning_rate_scheduler.step(average_valid_loss)
             
-            if patience_counter >= patience:
+            if patience_counter >= self.early_stopping_patience:
                 logger.info(
                     f"Early stopping triggered after {epoch} epochs. "
                     f"Best validation loss: {best_valid_loss:.4f}"
@@ -936,7 +948,7 @@ class ConfigOptimizer:
     def predict_with_uncertainty(
         self, 
         candidate_tensor : torch.Tensor, 
-        num_samples      : int = 10
+        num_samples      : int
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Estimates predictive uncertainty by performing multiple stochastic forward passes
@@ -944,7 +956,7 @@ class ConfigOptimizer:
         
         Args:
             candidate_tensor : A batch of configuration vectors to evaluate.
-            num_samples      : Number of forward passes to approximate uncertainty. Default is 10.
+            num_samples      : Number of forward passes to approximate uncertainty.
 
         Returns:
             (means, stds): Tensors containing the mean and standard deviation of predicted scores

@@ -1,13 +1,13 @@
 import duckdb
 import json
 
-from dataclasses import dataclass
-from functools   import cache
-from pathlib     import Path
-from rapidfuzz   import fuzz, process, utils as fuzz_utils
-from typing      import Any, NamedTuple
-
 from bookshelf_scanner import ModuleLogger, Utils
+from dataclasses       import dataclass
+from functools         import cache
+from pathlib           import Path
+from rapidfuzz         import fuzz, process, utils as fuzz_utils
+from typing            import Any, NamedTuple
+
 logger = ModuleLogger('matcher')()
 
 class BookRecord(NamedTuple):

@@ -2,16 +2,16 @@ import cv2
 import json
 import numpy as np
 
-from copy        import deepcopy
-from dataclasses import dataclass, field
-from easyocr     import Reader
-from functools   import cache
-from omegaconf   import OmegaConf
-from pathlib     import Path
-from PIL         import Image, ImageDraw, ImageFont
-from typing      import Any
-
 from bookshelf_scanner import ModuleLogger, Utils
+from copy              import deepcopy
+from dataclasses       import dataclass, field
+from easyocr           import Reader
+from functools         import cache
+from omegaconf         import OmegaConf
+from pathlib           import Path
+from PIL               import Image, ImageDraw, ImageFont
+from typing            import Any
+
 logger = ModuleLogger('extractor')()
 
 # -------------------- Data Classes --------------------
