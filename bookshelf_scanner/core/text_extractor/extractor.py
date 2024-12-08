@@ -2,15 +2,16 @@ import cv2
 import json
 import numpy as np
 
-from dataclasses import dataclass
-from easyocr     import Reader
-from functools   import cache
-from pathlib     import Path
-from PIL         import Image, ImageDraw, ImageFont
-from ruamel.yaml import YAML
-from typing      import Any
-
 from bookshelf_scanner import ModuleLogger, Utils
+from copy              import deepcopy
+from dataclasses       import dataclass, field
+from easyocr           import Reader
+from functools         import cache
+from omegaconf         import OmegaConf
+from pathlib           import Path
+from PIL               import Image, ImageDraw, ImageFont
+from typing            import Any
+
 logger = ModuleLogger('extractor')()
 
 # -------------------- Data Classes --------------------
@@ -22,10 +23,10 @@ class DisplayState:
     """
     image_idx     : int = 0      # Index of the current image
     image_name    : str = ''     # Name of the current image
-    window_height : int = 800    # Window height in pixels
     new_image     : bool = True  # Flag to indicate if the current image is new
+    window_height : int = 800    # Window height in pixels
 
-    def advance_to_next_image(self, total_images: int) -> None:
+    def advance_to_next_image(self, total_images: int):
         """
         Cycle to the next image and mark it as new.
         """
@@ -44,203 +45,182 @@ class DisplayState:
             return True
         return False
 
-@dataclass
-class Parameter:
-    """
-    Defines an adjustable parameter for image processing.
-    """
-    name          : str                          # Internal name of the parameter
-    display_name  : str                          # Name to display in the UI
-    value         : int | float                  # Current value of the parameter
-    increase_key  : str                          # Key to increase the parameter
-    min           : int | float | None = None    # Minimum value of the parameter
-    max           : int | float | None = None    # Maximum value of the parameter
-    step          : int | float | None = None    # Step size for incrementing/decrementing the parameter
-
-    @property
-    def decrease_key(self) -> str:
-        """
-        Returns the key to decrease the parameter.
-        """
-        return self.increase_key.lower()
-
-    @property
-    def formatted_value(self) -> str:
-        """
-        Returns the value formatted as a string for display.
-        """
-        return f"{self.value:.2f}" if isinstance(self.value, float) else str(self.value)
-
-    def adjust(self, increase: bool) -> int | float:
-        """
-        Adjusts the parameter value based on direction.
-
-        Args:
-            increase : True to increase the value, False to decrease
-
-        Returns:
-            Previous value before adjustment
-        """
-        old_value = self.value
-        delta     = self.step if increase else -self.step
-        new_value = self.value + delta
-
-        if isinstance(self.value, float):
-            self.value = round(max(self.min, min(new_value, self.max)), 2)
-        else:
-            self.value = max(self.min, min(new_value, self.max))
-
-        return old_value
-
-@dataclass
-class ProcessingStep:
-    """
-    Groups related parameters and processing logic.
-    """
-    name          : str                # Internal name of the processing step
-    display_name  : str                # Name to display in the UI
-    toggle_key    : str                # Key to toggle this processing step
-    parameters    : list[Parameter]    # List of parameter instances
-    is_enabled    : bool = False       # Whether the step is enabled
-    is_pipeline   : bool = True        # Whether this step performs image processing
-
-    def toggle_enabled_state(self) -> str:
-        """
-        Toggles the enabled state of the processing step.
-
-        Returns:
-            Description of the action taken
-        """
-        self.is_enabled = not self.is_enabled
-        return f"'{self.display_name}' {'Enabled' if self.is_enabled else 'Disabled'}"
-
-    def adjust_parameter(self, key_char: str) -> str | None:
-        """
-        Adjusts parameter value based on key press.
-
-        Args:
-            key_char : The character representing the key pressed
-
-        Returns:
-            Action description string or None if no action taken
-        """
-        for param in self.parameters:
-            if key_char in (param.increase_key, param.decrease_key):
-                increase    = key_char == param.increase_key
-                old_value   = param.adjust(increase)
-                action_type = 'Increased' if increase else 'Decreased'
-                return f"{action_type} '{param.display_name}' from {old_value} to {param.value}"
-        return None
-
-# -------------------- ProcessingState Class --------------------
-
 @dataclass(frozen = True)
-class ProcessingState:
+class ConfigState:
     """
     Immutable state representing all processing parameters for an image.
     Used as a cache key for consistent image processing results.
     """
-    steps       : tuple[tuple[str, bool, tuple[Any, ...]], ...]
-    ocr_enabled : bool
+    config_dict    : dict = field(compare = False, hash = False)
+    config_tuple   : tuple
+    param_key_map  : dict[str, tuple[str, str, bool]] = field(compare = False, hash = False)
+    step_index_map : dict[int, str]                   = field(compare = False, hash = False)
 
-    @classmethod
-    def from_processing_steps(cls, steps: list[ProcessingStep]) -> 'ProcessingState':
+    def adjust_parameter(self, key_char: str) -> tuple['ConfigState', str | None]:
         """
-        Creates an immutable ProcessingState from a list of ProcessingSteps.
-        Only includes enabled steps and their parameters, with consistent ordering
-        for reliable caching.
+        Returns a new ConfigState with the specified parameter adjusted, if applicable.
 
         Args:
-            steps: List of ProcessingStep instances to convert
+            key_char: The character representing the key pressed
 
         Returns:
-            ProcessingState: Immutable state instance containing enabled steps and their parameters
+            tuple: (new ConfigState, action description or None)
         """
-        state_steps = tuple(
-            (
-                step.name,
-                step.is_enabled,
-                tuple(sorted(
-                    (param.name, param.value)
-                    for param in sorted(step.parameters, key=lambda p: p.name)
-                ))
+        match = self.param_key_map.get(key_char)
+        if not match:
+            return self, None
+
+        step_name, param_name, increase = match
+        new_dict = deepcopy(self.config_dict)
+
+        param_definition = new_dict["steps"][step_name]["parameters"][param_name]
+        old_value        = param_definition["value"]
+        delta            = param_definition["step"] if increase else -param_definition["step"]
+        new_value        = old_value + delta
+
+        if isinstance(old_value, float):
+            new_value = round(
+                max(param_definition["min"], min(new_value, param_definition["max"])), 
+                2
             )
-            for step in sorted(steps, key=lambda s: s.name)
-            if step.is_enabled and step.is_pipeline
+        else:
+            new_value = max(param_definition["min"], min(new_value, param_definition["max"]))
+
+        param_definition["value"] = new_value
+        new_state   = ConfigState.from_dict(config_dict = new_dict)
+        action_type = 'Increased' if increase else 'Decreased'
+        action      = f"{action_type} '{param_definition['display_name']}' from {old_value} to {param_definition['value']}"
+        return new_state, action
+
+    def convert_to_hashable_tuple(self, value: Any) -> Any:
+        """
+        Converts a nested dictionary/list structure into a nested tuple structure
+        that is deterministic and hashable, ensuring that ConfigState instances
+        can serve as stable cache keys.
+
+        Args:
+            value: The input data (dict, list, or primitive) to convert.
+
+        Returns:
+            A hashable tuple-based structure representing the input value.
+        """
+        if isinstance(value, dict):
+            return tuple(sorted((k, self.convert_to_hashable_tuple(v)) for k, v in value.items()))
+        elif isinstance(value, list):
+            return tuple(self.convert_to_hashable_tuple(x) for x in value)
+        return value
+
+    @classmethod
+    def from_config(cls, config: Any) -> 'ConfigState':
+        """
+        Convert the OmegaConf config into a stable structure, storing both
+        a hashable tuple and the direct dictionary for easy access.
+
+        Args:
+            config : The OmegaConf config object.
+
+        Returns:
+            ConfigState: Immutable state instance.
+        """
+        config_dict = OmegaConf.to_container(config, resolve=True)
+        return cls.from_dict(config_dict = config_dict)
+
+    @classmethod
+    def from_dict(cls, config_dict: dict) -> 'ConfigState':
+        """
+        Creates a ConfigState instance directly from a configuration dictionary.
+
+        Args:
+            config_dict: A dictionary representing the configuration.
+
+        Returns:
+            ConfigState: Immutable state instance created from the given dictionary.
+        """
+        # We remove JSON serialization entirely and rely on a stable hashable tuple structure.
+        # Create a temporary instance to call convert_to_hashable_tuple for hashing:
+        temp = object.__new__(cls)
+        tuple_representation = cls.convert_to_hashable_tuple(temp, config_dict)
+
+        step_index_map = {i+1: step_name for i, step_name in enumerate(config_dict["steps"].keys())}
+        param_key_map  = {}
+
+        for step_name, step_definition in config_dict["steps"].items():
+            if "parameters" in step_definition and step_definition["parameters"] is not None:
+                for param_name, param_definition in step_definition["parameters"].items():
+                    inc_key = param_definition["increase_key"]
+                    param_key_map[inc_key]         = (step_name, param_name, True)
+                    param_key_map[inc_key.lower()] = (step_name, param_name, False)
+
+        return cls(
+            config_dict    = config_dict,
+            config_tuple   = tuple_representation,
+            param_key_map  = param_key_map,
+            step_index_map = step_index_map
         )
-        
-        ocr_enabled = any(
-            step.name == 'ocr' and step.is_enabled 
-            for step in steps
-        )
-        
-        return cls(steps = state_steps, ocr_enabled = ocr_enabled)
+
+    def toggle_step_enabled(self, step_index: int) -> tuple['ConfigState', str]:
+        """
+        Returns a new ConfigState with the enabled state of the specified step toggled.
+
+        Args:
+            step_index: Index of the step (1-based)
+
+        Returns:
+            tuple: (new ConfigState, action description)
+        """
+        step_name = self.step_index_map.get(step_index)
+        if step_name is None:
+            return self, ""
+
+        new_dict    = deepcopy(self.config_dict)
+        current_val = new_dict["steps"][step_name]["enabled"]
+        new_dict["steps"][step_name]["enabled"] = not current_val
+
+        new_state       = ConfigState.from_dict(config_dict = new_dict)
+        step_definition = new_state.config_dict["steps"][step_name]
+        action          = f"'{step_definition['display_name']}' {'Enabled' if step_definition['enabled'] else 'Disabled'}"
+        return new_state, action
+
+    def __hash__(self):
+        return hash(self.config_tuple)
 
 # -------------------- Processing Functions --------------------
 
-def adjust_brightness(image: np.ndarray, params: dict) -> np.ndarray:
+def adjust_brightness(input_image: np.ndarray, parameters: dict) -> np.ndarray:
     """
     Adjusts the brightness of the image, enhancing text visibility.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'brightness_value'.
-
-    Returns:
-        Brightness-adjusted image.
     """
-    value     = params['brightness_value']
-    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    value     = parameters['brightness_value']['value']
+    hsv_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2HSV)
     hsv_image[:, :, 2] = cv2.add(hsv_image[:, :, 2], value)
     return cv2.cvtColor(hsv_image, cv2.COLOR_HSV2BGR)
 
-def adjust_contrast(image: np.ndarray, params: dict) -> np.ndarray:
+def adjust_contrast(input_image: np.ndarray, parameters: dict) -> np.ndarray:
     """
     Adjusts the contrast of the image to enhance text-background distinction.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'contrast_value'.
-
-    Returns:
-        Contrast-adjusted image.
     """
-    alpha = params['contrast_value']
-    return cv2.convertScaleAbs(image, alpha = alpha, beta = 0)
+    alpha = parameters['contrast_value']['value']
+    return cv2.convertScaleAbs(input_image, alpha = alpha, beta = 0)
 
-def apply_clahe(image: np.ndarray, params: dict) -> np.ndarray:
+def apply_clahe(input_image: np.ndarray, parameters: dict) -> np.ndarray:
     """
     Applies CLAHE to enhance local contrast and reveal text details.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'clahe_clip_limit'.
-
-    Returns:
-        CLAHE-enhanced image.
     """
-    clip_limit = params['clahe_clip_limit']
-    lab_image  = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    clip_limit = parameters['clahe_clip_limit']['value']
+    lab_image  = cv2.cvtColor(input_image, cv2.COLOR_BGR2LAB)
     clahe      = cv2.createCLAHE(clipLimit = clip_limit)
 
     lab_image[:, :, 0] = clahe.apply(lab_image[:, :, 0])
     return cv2.cvtColor(lab_image, cv2.COLOR_LAB2BGR)
 
-def remove_shadow(image: np.ndarray, params: dict) -> np.ndarray:
+def remove_shadow(input_image: np.ndarray, parameters: dict) -> np.ndarray:
     """
-    Removes shadows from the image to improve OCR accuracy.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'shadow_kernel_size' and 'shadow_median_blur'.
-
-    Returns:
-        Shadow-removed image.
+    Removes shadows from the image to improve text isolation.
     """
-    kernel_size = int(params['shadow_kernel_size']) | 1
-    median_blur = int(params['shadow_median_blur']) | 1
+    kernel_size = int(parameters['shadow_kernel_size']['value']) | 1
+    median_blur = int(parameters['shadow_median_blur']['value']) | 1
     kernel      = np.ones((kernel_size, kernel_size), np.uint8)
-    channels    = list(cv2.split(image))
+    channels    = list(cv2.split(input_image))
 
     for i in range(len(channels)):
         dilated     = cv2.dilate(channels[i], kernel)
@@ -250,22 +230,15 @@ def remove_shadow(image: np.ndarray, params: dict) -> np.ndarray:
 
     return cv2.merge(channels)
 
-def rotate_image(image: np.ndarray, params: dict) -> np.ndarray:
+def rotate_image(input_image: np.ndarray, parameters: dict) -> np.ndarray:
     """
     Rotates the image by a specified angle to correct text orientation.
-
-    Args:
-        image : Input image.
-        params: Dictionary containing 'rotation_angle'.
-
-    Returns:
-        Rotated image.
     """
-    angle = params['rotation_angle']
+    angle = parameters['rotation_angle']['value']
     if angle % 360 != 0:
-        k = int(angle / 90) % 4
-        return np.rot90(image, k)
-    return image
+        rotations = int(angle / 90) % 4
+        return np.rot90(input_image, rotations)
+    return input_image
 
 PROCESSING_FUNCTIONS = {
     'image_rotation'        : rotate_image,
@@ -277,18 +250,20 @@ PROCESSING_FUNCTIONS = {
 
 # -------------------- TextExtractor Class --------------------
 
+
 class TextExtractor:
     """
     Handles image processing and text extraction using OCR.
     """
 
     # -------------------- Class Constants --------------------
+
     PROJECT_ROOT    = Utils.find_root('pyproject.toml')
     ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
     DEFAULT_HEIGHT  = 800
     FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
     OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
-    PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'params.yml'
+    PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'extractor.yml'
     UI_COLORS       = {
         'GRAY'  : (200, 200, 200),
         'TEAL'  : (255, 255, 0),
@@ -296,79 +271,109 @@ class TextExtractor:
     }
     WINDOW_NAME     = 'Bookshelf Scanner'
 
-    # -------------------- Initialization Methods --------------------
+    # -------------------- Initialization and Configuration Methods --------------------
 
     def __init__(
         self,
         allowed_formats : set[str] | None = None,
+        config_file     : Path | None     = None,
         gpu_enabled     : bool            = False,
         headless        : bool            = False,
-        output_json     : bool            = False,
         output_file     : Path | None     = None,
-        params_file     : Path | None     = None,
-        window_height   : int             = DEFAULT_HEIGHT,
+        output_json     : bool            = False,
+        window_height   : int             = DEFAULT_HEIGHT
     ):
         """
         Initializes the TextExtractor instance.
 
         Args:
             allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
+            config_file     : Optional custom path to config.yml
             gpu_enabled     : Whether to use GPU for OCR processing
             headless        : Whether to run in headless mode
-            output_json     : Whether to output OCR results to JSON file
             output_file     : Path to save resultant strings from OCR processing
-            params_file     : Optional custom path to params.yml
+            output_json     : Whether to output OCR results to JSON file
             window_height   : Default window height for UI display
         """
         self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
+        self.config_file     = config_file or self.PARAMS_FILE
+        self.config_state    = None
         self.headless        = headless
-        self.output_json     = output_json
         self.output_file     = output_file or self.OUTPUT_FILE
-        self.params_file     = params_file or self.PARAMS_FILE
+        self.output_json     = output_json
         self.reader          = Reader(['en'], gpu=gpu_enabled)
-        self.steps           = []
         self.state           = DisplayState(window_height = window_height) if not headless else None
+
+    def initialize_processing_steps(self, config_override: dict | None = None):
+        """
+        Initializes processing steps with default parameters or overrides.
+        Maintains consistent dictionary structure for ConfigState compatibility.
+
+        Args:
+            config_override: Optional dictionary of step-level overrides matching config structure from YML
+        """
+        base_config = OmegaConf.load(self.config_file)
+        merged_cfg  = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
+        self.config_state = ConfigState.from_config(config = merged_cfg)
+
+    # -------------------- Headless Mode Operations --------------------
+
+    def run_headless_mode(
+        self, 
+        image_files     : list[Path], 
+        config_override : dict | None = None
+    ):
+        """
+        Processes images in headless mode.
+
+        Args:
+            config_override : Optional parameter overrides
+            image_files     : List of image file paths to process
+        """
+        if not image_files:
+            raise ValueError("No image files provided")
+
+        if self.config_state is None or config_override:
+            self.initialize_processing_steps(config_override = config_override)
+
+        results = self.perform_ocr_headless(image_files = image_files)
+
+        if self.output_json:
+            with self.output_file.open('w', encoding = 'utf-8') as f:
+                json.dump(results, f, ensure_ascii = False, indent = 4)
+            logger.info(f"OCR results saved to {self.output_file}")
 
     # -------------------- Image Loading and Preparation --------------------
 
     @staticmethod
-    def load_image(image_path: str) -> np.ndarray:
-        """
-        Loads an image from the specified file path.
-
-        Args:
-            image_path : Path to the image file.
-
-        Returns:
-            Loaded image as a numpy array.
-
-        Raises:
-            FileNotFoundError: If the image cannot be loaded.
-        """
-        image = cv2.imread(image_path)
-        if image is None:
-            raise FileNotFoundError(f"Image not found: {image_path}")
-        return image
-
-    @staticmethod
-    def center_image_in_square(image: np.ndarray) -> np.ndarray:
+    def center_image_in_square(input_image: np.ndarray) -> np.ndarray:
         """
         Centers the image in a square canvas with sides equal to the longest side.
 
         Args:
-            image : Input image.
+            input_image : Input image.
 
         Returns:
             Centered square image.
         """
-        height, width = image.shape[:2]
+        height, width = input_image.shape[:2]
         max_side      = max(height, width)
         canvas        = np.zeros((max_side, max_side, 3), dtype=np.uint8)
         y_offset      = (max_side - height) // 2
         x_offset      = (max_side - width) // 2
 
-        canvas[y_offset:y_offset + height, x_offset:x_offset + width] = image
+        canvas[y_offset:y_offset + height, x_offset:x_offset + width] = input_image
         return canvas
+
+    @staticmethod
+    def load_image(image_path: str) -> np.ndarray:
+        """
+        Loads an image from the specified file path.
+        """
+        image = cv2.imread(image_path)
+        if image is None:
+            raise FileNotFoundError(f"Image not found: {image_path}")
+        return image
 
     def prepare_display_image(self, processed_image: np.ndarray) -> tuple[np.ndarray, float]:
         """
@@ -378,13 +383,12 @@ class TextExtractor:
             processed_image: The image to prepare for display.
 
         Returns:
-            A tuple containing the prepared display image and the scaling factor.
+            tuple: (display_image, display_scale)
         """
-        centered_image = self.center_image_in_square(processed_image)
+        centered_image = self.center_image_in_square(input_image = processed_image)
         if centered_image.ndim == 2:
             centered_image = cv2.cvtColor(centered_image, cv2.COLOR_GRAY2BGR)
 
-        # Scale image to window height
         display_scale = self.state.window_height / centered_image.shape[0]
         display_image = cv2.resize(
             centered_image,
@@ -392,104 +396,94 @@ class TextExtractor:
         )
         return display_image, display_scale
 
-    # -------------------- Processing Steps Initialization --------------------
+    # -------------------- Interactive Mode Operations --------------------
 
-    def initialize_processing_steps(self, params_override: dict | None = None) -> list[ProcessingStep]:
+    def interactive_mode(
+        self,
+        image_files     : list[Path],
+        config_override : dict | None = None
+    ):
         """
-        Initializes processing steps with default parameters or overrides.
-        Maintains consistent dictionary structure for ProcessingState compatibility.
+        Runs the interactive experiment allowing parameter adjustment and image processing.
 
         Args:
-            params_override: Optional dictionary of step-level overrides matching params.yml structure
-
-        Returns:
-            List of initialized ProcessingStep instances
+            config_override : Optional parameter overrides
+            image_files     : List of image file paths to process
         """
-        yaml = YAML(typ = 'safe')
+        if not image_files:
+            raise ValueError("No image files provided")
 
-        with self.params_file.open('r') as f:
-            step_definitions = yaml.load(f)
+        if self.config_state is None or config_override:
+            self.initialize_processing_steps(config_override = config_override)
 
-        self.steps = []
-        params_override = params_override or {}
+        cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
+        logger.info("Starting interactive experiment.")
 
-        for index, step_def in enumerate(step_definitions):
-            step_name     = step_def['name']
-            step_override = params_override.get(step_name, {})
-            is_pipeline   = step_name != 'ocr'  # OCR is not part of the image processing pipeline
+        try:
+            while True:
+                current_image_path    = image_files[self.state.image_idx]
+                self.state.image_name = current_image_path.name
+                ocr_results           = self.perform_ocr(config_state = self.config_state, image_path = str(current_image_path))
 
-            # Create parameters list with any overrides
-            param_overrides = step_override.get('parameters', {})
-            parameters = [
-                Parameter(**{
-                    **param_def,
-                    'value': param_overrides.get(param_def['name'], param_def['value'])
-                })
-                for param_def in step_def.get('parameters', [])
-            ]
+                if self.state.check_and_reset_new_image_flag():
+                    self.log_ocr_results(ocr_results = ocr_results)
 
-            self.steps.append(
-                ProcessingStep(
-                    name         = step_name,
-                    display_name = step_def['display_name'],
-                    toggle_key   = str(index + 1),
-                    parameters   = parameters,
-                    is_enabled   = step_override.get('enabled', step_def.get('enabled', False)),
-                    is_pipeline  = is_pipeline
-                )
-            )
+                processed_image      = self.process_image(config_state = self.config_state, image_path = str(current_image_path))
+                display_image, scale = self.prepare_display_image(processed_image = processed_image)
 
-        return self.steps
+                if ocr_results:
+                    adjusted_ocr_results = self.adjust_ocr_coordinates(
+                        display_scale = scale,
+                        ocr_results   = ocr_results,
+                        original_size = processed_image.shape[:2]
+                    )
+                    display_image = self.annotate_image_with_ocr(
+                        adjusted_ocr_results = adjusted_ocr_results,
+                        display_image        = display_image
+                    )
 
-    # -------------------- Image Processing --------------------
+                sidebar_image  = self.render_sidebar(image_name = self.state.image_name, window_height = self.state.window_height)
+                combined_image = np.hstack([display_image, sidebar_image])
+                cv2.imshow(self.WINDOW_NAME, combined_image)
+                cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
 
-    @cache
-    def process_image(self, image_path: str, processing_state: ProcessingState) -> np.ndarray:
-        """
-        Processes the image according to the enabled processing steps.
+                key = cv2.waitKey(1) & 0xFF
+                if key == 255:
+                    continue
 
-        Args:
-            image_path       : Path to the image file to process
-            processing_state : ProcessingState instance representing current parameters
+                try:
+                    char = chr(key)
+                except ValueError:
+                    continue
 
-        Returns:
-            Processed image as numpy array
-        """
-        image = self.load_image(image_path)
-        processed_image = image.copy()
+                if self.process_user_input(char = char, ocr_results = ocr_results, total_images = len(image_files)):
+                    break
 
-        for step_name, is_enabled, params in processing_state.steps:
-            if not is_enabled:
-                continue
-
-            processing_function = PROCESSING_FUNCTIONS.get(step_name)
-            if processing_function:
-                params_dict     = {param_name: param_value for param_name, param_value in params}
-                processed_image = processing_function(processed_image, params_dict)
-                logger.debug(f"Applied '{step_name}' step.")
-            else:
-                logger.warning(f"No processing function defined for step '{step_name}'")
-
-        return processed_image
+        finally:
+            cv2.destroyAllWindows()
 
     # -------------------- OCR Operations --------------------
 
     @cache
-    def perform_ocr(self, image_path: str, processing_state: ProcessingState) -> list[tuple]:
+    def perform_ocr(
+        self, 
+        config_state : ConfigState, 
+        image_path   : str
+    ) -> list[tuple]:
         """
         Extracts text from a given image using EasyOCR.
 
         Args:
-            image_path       : The path to the image to perform OCR on
-            processing_state : ProcessingState instance representing current parameters
+            config_state : ConfigState instance representing current parameters
+            image_path   : The path to the image to perform OCR on
 
         Returns:
             List of tuples containing OCR results
         """
-        processed_image = self.process_image(image_path, processing_state)
+        processed_image = self.process_image(config_state = config_state, image_path = image_path)
         try:
             ocr_results = self.reader.readtext(
-                processed_image[..., ::-1],  # Convert BGR to RGB
+                processed_image[..., ::-1],
                 decoder       = 'greedy',
                 rotation_info = [90, 180, 270]
             )
@@ -508,204 +502,183 @@ class TextExtractor:
             image_files : List of image file paths to process.
 
         Returns:
-            Dictionary mapping image names to their OCR results.
+            dict: Mapping image names to their OCR results
         """
-        results          = {}
-        processing_state = ProcessingState.from_processing_steps(self.steps)
-
+        results = {}
         for image_path in image_files:
             image_name = image_path.name
-
             try:
-                ocr_results = self.perform_ocr(
-                    str(image_path),
-                    processing_state
-                )
+                ocr_results = self.perform_ocr(config_state = self.config_state, image_path = str(image_path))
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
                 ]
-
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
                 continue
 
         return results
 
-    def log_ocr_results(self, ocr_results: list[tuple[list, str, float]]) -> None:
-        """
-        Logs OCR results in a consistent format.
+    # -------------------- UI Rendering and Annotation --------------------
 
-        Args:
-            ocr_results: List of OCR results (bounding_box, text, confidence)
-        """
-        if ocr_results:
-            logger.info(f"OCR Results for image '{self.state.image_name}':")
-            for _, text, confidence in ocr_results:
-                logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
-
-    def adjust_ocr_coordinates(
+    def annotate_image_with_ocr(
         self,
-        ocr_results   : list[tuple],
-        original_size  : tuple[int, int],
-        display_scale  : float
-    ) -> list[tuple]:
+        adjusted_ocr_results : list[tuple],
+        display_image        : np.ndarray
+    ) -> np.ndarray:
         """
-        Adjust OCR coordinates to match the display image.
+        Annotates the display image with OCR results.
 
         Args:
-            ocr_results   : List of OCR results (bounding_box, text, confidence).
-            original_size  : Original image size (height, width).
-            display_scale  : Scale factor used for the display image.
+            adjusted_ocr_results : List of adjusted OCR results.
+            display_image        : The image to annotate.
 
         Returns:
-            List of adjusted OCR results.
+            np.ndarray: Annotated image.
         """
-        orig_height, orig_width = original_size
-        max_side = max(orig_height, orig_width)
+        annotated_image = display_image.copy()
+        for coordinates, text, confidence in adjusted_ocr_results:
+            coordinates = np.array(coordinates).astype(int)
+            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
 
-        # Calculate offsets due to centering in a square
-        y_offset = (max_side - orig_height) // 2
-        x_offset = (max_side - orig_width)  // 2
+            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
+            text_position      = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
 
-        adjusted_ocr_results = []
-        for bounding_box, text, confidence in ocr_results:
-            adjusted_box = [
-                [
-                    (x + x_offset) * display_scale,
-                    (y + y_offset) * display_scale
-                ]
-                for x, y in bounding_box
-            ]
-            adjusted_ocr_results.append((adjusted_box, text, confidence))
-
-        return adjusted_ocr_results
-
-    # -------------------- UI Rendering --------------------
+            annotated_image = self.draw_text(
+                opacity      = 0.75,
+                position     = text_position,
+                scale        = 1.0,
+                source_image = annotated_image,
+                text         = f"{text} ({confidence * 100:.1f}%)"
+            )
+        return annotated_image
 
     @staticmethod
     def draw_text(
+        position     : tuple[int, int],
         source_image : np.ndarray,
         text         : str,
-        position     : tuple[int, int],
-        scale        : float = 1.0,
-        opacity      : float = 0.75
+        opacity      : float = 0.75,
+        scale        : float = 1.0
     ) -> np.ndarray:
         """
         Draws bold white text with semi-transparent background.
 
         Args:
-            source_image : Image to draw on
-            text         : Text to draw
+            opacity      : Background opacity (0.0 to 1.0)
             position     : (x,y) center position for text box
             scale        : Text size multiplier (1.0 = default size)
-            opacity      : Background opacity (0.0 to 1.0)
+            source_image : Image to draw on
+            text         : Text to draw
 
         Returns:
-            Image with text drawn on it.
+            np.ndarray: Image with text drawn on it.
         """
-        # Setup drawing layers
         pil_image  = Image.fromarray(cv2.cvtColor(source_image, cv2.COLOR_BGR2RGB))
         text_layer = Image.new('RGBA', pil_image.size, (0, 0, 0, 0))
         draw       = ImageDraw.Draw(text_layer)
 
-        # Add thin spaces between characters
         spaced_text = ' '.join(text)
-
-        # Get text dimensions
         font        = ImageFont.load_default()
-        bbox        = draw.textbbox((0, 0), spaced_text, font=font)
+        bbox        = draw.textbbox((0, 0), spaced_text, font = font)
         text_width  = bbox[2] - bbox[0]
         text_height = bbox[3] - bbox[1]
 
-        # Calculate box padding based on scale
         box_padding  = max(4, int(20 * scale * 0.2))
         total_width  = text_width  + box_padding * 2
         total_height = text_height + box_padding * 2
 
-        # Constrain position to keep text box within image bounds
         center_x, center_y = position
         bounded_x = max(total_width  // 2, min(source_image.shape[1] - total_width  // 2, center_x))
         bounded_y = max(total_height // 2, min(source_image.shape[0] - total_height // 2, center_y))
 
-        # Calculate text position relative to center
         text_x = bounded_x - text_width  // 2
         text_y = bounded_y - text_height // 2
 
-        # Draw background
         background_bbox = (
             text_x - box_padding,
             text_y - box_padding,
             text_x + text_width + box_padding,
             text_y + text_height + box_padding
         )
-        draw.rectangle(background_bbox, fill=(0, 0, 0, int(255 * opacity)))
+        draw.rectangle(background_bbox, fill = (0, 0, 0, int(255 * opacity)))
 
-        # Draw text multiple times for boldness
         for offset_x, offset_y in [(0, 0), (1, 0), (0, 1), (1, 1)]:
             draw.text(
                 (text_x + offset_x, text_y + offset_y),
                 spaced_text,
-                font=font,
-                fill=(255, 255, 255, 255)
+                font = font,
+                fill = (255, 255, 255, 255)
             )
 
-        # Composite text layer onto source image
         annotated_image = Image.alpha_composite(pil_image.convert('RGBA'), text_layer)
         return cv2.cvtColor(np.array(annotated_image), cv2.COLOR_RGBA2BGR)
 
-    def generate_sidebar_content(
-        self,
-        steps       : list[ProcessingStep],
-        image_name  : str
+    def generate_sidebar_content(self, image_name: str
     ) -> list[tuple[str, tuple[int, int, int], float]]:
         """
         Generates a list of sidebar lines with text content, colors, and scaling factors.
         Used internally by render_sidebar to prepare display content.
 
         Args:
-            steps      : List of ProcessingStep instances
             image_name : Name of the current image being processed
 
         Returns:
-            List of tuples containing (text, color, scale_factor) for each line
+            list: (text, color, scale_factor) tuples
         """
         lines = [
             (f"[/] Current Image: {image_name}", self.UI_COLORS['TEAL'],  0.85),
-            ("", self.UI_COLORS['WHITE'], 1.0)  # Spacer
+            ("", self.UI_COLORS['WHITE'], 1.0)
         ]
 
-        for step in steps:
-            status = 'Enabled' if step.is_enabled else 'Disabled'
+        steps_dict = self.config_state.config_dict["steps"]
+        for i in sorted(self.config_state.step_index_map.keys()):
+            step_name       = self.config_state.step_index_map[i]
+            step_definition = steps_dict[step_name]
+            status          = 'Enabled' if step_definition['enabled'] else 'Disabled'
+
+            # Add step line
             lines.append((
-                f"[{step.toggle_key}] {step.display_name}: {status}",
+                f"[{i}] {step_definition['display_name']}: {status}",
                 self.UI_COLORS['WHITE'],
                 1.0
             ))
 
-            for param in step.parameters:
-                lines.append((
-                    f"   [{param.decrease_key} | {param.increase_key}] {param.display_name}: {param.formatted_value}",
-                    self.UI_COLORS['GRAY'],
-                    0.85
-                ))
-            lines.append(("", self.UI_COLORS['WHITE'], 1.0))  # Spacer
+            # Add parameters if any
+            if 'parameters' in step_definition and step_definition['parameters'] is not None:
+                for _, param_definition in step_definition['parameters'].items():
+                    inc_key   = param_definition['increase_key']
+                    dec_key   = inc_key.lower()
+                    value_str = (
+                        f"{param_definition['value']:.2f}"
+                        if isinstance(param_definition['value'], float)
+                        else str(param_definition['value'])
+                    )
+                    lines.append((
+                        f"   [{dec_key} | {inc_key}] {param_definition['display_name']}: {value_str}",
+                        self.UI_COLORS['GRAY'],
+                        0.85
+                    ))
+            lines.append(("", self.UI_COLORS['WHITE'], 1.0))
 
         lines.append(("[q] Quit", self.UI_COLORS['WHITE'], 1.0))
         return lines
 
-    def render_sidebar(self, steps: list[ProcessingStep], image_name: str, window_height: int) -> np.ndarray:
+    def render_sidebar(
+        self, 
+        image_name    : str, 
+        window_height : int
+    ) -> np.ndarray:
         """
         Renders the sidebar image with controls and settings.
 
         Args:
-            steps        : List of ProcessingStep instances
-            image_name   : Name of the current image being processed
-            window_height: Height of the display window
+            image_name    : Name of the current image being processed
+            window_height : Height of the display window
 
         Returns:
-            Sidebar image as a numpy array.
+            np.ndarray: Sidebar image as a numpy array.
         """
-        lines             = self.generate_sidebar_content(steps, image_name)
+        lines             = self.generate_sidebar_content(image_name = image_name)
         num_lines         = len(lines)
         margin            = int(0.05 * window_height)
         horizontal_margin = 20
@@ -713,7 +686,6 @@ class TextExtractor:
         font_scale        = line_height / 40
         font_thickness    = max(1, int(font_scale * 1.5))
 
-        # Determine maximum text width
         max_text_width = max(
             cv2.getTextSize(text, self.FONT_FACE, font_scale * rel_scale, font_thickness)[0][0]
             for text, _, rel_scale in lines if text
@@ -723,7 +695,6 @@ class TextExtractor:
         sidebar       = np.zeros((window_height, sidebar_width, 3), dtype=np.uint8)
         y_position    = margin + line_height
 
-        # Draw text lines onto the sidebar
         for text, color, rel_scale in lines:
             if text:
                 cv2.putText(
@@ -742,7 +713,12 @@ class TextExtractor:
 
     # -------------------- User Input Handling --------------------
 
-    def process_user_input(self, char: str, ocr_results: list, total_images: int) -> bool:
+    def process_user_input(
+        self,
+        char        : str,
+        ocr_results : list,
+        total_images: int
+    ) -> bool:
         """
         Processes user input and performs corresponding actions.
 
@@ -757,62 +733,65 @@ class TextExtractor:
         if char == 'q':
             logger.info("Quitting interactive experiment.")
             return True
-        
+
         elif char == '/':
             old_name = self.state.image_name
-            self.state.advance_to_next_image(total_images)
+            self.state.advance_to_next_image(total_images = total_images)
             logger.info(f"Switched from '{old_name}' to '{self.state.image_name}'")
             return False
 
-        # Handle parameter and step adjustments
-        for step in self.steps:
-            if char == step.toggle_key:
-                action = step.toggle_enabled_state()
-                logger.info(action)
-                self.log_ocr_results(ocr_results)
-                break
-
-            action = step.adjust_parameter(char)
+        if char.isdigit():
+            step_index        = int(char)
+            new_state, action = self.config_state.toggle_step_enabled(step_index = step_index)
             if action:
+                self.config_state = new_state
                 logger.info(action)
-                self.log_ocr_results(ocr_results)
-                break
+                self.log_ocr_results(ocr_results = ocr_results)
+            return False
 
+        new_state, action = self.config_state.adjust_parameter(key_char = char)
+        if action:
+            self.config_state = new_state
+            logger.info(action)
+            self.log_ocr_results(ocr_results = ocr_results)
         return False
 
-    # -------------------- Image Display and Annotation --------------------
+    # -------------------- Utility Methods --------------------
 
-    def annotate_image_with_ocr(self, display_image: np.ndarray, adjusted_ocr_results: list[tuple]) -> np.ndarray:
+    def adjust_ocr_coordinates(
+        self,
+        display_scale : float,
+        ocr_results   : list[tuple],
+        original_size : tuple[int, int]
+    ) -> list[tuple]:
         """
-        Annotates the display image with OCR results.
+        Adjust OCR coordinates to match the display image.
 
         Args:
-            display_image        : The image to annotate.
-            adjusted_ocr_results : List of adjusted OCR results.
+            display_scale : Scale factor used for the display image.
+            ocr_results   : List of OCR results (bounding_box, text, confidence).
+            original_size : Original image size (height, width).
 
         Returns:
-            Annotated image.
+            list: Adjusted OCR results.
         """
-        annotated_image = display_image.copy()
-        for coordinates, text, confidence in adjusted_ocr_results:
-            coordinates = np.array(coordinates).astype(int)
+        orig_height, orig_width = original_size
+        max_side                = max(orig_height, orig_width)
+        y_offset                = (max_side - orig_height) // 2
+        x_offset                = (max_side - orig_width)  // 2
 
-            # Draw bounding box
-            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
+        adjusted_ocr_results = []
+        for bounding_box, text, confidence in ocr_results:
+            adjusted_box = [
+                [
+                    (x + x_offset) * display_scale,
+                    (y + y_offset) * display_scale
+                ]
+                for x, y in bounding_box
+            ]
+            adjusted_ocr_results.append((adjusted_box, text, confidence))
 
-            # Set text position above the bounding box
-            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
-            text_position = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
-
-            # Draw the text annotation
-            annotated_image = self.draw_text(
-                source_image = annotated_image,
-                text         = f"{text} ({confidence * 100:.1f}%)",
-                position     = text_position
-            )
-        return annotated_image
-
-    # -------------------- Utility Methods --------------------
+        return adjusted_ocr_results
 
     @classmethod
     def find_image_files(cls, subdirectory: str = 'Books') -> list[Path]:
@@ -823,116 +802,75 @@ class TextExtractor:
             subdirectory : Name of the subdirectory within 'images' to process (e.g., 'Books', 'Bookcases', 'Shelves')
 
         Returns:
-            List of image file paths
+            list: Image file paths
 
         Raises:
             FileNotFoundError : If no image files are found in the specified subdirectory
         """
         image_dir = cls.PROJECT_ROOT / 'bookshelf_scanner' / 'images' / subdirectory
-        
+
         if not image_dir.is_dir():
             raise FileNotFoundError(f"Image subdirectory not found: {image_dir}")
-            
+
         image_files = sorted(
             file for file in image_dir.glob('*')
             if file.is_file() and file.suffix.lower() in cls.ALLOWED_FORMATS
         )
-        
+
         if not image_files:
             raise FileNotFoundError(f"No image files found in {image_dir}")
-            
+
         return image_files
 
-    # -------------------- Headless Mode Operations --------------------
-
-    def run_headless_mode(self, image_files: list[Path], params_override: dict | None = None):
+    @cache
+    def process_image(
+        self,
+        config_state : ConfigState,
+        image_path   : str
+    ) -> np.ndarray:
         """
-        Processes images in headless mode.
+        Processes the image according to the enabled processing steps.
 
         Args:
-            image_files     : List of image file paths to process
-            params_override : Optional parameter overrides
+            config_state : ConfigState instance representing current parameters
+            image_path   : Path to the image file to process
+
+        Returns:
+            np.ndarray: Processed image
         """
-        if not image_files:
-            raise ValueError("No image files provided")
+        image           = self.load_image(image_path = image_path)
+        processed_image = image.copy()
+        steps_dict      = config_state.config_dict['steps']
 
-        # Initialize or update processing steps
-        if not self.steps or params_override:
-            self.initialize_processing_steps(params_override)
+        for step_name, step_definition in steps_dict.items():
+            if not step_definition.get('enabled', False):
+                continue
 
-        results = self.perform_ocr_headless(image_files)
+            if 'parameters' in step_definition:
+                parameters = {
+                    name: {'value': p['value']}
+                    for name, p in step_definition['parameters'].items()
+                }
+            else:
+                parameters = {}
 
-        if self.output_json:
-            with self.output_file.open('w', encoding = 'utf-8') as f:
-                json.dump(results, f, ensure_ascii = False, indent = 4)
-            logger.info(f"OCR results saved to {self.output_file}")
-        
+            processing_function = PROCESSING_FUNCTIONS.get(step_name)
+            if processing_function:
+                processed_image = processing_function(processed_image, parameters)
+                logger.debug(f"Applied '{step_name}' step.")
+            else:
+                logger.warning(f"No processing function defined for step '{step_name}'")
 
-    # -------------------- Interactive Mode Operations --------------------
+        return processed_image
 
-    def interactive_mode(self, image_files: list[Path], params_override: dict | None = None):
+    def log_ocr_results(self, ocr_results: list[tuple[list, str, float]]):
         """
-        Runs the interactive experiment allowing parameter adjustment and image processing.
+        Logs OCR results in a consistent format.
 
         Args:
-            image_files     : List of image file paths to process
-            params_override : Optional parameter overrides
+            ocr_results: List of OCR results (bounding_box, text, confidence)
         """
-        if not image_files:
-            raise ValueError("No image files provided")
-
-        # Initialize or update processing steps
-        if not self.steps or params_override:
-            self.initialize_processing_steps(params_override)
-
-        cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
-        logger.info("Starting interactive experiment.")
-        
-        try:
-            while True:
-                image_path            = image_files[self.state.image_idx]
-                self.state.image_name = image_path.name
-                
-                processing_state = ProcessingState.from_processing_steps(self.steps)
-                processed_image  = self.process_image(str(image_path), processing_state)
-
-                # Perform OCR if enabled
-                ocr_results = []
-                if processing_state.ocr_enabled:
-                    ocr_results = self.perform_ocr(str(image_path), processing_state)
-                    if self.state.check_and_reset_new_image_flag():
-                        self.log_ocr_results(ocr_results)
-
-                # Prepare the display image
-                display_image, display_scale = self.prepare_display_image(processed_image)
-
-                # Annotate the display image with OCR results
-                if ocr_results:
-                    adjusted_ocr_results = self.adjust_ocr_coordinates(
-                        ocr_results,
-                        processed_image.shape[:2],
-                        display_scale
-                    )
-                    display_image = self.annotate_image_with_ocr(display_image, adjusted_ocr_results)
-
-                # Add sidebar and display
-                sidebar_image  = self.render_sidebar(self.steps, self.state.image_name, self.state.window_height)
-                combined_image = np.hstack([display_image, sidebar_image])
-                cv2.imshow(self.WINDOW_NAME, combined_image)
-                cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
-
-                # Handle user input
-                key = cv2.waitKey(1) & 0xFF
-                if key == 255:
-                    continue
-
-                try:
-                    char = chr(key)
-                except ValueError:
-                    continue  # Non-ASCII key pressed
-
-                if self.process_user_input(char, ocr_results, len(image_files)):
-                    break
-
-        finally:
-            cv2.destroyAllWindows()
+        if ocr_results and not self.headless:
+            logger.info(f"OCR Results for image '{self.state.image_name}':")
+            for _, text, confidence in ocr_results:
+                logger.info(f"Text: '{text}' with confidence {confidence:.2f}")

@@ -1,13 +1,13 @@
 import duckdb
 import json
 
-from dataclasses import dataclass
-from functools   import cache
-from pathlib     import Path
-from rapidfuzz   import fuzz, process, utils as fuzz_utils
-from typing      import Any, NamedTuple
-
 from bookshelf_scanner import ModuleLogger, Utils
+from dataclasses       import dataclass
+from functools         import cache
+from pathlib           import Path
+from rapidfuzz         import fuzz, process, utils as fuzz_utils
+from typing            import Any, NamedTuple
+
 logger = ModuleLogger('matcher')()
 
 class BookRecord(NamedTuple):
@@ -95,7 +95,7 @@ class FuzzyMatcher:
         Combines all texts into a single string, filtering by confidence threshold.
 
         Args:
-            texts : List of (text, confidence) tuples from OCR
+            texts: List of (text, confidence) tuples from OCR
 
         Returns:
             List of text strings that passed the confidence threshold
@@ -115,7 +115,7 @@ class FuzzyMatcher:
         Uses process.extract to find the best matches.
 
         Args:
-            texts : List of text strings to match
+            texts: List of text strings to match
 
         Returns:
             List of match dictionaries with scores above min_match_score

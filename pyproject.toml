@@ -7,21 +7,21 @@ readme       = "README.md"
 packages     = [{ include = "bookshelf_scanner" }]
 
 [tool.poetry.scripts]
-book-segmenter      = "bookshelf_scanner.core.book_segmenter.__main__:main"
-text-extractor      = "bookshelf_scanner.core.text_extractor.__main__:main"
-parameter-optimizer = "bookshelf_scanner.core.parameter_optimizer.__main__:main"
-fuzzy-matcher       = "bookshelf_scanner.core.fuzzy_matcher.__main__:main"
+book-segmenter   = "bookshelf_scanner.core.book_segmenter.__main__:main"
+text-extractor   = "bookshelf_scanner.core.text_extractor.__main__:main"
+config-optimizer = "bookshelf_scanner.core.config_optimizer.__main__:main"
+fuzzy-matcher    = "bookshelf_scanner.core.fuzzy_matcher.__main__:main"
 
 [tool.poetry.dependencies]
 python        = "^3.12"
 
 duckdb        = "*"
 easyocr       = "*"
-matplotlib    = "^3.9.2"
-onnxruntime   = "^1.20.0"
+matplotlib    = "*"
+omegaconf     = "*"
+onnxruntime   = "*"
 opencv-python = "*"
-ruamel-yaml   = "*"
-rapidfuzz     = "^3.0.0"
+rapidfuzz     = "*"
 torch         = "*"
 
 [tool.poetry.group.dev.dependencies]
