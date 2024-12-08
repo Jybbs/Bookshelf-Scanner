@@ -1,4 +1,3 @@
-```markdown
 # Bookshelf Scanner
 
 **Bookshelf Scanner** is a computer vision project focused on extracting and organizing text from book spines in bookshelf images. It integrates object detection, image preprocessing, optical character recognition (**OCR**), parameter optimization, and fuzzy text matching, aiming to reduce manual effort and trial-and-error commonly required for such tasks.
