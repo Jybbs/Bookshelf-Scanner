@@ -112,7 +112,7 @@ class ClusterMember:
     latent_vector     : torch.Tensor
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'ClusterMember':
+    def from_dict(cls, data: dict, device_type: str = 'cpu') -> 'ClusterMember':
         """
         Creates a ClusterMember instance from a dictionary.
 
@@ -123,9 +123,9 @@ class ClusterMember:
             ClusterMember instance.
         """
         return cls(
-            config_vector     = torch.tensor(data['parameters'], dtype = torch.float32),
+            config_vector     = torch.tensor(data['parameters'], dtype = torch.float32, device = device_type),
             performance_score = data['score'],
-            latent_vector     = torch.tensor(data['latent'], dtype = torch.float32)
+            latent_vector     = torch.tensor(data['latent'], dtype = torch.float32, device = device_type)
         )
 
 @dataclass
@@ -150,7 +150,7 @@ class OCRResult:
         }
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'OCRResult':
+    def from_dict(cls, data: dict, device_type: str = 'cpu') -> 'OCRResult':
         """
         Creates an OCRResult instance from a dictionary.
 
@@ -160,6 +160,7 @@ class OCRResult:
         Returns:
             OCRResult: An instance of OCRResult populated with the provided data.
         """
+        # No tensors here, but we keep the device_type parameter for consistency
         return cls(text = data['text'], confidence = data['confidence'])
     
     @classmethod
@@ -209,7 +210,7 @@ class OptimizationRecord:
         }
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'OptimizationRecord':
+    def from_dict(cls, data: dict, device_type: str = 'cpu') -> 'OptimizationRecord':
         """
         Creates an OptimizationRecord instance from a dictionary.
 
@@ -221,10 +222,10 @@ class OptimizationRecord:
         """
         return cls(
             image_path    = Path(data['image_path']),
-            config_vector = torch.tensor(data['parameters'], dtype = torch.float32),
+            config_vector = torch.tensor(data['parameters'], dtype = torch.float32, device = device_type),
             score         = data['score'],
-            latent_vector = torch.tensor(data['latent_vector'], dtype = torch.float32),
-            ocr_results   = [OCRResult.from_dict(ocr) for ocr in data.get('ocr_results', [])]
+            latent_vector = torch.tensor(data['latent_vector'], dtype = torch.float32, device = device_type),
+            ocr_results   = [OCRResult.from_dict(ocr, device_type = device_type) for ocr in data.get('ocr_results', [])]
         )
     
     def update_if_better(self, other: 'OptimizationRecord') -> bool:
@@ -391,7 +392,7 @@ class ConfigOptimizer:
             encoder_hidden_dim     = self.encoder_hidden_dim,
             predictor_hidden_dim_1 = self.predictor_hidden_dim_1,
             predictor_hidden_dim_2 = self.predictor_hidden_dim_2
-        ).to(self.device_type)
+        ).to(device = self.device_type)
 
     # -------------------- Configuration Space & Conversion --------------------
 
@@ -433,7 +434,8 @@ class ConfigOptimizer:
             Dictionary structured for the extractor's config override, containing steps and parameters.
         """
         config_dict = {"steps": {}}
-        vector_numpy = config_vector.cpu().numpy()
+        # Convert to CPU for numpy operations
+        vector_numpy = config_vector.detach().cpu().numpy()
 
         names      = [b['name']       for b in self.config_space_boundaries]
         min_values = np.array([b['min_value']  for b in self.config_space_boundaries])
@@ -474,7 +476,7 @@ class ConfigOptimizer:
 
             # Restore optimization history
             self.optimizer_state.optimization_history = [
-                OptimizationRecord.from_dict(record)
+                OptimizationRecord.from_dict(record, device_type = self.device_type)
                 for record in checkpoint['optimization_history']
             ]
 
@@ -482,7 +484,7 @@ class ConfigOptimizer:
             config_clusters = defaultdict(lambda: {'members': [], 'center': None})
             for cluster_id_str, members in checkpoint['parameter_clusters'].items():
                 cluster_id_int = int(cluster_id_str)
-                cluster_members = [ClusterMember.from_dict(m) for m in members]
+                cluster_members = [ClusterMember.from_dict(m, device_type = self.device_type) for m in members]
                 config_clusters[cluster_id_int]['members'].extend(cluster_members)
 
             # Recalculate cluster centers now that we have members
@@ -490,7 +492,7 @@ class ConfigOptimizer:
                 if cinfo['members']:
                     # Compute the mean latent vector of all members to serve as the cluster center
                     latent_vectors = torch.stack([m.latent_vector for m in cinfo['members']])
-                    cinfo['center'] = latent_vectors.mean(dim = 0)
+                    cinfo['center'] = latent_vectors.mean(dim = 0).to(device = self.device_type)
                 else:
                     cinfo['center'] = None
 
@@ -586,12 +588,12 @@ class ConfigOptimizer:
             best_config_vector = suggested_configs[0]
             needed = self.initial_points_count - len(suggested_configs)
             for _ in range(needed):
-                noise = torch.randn_like(best_config_vector) * self.initial_suggestion_noise_scale
+                noise = torch.randn_like(best_config_vector, device = self.device_type) * self.initial_suggestion_noise_scale
                 suggested_configs.append(torch.clamp(best_config_vector + noise, 0, 1))
         else:
             # If no existing suggestions, generate purely random configuration vectors
             suggested_configs.extend(
-                torch.rand(len(self.config_space_boundaries)) for _ in range(self.initial_points_count)
+                torch.rand(len(self.config_space_boundaries), device = self.device_type) for _ in range(self.initial_points_count)
             )
 
         return suggested_configs
@@ -616,7 +618,7 @@ class ConfigOptimizer:
 
         # Encode the configuration vector into latent space for clustering
         latent_representation, _ = self.optimizer_state.model(config_vector.unsqueeze(0))
-        latent_representation = latent_representation.squeeze().cpu()
+        latent_representation = latent_representation.squeeze().to(device = self.device_type)
 
         # If no clusters exist, initialize the first cluster
         if not self.optimizer_state.config_clusters:
@@ -675,9 +677,9 @@ class ConfigOptimizer:
         # Initialize best_record with very low initial score
         best_record = OptimizationRecord(
             image_path    = image_path,
-            config_vector = torch.zeros(len(self.config_space_boundaries)).to(self.device_type),
+            config_vector = torch.zeros(len(self.config_space_boundaries), device = self.device_type),
             score         = -float('inf'),
-            latent_vector = torch.zeros(self.latent_dimension).to(self.device_type),
+            latent_vector = torch.zeros(self.latent_dimension, device = self.device_type),
             ocr_results   = []
         )
 
@@ -694,6 +696,7 @@ class ConfigOptimizer:
             Returns:
                 OptimizationRecord capturing performance and OCR results for this configuration.
             """
+            config_vector = config_vector.to(device = self.device_type)
             config_override = self.vector_to_config_dictionary(config_vector)
             self.extractor.initialize_processing_steps(config_override = config_override)
             
@@ -716,7 +719,7 @@ class ConfigOptimizer:
                 ocr_results   = ocr_results_instances,
                 latent_vector = latent_representation 
                     if latent_representation is not None 
-                    else torch.zeros(len(self.config_space_boundaries)).to(self.device_type)
+                    else torch.zeros(len(self.config_space_boundaries), device = self.device_type)
             )
 
         # -------------------- Initial Evaluation --------------------
@@ -733,7 +736,7 @@ class ConfigOptimizer:
                 f"No configurations improved the score for {image_path.name}. "
                 f"Using a random configuration vector as a fallback."
             )
-            random_config = torch.rand(len(self.config_space_boundaries)).to(self.device_type)
+            random_config = torch.rand(len(self.config_space_boundaries), device = self.device_type)
             fallback_record = evaluate_config_vector(random_config)
             fallback_record.score = 0.0
             
@@ -746,14 +749,14 @@ class ConfigOptimizer:
             # Generate candidate configurations by adding noise that decreases over iterations
             candidate_config_vectors = [
                 torch.clamp(
-                    best_record.config_vector + torch.randn_like(best_record.config_vector) *
+                    best_record.config_vector + torch.randn_like(best_record.config_vector, device = self.device_type) *
                     (1.0 - iteration / self.iteration_count) * self.refinement_noise_scale,
                     min = 0,
                     max = 1
                 ) for _ in range(self.refinement_candidate_count)
             ]
 
-            candidate_tensor = torch.stack(candidate_config_vectors).to(self.device_type)
+            candidate_tensor = torch.stack(candidate_config_vectors).to(device = self.device_type)
             means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples = self.uncertainty_num_samples)
 
             # Use UCB to pick the candidate balancing exploitation (mean) and exploration (std)
@@ -830,8 +833,8 @@ class ConfigOptimizer:
             return
 
         # Prepare normalized training data
-        config_vectors = torch.stack([r.config_vector for r in self.optimizer_state.optimization_history])
-        scores         = torch.tensor([r.score for r in self.optimizer_state.optimization_history], dtype = torch.float32)
+        config_vectors = torch.stack([r.config_vector for r in self.optimizer_state.optimization_history]).to(device = self.device_type)
+        scores         = torch.tensor([r.score for r in self.optimizer_state.optimization_history], dtype = torch.float32, device = self.device_type)
         
         min_score, max_score = self.optimizer_state.score_scaling
         if max_score - min_score == 0:
@@ -869,8 +872,8 @@ class ConfigOptimizer:
         for epoch in range(1, self.max_epochs + 1):
             train_loss = 0.0
             for batch_configs, batch_scores in train_loader:
-                batch_configs = batch_configs.to(self.device_type)
-                batch_scores  = batch_scores.to(self.device_type)
+                batch_configs = batch_configs.to(device = self.device_type)
+                batch_scores  = batch_scores.to(device = self.device_type)
 
                 self.model_optimizer.zero_grad(set_to_none = True)
 
@@ -905,8 +908,8 @@ class ConfigOptimizer:
             valid_loss = 0.0
             with torch.inference_mode():
                 for batch_configs, batch_scores in valid_loader:
-                    batch_configs = batch_configs.to(self.device_type)
-                    batch_scores  = batch_scores.to(self.device_type)
+                    batch_configs = batch_configs.to(device = self.device_type)
+                    batch_scores  = batch_scores.to(device = self.device_type)
                     
                     _, predicted_scores = self.optimizer_state.model(batch_configs)
                     loss = mse_loss(predicted_scores.squeeze(), batch_scores)

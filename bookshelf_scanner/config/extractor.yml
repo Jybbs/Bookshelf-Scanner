@@ -1,3 +1,10 @@
+easyocr:
+  device_type   : "cpu"          # The computation device to use: "cpu", "cuda", or "mps".
+  gpu_enabled   : false          # Whether to attempt GPU usage if device_type is "cuda".
+  language_list : ["en"]         # List of languages for the EasyOCR reader.
+  decoder       : "greedy"       # Decoder type for OCR. Could be "greedy", "beamsearch", etc.
+  rotation_info : [90, 180, 270] # Additional rotation angles for OCR attempts.
+
 steps:
   image_rotation:
     display_name : Image Rotation
