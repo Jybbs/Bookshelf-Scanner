@@ -1,70 +1,67 @@
-- name         : ocr
-  display_name : OCR
-  enabled      : true
+steps:
+  image_rotation:
+    display_name : Image Rotation
+    enabled      : false
+    parameters   :
+      rotation_angle:
+        display_name : Rotation Angle
+        value        : 90
+        min          : 0
+        max          : 270
+        step         : 90
+        increase_key : R
 
-- name         : image_rotation
-  display_name : Image Rotation
-  enabled      : false
-  parameters   :
-    - name         : rotation_angle
-      display_name : Rotation Angle
-      value        : 90
-      min          : 0
-      max          : 270
-      step         : 90
-      increase_key : R
+  shadow_removal:
+    display_name : Shadow Removal
+    enabled      : false
+    parameters   :
+      shadow_kernel_size:
+        display_name : Shadow Kernel Size
+        value        : 23
+        min          : 3
+        max          : 30
+        step         : 2
+        increase_key : K
+      shadow_median_blur:
+        display_name : Shadow Median Blur
+        value        : 15
+        min          : 3
+        max          : 30
+        step         : 2
+        increase_key : M
 
-- name         : shadow_removal
-  display_name : Shadow Removal
-  enabled      : false
-  parameters   :
-    - name         : shadow_kernel_size
-      display_name : Shadow Kernel Size
-      value        : 23
-      min          : 3
-      max          : 30
-      step         : 2
-      increase_key : K
-    - name         : shadow_median_blur
-      display_name : Shadow Median Blur
-      value        : 15
-      min          : 3
-      max          : 30
-      step         : 2
-      increase_key : M
+  color_clahe:
+    display_name : Color CLAHE
+    enabled      : false
+    parameters   :
+      clahe_clip_limit:
+        display_name : CLAHE Clip Limit
+        value        : 1.0
+        min          : 0.0
+        max          : 5.0
+        step         : 0.5
+        increase_key : L
 
-- name         : color_clahe
-  display_name : Color CLAHE
-  enabled      : false
-  parameters   :
-    - name         : clahe_clip_limit
-      display_name : CLAHE Clip Limit
-      value        : 1.0
-      min          : 0.0
-      max          : 5.0
-      step         : 0.5
-      increase_key : L
+  brightness_adjustment:
+    display_name : Brightness Adjustment
+    enabled      : false
+    parameters   :
+      brightness_value:
+        display_name : Brightness Value
+        value        : 0
+        min          : -50
+        max          : 50
+        step         : 5
+        increase_key : B
 
-- name         : brightness_adjustment
-  display_name : Brightness Adjustment
-  enabled      : false
-  parameters   :
-    - name         : brightness_value
-      display_name : Brightness Value
-      value        : 0
-      min          : -50
-      max          : 50
-      step         : 5
-      increase_key : B
-
-- name         : contrast_adjustment
-  display_name : Contrast Adjustment
-  enabled      : false
-  parameters   :
-    - name         : contrast_value
-      display_name : Contrast Value
-      value        : 1.0
-      min          : 0.0
-      max          : 3.0
-      step         : 0.2
-      increase_key : C
+  contrast_adjustment:
+    display_name : Contrast Adjustment
+    enabled      : false
+    parameters   :
+      contrast_value:
+        display_name : Contrast Value
+        value        : 1.0
+        min          : 0.0
+        max          : 3.0
+        step         : 0.2
+        increase_key : C

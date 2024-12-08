@@ -11,9 +11,11 @@ def main():
         'image_files': extractor.find_image_files('Books'),
 
         'config_override': {
-            'color_clahe'    : {'enabled' : True},
-            'shadow_removal' : {'enabled' : True},
-            'image_rotation' : {'enabled' : True}
+            'steps': {
+                'color_clahe'    : {'enabled' : True},
+                'shadow_removal' : {'enabled' : True},
+                'image_rotation' : {'enabled' : True}
+            }
         }
     }
     
