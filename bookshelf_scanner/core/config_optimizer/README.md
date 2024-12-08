@@ -6,83 +6,130 @@ The **ConfigOptimizer** module introduces a **meta-learning and Bayesian optimiz
 
 ## Theoretical and Mathematical Foundations
 
-Modern OCR pipelines, like `TextExtractor`, involve multiple processing steps each with numerous adjustable parameters. Naively searching over all combinations is prohibitively expensive and impractical. Instead, we want a method that **learns** as it goes, zeroing in on high-quality configurations without enumerating the entire space.
+Modern OCR pipelines, like **TextExtractor**, contain multiple processing steps—each with a variety of adjustable parameters. Exploring all possible parameter combinations is computationally intractable. Instead, we need a strategy that **learns from experience**, guiding us toward configurations that deliver high-quality OCR outputs without brute-forcing the entire search space.
 
-### Problem Setting
+---
 
-Suppose the pipeline has $`S`$ steps, and step $`i`$ contains $`P_i`$ parameters. Letting  
+### Defining the Optimization Problem
 
-$`D = \sum_{i=1}^S P_i,`$  
+#### Configuration Space
 
-we represent a full configuration as a vector  
+- Let there be $`S`$ steps in the OCR pipeline.
 
-$`\mathbf{x} \in [0,1]^D,`$  
+- Each step $`i`$ has $`P_i`$ parameters.
+- Define the total number of parameters as:
+  
+  $`D = \sum_{i=1}^S P_i.`$
+  
+We represent any full configuration as a vector of normalized parameters:
 
-where each parameter is normalized to the unit interval for consistency.
+$`\mathbf{x} \in [0,1]^D.`$
 
-Our goal is to find:  
+#### Objective
 
-$`\max_{\mathbf{x} \in [0,1]^D} \text{score}(\mathbf{x}),`$
+We aim to find the parameter vector $`\mathbf{x}`$ that maximizes OCR quality:
 
-where $`\text{score}(\mathbf{x})`$ measures OCR quality under configuration $`\mathbf{x}`$.
+$`\max_{\mathbf{x} \in [0,1]^D} \text{score}(\mathbf{x}).`$
 
-### Scoring the OCR Output
+---
 
-Given a configuration $`\mathbf{x}`$, the OCR system produces a set of text/confidence pairs:
+### Scoring OCR Outputs
 
-$`\mathcal{R}(\mathbf{x}) = \{(t_k, c_k)\}.`$
+Given a configuration $`\mathbf{x}`$, the OCR system produces text/confidence pairs:
 
-We define:
+$`\mathcal{R}(\mathbf{x}) = \{(t_k, c_k)\},`$
+
+where each pair consists of a text snippet $`t_k`$ and a confidence score $`c_k`$.
+
+#### Score Definition
+
+We define the score as:
 
 $`\text{score}(\mathbf{x}) = \sum_{(t,c) \in \mathcal{R}(\mathbf{x})} |t| \cdot c,`$
 
-where $`|t|`$ is the length of the extracted text $`t`$ and $`c`$ is the confidence score. This rewards configurations that yield both longer text and higher confidence, correlating closely with OCR effectiveness.
+where $`|t|`$ is the length of the extracted text snippet. This formulation rewards configurations that produce longer, more confidently recognized text, effectively capturing OCR quality in a single scalar value.
 
-### Meta-Learning Surrogate Model
+---
 
-To avoid brute-force search, we train a model to approximate the performance function:
+### Surrogate Modeling for Efficient Search
 
-$`f_\theta(\mathbf{x}) \approx \text{score}(\mathbf{x}).`$
+Instead of running the full OCR process for every candidate configuration, we build a **surrogate model** that predicts scores based on observed data.
 
-This is done by minimizing a mean squared error loss:
+#### Surrogate Model Training
 
-$`L(\theta) = \mathbb{E}_{(\mathbf{x},y)}[(f_\theta(\mathbf{x}) - y)^2],`$
+- Let $`f_\theta(\mathbf{x})`$ approximate $`\text{score}(\mathbf{x})`$.
+- We train $`f_\theta`$ on previously evaluated configurations and their observed scores $`y = \text{score}(\mathbf{x})`$.
 
-where $`y = \text{score}(\mathbf{x})`$ is obtained from actual OCR runs. As we gather more data, $`f_\theta`$ becomes a reliable guide to the configuration space.
+The training objective is to minimize the mean squared error:
 
-### Bayesian Optimization Inspiration
+$`L(\theta) = \mathbb{E}_{(\mathbf{x},y)}[(f_\theta(\mathbf{x}) - y)^2].`$
 
-In classical **Bayesian Optimization**, a Gaussian Process (GP) models the unknown objective, and we use an acquisition function to decide where to sample next. Here, we mimic the Bayesian flavor using a neural network and dropout-based uncertainty:
+As we accumulate more training data, our model $`f_\theta`$ guides us toward promising configurations, reducing the need to evaluate unproductive ones.
 
-1. **Approximating a Posterior:**
-   By enabling dropout at inference, each forward pass of $f_\theta(\mathbf{x})$ yields a slightly different prediction. For $`K`$ stochastic passes:
+---
 
-   $`f_\theta^{(k)}(\mathbf{x}), \quad k=1,\dots,K.`$
+### Infusing Bayesian Optimization Ideas
 
-   We estimate:
+Classical Bayesian Optimization uses Gaussian Processes to model unknown functions and acquisition functions to select new query points. We capture a similar flavor by using a neural network with dropout to estimate uncertainty.
 
-   $`\mu(\mathbf{x}) = \frac{1}{K}\sum_{k=1}^K f_\theta^{(k)}(\mathbf{x}) \quad\text{and}\quad \sigma(\mathbf{x}) = \sqrt{\frac{1}{K}\sum_{k=1}^K (f_\theta^{(k)}(\mathbf{x}) - \mu(\mathbf{x}))^2}.`$
+#### Dropout for Uncertainty Estimates
 
-   This provides a distribution-like estimate of model uncertainty, similar to a posterior in Bayesian methods.
+By applying dropout at inference time, we generate multiple stochastic predictions for the same input $`\mathbf{x}`$:
 
-2. **Acquisition Function (UCB):**
-   We use an Upper Confidence Bound (UCB) acquisition function to choose new configurations:
+$`f_\theta^{(k)}(\mathbf{x}), \quad k=1,\dots,K.`$
 
-   $`\text{UCB}(\mathbf{x}) = \mu(\mathbf{x}) + \beta \sigma(\mathbf{x}),`$
+From these $`K`$ samples, we estimate:
 
-   where $`\beta > 0`$ trades off exploration ($`\sigma(\mathbf{x})`$) and exploitation ($`\mu(\mathbf{x})`$). This guides us to either reduce uncertainty by exploring unknown regions or capitalize on known promising areas.
+- **Mean Prediction:**
+  
+  $`\mu(\mathbf{x}) = \frac{1}{K}\sum_{k=1}^K f_\theta^{(k)}(\mathbf{x})`$
+  
+- **Uncertainty (Standard Deviation):**
+  
+  $`\sigma(\mathbf{x}) = \sqrt{\frac{1}{K}\sum_{k=1}^K (f_\theta^{(k)}(\mathbf{x}) - \mu(\mathbf{x}))^2}.`$
 
-### Efficiency and Complexity
+These estimates provide a "posterior-like" distribution over scores, similar in spirit to Bayesian approaches.
 
-If each parameter had $`n`$ discrete values, exhaustive search takes $`O(n^D)`$ evaluations, which explodes combinatorially. By using the learned model and the UCB criterion, we only evaluate $`T \ll n^D`$ configurations in practice. Each evaluation updates our surrogate, making subsequent steps more informed. Thus, we achieve huge savings in time and computational resources.
+#### Acquisition Function (UCB)
 
-### Clustering in Latent Space
+We use an Upper Confidence Bound (UCB) to select new configurations to evaluate:
 
-The model also maps configurations into a latent space, where:
+$`\text{UCB}(\mathbf{x}) = \mu(\mathbf{x}) + \beta \sigma(\mathbf{x}),`$
+
+where $`\beta > 0`$ balances exploration (focusing on configurations with high uncertainty $`\sigma(\mathbf{x})`$) and exploitation (focusing on configurations with a high mean prediction $`\mu(\mathbf{x})`$).
+
+---
+
+### Efficiency in High-Dimensional Spaces
+
+#### Complexity Reduction
+
+If each parameter had $`n`$ possible values, naive brute force would cost $`O(n^D)`$ evaluations. With our surrogate-driven approach:
+
+- We only evaluate $`T \ll n^D`$ configurations.
+
+- Each evaluation refines $`f_\theta`$, improving subsequent guidance.
+
+This yields dramatic savings in both time and computational resources, making the search feasible even in high-dimensional parameter spaces.
+
+---
+
+### Clustering and Latent Representations
+
+Beyond direct parameter optimization, we can analyze the configuration space structurally.
+
+#### Latent Embedding and Clustering
+
+We embed each configuration $`\mathbf{x}`$ into a latent space:
 
 $`\mathbf{x} \xrightarrow{e_\phi} \mathbf{z} \in \mathbb{R}^L.`$
 
-We cluster these latent representations to identify and focus on high-performing regions. Clustering helps refine where we search next and ensures we don't get stuck or wander aimlessly in the configuration space.
+Clustering these latent vectors $`\mathbf{z}`$ helps us:
+
+- Identify clusters of configurations that yield high OCR scores.
+
+- Focus exploration on promising neighborhoods.
+- Avoid getting stuck in local optima by providing a higher-level view of the parameter space.
 
 ---
 
@@ -111,6 +158,7 @@ We cluster these latent representations to identify and focus on high-performing
 Coordinates the entire process:
   
   - Extracts configuration boundaries from `TextExtractor`.
+
   - Normalizes parameters to $`[0,1]^D`$.
   - Manages the meta-learning model and training buffer.
   - Employs acquisition functions (UCB) and clustering for guided search.
@@ -121,6 +169,7 @@ Coordinates the entire process:
   A neural model composed of:
 
   - **`ConfigEncoder`:** Maps $`\mathbf{x}`$ to $\mathbf{z}`$, a compressed representation capturing essential features.
+
   - **`PerformancePredictor`:** Maps $`\mathbf{z}`$ to a predicted score, $`\hat{y}`$.
   
   Together:
@@ -186,6 +235,7 @@ The output `optimizer.json` maps each image to its best configuration and result
 
 This final record:
 - Clearly shows the chosen configuration in terms of human-understandable steps and parameters.
+
 - Provides the final OCR output and computed score.
 - Allows reproducing the exact best configuration for future runs.
 
@@ -194,6 +244,7 @@ This final record:
 ## Why is This Useful?
 
 - **High-Dimensional Efficiency:** Tames exponentially large search spaces using intelligent, learning-based approaches.
+
 - **Data-Driven Approach:** The more it sees, the better it predicts, reducing guesswork.
 - **Bayesian-Inspired Precision:** Balances trying new regions to gain information with refining known good areas.
 - **Practical Payoff:** Saves tremendous amounts of computational time and ensures stable, high-quality OCR configurations with fewer trials.
