@@ -6,7 +6,7 @@
           "enabled": true,
           "parameters": {
             "rotation_angle": {
-              "value": 168.0
+              "value": 74.0
             }
           }
         },
@@ -14,10 +14,10 @@
           "enabled": true,
           "parameters": {
             "shadow_kernel_size": {
-              "value": 30.0
+              "value": 13.0
             },
             "shadow_median_blur": {
-              "value": 22.0
+              "value": 10.0
             }
           }
         },
@@ -25,7 +25,7 @@
           "enabled": true,
           "parameters": {
             "clahe_clip_limit": {
-              "value": 4.9
+              "value": 1.0
             }
           }
         },
@@ -33,7 +33,7 @@
           "enabled": true,
           "parameters": {
             "brightness_value": {
-              "value": -45.0
+              "value": -37.0
             }
           }
         },
@@ -41,7 +41,7 @@
           "enabled": true,
           "parameters": {
             "contrast_value": {
-              "value": 1.3
+              "value": 1.4
             }
           }
         }
@@ -49,11 +49,19 @@
     },
     "ocr_results": [
       {
-        "text": "ANNE FRANK THE DIARY OFAYOUNG GIRL",
-        "confidence": 0.7981538086729822
+        "text": "ANNE FRANK:",
+        "confidence": 0.992306275282309
+      },
+      {
+        "text": "THE",
+        "confidence": 0.9964700868561064
+      },
+      {
+        "text": "DIARY OF AVOUNG GIRL",
+        "confidence": 0.531636241990347
       }
     ],
-    "score": 27.137229494881396
+    "score": 24.53750412848066
   },
   "1.jpg": {
     "config_dict": {
@@ -62,7 +70,7 @@
           "enabled": true,
           "parameters": {
             "rotation_angle": {
-              "value": 169.0
+              "value": 23.0
             }
           }
         },
@@ -70,10 +78,10 @@
           "enabled": true,
           "parameters": {
             "shadow_kernel_size": {
-              "value": 30.0
+              "value": 10.0
             },
             "shadow_median_blur": {
-              "value": 22.0
+              "value": 12.0
             }
           }
         },
@@ -81,7 +89,7 @@
           "enabled": true,
           "parameters": {
             "clahe_clip_limit": {
-              "value": 4.5
+              "value": 2.8
             }
           }
         },
@@ -89,7 +97,7 @@
           "enabled": true,
           "parameters": {
             "brightness_value": {
-              "value": -50.0
+              "value": -35.0
             }
           }
         },
@@ -97,7 +105,7 @@
           "enabled": true,
           "parameters": {
             "contrast_value": {
-              "value": 1.3
+              "value": 1.5
             }
           }
         }
@@ -105,15 +113,15 @@
     },
     "ocr_results": [
       {
-        "text": "Sa",
-        "confidence": 0.9717053982448219
+        "text": "THE FORESHADOWING",
+        "confidence": 0.9933134154192369
       },
       {
-        "text": "THE FORESHADOWING",
-        "confidence": 0.9975833411887892
+        "text": "N",
+        "confidence": 0.8722409052133031
       }
     ],
-    "score": 18.90232759669906
+    "score": 17.75856896734033
   },
   "10.jpg": {
     "config_dict": {
@@ -122,7 +130,7 @@
           "enabled": true,
           "parameters": {
             "rotation_angle": {
-              "value": 167.0
+              "value": 101.0
             }
           }
         },
@@ -130,10 +138,10 @@
           "enabled": true,
           "parameters": {
             "shadow_kernel_size": {
-              "value": 30.0
+              "value": 14.0
             },
             "shadow_median_blur": {
-              "value": 23.0
+              "value": 15.0
             }
           }
         },
@@ -141,7 +149,7 @@
           "enabled": true,
           "parameters": {
             "clahe_clip_limit": {
-              "value": 5.0
+              "value": 0.9
             }
           }
         },
@@ -149,7 +157,7 @@
           "enabled": true,
           "parameters": {
             "brightness_value": {
-              "value": -46.0
+              "value": -32.0
             }
           }
         },
@@ -157,7 +165,7 @@
           "enabled": true,
           "parameters": {
             "contrast_value": {
-              "value": 1.3
+              "value": 0.7
             }
           }
         }
@@ -166,14 +174,14 @@
     "ocr_results": [
       {
         "text": "Chinese Cinderella",
-        "confidence": 0.9877835738161711
+        "confidence": 0.9923323424379156
       },
       {
-        "text": "3",
-        "confidence": 0.9353640820468314
+        "text": "88980",
+        "confidence": 0.6699420137846083
       }
     ],
-    "score": 18.715468410737913
+    "score": 21.21169223280552
   },
   "11.jpg": {
     "config_dict": {
@@ -182,7 +190,7 @@
           "enabled": true,
           "parameters": {
             "rotation_angle": {
-              "value": 206.0
+              "value": 69.0
             }
           }
         },
@@ -190,10 +198,10 @@
           "enabled": true,
           "parameters": {
             "shadow_kernel_size": {
-              "value": 30.0
+              "value": 5.0
             },
             "shadow_median_blur": {
-              "value": 26.0
+              "value": 6.0
             }
           }
         },
@@ -201,7 +209,7 @@
           "enabled": true,
           "parameters": {
             "clahe_clip_limit": {
-              "value": 3.3
+              "value": 1.9
             }
           }
         },
@@ -209,7 +217,7 @@
           "enabled": true,
           "parameters": {
             "brightness_value": {
-              "value": -48.0
+              "value": -14.0
             }
           }
         },
@@ -217,7 +225,7 @@
           "enabled": true,
           "parameters": {
             "contrast_value": {
-              "value": 1.3
+              "value": 0.6
             }
           }
         }
@@ -225,31 +233,31 @@
     },
     "ocr_results": [
       {
-        "text": "Harcourt",
-        "confidence": 0.7867860834915759
-      },
-      {
-        "text": "Quilt",
-        "confidence": 0.9987836456439039
-      },
-      {
-        "text": "fin",
-        "confidence": 0.8473899662264492
-      },
-      {
-        "text": "F",
-        "confidence": 0.9779344207141207
+        "text": "NNV",
+        "confidence": 0.9991295456534335
       },
       {
         "text": "RINALDI",
-        "confidence": 0.9983976782456734
+        "confidence": 0.997840526795199
       },
       {
-        "text": "ANN",
-        "confidence": 0.9999908462120632
+        "text": "F",
+        "confidence": 0.419210528154057
+      },
+      {
+        "text": "Jffin",
+        "confidence": 0.8405134080904024
+      },
+      {
+        "text": "Quilt",
+        "confidence": 0.9994077806641916
+      },
+      {
+        "text": "@Harcourt",
+        "confidence": 0.8894688082228877
       }
     ],
-    "score": 24.7970675019015
+    "score": 27.606308070459708
   },
   "12.jpg": {
     "config_dict": {
@@ -258,7 +266,7 @@
           "enabled": true,
           "parameters": {
             "rotation_angle": {
-              "value": 156.0
+              "value": 100.0
             }
           }
         },
@@ -266,10 +274,10 @@
           "enabled": true,
           "parameters": {
             "shadow_kernel_size": {
-              "value": 30.0
+              "value": 6.0
             },
             "shadow_median_blur": {
-              "value": 18.0
+              "value": 8.0
             }
           }
         },
@@ -277,7 +285,7 @@
           "enabled": true,
           "parameters": {
             "clahe_clip_limit": {
-              "value": 3.9
+              "value": 3.1
             }
           }
         },
@@ -285,1622 +293,7 @@
           "enabled": true,
           "parameters": {
             "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.5
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Rabin",
-        "confidence": 0.9893847176815135
-      },
-      {
-        "text": "Betsy",
-        "confidence": 0.9997747537421604
-      },
-      {
-        "text": "Emperor",
-        "confidence": 0.999457152232253
-      },
-      {
-        "text": "1",
-        "confidence": 0.9886671165549075
-      },
-      {
-        "text": "emdIbc",
-        "confidence": 0.2001235482144254
-      }
-    ],
-    "score": 19.1314058285856
-  },
-  "13.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 170.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 28.0
-            },
-            "shadow_median_blur": {
-              "value": 29.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 3.6
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.4
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Wolf by the Ears",
-        "confidence": 0.9669573314689154
-      },
-      {
-        "text": "Rinaldi",
-        "confidence": 0.9998036809676711
-      }
-    ],
-    "score": 22.469943070276344
-  },
-  "14.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 154.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 15.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.7
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -49.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.2
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "JOHNNY TREMAIN",
-        "confidence": 0.9349297811807292
-      },
-      {
-        "text": "1",
-        "confidence": 0.6904042422229963
-      },
-      {
-        "text": "1",
-        "confidence": 0.9785991790966051
-      }
-    ],
-    "score": 14.75802035784981
-  },
-  "15.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 156.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 18.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.5
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.6
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "SOLDIER S HEART",
-        "confidence": 0.8728609628194285
-      },
-      {
-        "text": "2",
-        "confidence": 0.48464640627429745
-      },
-      {
-        "text": "GARY PAUL SEN",
-        "confidence": 0.9098939141199608
-      }
-    ],
-    "score": 25.406181732125212
-  },
-  "16.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 168.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 28.0
-            },
-            "shadow_median_blur": {
-              "value": 22.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.8
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -38.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.2
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Confassions",
-        "confidence": 0.5470392750914832
-      },
-      {
-        "text": "ff Chnrloth",
-        "confidence": 0.2512833059088419
-      },
-      {
-        "text": "Doylc",
-        "confidence": 0.7415019386674433
-      },
-      {
-        "text": "<",
-        "confidence": 0.8897306834029486
-      }
-    ],
-    "score": 13.37878876774374
-  },
-  "17.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 155.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 17.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.7
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -48.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.6
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "SuMMER",
-        "confidence": 0.9884797275527683
-      },
-      {
-        "text": "GERMAN SOLDIER",
-        "confidence": 0.8801139579957417
-      },
-      {
-        "text": "B E TTELGREEME",
-        "confidence": 0.27119328512448776
-      }
-    ],
-    "score": 22.04917976899982
-  },
-  "18.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 253.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 10.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.1
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -49.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.1
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "DANIEL HALF HUMAN",
-        "confidence": 0.9969059181602048
-      },
-      {
-        "text": "CHOTJEWITZ",
-        "confidence": 0.9751512669771819
-      }
-    ],
-    "score": 26.698913278495297
-  },
-  "19.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 258.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 28.0
-            },
-            "shadow_median_blur": {
-              "value": 10.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 3.5
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -48.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.3
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "SCOTT ODELL",
-        "confidence": 0.9224577089613676
-      },
-      {
-        "text": "SARAH BISHOP",
-        "confidence": 0.9198569394383354
-      },
-      {
-        "text": "14",
-        "confidence": 0.45564367237569336
-      }
-    ],
-    "score": 22.096605416586456
-  },
-  "2.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 174.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 17.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.4
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.4
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "3",
-        "confidence": 0.967076121017957
-      },
-      {
-        "text": "1",
-        "confidence": 0.9489251435031889
-      },
-      {
-        "text": "ANN RINALDI",
-        "confidence": 0.983273254310207
-      },
-      {
-        "text": "Sara 6",
-        "confidence": 0.7668260186558077
-      },
-      {
-        "text": "1",
-        "confidence": 0.840338463024537
-      }
-    ],
-    "score": 18.173301636892806
-  },
-  "20.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 183.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 28.0
-            },
-            "shadow_median_blur": {
-              "value": 25.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 5.0
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -46.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.4
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Syvys Civil War ",
-        "confidence": 0.7663807754031335
-      },
-      {
-        "text": "BRENAMAN",
-        "confidence": 0.9962283948129671
-      }
-    ],
-    "score": 20.231919564953873
-  },
-  "21.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 174.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 20.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 5.0
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -44.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.2
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "IT Rained WARM BREAD",
-        "confidence": 0.707929054582531
-      },
-      {
-        "text": "8",
-        "confidence": 0.8363457863968193
-      },
-      {
-        "text": "Hoskowitz SWEET",
-        "confidence": 0.6647455629313291
-      },
-      {
-        "text": "1",
-        "confidence": 0.7334265972217544
-      }
-    ],
-    "score": 25.69953691923913
-  },
-  "22.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 247.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 9.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 3.9
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.6
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "JIM CROW",
-        "confidence": 0.9358523541429541
-      },
-      {
-        "text": "0",
-        "confidence": 0.44426654900740914
-      },
-      {
-        "text": "RISING",
-        "confidence": 0.9996402390742937
-      },
-      {
-        "text": "SKY",
-        "confidence": 0.9300651551029114
-      },
-      {
-        "text": "DARK",
-        "confidence": 0.9941760301589966
-      },
-      {
-        "text": "Bolden",
-        "confidence": 0.9991819787105729
-      },
-      {
-        "text": "GATES",
-        "confidence": 0.9058408997151216
-      },
-      {
-        "text": "Focus",
-        "confidence": 0.9231245160885502
-      }
-    ],
-    "score": 35.83574535382332
-  },
-  "23.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 180.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 17.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.3
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.3
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "DREAM",
-        "confidence": 0.9975979529656258
-      },
-      {
-        "text": "tne",
-        "confidence": 0.9172139137118548
-      },
-      {
-        "text": "CHILDo",
-        "confidence": 0.8713129544646989
-      },
-      {
-        "text": "9",
-        "confidence": 0.8814873096395246
-      },
-      {
-        "text": "ROBINSON",
-        "confidence": 0.999685732641559
-      }
-    ],
-    "score": 21.846482403523883
-  },
-  "24.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 243.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 9.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 3.9
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.7
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "HOME % the BRAVE",
-        "confidence": 0.746903865247319
-      },
-      {
-        "text": "APPLEGAT",
-        "confidence": 0.8452294498090424
-      }
-    ],
-    "score": 18.712297442429442
-  },
-  "25.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 245.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 9.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.4
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -49.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.7
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "1",
-        "confidence": 0.8509078555774217
-      },
-      {
-        "text": "6",
-        "confidence": 0.8578016731672164
-      },
-      {
-        "text": "MIGHT",
-        "confidence": 0.879498768416208
-      },
-      {
-        "text": "WITH THE",
-        "confidence": 0.98489883070393
-      }
-    ],
-    "score": 13.985394016457118
-  },
-  "26.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 177.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 24.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.3
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -49.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.7
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "JVNVZNvn 9 112024*4",
-        "confidence": 0.3419042521056455
-      },
-      {
-        "text": "Houston",
-        "confidence": 0.9425747685563859
-      }
-    ],
-    "score": 13.094204169901966
-  },
-  "27.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 163.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 18.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.5
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.7
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [],
-    "score": 0.0
-  },
-  "28.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 172.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 22.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 3.0
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -47.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.2
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Lit CHAT",
-        "confidence": 0.9527002313677214
-      },
-      {
-        "text": "1",
-        "confidence": 0.9504885984716225
-      },
-      {
-        "text": "1",
-        "confidence": 0.9766851026188625
-      }
-    ],
-    "score": 9.548775552032257
-  },
-  "29.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 165.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 18.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.4
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 2.3
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "1",
-        "confidence": 0.6843054897408365
-      },
-      {
-        "text": "3",
-        "confidence": 0.9029798763949657
-      },
-      {
-        "text": "Tne game % orrowed phrases",
-        "confidence": 0.7053843234844905
-      }
-    ],
-    "score": 19.927277776732556
-  },
-  "3.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 163.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 18.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.5
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.7
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Hang",
-        "confidence": 0.8376612663269043
-      },
-      {
-        "text": "Thousand",
-        "confidence": 0.884299191679733
-      },
-      {
-        "text": "ANN RINALDI",
-        "confidence": 0.9945823923456625
-      },
-      {
-        "text": "Trees with Ribbons",
-        "confidence": 0.9442959974729003
-      }
-    ],
-    "score": 38.36277286905997
-  },
-  "4.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 270.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 27.0
-            },
-            "shadow_median_blur": {
-              "value": 11.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.9
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -50.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 2.1
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "RINALDI",
-        "confidence": 0.8220522543285437
-      },
-      {
-        "text": "1",
-        "confidence": 0.5897801573088977
-      }
-    ],
-    "score": 6.344145937608704
-  },
-  "5.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 255.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 28.0
-            },
-            "shadow_median_blur": {
-              "value": 16.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.0
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -34.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.4
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "Ann Rinaldli",
-        "confidence": 0.5941555890820075
-      },
-      {
-        "text": "BEND IN THE RIVER",
-        "confidence": 0.9412295998874971
-      },
-      {
-        "text": "ThE SECOND",
-        "confidence": 0.7036993974089897
-      }
-    ],
-    "score": 30.167764241161436
-  },
-  "6.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 166.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 15.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 3.2
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -47.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.9
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "William Lavender",
-        "confidence": 0.9038297296549535
-      },
-      {
-        "text": "JUST JANE",
-        "confidence": 0.9734046888269907
-      }
-    ],
-    "score": 23.221917873922173
-  },
-  "7.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 155.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 29.0
-            },
-            "shadow_median_blur": {
-              "value": 18.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.3
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -42.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 0.8
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "4 BREAK",
-        "confidence": 0.7889757686775517
-      },
-      {
-        "text": "ANN RINALDI",
-        "confidence": 0.9805868161679095
-      },
-      {
-        "text": "with CHARity",
-        "confidence": 0.8052487601215864
-      }
-    ],
-    "score": 25.972270480048905
-  },
-  "8.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 152.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 30.0
-            },
-            "shadow_median_blur": {
-              "value": 30.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.1
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -24.0
-            }
-          }
-        },
-        "contrast_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "contrast_value": {
-              "value": 1.0
-            }
-          }
-        }
-      }
-    },
-    "ocr_results": [
-      {
-        "text": "FINISHING BECCA",
-        "confidence": 0.9985809987184749
-      },
-      {
-        "text": "NALDI",
-        "confidence": 0.9210690534360649
-      }
-    ],
-    "score": 19.58406024795745
-  },
-  "9.jpg": {
-    "config_dict": {
-      "steps": {
-        "image_rotation": {
-          "enabled": true,
-          "parameters": {
-            "rotation_angle": {
-              "value": 221.0
-            }
-          }
-        },
-        "shadow_removal": {
-          "enabled": true,
-          "parameters": {
-            "shadow_kernel_size": {
-              "value": 28.0
-            },
-            "shadow_median_blur": {
-              "value": 19.0
-            }
-          }
-        },
-        "color_clahe": {
-          "enabled": true,
-          "parameters": {
-            "clahe_clip_limit": {
-              "value": 4.8
-            }
-          }
-        },
-        "brightness_adjustment": {
-          "enabled": true,
-          "parameters": {
-            "brightness_value": {
-              "value": -44.0
+              "value": -16.0
             }
           }
         },
@@ -1916,14 +309,1718 @@
     },
     "ocr_results": [
       {
-        "text": "BURNING TIME",
-        "confidence": 0.9597159227194871
+        "text": "Betsy",
+        "confidence": 0.9786795981840399
       },
       {
-        "text": "BEYOND THE;",
-        "confidence": 0.7599438182630927
+        "text": "\"Rabin",
+        "confidence": 0.898174251075721
+      },
+      {
+        "text": "Emperor",
+        "confidence": 0.9404236059630041
+      },
+      {
+        "text": "A",
+        "confidence": 0.022624704596678535
+      },
+      {
+        "text": "qru0",
+        "confidence": 0.3437644839286804
       }
     ],
-    "score": 19.875973073527867
+    "score": 18.263091379426957
+  },
+  "13.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 55.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 3.0
+            },
+            "shadow_median_blur": {
+              "value": 6.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.4
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -5.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.6
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "Wolf by the Ears",
+        "confidence": 0.9955226656419788
+      },
+      {
+        "text": "Rinaldi",
+        "confidence": 0.9999643598057807
+      }
+    ],
+    "score": 22.928113168912127
+  },
+  "14.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 55.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 5.0
+            },
+            "shadow_median_blur": {
+              "value": 3.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.2
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -24.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.7
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "L",
+        "confidence": 0.16474929516108716
+      },
+      {
+        "text": "MTOMT",
+        "confidence": 0.5633743802332422
+      },
+      {
+        "text": "JOHNNY",
+        "confidence": 0.9782793521273179
+      },
+      {
+        "text": "TREMAIN",
+        "confidence": 0.9954054279669465
+      }
+    ],
+    "score": 15.81913530485983
+  },
+  "15.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 127.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 5.0
+            },
+            "shadow_median_blur": {
+              "value": 8.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.2
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -29.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 1.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "SOLDIERS HEART",
+        "confidence": 0.9750408910728664
+      },
+      {
+        "text": "2972",
+        "confidence": 0.24105793237686157
+      },
+      {
+        "text": "GARV PAULSEN",
+        "confidence": 0.7745247841022176
+      }
+    ],
+    "score": 23.90910161375419
+  },
+  "16.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 125.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 7.0
+            },
+            "shadow_median_blur": {
+              "value": 7.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.0
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -11.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "8",
+        "confidence": 0.5449049335183567
+      },
+      {
+        "text": "Confassions",
+        "confidence": 0.7827459302048797
+      }
+    ],
+    "score": 9.155110165772033
+  },
+  "17.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 114.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 7.0
+            },
+            "shadow_median_blur": {
+              "value": 8.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.5
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -24.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "BETTESG REENE SuMMER e W GERMAN SoLDIER",
+        "confidence": 0.4844147578510683
+      },
+      {
+        "text": "5",
+        "confidence": 0.8479730265187335
+      }
+    ],
+    "score": 19.740148582710397
+  },
+  "18.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 84.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 10.0
+            },
+            "shadow_median_blur": {
+              "value": 5.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 3.3
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -6.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 1.1
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "CHOTJEWITZ",
+        "confidence": 0.9934387444223844
+      },
+      {
+        "text": "DANIELHALFHUMAM",
+        "confidence": 0.7947075608775631
+      },
+      {
+        "text": "4",
+        "confidence": 0.7120062999499375
+      }
+    ],
+    "score": 22.567007157337226
+  },
+  "19.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 103.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 3.0
+            },
+            "shadow_median_blur": {
+              "value": 5.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.3
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 2.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.8
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "SARAH BISHOP",
+        "confidence": 0.9831225463905823
+      },
+      {
+        "text": "SCOTT ODELL",
+        "confidence": 0.8920329190119416
+      },
+      {
+        "text": "14",
+        "confidence": 0.9322096379194609
+      }
+    ],
+    "score": 23.47425194165727
+  },
+  "2.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 37.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 3.0
+            },
+            "shadow_median_blur": {
+              "value": 7.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.0
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -19.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.6
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "NNV",
+        "confidence": 0.9943741246556349
+      },
+      {
+        "text": "RINALDI",
+        "confidence": 0.9888277258137369
+      },
+      {
+        "text": "3",
+        "confidence": 0.9561390221966946
+      },
+      {
+        "text": "9145",
+        "confidence": 0.4818200469017029
+      },
+      {
+        "text": "6",
+        "confidence": 0.9510402620242218
+      },
+      {
+        "text": "Revere",
+        "confidence": 0.9423073282485792
+      },
+      {
+        "text": "Harcourt",
+        "confidence": 0.8774578815259843
+      }
+    ],
+    "score": 26.41288294819014
+  },
+  "20.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 86.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 5.0
+            },
+            "shadow_median_blur": {
+              "value": 5.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.7
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -36.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.5
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "~BRENAMAN",
+        "confidence": 0.9426606450937366
+      },
+      {
+        "text": "8",
+        "confidence": 0.5051357156379623
+      },
+      {
+        "text": "8",
+        "confidence": 0.9810407235469008
+      },
+      {
+        "text": "Cil War",
+        "confidence": 0.8093880553550887
+      },
+      {
+        "text": "Mcods",
+        "confidence": 0.5948344966869465
+      }
+    ],
+    "score": 18.610011115948843
+  },
+  "21.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 69.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 3.0
+            },
+            "shadow_median_blur": {
+              "value": 3.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.2
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -10.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.6
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "imohsohi",
+        "confidence": 0.5007465423458509
+      },
+      {
+        "text": "SWFET",
+        "confidence": 0.7916100182963195
+      },
+      {
+        "text": "IINS",
+        "confidence": 0.8821881413459778
+      },
+      {
+        "text": "3",
+        "confidence": 0.8028833422324624
+      },
+      {
+        "text": "5",
+        "confidence": 0.6730011972889685
+      },
+      {
+        "text": "Rained",
+        "confidence": 0.9815950252182479
+      },
+      {
+        "text": "WARM",
+        "confidence": 0.9905083281989278
+      },
+      {
+        "text": "BReAD",
+        "confidence": 0.8708340711674738
+      }
+    ],
+    "score": 27.174433355096316
+  },
+  "22.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 51.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 6.0
+            },
+            "shadow_median_blur": {
+              "value": 11.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.6
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -9.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.5
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "Focus",
+        "confidence": 0.9150146470928416
+      },
+      {
+        "text": "GATES",
+        "confidence": 0.986040055583165
+      },
+      {
+        "text": "Bolden",
+        "confidence": 0.9994286615331571
+      },
+      {
+        "text": "DARK SKY",
+        "confidence": 0.9391967200891169
+      },
+      {
+        "text": "RISING",
+        "confidence": 0.9992395619751427
+      },
+      {
+        "text": "RECONSIRU",
+        "confidence": 0.4779111810466095
+      }
+    ],
+    "score": 33.31205724456225
+  },
+  "23.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 98.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 11.0
+            },
+            "shadow_median_blur": {
+              "value": 17.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.7
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 21.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.2
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "8",
+        "confidence": 0.8676303217269812
+      },
+      {
+        "text": "DREAM",
+        "confidence": 0.9892885277888002
+      },
+      {
+        "text": "8",
+        "confidence": 0.8606817806390268
+      },
+      {
+        "text": "Or",
+        "confidence": 0.9656309484325333
+      },
+      {
+        "text": "ROBINSON",
+        "confidence": 0.9987051665587191
+      }
+    ],
+    "score": 16.59565797064483
+  },
+  "24.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 41.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 9.0
+            },
+            "shadow_median_blur": {
+              "value": 12.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 0.9
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 0.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.6
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "APPLEGATE",
+        "confidence": 0.9708872840926162
+      },
+      {
+        "text": "HOME",
+        "confidence": 0.9991077780723572
+      },
+      {
+        "text": "Jo",
+        "confidence": 0.9325147792935882
+      },
+      {
+        "text": "the",
+        "confidence": 0.9096097827789605
+      },
+      {
+        "text": "BRAVE",
+        "confidence": 0.9996527184158677
+      }
+    ],
+    "score": 22.326539168126367
+  },
+  "25.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 58.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 8.0
+            },
+            "shadow_median_blur": {
+              "value": 9.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.9
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 0.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "PINKNEY",
+        "confidence": 0.441315863339322
+      },
+      {
+        "text": "WIth THB",
+        "confidence": 0.5960108189649862
+      },
+      {
+        "text": "MIGHTOP",
+        "confidence": 0.8155252344654039
+      },
+      {
+        "text": "ANGES",
+        "confidence": 0.998670613878463
+      },
+      {
+        "text": "Ol",
+        "confidence": 0.9200113131792772
+      }
+    ],
+    "score": 20.39934993210384
+  },
+  "26.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 45.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 4.0
+            },
+            "shadow_median_blur": {
+              "value": 3.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.8
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -12.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.5
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "Honston",
+        "confidence": 0.8529998376656537
+      },
+      {
+        "text": "(Faicwcll 6",
+        "confidence": 0.5849979234006092
+      },
+      {
+        "text": "Manzanar",
+        "confidence": 0.7660038513550766
+      },
+      {
+        "text": "2",
+        "confidence": 0.8872236958998201
+      },
+      {
+        "text": "HmI",
+        "confidence": 0.3796714715229379
+      }
+    ],
+    "score": 20.560244942375522
+  },
+  "27.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 7.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 6.0
+            },
+            "shadow_median_blur": {
+              "value": 12.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.7
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -11.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.5
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "USD",
+        "confidence": 0.631708413946582
+      },
+      {
+        "text": "8",
+        "confidence": 0.8911536786612864
+      },
+      {
+        "text": "1",
+        "confidence": 0.4269683306184824
+      }
+    ],
+    "score": 3.2132472511195145
+  },
+  "28.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 67.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 6.0
+            },
+            "shadow_median_blur": {
+              "value": 8.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.7
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -1.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.7
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "5",
+        "confidence": 0.9876615109251361
+      },
+      {
+        "text": "CHAT",
+        "confidence": 0.9852811458575251
+      },
+      {
+        "text": "Hnott",
+        "confidence": 0.3174471352002062
+      },
+      {
+        "text": "041758",
+        "confidence": 0.46480387809889334
+      }
+    ],
+    "score": 9.304845038949628
+  },
+  "29.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 111.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 5.0
+            },
+            "shadow_median_blur": {
+              "value": 10.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 3.3
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -22.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.9
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "ABOOL",
+        "confidence": 0.6462720252561991
+      },
+      {
+        "text": "9",
+        "confidence": 0.5893671590510543
+      },
+      {
+        "text": "Ta game % Borrowed phrases",
+        "confidence": 0.5930699483709588
+      }
+    ],
+    "score": 19.24054594297698
+  },
+  "3.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 129.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 4.0
+            },
+            "shadow_median_blur": {
+              "value": 18.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.4
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 0.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "Hang",
+        "confidence": 0.7379775643348694
+      },
+      {
+        "text": "Thousand",
+        "confidence": 0.9770528006220447
+      },
+      {
+        "text": "ANN",
+        "confidence": 0.9991735889745519
+      },
+      {
+        "text": "RINAL DI",
+        "confidence": 0.8514500446963219
+      },
+      {
+        "text": "5",
+        "confidence": 0.941176091751462
+      },
+      {
+        "text": "Trees with Ribbons",
+        "confidence": 0.9934252940072349
+      }
+    ],
+    "score": 39.40028517069176
+  },
+  "4.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 128.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 6.0
+            },
+            "shadow_median_blur": {
+              "value": 16.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.1
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -14.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.3
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "1",
+        "confidence": 0.608962913101724
+      },
+      {
+        "text": "1",
+        "confidence": 0.43037403044223765
+      },
+      {
+        "text": "ANN RINALDI",
+        "confidence": 0.8695716558428018
+      }
+    ],
+    "score": 10.604625157814782
+  },
+  "5.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 138.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 9.0
+            },
+            "shadow_median_blur": {
+              "value": 16.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.4
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 2.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.3
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "THE SECOND BEND IN THE RIVER",
+        "confidence": 0.916055446174185
+      },
+      {
+        "text": "1",
+        "confidence": 0.32834595618300355
+      },
+      {
+        "text": "Ann Rinaldi",
+        "confidence": 0.9908699809333902
+      }
+    ],
+    "score": 36.87746823932748
+  },
+  "6.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 139.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 4.0
+            },
+            "shadow_median_blur": {
+              "value": 18.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.7
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 2.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.5
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "William Lavender",
+        "confidence": 0.9013408403518602
+      },
+      {
+        "text": "JUST JANE",
+        "confidence": 0.9634841000213837
+      },
+      {
+        "text": " |",
+        "confidence": 0.9831953103672666
+      }
+    ],
+    "score": 25.059200966556748
+  },
+  "7.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 154.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 7.0
+            },
+            "shadow_median_blur": {
+              "value": 11.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.8
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 11.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.7
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "A BREAK",
+        "confidence": 0.8762728625329863
+      },
+      {
+        "text": "ANN RINALD[",
+        "confidence": 0.9417756073072789
+      },
+      {
+        "text": "with_CHARity",
+        "confidence": 0.8072471473668816
+      },
+      {
+        "text": "5",
+        "confidence": 0.9791132895335899
+      }
+    ],
+    "score": 27.15952077604714
+  },
+  "8.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 109.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 3.0
+            },
+            "shadow_median_blur": {
+              "value": 21.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 1.8
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": 17.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "FINISHING BECCA",
+        "confidence": 0.9986315543131192
+      },
+      {
+        "text": "1",
+        "confidence": 0.8823549238564397
+      },
+      {
+        "text": "1",
+        "confidence": 0.7748958480852366
+      }
+    ],
+    "score": 16.636724086638466
+  },
+  "9.jpg": {
+    "config_dict": {
+      "steps": {
+        "image_rotation": {
+          "enabled": true,
+          "parameters": {
+            "rotation_angle": {
+              "value": 174.0
+            }
+          }
+        },
+        "shadow_removal": {
+          "enabled": true,
+          "parameters": {
+            "shadow_kernel_size": {
+              "value": 6.0
+            },
+            "shadow_median_blur": {
+              "value": 17.0
+            }
+          }
+        },
+        "color_clahe": {
+          "enabled": true,
+          "parameters": {
+            "clahe_clip_limit": {
+              "value": 2.2
+            }
+          }
+        },
+        "brightness_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "brightness_value": {
+              "value": -21.0
+            }
+          }
+        },
+        "contrast_adjustment": {
+          "enabled": true,
+          "parameters": {
+            "contrast_value": {
+              "value": 0.4
+            }
+          }
+        }
+      }
+    },
+    "ocr_results": [
+      {
+        "text": "BEVOND THE BURNING TIME",
+        "confidence": 0.7128567346618014
+      }
+    ],
+    "score": 16.39570489722143
   }
 }

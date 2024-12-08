@@ -290,7 +290,7 @@ class ConfigOptimizer:
     # -------------------- Project & File Directories --------------------
     PROJECT_ROOT_DIRECTORY = Utils.find_root('pyproject.toml')
     RESULTS_DIRECTORY      = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'data' / 'results'
-    MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'core' / 'parameter_optimizer' / 'models'
+    MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'core' / 'config_optimizer' / 'models'
     OUTPUT_JSON_FILE       = RESULTS_DIRECTORY / 'optimizer.json'
     MODEL_PYTORCH_FILE     = MODEL_DIRECTORY / 'meta_learner.pt'
 
