@@ -445,7 +445,7 @@ class ParameterOptimizer:
         to ensure no cluster center is None.
         """
         if self.MODEL_PYTORCH_FILE.exists():
-            checkpoint = torch.load(self.MODEL_PYTORCH_FILE, map_location = self.device_type, weights_only = True)
+            checkpoint = torch.load(self.MODEL_PYTORCH_FILE, map_location = self.device_type)
 
             # Load model state
             self.optimizer_state.model.load_state_dict(checkpoint['model_state_dict'])
@@ -489,9 +489,9 @@ class ParameterOptimizer:
         self.MODEL_PYTORCH_FILE.parent.mkdir(exist_ok = True, parents = True)
         
         checkpoint_data = {
-            'model_state_dict' : self.optimizer_state.model.state_dict(),
+            'model_state_dict'     : self.optimizer_state.model.state_dict(),
             'optimization_history' : [record.to_dict() for record in self.optimizer_state.optimization_history],
-            'parameter_clusters' : {
+            'parameter_clusters'   : {
                 cluster_id: [
                     {
                         'parameters' : member.parameter_vector.tolist(),
@@ -508,21 +508,34 @@ class ParameterOptimizer:
 
     def save_optimization_results(self):
         """
-        Saves the optimization results to a JSON file.
-        
-        Records the best parameters, scores, and OCR results for each processed image,
-        allowing external analysis or future reference.
+        Saves a simplified version of the optimization results to a JSON file.
+
+        For each image, we store:
+        - The image name (e.g. "0.jpg") as the key in the JSON.
+        - A 'config_dict' with human-readable steps and parameters.
+        - The 'score' achieved.
+        - The 'ocr_results' list.
+
+        This excludes internal vectors like 'parameters' and 'latent_vector' to produce a more
+        human-friendly and reproducible configuration record.
         """
-        output_data = {
-            str(record.image_path): record.to_dict()
-            for record in self.optimizer_state.optimization_history
-        }
-        
+        output_data = {}
+        for record in self.optimizer_state.optimization_history:
+            image_key = record.image_path.name
+
+            # Convert best parameters back to a human-readable config dictionary
+            config_dict = self.vector_to_parameter_dictionary(record.parameters)
+
+            output_data[image_key] = {
+                'config_dict' : config_dict,
+                'ocr_results' : [ocr.to_dict() for ocr in record.ocr_results],
+                'score'       : record.score
+            }
+
         self.OUTPUT_JSON_FILE.parent.mkdir(exist_ok = True, parents = True)
-        
         with self.OUTPUT_JSON_FILE.open('w', encoding = 'utf-8') as output_file:
             json.dump(output_data, output_file, indent = 2, ensure_ascii = False)
-        
+
         logger.info(f"Results saved to {self.OUTPUT_JSON_FILE}")
 
     # -------------------- Parameter Suggestion & Clustering --------------------
