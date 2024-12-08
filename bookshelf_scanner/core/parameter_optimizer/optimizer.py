@@ -291,7 +291,7 @@ class ParameterOptimizer:
     
     PROJECT_ROOT_DIRECTORY = Utils.find_root('pyproject.toml')
     RESULTS_DIRECTORY      = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'data' / 'results'
-    MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'parameter_optimizer' / 'models'
+    MODEL_DIRECTORY        = PROJECT_ROOT_DIRECTORY / 'bookshelf_scanner' / 'core' / 'parameter_optimizer' / 'models'
     OUTPUT_JSON_FILE       = RESULTS_DIRECTORY / 'optimizer.json'
     MODEL_PYTORCH_FILE     = MODEL_DIRECTORY / 'meta_learner.pt'
     
@@ -333,6 +333,8 @@ class ParameterOptimizer:
         self.cluster_distance_threshold = cluster_distance_threshold
         self.training_buffer_size       = training_buffer_size
 
+        # Ensure extractor config_state is initialized
+        self.extractor.initialize_processing_steps()
         self.parameter_boundaries = self.extract_parameter_boundaries()
         
         input_dimension      = len(self.parameter_boundaries)
@@ -380,23 +382,24 @@ class ParameterOptimizer:
         Returns:
             List of dictionaries defining each parameter's bounds and type.
         """
-        processing_steps     = self.extractor.initialize_processing_steps()
         parameter_boundaries = []
-        
-        for processing_step in processing_steps:
-            if processing_step.parameters and processing_step.is_pipeline:
-                for parameter in processing_step.parameters:
+        # Read from the extractor's config_state
+        for step_name, step_definition in self.extractor.config_state.config_dict["steps"].items():
+            if "parameters" in step_definition and step_definition["parameters"] is not None:
+                for param_name, param_definition in step_definition["parameters"].items():
+                    value      = param_definition["value"]
+                    is_integer = isinstance(value, int)
                     parameter_boundaries.append({
-                        'name'       : f"{processing_step.name}.{parameter.name}",
-                        'min_value'  : float(parameter.min),
-                        'max_value'  : float(parameter.max),
-                        'step_value' : float(parameter.step),
-                        'is_integer' : isinstance(parameter.value, int)
+                        'name'       : f"{step_name}.{param_name}",
+                        'min_value'  : float(param_definition["min"]),
+                        'max_value'  : float(param_definition["max"]),
+                        'step_value' : float(param_definition["step"]),
+                        'is_integer' : is_integer
                     })
 
         return parameter_boundaries
     
-    def vector_to_parameter_dictionary(self, parameter_vector: torch.Tensor) -> dict[str, dict[str, Any]]:
+    def vector_to_parameter_dictionary(self, parameter_vector: torch.Tensor) -> dict[str, Any]:
         """
         Converts a normalized parameter vector to a parameter dictionary.
 
@@ -408,7 +411,7 @@ class ParameterOptimizer:
         Returns:
             Dictionary structured for the extractor's config override.
         """
-        parameter_dictionary = {}
+        parameter_dictionary = {"steps": {}}
         vector_numpy = parameter_vector.cpu().numpy()
 
         names = [boundary['name'] for boundary in self.parameter_boundaries]
@@ -419,14 +422,16 @@ class ParameterOptimizer:
         scaled_values = vector_numpy * (max_values - min_values) + min_values
         scaled_values = np.where(is_integer, np.round(scaled_values).astype(int), np.round(scaled_values, 1))
 
-        for name, value in zip(names, scaled_values):
-            step_name, parameter_name = name.split('.')
-            if step_name not in parameter_dictionary:
-                parameter_dictionary[step_name] = {
+        for name, val in zip(names, scaled_values):
+            # Convert numpy types to Python primitives
+            python_value = int(val) if isinstance(val, np.integer) else float(val)
+            step_name, param_name = name.split('.')
+            if step_name not in parameter_dictionary["steps"]:
+                parameter_dictionary["steps"][step_name] = {
                     'enabled'    : True,
                     'parameters' : {}
                 }
-            parameter_dictionary[step_name]['parameters'][parameter_name] = value
+            parameter_dictionary["steps"][step_name]['parameters'][param_name] = {"value": python_value}
 
         return parameter_dictionary
     
@@ -646,9 +651,8 @@ class ParameterOptimizer:
             Evaluates a single parameter vector by performing OCR and calculating the performance score.
             """
             # Convert vector to parameter dictionary
-            self.extractor.initialize_processing_steps(
-                params_override = self.vector_to_parameter_dictionary(parameter_vector)
-            )
+            params_override = self.vector_to_parameter_dictionary(parameter_vector)
+            self.extractor.initialize_processing_steps(config_override = params_override)
             
             # Perform OCR and calculate performance score
             ocr_results_raw   = self.extractor.perform_ocr_headless([image_path])
