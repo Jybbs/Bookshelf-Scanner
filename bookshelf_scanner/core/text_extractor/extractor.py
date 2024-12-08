@@ -301,7 +301,8 @@ class TextExtractor:
         self.headless        = headless
         self.output_file     = output_file or self.OUTPUT_FILE
         self.output_json     = output_json
-        self.reader          = Reader(['en'], gpu=gpu_enabled)
+        self.reader          = None
+        self.easyocr_config  = None
         self.state           = DisplayState(window_height = window_height) if not headless else None
 
     def initialize_processing_steps(self, config_override: dict | None = None):
@@ -312,9 +313,18 @@ class TextExtractor:
         Args:
             config_override: Optional dictionary of step-level overrides matching config structure from YML
         """
-        base_config = OmegaConf.load(self.config_file)
-        merged_cfg  = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
-        self.config_state = ConfigState.from_config(config = merged_cfg)
+        base_config       = OmegaConf.load(self.config_file)
+        merged_config     = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
+        self.config_state = ConfigState.from_config(config = merged_config)
+
+        # Store easyocr configuration for easier access
+        self.easyocr_config = self.config_state.config_dict["easyocr"]
+        device_type         = self.easyocr_config["device_type"]
+        gpu_enabled         = self.easyocr_config["gpu_enabled"]
+        language_list       = self.easyocr_config["language_list"]
+
+        use_gpu     = (device_type == "cuda" and gpu_enabled == True)
+        self.reader = Reader(language_list, gpu = use_gpu)
 
     # -------------------- Headless Mode Operations --------------------
 
@@ -482,10 +492,13 @@ class TextExtractor:
         """
         processed_image = self.process_image(config_state = config_state, image_path = image_path)
         try:
+            decoder       = self.easyocr_config["decoder"]
+            rotation_info = self.easyocr_config["rotation_info"]
+
             ocr_results = self.reader.readtext(
                 processed_image[..., ::-1],
-                decoder       = 'greedy',
-                rotation_info = [90, 180, 270]
+                decoder       = decoder,
+                rotation_info = rotation_info
             )
             logger.debug(f"Extracted text from image '{image_path}'.")
             return ocr_results
