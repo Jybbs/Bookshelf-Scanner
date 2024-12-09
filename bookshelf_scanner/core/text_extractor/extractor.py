@@ -353,9 +353,12 @@ class TextExtractor:
             image_name = image_path.name
             try:
                 ocr_results = self.perform_ocr(config_state = config_state, image_path = str(image_path))
-                results[image_name] = [
-                    (text, confidence) for _, text, confidence in ocr_results
-                ]
+                results[image_name] = {
+                    "ocr_results": [
+                        {"text": text, "confidence": confidence}
+                        for _, text, confidence in ocr_results
+                    ]
+                }
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
                 continue
