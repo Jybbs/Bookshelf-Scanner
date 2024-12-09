@@ -326,7 +326,18 @@ class TextExtractor:
             raise ValueError("No image files provided")
 
         config_state = self.merge_steps_config(config_override = config_override)
-        results      = self.perform_ocr_headless(image_files = image_files, config_state = config_state)
+        results      = {}
+
+        for image_path in image_files:
+            image_name = image_path.name
+            try:
+                ocr_results = self.perform_ocr(config_state = config_state, image_path = str(image_path))
+                results[image_name] = [
+                    (text, confidence) for _, text, confidence in ocr_results
+                ]
+            except Exception as e:
+                logger.error(f"Failed to process image {image_name}: {e}")
+                continue
 
         if self.output_json:
             with self.output_file.open('w', encoding = 'utf-8') as f:
@@ -489,31 +500,6 @@ class TextExtractor:
         except Exception as e:
             logger.error(f"OCR failed for {image_path}: {e}")
             return []
-
-    def perform_ocr_headless(self, image_files: list[Path], config_state: ConfigState) -> dict:
-        """
-        Processes a list of images and extracts text from them in non-interactive mode.
-
-        Args:
-            image_files : List of image file paths to process.
-            config_state: ConfigState used for processing.
-
-        Returns:
-            dict: Mapping image names to their OCR results
-        """
-        results = {}
-        for image_path in image_files:
-            image_name = image_path.name
-            try:
-                ocr_results = self.perform_ocr(config_state = config_state, image_path = str(image_path))
-                results[image_name] = [
-                    (text, confidence) for _, text, confidence in ocr_results
-                ]
-            except Exception as e:
-                logger.error(f"Failed to process image {image_name}: {e}")
-                continue
-
-        return results
 
     # -------------------- UI Rendering and Annotation --------------------
 
