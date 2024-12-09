@@ -728,8 +728,8 @@ class ConfigOptimizer:
                 f"No configurations improved the score for {image_path.name}. "
                 f"Using a random configuration vector as a fallback."
             )
-            random_config = torch.rand(len(self.config_space_boundaries), device = self.device_type)
-            fallback_record = evaluate_config_vector(random_config)
+            random_config         = torch.rand(len(self.config_space_boundaries), device = self.device_type)
+            fallback_record       = evaluate_config_vector(random_config)
             fallback_record.score = 0.0
             
             best_record.update_if_better(fallback_record)
