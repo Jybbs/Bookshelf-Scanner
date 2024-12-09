@@ -301,12 +301,13 @@ class TextExtractor:
             output_json     : Whether to output OCR results to JSON file
             window_height   : Default window height for UI display (relevant for interactive mode)
         """
-        self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
-        self.config_file     = config_file or self.PARAMS_FILE
-        self.output_file     = output_file or self.OUTPUT_FILE
-        self.output_json     = output_json
-        self.window_height   = window_height
-        self.state           = None  # Will be set in interactive mode
+        self.allowed_formats   = allowed_formats or self.ALLOWED_FORMATS
+        self.collected_results = {}
+        self.config_file       = config_file or self.PARAMS_FILE
+        self.output_file       = output_file or self.OUTPUT_FILE
+        self.output_json       = output_json
+        self.window_height     = window_height
+        self.state             = None  # Will be set in interactive mode
 
         # Load base config and setup the Reader
         self.base_config  = OmegaConf.load(self.config_file)
@@ -353,17 +354,18 @@ class TextExtractor:
             image_name = image_path.name
             try:
                 ocr_results = self.perform_ocr(config_state = config_state, image_path = str(image_path))
-                results[image_name] = [
-                    (text, confidence) for _, text, confidence in ocr_results
-                ]
+                results[image_name] = {
+                    "ocr_results": [
+                        {"text": text, "confidence": confidence}
+                        for _, text, confidence in ocr_results
+                    ]
+                }
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
                 continue
 
         if self.output_json:
-            with self.output_file.open('w', encoding = 'utf-8') as f:
-                json.dump(results, f, ensure_ascii = False, indent = 4)
-            logger.info(f"OCR results saved to {self.output_file}")
+            self.save_to_json(results)
 
         return results
 
@@ -438,8 +440,7 @@ class TextExtractor:
             raise ValueError("No image files provided")
 
         # Set up the display state since we're in interactive mode
-        self.state = DisplayState(window_height = self.window_height)
-
+        self.state   = DisplayState(window_height = self.window_height)
         config_state = self.merge_steps_config(config_override = config_override)
 
         cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
@@ -450,6 +451,14 @@ class TextExtractor:
                 current_image_path    = image_files[self.state.image_idx]
                 self.state.image_name = current_image_path.name
                 ocr_results           = self.perform_ocr(config_state = config_state, image_path = str(current_image_path))
+
+                # Collect results for potential JSON saving later
+                self.collected_results[self.state.image_name] = {
+                    "ocr_results": [
+                        {"text": text, "confidence": confidence}
+                        for _, text, confidence in ocr_results
+                    ]
+                }
 
                 if self.state.check_and_reset_new_image_flag():
                     self.log_ocr_results(ocr_results = ocr_results)
@@ -488,6 +497,9 @@ class TextExtractor:
 
         finally:
             cv2.destroyAllWindows()
+
+        if self.output_json and self.collected_results:
+            self.save_to_json(self.collected_results)
 
     # -------------------- OCR Operations --------------------
 
@@ -888,3 +900,17 @@ class TextExtractor:
             logger.info(f"OCR Results for image '{self.state.image_name}':")
             for _, text, confidence in ocr_results:
                 logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
+
+    def save_to_json(self, results: dict):
+        """
+        Saves OCR results to a JSON file if output_json is True.
+
+        Args:
+            results : Dictionary of OCR results keyed by image name.
+        """
+        if not self.output_json:
+            return
+
+        with self.output_file.open('w', encoding = 'utf-8') as f:
+            json.dump(results, f, ensure_ascii = False, indent = 4)
+        logger.info(f"OCR results saved to {self.output_file}")
