@@ -344,6 +344,8 @@ class TextExtractor:
                 json.dump(results, f, ensure_ascii = False, indent = 4)
             logger.info(f"OCR results saved to {self.output_file}")
 
+        return results
+
     # -------------------- Image Loading and Preparation --------------------
 
     @staticmethod
