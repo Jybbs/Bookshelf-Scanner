@@ -1,401 +1,470 @@
 {
-    "0.jpg": [
-        [
-            "ANNE FRANK: THE DIARV OFAYOUING GIRL",
-            0.5741049251782034
+    "0.jpg": {
+        "ocr_results": [
+            {
+                "text": "ANNE FRANK: THE DIARV OFAYOUING GIRL",
+                "confidence": 0.5214801093153031
+            }
         ]
-    ],
-    "1.jpg": [
-        [
-            "6",
-            0.9146130154454255
-        ],
-        [
-            "THE TORESHADOWING",
-            0.47070782365778163
+    },
+    "1.jpg": {
+        "ocr_results": [
+            {
+                "text": "8",
+                "confidence": 0.5246203721395091
+            },
+            {
+                "text": "THE FORESHADOWING",
+                "confidence": 0.8816085501995992
+            }
         ]
-    ],
-    "10.jpg": [
-        [
-            "Chinese Cinderella",
-            0.8341664648033139
-        ],
-        [
-            "3",
-            0.8995842536938312
+    },
+    "10.jpg": {
+        "ocr_results": [
+            {
+                "text": "Chinese Cinderella",
+                "confidence": 0.7391946838568798
+            },
+            {
+                "text": "3",
+                "confidence": 0.6318886578665115
+            }
         ]
-    ],
-    "11.jpg": [
-        [
-            "ANN RINALDI",
-            0.6792358744323371
-        ],
-        [
-            "F",
-            0.8250909349066013
-        ],
-        [
-            "7",
-            0.9216431035313235
-        ],
-        [
-            "2",
-            0.8336602950115299
-        ],
-        [
-            "[",
-            0.7342646992217539
+    },
+    "11.jpg": {
+        "ocr_results": [
+            {
+                "text": "ANN RINALDI",
+                "confidence": 0.7488170300747217
+            },
+            {
+                "text": "F",
+                "confidence": 0.7762164222492096
+            },
+            {
+                "text": "7",
+                "confidence": 0.9454748413951997
+            },
+            {
+                "text": "Quilt",
+                "confidence": 0.9745857141023652
+            },
+            {
+                "text": "Harcourt",
+                "confidence": 0.7926985216546311
+            }
         ]
-    ],
-    "12.jpg": [
-        [
-            "Rabm",
-            0.4137307107448578
-        ],
-        [
-            "Betsy",
-            0.9986012437711698
-        ],
-        [
-            "Emperor",
-            0.9953900857956555
-        ],
-        [
-            "1",
-            0.34296012285341604
+    },
+    "12.jpg": {
+        "ocr_results": [
+            {
+                "text": "Betsy",
+                "confidence": 0.9998154317935324
+            },
+            {
+                "text": "0",
+                "confidence": 0.8858348095379966
+            },
+            {
+                "text": "Emperor",
+                "confidence": 0.9994566565196732
+            },
+            {
+                "text": "1",
+                "confidence": 0.3221627364906112
+            }
         ]
-    ],
-    "13.jpg": [
-        [
-            "Wolf by the Ears",
-            0.6834747310335029
-        ],
-        [
-            "Rinaldi",
-            0.9959950851564481
+    },
+    "13.jpg": {
+        "ocr_results": [
+            {
+                "text": "Wolf by the Ears",
+                "confidence": 0.6006328963721103
+            },
+            {
+                "text": "Rinaldi",
+                "confidence": 0.9989434001265077
+            }
         ]
-    ],
-    "14.jpg": [
-        [
-            "JOHNNY TREMAIN",
-            0.9946733274406421
-        ],
-        [
-            "1",
-            0.4765632016453516
-        ],
-        [
-            "1",
-            0.9595653865967648
+    },
+    "14.jpg": {
+        "ocr_results": [
+            {
+                "text": "JOHNNY TREMAIN",
+                "confidence": 0.7661316213255205
+            },
+            {
+                "text": "1",
+                "confidence": 0.516267457997003
+            },
+            {
+                "text": "1",
+                "confidence": 0.9674110774105884
+            }
         ]
-    ],
-    "15.jpg": [
-        [
-            "SOLDIER S HEART",
-            0.5611816693024415
-        ],
-        [
-            "0",
-            0.5961187617331554
-        ],
-        [
-            "GARY PAULSEN",
-            0.9752630112750789
+    },
+    "15.jpg": {
+        "ocr_results": [
+            {
+                "text": "SOLDIER S HEART",
+                "confidence": 0.6052743672294759
+            },
+            {
+                "text": "0",
+                "confidence": 0.4100943629439371
+            },
+            {
+                "text": "GARY PAULSEN",
+                "confidence": 0.993751704840613
+            }
         ]
-    ],
-    "16.jpg": [
-        [
-            "Confessiens %f Chartolte",
-            0.4626608417829021
-        ],
-        [
-            "7",
-            0.8997545387531005
-        ],
-        [
-            "Fv",
-            0.5005668612218452
-        ],
-        [
-            "4",
-            0.6720802807440265
+    },
+    "16.jpg": {
+        "ocr_results": [
+            {
+                "text": "IThe True Confessions %f ( hartolle",
+                "confidence": 0.18200801742549552
+            },
+            {
+                "text": "7",
+                "confidence": 0.6615267199695296
+            },
+            {
+                "text": "Fv",
+                "confidence": 0.491238293504924
+            }
         ]
-    ],
-    "17.jpg": [
-        [
-            "SuMMER",
-            0.9592519085727491
-        ],
-        [
-            "GERMAN SOLDIER",
-            0.8583360590474479
+    },
+    "17.jpg": {
+        "ocr_results": [
+            {
+                "text": "SuMMER",
+                "confidence": 0.9694781950469104
+            },
+            {
+                "text": "GERMAN SOLDIFR",
+                "confidence": 0.6979781226761379
+            },
+            {
+                "text": "1",
+                "confidence": 0.28188177304322437
+            }
         ]
-    ],
-    "18.jpg": [
-        [
-            "1",
-            0.6351080891549579
+    },
+    "18.jpg": {
+        "ocr_results": [
+            {
+                "text": "1",
+                "confidence": 0.5790932064329901
+            }
         ]
-    ],
-    "19.jpg": [
-        [
-            "SARAH BISHOP",
-            0.9640594736791886
-        ],
-        [
-            "SCOTT ODELL",
-            0.9072633450384723
-        ],
-        [
-            "42",
-            0.34573072989246334
+    },
+    "19.jpg": {
+        "ocr_results": [
+            {
+                "text": "SARAH BISHOP",
+                "confidence": 0.9833540640363193
+            },
+            {
+                "text": "SCOTT ODELL",
+                "confidence": 0.8731851044430242
+            },
+            {
+                "text": "42",
+                "confidence": 0.3646133719209549
+            }
         ]
-    ],
-    "2.jpg": [
-        [
-            "3",
-            0.8695119055560419
-        ],
-        [
-            "1",
-            0.6130955219308731
-        ],
-        [
-            "1",
-            0.6533895828330429
-        ],
-        [
-            "1",
-            0.9840057869327126
-        ],
-        [
-            "1",
-            0.8679183820709433
+    },
+    "2.jpg": {
+        "ocr_results": [
+            {
+                "text": "3",
+                "confidence": 0.8895395375070372
+            },
+            {
+                "text": "1",
+                "confidence": 0.5629426515378242
+            },
+            {
+                "text": "1",
+                "confidence": 0.6407227266571205
+            },
+            {
+                "text": "1",
+                "confidence": 0.9860817323311153
+            },
+            {
+                "text": "1",
+                "confidence": 0.8885178176117883
+            }
         ]
-    ],
-    "20.jpg": [
-        [
-            "Cvvys Civil War",
-            0.43155027104768234
-        ],
-        [
-            "BRENAMAN",
-            0.9990745728331324
-        ],
-        [
-            "1",
-            0.8243717665109784
+    },
+    "20.jpg": {
+        "ocr_results": [
+            {
+                "text": "Cvvys Civil War",
+                "confidence": 0.3733700604346228
+            },
+            {
+                "text": "BRENAMAN",
+                "confidence": 0.9993758930810668
+            },
+            {
+                "text": "1",
+                "confidence": 0.7137942903229408
+            }
         ]
-    ],
-    "21.jpg": [
-        [
-            "WARM BREAD",
-            0.918392698876273
-        ],
-        [
-            "1",
-            0.7510868461237443
-        ],
-        [
-            "Moskowitz SWFET",
-            0.5001209816654594
-        ],
-        [
-            "1",
-            0.8940681176848244
-        ],
-        [
-            "Lyon",
-            0.9106670022010803
+    },
+    "21.jpg": {
+        "ocr_results": [
+            {
+                "text": "1",
+                "confidence": 0.557863382486179
+            },
+            {
+                "text": "1",
+                "confidence": 0.723519758742114
+            },
+            {
+                "text": "1",
+                "confidence": 0.960469549579873
+            },
+            {
+                "text": "Lyon",
+                "confidence": 0.9503797888755798
+            },
+            {
+                "text": "Moskowitz SWFET",
+                "confidence": 0.6291032565501776
+            }
         ]
-    ],
-    "22.jpg": [
-        [
-            "1",
-            0.6773683651406515
-        ],
-        [
-            "RECONSTRUCTION AnD",
-            0.5025695760403207
-        ],
-        [
-            "2",
-            0.9313856629521666
+    },
+    "22.jpg": {
+        "ocr_results": [
+            {
+                "text": "31 DARK SKY RISING)",
+                "confidence": 0.696390873730689
+            },
+            {
+                "text": "!",
+                "confidence": 0.1884274427139454
+            },
+            {
+                "text": "3",
+                "confidence": 0.810355871656018
+            },
+            {
+                "text": "0",
+                "confidence": 0.8848467299565677
+            }
         ]
-    ],
-    "23.jpg": [
-        [
-            "8",
-            0.9527547407294925
-        ],
-        [
-            "2",
-            0.8803858869721495
-        ],
-        [
-            "8",
-            0.9988669983893352
-        ],
-        [
-            "ROBINSON",
-            0.9971393992617282
+    },
+    "23.jpg": {
+        "ocr_results": [
+            {
+                "text": "8",
+                "confidence": 0.9546539699647703
+            },
+            {
+                "text": "DREAM",
+                "confidence": 0.870810227769996
+            },
+            {
+                "text": "the",
+                "confidence": 0.994847576617892
+            },
+            {
+                "text": "ROBINSON",
+                "confidence": 0.9993362223132516
+            }
         ]
-    ],
-    "24.jpg": [
-        [
-            "HOME % the BRAVE",
-            0.6888965485233141
-        ],
-        [
-            "1",
-            0.8648754015287388
+    },
+    "24.jpg": {
+        "ocr_results": [
+            {
+                "text": "1",
+                "confidence": 0.5266168166510852
+            },
+            {
+                "text": "1",
+                "confidence": 0.8882892755246452
+            }
         ]
-    ],
-    "25.jpg": [
-        [
-            "With THE Might Of ANGELS",
-            0.7277740486997578
+    },
+    "25.jpg": {
+        "ocr_results": [
+            {
+                "text": "With THE Might Of ANGELS",
+                "confidence": 0.8483357095298609
+            }
         ]
-    ],
-    "26.jpg": [
-        [
-            "Fatewell 6 Manzanap",
-            0.4279811746131441
-        ],
-        [
-            "Houston",
-            0.6854248701126512
+    },
+    "26.jpg": {
+        "ocr_results": [
+            {
+                "text": "Fatewelt 6 Manzanar",
+                "confidence": 0.4682732889975573
+            },
+            {
+                "text": "Houston",
+                "confidence": 0.9760865667303981
+            }
         ]
-    ],
-    "27.jpg": [],
-    "28.jpg": [
-        [
-            "Lit CHAT",
-            0.8904399540531306
-        ],
-        [
-            "1",
-            0.3295037142611399
+    },
+    "27.jpg": {
+        "ocr_results": [
+            {
+                "text": "1",
+                "confidence": 0.7486402192466954
+            }
         ]
-    ],
-    "29.jpg": [
-        [
-            "IBOOK",
-            0.7173866788189086
-        ],
-        [
-            "8",
-            0.5927513700661144
-        ],
-        [
-            "3",
-            0.8146041092104248
+    },
+    "28.jpg": {
+        "ocr_results": [
+            {
+                "text": "Lit CHAT",
+                "confidence": 0.6645215648512727
+            },
+            {
+                "text": "1",
+                "confidence": 0.29803198112702844
+            },
+            {
+                "text": "L",
+                "confidence": 0.4180194259111545
+            }
         ]
-    ],
-    "3.jpg": [
-        [
-            "Hang",
-            0.859627902507782
-        ],
-        [
-            "Tho % S4n d",
-            0.4419656228073522
-        ],
-        [
-            "NNV",
-            0.9994015861370146
-        ],
-        [
-            "RINALDI",
-            0.7886948045506273
-        ],
-        [
-            "5",
-            0.9263474586993112
-        ],
-        [
-            "Trees with Ribbons",
-            0.8401046692420249
+    },
+    "29.jpg": {
+        "ocr_results": [
+            {
+                "text": "IBOOK",
+                "confidence": 0.5802047801275217
+            },
+            {
+                "text": "3",
+                "confidence": 0.9194152047720117
+            },
+            {
+                "text": "The game % borrowed phrases",
+                "confidence": 0.6176643640698949
+            }
         ]
-    ],
-    "4.jpg": [
-        [
-            "ANN RINALDI",
-            0.7694476921916305
+    },
+    "3.jpg": {
+        "ocr_results": [
+            {
+                "text": "Hang",
+                "confidence": 0.8697108626365662
+            },
+            {
+                "text": "puvs\"o4L",
+                "confidence": 0.33405391533136036
+            },
+            {
+                "text": "NNV",
+                "confidence": 0.9995473483127492
+            },
+            {
+                "text": "RINALDI",
+                "confidence": 0.7565222172223227
+            },
+            {
+                "text": "Trees with Ribbons",
+                "confidence": 0.8075837374885756
+            }
         ]
-    ],
-    "5.jpg": [
-        [
-            "ThE SECOND BEND IN THE RIVER",
-            0.5769982555426538
-        ],
-        [
-            "1",
-            0.6277180166725636
-        ],
-        [
-            "1",
-            0.9803923692794605
+    },
+    "4.jpg": {
+        "ocr_results": [
+            {
+                "text": "~Miue Eyes &Cave Seeu",
+                "confidence": 0.17615025908300774
+            },
+            {
+                "text": "ANN RINALDI",
+                "confidence": 0.6367143340527701
+            }
         ]
-    ],
-    "6.jpg": [
-        [
-            "William Lavenler",
-            0.7275485249358438
-        ],
-        [
-            "JUST",
-            0.9751982092857361
-        ],
-        [
-            "JANE",
-            0.9210155443287041
-        ],
-        [
-            "5",
-            0.6425594691174865
+    },
+    "5.jpg": {
+        "ocr_results": [
+            {
+                "text": "ThE SECOND BEND IN THE RIVER",
+                "confidence": 0.556321094359969
+            },
+            {
+                "text": "1",
+                "confidence": 0.7513571373721994
+            },
+            {
+                "text": "Ann Rinaldi",
+                "confidence": 0.9938236495722705
+            }
         ]
-    ],
-    "7.jpg": [
-        [
-            "BREA K",
-            0.9130062343748636
-        ],
-        [
-            "D",
-            0.9446115967405291
-        ],
-        [
-            "ANN",
-            0.9998287640819661
-        ],
-        [
-            "RINALD [",
-            0.694552918895968
-        ],
-        [
-            "with CHARity",
-            0.6937095072728555
-        ],
-        [
-            "5",
-            0.8700992620839685
+    },
+    "6.jpg": {
+        "ocr_results": [
+            {
+                "text": "William Lavenlcr",
+                "confidence": 0.42668510532319587
+            },
+            {
+                "text": "JUST",
+                "confidence": 0.9677479863166809
+            },
+            {
+                "text": "JANE",
+                "confidence": 0.9999858736991882
+            },
+            {
+                "text": "5",
+                "confidence": 0.9016300963494359
+            }
         ]
-    ],
-    "8.jpg": [
-        [
-            "FINISHING BECCA",
-            0.9836111586820092
-        ],
-        [
-            "1",
-            0.9095467710898362
+    },
+    "7.jpg": {
+        "ocr_results": [
+            {
+                "text": "BREA K",
+                "confidence": 0.92845340265978
+            },
+            {
+                "text": "D",
+                "confidence": 0.9377139456757142
+            },
+            {
+                "text": "ANN RINALD[",
+                "confidence": 0.7558813999437904
+            },
+            {
+                "text": "CHARity",
+                "confidence": 0.9726087965059617
+            },
+            {
+                "text": "1",
+                "confidence": 0.9253432234601497
+            }
         ]
-    ],
-    "9.jpg": [
-        [
-            "1",
-            0.5737956739912988
+    },
+    "8.jpg": {
+        "ocr_results": [
+            {
+                "text": "FINISHING BECCA",
+                "confidence": 0.9876166057551009
+            },
+            {
+                "text": "1",
+                "confidence": 0.906527057920048
+            }
         ]
-    ]
+    },
+    "9.jpg": {
+        "ocr_results": [
+            {
+                "text": "1",
+                "confidence": 0.5579419165184483
+            }
+        ]
+    }
 }

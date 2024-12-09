@@ -90,19 +90,19 @@ class FuzzyMatcher:
         """
         return fuzz_utils.default_process(text)
 
-    def combine_texts(self, texts : list[tuple[str, float]]) -> list[str]:
+    def combine_texts(self, ocr_entries : list[dict[str, Any]]) -> list[str]:
         """
         Combines all texts into a single string, filtering by confidence threshold.
 
         Args:
-            texts: List of (text, confidence) tuples from OCR
+            ocr_entries: List of OCR result dictionaries with 'text' and 'confidence' keys
 
         Returns:
             List of text strings that passed the confidence threshold
         """
         filtered_texts = [
-            text for text, conf in texts
-            if conf >= self.min_ocr_confidence
+            entry["text"] for entry in ocr_entries
+            if entry["confidence"] >= self.min_ocr_confidence
         ]
         
         if filtered_texts:
@@ -173,10 +173,15 @@ class FuzzyMatcher:
 
         logger.info(f"Processing {total_images} images")
 
-        for image_num, (image_name, ocr_texts) in enumerate(ocr_results.items(), 1):
+        for image_num, (image_name, image_data) in enumerate(ocr_results.items(), 1):
             logger.info(f"\nProcessing image {image_num}/{total_images}: {image_name}")
-            
-            texts = self.combine_texts(ocr_texts)
+
+            # Expecting image_data to have an "ocr_results" key now
+            if "ocr_results" not in image_data:
+                logger.info("No 'ocr_results' key found")
+                continue
+
+            texts = self.combine_texts(image_data["ocr_results"])
             if not texts:
                 logger.info("No valid texts found")
                 continue
