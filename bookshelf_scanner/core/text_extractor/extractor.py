@@ -279,6 +279,7 @@ class TextExtractor:
     ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
     DEFAULT_HEIGHT  = 800
     FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
+    IMAGE_DIR       = PROJECT_ROOT / 'bookshelf_scanner' / 'images' / 'processed'
     OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
     PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'extractor.yml'
     UI_COLORS       = {
@@ -296,6 +297,8 @@ class TextExtractor:
         config_file     : Path | None     = None,
         output_file     : Path | None     = None,
         output_json     : bool            = False,
+        output_images   : bool            = False,
+        image_dir       : Path | None     = None,
         window_height   : int             = DEFAULT_HEIGHT
     ):
         """
@@ -306,6 +309,8 @@ class TextExtractor:
             config_file     : Optional custom path to config.yml
             output_file     : Path to save resultant strings from OCR processing
             output_json     : Whether to output OCR results to JSON file
+            output_images   : Whether to output annotated images
+            image_dir       : Directory to save annotated images if output_images is True
             window_height   : Default window height for UI display (relevant for interactive mode)
         """
         self.allowed_formats   = allowed_formats or self.ALLOWED_FORMATS
@@ -313,8 +318,13 @@ class TextExtractor:
         self.config_file       = config_file or self.PARAMS_FILE
         self.output_file       = output_file or self.OUTPUT_FILE
         self.output_json       = output_json
+        self.output_images     = output_images
+        self.image_dir         = image_dir
         self.window_height     = window_height
         self.state             = None  # Will be set in interactive mode
+
+        if self.output_images and self.image_dir is not None:
+            self.image_dir.mkdir(parents=True, exist_ok=True)
 
         # Load base config and setup the Reader
         self.base_config  = OmegaConf.load(self.config_file)
@@ -367,6 +377,13 @@ class TextExtractor:
                         for _, text, confidence in ocr_results
                     ]
                 }
+
+                # Save annotated image if requested
+                if self.output_images and self.image_dir is not None:
+                    processed_image = self.process_image(config_state = config_state, image_path = str(image_path))
+                    annotated_image = self.annotate_original_image_with_ocr(processed_image, ocr_results)
+                    self.save_annotated_image(annotated_image, image_name)
+
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
                 continue
@@ -467,6 +484,12 @@ class TextExtractor:
                     ]
                 }
 
+                # Save annotated image if requested
+                if self.output_images and self.image_dir is not None:
+                    processed_image = self.process_image(config_state = config_state, image_path = str(current_image_path))
+                    annotated_image = self.annotate_original_image_with_ocr(processed_image, ocr_results)
+                    self.save_annotated_image(annotated_image, self.state.image_name)
+
                 if self.state.check_and_reset_new_image_flag():
                     self.log_ocr_results(ocr_results = ocr_results)
 
@@ -562,6 +585,38 @@ class TextExtractor:
         """
         annotated_image = display_image.copy()
         for coordinates, text, confidence in adjusted_ocr_results:
+            coordinates = np.array(coordinates).astype(int)
+            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
+
+            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
+            text_position      = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
+
+            annotated_image = self.draw_text(
+                opacity      = 0.75,
+                position     = text_position,
+                scale        = 1.0,
+                source_image = annotated_image,
+                text         = f"{text} ({confidence * 100:.1f}%)"
+            )
+        return annotated_image
+
+    def annotate_original_image_with_ocr(
+        self,
+        original_image : np.ndarray,
+        ocr_results    : list[tuple[list, str, float]]
+    ) -> np.ndarray:
+        """
+        Annotates the original processed image with OCR results (no sidebar, no scaling).
+
+        Args:
+            original_image : The original processed image at full resolution.
+            ocr_results    : OCR results with bounding boxes and text.
+
+        Returns:
+            np.ndarray: Annotated image.
+        """
+        annotated_image = original_image.copy()
+        for coordinates, text, confidence in ocr_results:
             coordinates = np.array(coordinates).astype(int)
             cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
 
@@ -834,12 +889,12 @@ class TextExtractor:
         return adjusted_ocr_results
 
     @classmethod
-    def find_image_files(cls, subdirectory: str = 'Books') -> list[Path]:
+    def find_image_files(cls, subdirectory: str = 'books') -> list[Path]:
         """
         Retrieves a sorted list of image files from a subdirectory within the images folder.
 
         Args:
-            subdirectory : Name of the subdirectory within 'images' to process (e.g., 'Books', 'Bookcases', 'Shelves')
+            subdirectory : Name of the subdirectory within 'images' to process (e.g., 'books', 'Bookcases', 'Shelves')
 
         Returns:
             list: Image file paths
@@ -928,3 +983,16 @@ class TextExtractor:
         with self.output_file.open('w', encoding = 'utf-8') as f:
             json.dump(results, f, ensure_ascii = False, indent = 4)
         logger.info(f"OCR results saved to {self.output_file}")
+
+    def save_annotated_image(self, annotated_image: np.ndarray, image_name: str):
+        """
+        Saves the annotated image to the specified directory.
+
+        Args:
+            annotated_image : The annotated image to save
+            image_name      : The file name for the output image
+        """
+        if self.image_dir is not None:
+            output_path = self.image_dir / image_name
+            cv2.imwrite(str(output_path), annotated_image)
+            logger.info(f"Annotated image saved to {output_path}")
