@@ -19,7 +19,7 @@ def main():
         }
     }
     
-    (extractor.run_headless_mode if extractor.headless else extractor.interactive_mode)(**params)
+    (extractor.run_headless_mode if extractor.headless else extractor.run_interactive_mode)(**params)
 
 if __name__ == "__main__":
     main()

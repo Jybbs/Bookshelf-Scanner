@@ -92,24 +92,6 @@ class ConfigState:
         action      = f"{action_type} '{param_definition['display_name']}' from {old_value} to {param_definition['value']}"
         return new_state, action
 
-    def convert_to_hashable_tuple(self, value: Any) -> Any:
-        """
-        Converts a nested dictionary/list structure into a nested tuple structure
-        that is deterministic and hashable, ensuring that ConfigState instances
-        can serve as stable cache keys.
-
-        Args:
-            value: The input data (dict, list, or primitive) to convert.
-
-        Returns:
-            A hashable tuple-based structure representing the input value.
-        """
-        if isinstance(value, dict):
-            return tuple(sorted((k, self.convert_to_hashable_tuple(v)) for k, v in value.items()))
-        elif isinstance(value, list):
-            return tuple(self.convert_to_hashable_tuple(x) for x in value)
-        return value
-
     @classmethod
     def from_config(cls, config: Any) -> 'ConfigState':
         """
@@ -136,10 +118,19 @@ class ConfigState:
         Returns:
             ConfigState: Immutable state instance created from the given dictionary.
         """
-        # Create a temporary instance to call convert_to_hashable_tuple for hashing:
-        temp = object.__new__(cls)
-        tuple_representation = cls.convert_to_hashable_tuple(temp, config_dict)
 
+        def convert_to_hashable_tuple(value: Any) -> Any:
+            """
+            Converts a nested dictionary/list structure into a nested tuple structure
+            that is deterministic and hashable, ensuring that ConfigState instances
+            can serve as stable cache keys.
+            """
+            if isinstance(value, dict):
+                return tuple(sorted((k, convert_to_hashable_tuple(v)) for k, v in value.items()))
+            elif isinstance(value, list):
+                return tuple(convert_to_hashable_tuple(x) for x in value)
+            return value
+    
         step_index_map = {i+1: step_name for i, step_name in enumerate(config_dict["steps"].keys())}
         param_key_map  = {}
 
@@ -152,7 +143,7 @@ class ConfigState:
 
         return cls(
             config_dict    = config_dict,
-            config_tuple   = tuple_representation,
+            config_tuple   = convert_to_hashable_tuple(config_dict),
             param_key_map  = param_key_map,
             step_index_map = step_index_map
         )
@@ -299,25 +290,44 @@ class TextExtractor:
         self.output_file     = output_file or self.OUTPUT_FILE
         self.output_json     = output_json
         self.reader          = None
-        self.easyocr_config  = None
         self.state           = DisplayState(window_height = window_height) if not headless else None
+
+    def merge_steps_config(self, config_override: dict | None = None) -> ConfigState:
+        """
+        Merges the base configuration with any provided overrides and returns a new ConfigState.
+
+        Args:
+            config_override: Optional dictionary of step-level overrides.
+
+        Returns:
+            ConfigState: The newly created configuration state after merging.
+        """
+        base_config   = OmegaConf.load(self.config_file)
+        merged_config = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
+        return ConfigState.from_config(config = merged_config)
+
+    def setup_reader_from_config(self, config_state: ConfigState):
+        """
+        Sets up the EasyOCR Reader instance from a given ConfigState.
+
+        Args:
+            config_state : The ConfigState instance from which to create the Reader.
+        """
+        self.reader = Reader(
+            lang_list = config_state.config_dict["easyocr"]["language_list"], 
+            gpu       = config_state.config_dict["easyocr"]["gpu_enabled"]
+        )
 
     def initialize_processing_steps(self, config_override: dict | None = None):
         """
-        Initializes processing steps with default parameters or overrides.
+        Initializes processing steps and sets up the OCR reader.
         Maintains consistent dictionary structure for ConfigState compatibility.
 
         Args:
-            config_override: Optional dictionary of step-level overrides matching config structure from YML
+            config_override: Optional dictionary of step-level overrides.
         """
-        base_config         = OmegaConf.load(self.config_file)
-        merged_config       = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
-        self.config_state   = ConfigState.from_config(config = merged_config)
-        self.easyocr_config = self.config_state.config_dict["easyocr"]
-        self.reader         = Reader(
-            lang_list = self.easyocr_config["language_list"], 
-            gpu       = self.easyocr_config["gpu_enabled"]
-        )
+        self.config_state = self.merge_steps_config(config_override = config_override)
+        self.setup_reader_from_config(config_state = self.config_state)
 
     # -------------------- Headless Mode Operations --------------------
 
@@ -401,7 +411,7 @@ class TextExtractor:
 
     # -------------------- Interactive Mode Operations --------------------
 
-    def interactive_mode(
+    def run_interactive_mode(
         self,
         image_files     : list[Path],
         config_override : dict | None = None
@@ -485,8 +495,8 @@ class TextExtractor:
         """
         processed_image = self.process_image(config_state = config_state, image_path = image_path)
         try:
-            decoder       = self.easyocr_config["decoder"]
-            rotation_info = self.easyocr_config["rotation_info"]
+            decoder       = self.config_state.config_dict["easyocr"]["decoder"]
+            rotation_info = self.config_state.config_dict["easyocr"]["rotation_info"]
 
             ocr_results = self.reader.readtext(
                 processed_image[..., ::-1],

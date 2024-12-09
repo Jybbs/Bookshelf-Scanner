@@ -161,7 +161,7 @@ image_files = extractor.find_image_files(subdirectory = 'Books')
 **Interactive Mode**:
 ```python
 # Launch a UI window where you can toggle steps (1, 2, 3...) and adjust parameters (e.g., B/b for brightness)
-extractor.interactive_mode(image_files = image_files)
+extractor.run_interactive_mode(image_files = image_files)
 ```
 
 In the interactive window:  

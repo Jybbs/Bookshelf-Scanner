@@ -115,10 +115,10 @@ from bookshelf_scanner import TextExtractor
 extractor = TextExtractor(headless = False)
 
 image_files = extractor.find_image_files(subdirectory = 'Books')
-extractor.interactive_mode(image_files = image_files)
+extractor.run_interactive_mode(image_files = image_files)
 ```
 
-In `interactive_mode`, you can freely tweak parameters until you achieve satisfactory OCR results.
+In `run_interactive_mode`, you can freely tweak parameters until you achieve satisfactory OCR results.
 
 ### Headless Mode
 
