@@ -275,14 +275,14 @@ class TextExtractor:
 
     # -------------------- Class Constants --------------------
 
-    PROJECT_ROOT    = Utils.find_root('pyproject.toml')
-    ALLOWED_FORMATS = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
-    DEFAULT_HEIGHT  = 800
-    FONT_FACE       = cv2.FONT_HERSHEY_DUPLEX
-    IMAGE_DIR       = PROJECT_ROOT / 'bookshelf_scanner' / 'images' / 'processed'
-    OUTPUT_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
-    PARAMS_FILE     = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'extractor.yml'
-    UI_COLORS       = {
+    PROJECT_ROOT     = Utils.find_root('pyproject.toml')
+    ALLOWED_FORMATS  = {'.bmp', '.jpg', '.jpeg', '.png', '.tiff'}
+    DEFAULT_HEIGHT   = 800
+    FONT_FACE        = cv2.FONT_HERSHEY_DUPLEX
+    OUTPUT_IMAGE_DIR = PROJECT_ROOT / 'bookshelf_scanner' / 'images' / 'processed'
+    OUTPUT_FILE      = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
+    PARAMS_FILE      = PROJECT_ROOT / 'bookshelf_scanner' / 'config' / 'extractor.yml'
+    UI_COLORS        = {
         'GRAY'  : (200, 200, 200),
         'TEAL'  : (255, 255, 0),
         'WHITE' : (255, 255, 255)
@@ -293,25 +293,25 @@ class TextExtractor:
 
     def __init__(
         self,
-        allowed_formats : set[str] | None = None,
-        config_file     : Path | None     = None,
-        output_file     : Path | None     = None,
-        output_json     : bool            = False,
-        output_images   : bool            = False,
-        image_dir       : Path | None     = None,
-        window_height   : int             = DEFAULT_HEIGHT
+        allowed_formats  : set[str] | None = None,
+        config_file      : Path | None     = None,
+        output_file      : Path | None     = None,
+        output_json      : bool            = False,
+        output_images    : bool            = False,
+        output_image_dir : Path | None     = None,
+        window_height    : int             = DEFAULT_HEIGHT
     ):
         """
         Initializes the TextExtractor instance.
 
         Args:
-            allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
-            config_file     : Optional custom path to config.yml
-            output_file     : Path to save resultant strings from OCR processing
-            output_json     : Whether to output OCR results to JSON file
-            output_images   : Whether to output annotated images
-            image_dir       : Directory to save annotated images if output_images is True
-            window_height   : Default window height for UI display (relevant for interactive mode)
+            allowed_formats  : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
+            config_file      : Optional custom path to config.yml
+            output_file      : Path to save resultant strings from OCR processing
+            output_json      : Whether to output OCR results to JSON file
+            output_images    : Whether to output annotated images
+            output_image_dir : Directory to save annotated images if output_images is True
+            window_height    : Default window height for UI display (relevant for interactive mode)
         """
         self.allowed_formats   = allowed_formats or self.ALLOWED_FORMATS
         self.collected_results = {}
@@ -319,12 +319,9 @@ class TextExtractor:
         self.output_file       = output_file or self.OUTPUT_FILE
         self.output_json       = output_json
         self.output_images     = output_images
-        self.image_dir         = image_dir
+        self.output_image_dir  = output_image_dir or self.OUTPUT_IMAGE_DIR
         self.window_height     = window_height
         self.state             = None  # Will be set in interactive mode
-
-        if self.output_images and self.image_dir is not None:
-            self.image_dir.mkdir(parents=True, exist_ok=True)
 
         # Load base config and setup the Reader
         self.base_config  = OmegaConf.load(self.config_file)
@@ -379,9 +376,9 @@ class TextExtractor:
                 }
 
                 # Save annotated image if requested
-                if self.output_images and self.image_dir is not None:
+                if self.output_images:
                     processed_image = self.process_image(config_state = config_state, image_path = str(image_path))
-                    annotated_image = self.annotate_original_image_with_ocr(processed_image, ocr_results)
+                    annotated_image = self.annotate_image_with_ocr(ocr_results = ocr_results, image = processed_image)
                     self.save_annotated_image(annotated_image, image_name)
 
             except Exception as e:
@@ -485,9 +482,9 @@ class TextExtractor:
                 }
 
                 # Save annotated image if requested
-                if self.output_images and self.image_dir is not None:
+                if self.output_images and self.output_image_dir is not None:
                     processed_image = self.process_image(config_state = config_state, image_path = str(current_image_path))
-                    annotated_image = self.annotate_original_image_with_ocr(processed_image, ocr_results)
+                    annotated_image = self.annotate_image_with_ocr(ocr_results = ocr_results, image = processed_image)
                     self.save_annotated_image(annotated_image, self.state.image_name)
 
                 if self.state.check_and_reset_new_image_flag():
@@ -503,11 +500,11 @@ class TextExtractor:
                         original_size = processed_image.shape[:2]
                     )
                     display_image = self.annotate_image_with_ocr(
-                        adjusted_ocr_results = adjusted_ocr_results,
-                        display_image        = display_image
+                        adjusted_ocr_results,
+                        display_image
                     )
 
-                sidebar_image  = self.render_sidebar(config_state = config_state, image_name = self.state.image_name, window_height = self.state.window_height)
+                sidebar_image  = self.render_sidebar(config_state = config_state, image_name = self.state.image_name, window_height = self.window_height)
                 combined_image = np.hstack([display_image, sidebar_image])
                 cv2.imshow(self.WINDOW_NAME, combined_image)
                 cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
@@ -570,21 +567,21 @@ class TextExtractor:
 
     def annotate_image_with_ocr(
         self,
-        adjusted_ocr_results : list[tuple],
-        display_image        : np.ndarray
+        ocr_results : list[tuple],
+        image       : np.ndarray
     ) -> np.ndarray:
         """
-        Annotates the display image with OCR results.
+        Annotates the given image with OCR results.
 
         Args:
-            adjusted_ocr_results : List of adjusted OCR results.
-            display_image        : The image to annotate.
+            ocr_results : List of OCR results (bounding_box, text, confidence)
+            image       : The image to annotate
 
         Returns:
             np.ndarray: Annotated image.
         """
-        annotated_image = display_image.copy()
-        for coordinates, text, confidence in adjusted_ocr_results:
+        annotated_image = image.copy()
+        for coordinates, text, confidence in ocr_results:
             coordinates = np.array(coordinates).astype(int)
             cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
 
@@ -992,7 +989,7 @@ class TextExtractor:
             annotated_image : The annotated image to save
             image_name      : The file name for the output image
         """
-        if self.image_dir is not None:
-            output_path = self.image_dir / image_name
+        if self.output_image_dir is not None:
+            output_path = self.output_image_dir / image_name
             cv2.imwrite(str(output_path), annotated_image)
             logger.info(f"Annotated image saved to {output_path}")
