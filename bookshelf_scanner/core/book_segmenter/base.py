@@ -69,7 +69,7 @@ def main():
     import cv2
 
     # Load the image(s) 
-    image_dir = os.path.join(os.path.dirname(__file__), "../../images/Shelves") #edited to ensure runs from any directory
+    image_dir = os.path.join(os.path.dirname(__file__), "../../images/shelves") #edited to ensure runs from any directory
     image_dir = os.path.abspath(image_dir)
     
     #debugging

@@ -16,13 +16,13 @@ PYTHON_PATH=$(pwd) python bookshelf_scanner/core/book_segmenter/base.py
 BookSegmenter is packaged as a Python module. To import the module into your file, you can use the following code:
 
 ```python
-from booksegmenter.BookSegmenter_base import BookSegmenter 
+from booksegmenter._base import BookSegmenter 
 ```
 
-The [BookSegmenter_base.py](BookSegmenter/BookSegmenter_base.py) contains the class definition and methods for the BookSegmenter. A simple example of how to use the BookSegmenter is shown below:
+The [base.py](BookSegmenter/base.py) contains the class definition and methods for the BookSegmenter. A simple example of how to use the BookSegmenter is shown below:
 
 ```python
-from booksegmenter.BookSegmenter_base import BookSegmenter
+from booksegmenter.base import BookSegmenter
 
 # Initialize the BookSegmenter
 segmenter = BookSegmenter()
@@ -36,10 +36,6 @@ books, confidences = segmenter.segment_image(image_path)
 # Display the segmented books
 segmenter.display_books(image_path, books, confidences)
 ```
-
-
-
-
 
 ## Future Plans
 
