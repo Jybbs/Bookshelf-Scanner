@@ -5,7 +5,7 @@ Entry point for running the text extractor as a module.
 from bookshelf_scanner import TextExtractor
 
 def main():
-    extractor = TextExtractor()
+    extractor = TextExtractor(output_images = True)
     
     params = {
         'image_files': extractor.find_image_files('Books'),
@@ -19,7 +19,7 @@ def main():
         }
     }
     
-    extractor.run_interactive_mode(**params)
+    extractor.run_headless_mode(**params)
 
 if __name__ == "__main__":
     main()

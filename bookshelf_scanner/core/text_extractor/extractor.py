@@ -967,7 +967,10 @@ class TextExtractor:
             for _, text, confidence in ocr_results:
                 logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
 
-    def save_annotated_image(self, annotated_image: np.ndarray, image_name: str):
+    def save_annotated_image(
+        self, 
+        annotated_image : np.ndarray, 
+        image_name      : str):
         """
         Saves the annotated image to the specified directory.
 
