@@ -375,11 +375,14 @@ class TextExtractor:
                     ]
                 }
 
-                # Save annotated image if requested
+                processed_image = self.process_image(config_state = config_state, image_path = str(image_path))
+                display_image = self.prepare_and_annotate_for_display(
+                    processed_image = processed_image,
+                    ocr_results     = ocr_results
+                )
+
                 if self.output_images:
-                    processed_image = self.process_image(config_state = config_state, image_path = str(image_path))
-                    annotated_image = self.annotate_image_with_ocr(ocr_results = ocr_results, image = processed_image)
-                    self.save_annotated_image(annotated_image, image_name)
+                    self.save_annotated_image(display_image, image_name)
 
             except Exception as e:
                 logger.error(f"Failed to process image {image_name}: {e}")
@@ -481,28 +484,19 @@ class TextExtractor:
                     ]
                 }
 
-                # Save annotated image if requested
+                # Prepare and annotate image
+                processed_image = self.process_image(config_state = config_state, image_path = str(current_image_path))
+                display_image = self.prepare_and_annotate_for_display(
+                    processed_image = processed_image,
+                    ocr_results     = ocr_results
+                )
+
+                # If output_images is enabled, save the annotated image used for display
                 if self.output_images and self.output_image_dir is not None:
-                    processed_image = self.process_image(config_state = config_state, image_path = str(current_image_path))
-                    annotated_image = self.annotate_image_with_ocr(ocr_results = ocr_results, image = processed_image)
-                    self.save_annotated_image(annotated_image, self.state.image_name)
+                    self.save_annotated_image(display_image, self.state.image_name)
 
                 if self.state.check_and_reset_new_image_flag():
                     self.log_ocr_results(ocr_results = ocr_results)
-
-                processed_image      = self.process_image(config_state = config_state, image_path = str(current_image_path))
-                display_image, scale = self.prepare_display_image(processed_image = processed_image)
-
-                if ocr_results:
-                    adjusted_ocr_results = self.adjust_ocr_coordinates(
-                        display_scale = scale,
-                        ocr_results   = ocr_results,
-                        original_size = processed_image.shape[:2]
-                    )
-                    display_image = self.annotate_image_with_ocr(
-                        adjusted_ocr_results,
-                        display_image
-                    )
 
                 sidebar_image  = self.render_sidebar(config_state = config_state, image_name = self.state.image_name, window_height = self.window_height)
                 combined_image = np.hstack([display_image, sidebar_image])
@@ -565,70 +559,6 @@ class TextExtractor:
 
     # -------------------- UI Rendering and Annotation --------------------
 
-    def annotate_image_with_ocr(
-        self,
-        ocr_results : list[tuple],
-        image       : np.ndarray
-    ) -> np.ndarray:
-        """
-        Annotates the given image with OCR results.
-
-        Args:
-            ocr_results : List of OCR results (bounding_box, text, confidence)
-            image       : The image to annotate
-
-        Returns:
-            np.ndarray: Annotated image.
-        """
-        annotated_image = image.copy()
-        for coordinates, text, confidence in ocr_results:
-            coordinates = np.array(coordinates).astype(int)
-            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
-
-            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
-            text_position      = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
-
-            annotated_image = self.draw_text(
-                opacity      = 0.75,
-                position     = text_position,
-                scale        = 1.0,
-                source_image = annotated_image,
-                text         = f"{text} ({confidence * 100:.1f}%)"
-            )
-        return annotated_image
-
-    def annotate_original_image_with_ocr(
-        self,
-        original_image : np.ndarray,
-        ocr_results    : list[tuple[list, str, float]]
-    ) -> np.ndarray:
-        """
-        Annotates the original processed image with OCR results (no sidebar, no scaling).
-
-        Args:
-            original_image : The original processed image at full resolution.
-            ocr_results    : OCR results with bounding boxes and text.
-
-        Returns:
-            np.ndarray: Annotated image.
-        """
-        annotated_image = original_image.copy()
-        for coordinates, text, confidence in ocr_results:
-            coordinates = np.array(coordinates).astype(int)
-            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
-
-            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
-            text_position      = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
-
-            annotated_image = self.draw_text(
-                opacity      = 0.75,
-                position     = text_position,
-                scale        = 1.0,
-                source_image = annotated_image,
-                text         = f"{text} ({confidence * 100:.1f}%)"
-            )
-        return annotated_image
-
     @staticmethod
     def draw_text(
         position     : tuple[int, int],
@@ -690,6 +620,38 @@ class TextExtractor:
         annotated_image = Image.alpha_composite(pil_image.convert('RGBA'), text_layer)
         return cv2.cvtColor(np.array(annotated_image), cv2.COLOR_RGBA2BGR)
 
+    def annotate_image_with_ocr(
+        self,
+        ocr_results : list[tuple],
+        image       : np.ndarray
+    ) -> np.ndarray:
+        """
+        Annotates the given image with OCR results.
+
+        Args:
+            ocr_results : List of OCR results (bounding_box, text, confidence)
+            image       : The image to annotate
+
+        Returns:
+            np.ndarray: Annotated image.
+        """
+        annotated_image = image.copy()
+        for coordinates, text, confidence in ocr_results:
+            coordinates = np.array(coordinates).astype(int)
+            cv2.polylines(annotated_image, [coordinates], True, (0, 255, 0), 2)
+
+            x_coords, y_coords = coordinates[:, 0], coordinates[:, 1]
+            text_position      = (int(np.mean(x_coords)), max(int(np.min(y_coords) - 10), 0))
+
+            annotated_image = self.draw_text(
+                opacity      = 0.75,
+                position     = text_position,
+                scale        = 1.0,
+                source_image = annotated_image,
+                text         = f"{text} ({confidence * 100:.1f}%)"
+            )
+        return annotated_image
+
     def generate_sidebar_content(
         self, 
         config_state : ConfigState,
@@ -718,14 +680,12 @@ class TextExtractor:
             step_definition = steps_dict[step_name]
             status          = 'Enabled' if step_definition['enabled'] else 'Disabled'
 
-            # Add step line
             lines.append((
                 f"[{i}] {step_definition['display_name']}: {status}",
                 self.UI_COLORS['WHITE'],
                 1.0
             ))
 
-            # Add parameters if any
             if 'parameters' in step_definition and step_definition['parameters'] is not None:
                 for _, param_definition in step_definition['parameters'].items():
                     inc_key   = param_definition['increase_key']
@@ -884,6 +844,39 @@ class TextExtractor:
             adjusted_ocr_results.append((adjusted_box, text, confidence))
 
         return adjusted_ocr_results
+
+    def prepare_and_annotate_for_display(
+        self,
+        processed_image : np.ndarray,
+        ocr_results     : list[tuple]
+    ) -> np.ndarray:
+        """
+        Prepares and annotates the processed image for display or saving.
+
+        This method:
+        1. Prepares the display image by centering and scaling.
+        2. Adjusts OCR coordinates according to the display scale.
+        3. Annotates the display image with OCR results.
+
+        Args:
+            processed_image : The processed image (post-processing steps)
+            ocr_results     : OCR results (bounding_box, text, confidence)
+
+        Returns:
+            np.ndarray: Annotated display image.
+        """
+        display_image, scale = self.prepare_display_image(processed_image = processed_image)
+        if ocr_results:
+            adjusted_ocr_results = self.adjust_ocr_coordinates(
+                display_scale = scale,
+                ocr_results   = ocr_results,
+                original_size = processed_image.shape[:2]
+            )
+            display_image = self.annotate_image_with_ocr(
+                adjusted_ocr_results,
+                display_image
+            )
+        return display_image
 
     @classmethod
     def find_image_files(cls, subdirectory: str = 'books') -> list[Path]:
