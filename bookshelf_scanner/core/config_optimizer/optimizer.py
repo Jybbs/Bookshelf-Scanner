@@ -705,16 +705,16 @@ class ConfigOptimizer:
             config_override = self.vector_to_config_dictionary(config_vector)
             
             # Directly run headless mode on the single image and get results
-            
             original_output_images = self.extractor.output_images
-            self.extractor.output_images = False # output_images is off during search to avoid saving intermediate images
+            self.extractor.output_images = False  # Avoid saving intermediate images
             results = self.extractor.run_headless_mode([image_path], config_override = config_override)
             self.extractor.output_images = original_output_images
-
+            
             # Extract OCR results for the current image
-            image_name        = image_path.name
-            ocr_tuples        = results.get(image_name, [])
-            performance_score = sum(len(text) * confidence for text, confidence in ocr_tuples)
+            image_name            = image_path.name
+            ocr_dicts             = results.get(image_name, {}).get("ocr_results", [])
+            ocr_tuples            = [(d["text"], d["confidence"]) for d in ocr_dicts]
+            performance_score     = sum(len(text) * confidence for text, confidence in ocr_tuples)
             ocr_results_instances = OCRResult.from_tuples(ocr_tuples)
 
             # Encode the config vector in latent space
@@ -803,12 +803,16 @@ class ConfigOptimizer:
             config_override                 = self.vector_to_config_dictionary(best_record.config_vector)
             original_output_images          = self.extractor.output_images
             original_output_dir             = self.extractor.output_image_dir
+
             self.extractor.output_images    = True
             self.extractor.run_headless_mode([image_path], config_override = config_override)
+            logger.info(f"Saved processed image for the best configuration of '{image_path.name}'")
+
             self.extractor.output_images    = original_output_images
             self.extractor.output_image_dir = original_output_dir
         
         return best_record.to_dict()
+
 
     def optimize(self, image_file_paths: list[Path]):
         """
