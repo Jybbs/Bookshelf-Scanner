@@ -48,34 +48,6 @@ Throughout, a `ModuleLogger` system provides consistent, module-specific logging
 
 ---
 
-## Technical Highlights
-
-- **Spine Detection (*YOLOv8*)**:  
-  Utilizes a trained model to identify bounding boxes around spines. The model’s accuracy and generalization depend on the training data. This step transforms a complex scene into a set of targeted sub-images.
-
-- **Preprocessing Steps Detail**:
-
-  - **Shadow Removal**: Involves morphological operations and median filters. For example, a dilate-then-subtract approach can highlight text while minimizing shadow gradients.
-
-  - **CLAHE**: Applied to the luminance channel in a LAB color space, CLAHE avoids global overexposure. Parameters like `clip_limit` control how aggressively contrast is stretched.
-  - **Brightness/Contrast**: Simple arithmetic and scaling on pixel intensities. Incrementing brightness shifts intensity upward, while contrast scaling widens or narrows the intensity distribution.
-  - **Rotation**: Usually done in multiples of 90°, making it straightforward and lossless. Automatically trying multiple rotations increases the chance of readable text lines.
-
-- **ConfigOptimizer Mechanics**:
-
-  - **Surrogate Model**: Gathers data (*parameter sets and resulting OCR scores*) as it goes. With each evaluation, it updates an internal model (*often a neural network*) that predicts OCR performance from parameters.
-
-  - **Sampling with Uncertainty**: By enabling dropout or similar techniques at inference time, the model produces different predictions per pass, approximating a distribution of possible outcomes. This helps gauge which regions of parameter space are well-understood (*low uncertainty*) and which might still hold potential (*high uncertainty*).
-  - **UCB Acquisition**: The optimizer picks parameters to try next based on both mean predicted performance and uncertainty. It may try parameter settings in unexplored regions if uncertainty is high, aiming to discover better configurations.
-
-- **Fuzzy Matching**:
-
-  - Uses tokenization and character-based similarity metrics to handle OCR's partial errors.
-
-  - Maps extracted strings (*which may be incomplete or slightly misspelled*) to known book titles with a similarity score. Higher scores indicate closer matches.
-
----
-
 ## Project Structure
 
 ```
