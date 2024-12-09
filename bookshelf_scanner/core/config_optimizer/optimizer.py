@@ -310,38 +310,38 @@ class ConfigOptimizer:
         config = OmegaConf.load(self.PARAMS_FILE)
 
         # Optimization parameters
-        self.extractor                      = extractor
         self.cluster_distance_threshold     = config.optimization.cluster_distance_threshold
         self.device_type                    = config.optimization.device_type
+        self.extractor                      = extractor
         self.initial_points_count           = config.optimization.initial_points_count
+        self.initial_suggestion_noise_scale = config.optimization.initial_suggestion_noise_scale
         self.iteration_count                = config.optimization.iteration_count
         self.learning_rate_value            = config.optimization.learning_rate_value
+        self.refinement_candidate_count     = config.optimization.refinement_candidate_count
+        self.refinement_noise_scale         = config.optimization.refinement_noise_scale
         self.training_batch_size            = config.optimization.training_batch_size
         self.training_buffer_size           = config.optimization.training_buffer_size
         self.ucb_beta                       = config.optimization.ucb_beta
-        self.initial_suggestion_noise_scale = config.optimization.initial_suggestion_noise_scale
-        self.refinement_noise_scale         = config.optimization.refinement_noise_scale
-        self.refinement_candidate_count     = config.optimization.refinement_candidate_count
 
         # Training parameters
-        self.max_epochs                     = config.training.max_epochs
         self.diversity_weight               = config.training.diversity_weight
-        self.grad_clip_norm                 = config.training.grad_clip_norm
-        self.min_improvement                = config.training.min_improvement
         self.early_stopping_patience        = config.training.early_stopping_patience
+        self.grad_clip_norm                 = config.training.grad_clip_norm
         self.lr_scheduler_factor            = config.training.lr_scheduler_factor
         self.lr_scheduler_patience          = config.training.lr_scheduler_patience
+        self.max_epochs                     = config.training.max_epochs
+        self.min_improvement                = config.training.min_improvement
         self.train_valid_split_ratio        = config.training.train_valid_split_ratio
 
         # Architecture parameters
-        self.latent_dimension               = config.architecture.latent_dimension
         self.encoder_hidden_dim             = config.architecture.encoder_hidden_dim
+        self.latent_dimension               = config.architecture.latent_dimension
         self.predictor_hidden_dim_1         = config.architecture.predictor_hidden_dim_1
         self.predictor_hidden_dim_2         = config.architecture.predictor_hidden_dim_2
 
         # Uncertainty parameters
         self.uncertainty_num_samples        = config.uncertainty.uncertainty_num_samples
-        
+
         # Directly use extractor.config_space, which is pre-computed at extractor initialization
         self.config_space_boundaries = self.extractor.config_space
         input_dimension              = len(self.config_space_boundaries)
