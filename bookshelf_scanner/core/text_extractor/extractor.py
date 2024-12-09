@@ -92,24 +92,6 @@ class ConfigState:
         action      = f"{action_type} '{param_definition['display_name']}' from {old_value} to {param_definition['value']}"
         return new_state, action
 
-    def convert_to_hashable_tuple(self, value: Any) -> Any:
-        """
-        Converts a nested dictionary/list structure into a nested tuple structure
-        that is deterministic and hashable, ensuring that ConfigState instances
-        can serve as stable cache keys.
-
-        Args:
-            value: The input data (dict, list, or primitive) to convert.
-
-        Returns:
-            A hashable tuple-based structure representing the input value.
-        """
-        if isinstance(value, dict):
-            return tuple(sorted((k, self.convert_to_hashable_tuple(v)) for k, v in value.items()))
-        elif isinstance(value, list):
-            return tuple(self.convert_to_hashable_tuple(x) for x in value)
-        return value
-
     @classmethod
     def from_config(cls, config: Any) -> 'ConfigState':
         """
@@ -136,11 +118,19 @@ class ConfigState:
         Returns:
             ConfigState: Immutable state instance created from the given dictionary.
         """
-        # We remove JSON serialization entirely and rely on a stable hashable tuple structure.
-        # Create a temporary instance to call convert_to_hashable_tuple for hashing:
-        temp = object.__new__(cls)
-        tuple_representation = cls.convert_to_hashable_tuple(temp, config_dict)
 
+        def convert_to_hashable_tuple(value: Any) -> Any:
+            """
+            Converts a nested dictionary/list structure into a nested tuple structure
+            that is deterministic and hashable, ensuring that ConfigState instances
+            can serve as stable cache keys.
+            """
+            if isinstance(value, dict):
+                return tuple(sorted((k, convert_to_hashable_tuple(v)) for k, v in value.items()))
+            elif isinstance(value, list):
+                return tuple(convert_to_hashable_tuple(x) for x in value)
+            return value
+    
         step_index_map = {i+1: step_name for i, step_name in enumerate(config_dict["steps"].keys())}
         param_key_map  = {}
 
@@ -153,10 +143,30 @@ class ConfigState:
 
         return cls(
             config_dict    = config_dict,
-            config_tuple   = tuple_representation,
+            config_tuple   = convert_to_hashable_tuple(config_dict),
             param_key_map  = param_key_map,
             step_index_map = step_index_map
         )
+    
+    def extract_parameter_space(self) -> list[dict[str, Any]]:
+        """
+        Extracts configuration range definitions from this ConfigState.
+        
+        Returns:
+            list: List of dictionaries defining each parameter's bounds, step, and type.
+        """
+        return [
+            {
+                'name'       : f"{step_name}.{param_name}",
+                'min_value'  : float(param_definition["min"]),
+                'max_value'  : float(param_definition["max"]),
+                'step_value' : float(param_definition["step"]),
+                'is_integer' : isinstance(param_definition["value"], int)
+            }
+            for step_name, step_definition in self.config_dict["steps"].items()
+            if step_definition.get("parameters") is not None
+            for param_name, param_definition in step_definition["parameters"].items()
+        ]
 
     def toggle_step_enabled(self, step_index: int) -> tuple['ConfigState', str]:
         """
@@ -277,8 +287,6 @@ class TextExtractor:
         self,
         allowed_formats : set[str] | None = None,
         config_file     : Path | None     = None,
-        gpu_enabled     : bool            = False,
-        headless        : bool            = False,
         output_file     : Path | None     = None,
         output_json     : bool            = False,
         window_height   : int             = DEFAULT_HEIGHT
@@ -289,32 +297,37 @@ class TextExtractor:
         Args:
             allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
             config_file     : Optional custom path to config.yml
-            gpu_enabled     : Whether to use GPU for OCR processing
-            headless        : Whether to run in headless mode
             output_file     : Path to save resultant strings from OCR processing
             output_json     : Whether to output OCR results to JSON file
-            window_height   : Default window height for UI display
+            window_height   : Default window height for UI display (relevant for interactive mode)
         """
         self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
         self.config_file     = config_file or self.PARAMS_FILE
-        self.config_state    = None
-        self.headless        = headless
         self.output_file     = output_file or self.OUTPUT_FILE
         self.output_json     = output_json
-        self.reader          = Reader(['en'], gpu=gpu_enabled)
-        self.state           = DisplayState(window_height = window_height) if not headless else None
+        self.window_height   = window_height
+        self.state           = None  # Will be set in interactive mode
 
-    def initialize_processing_steps(self, config_override: dict | None = None):
+        # Load base config and setup the Reader
+        self.base_config  = OmegaConf.load(self.config_file)
+        self.config_space = ConfigState.from_config(self.base_config).extract_parameter_space()
+        self.reader       = Reader(
+            lang_list = self.base_config["easyocr"]["language_list"], 
+            gpu       = self.base_config["easyocr"]["gpu_enabled"]
+        )
+
+    def merge_steps_config(self, config_override: dict | None = None) -> ConfigState:
         """
-        Initializes processing steps with default parameters or overrides.
-        Maintains consistent dictionary structure for ConfigState compatibility.
+        Merges the base configuration with any provided overrides and returns a new ConfigState.
 
         Args:
-            config_override: Optional dictionary of step-level overrides matching config structure from YML
+            config_override: Optional dictionary of step-level overrides.
+
+        Returns:
+            ConfigState: The newly created configuration state after merging.
         """
-        base_config = OmegaConf.load(self.config_file)
-        merged_cfg  = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
-        self.config_state = ConfigState.from_config(config = merged_cfg)
+        merged_config = OmegaConf.merge(self.base_config, OmegaConf.create(config_override)) if config_override else self.base_config
+        return ConfigState.from_config(config = merged_config)
 
     # -------------------- Headless Mode Operations --------------------
 
@@ -324,7 +337,7 @@ class TextExtractor:
         config_override : dict | None = None
     ):
         """
-        Processes images in headless mode.
+        Processes images in a non-interactive (headless) mode.
 
         Args:
             config_override : Optional parameter overrides
@@ -333,15 +346,26 @@ class TextExtractor:
         if not image_files:
             raise ValueError("No image files provided")
 
-        if self.config_state is None or config_override:
-            self.initialize_processing_steps(config_override = config_override)
+        config_state = self.merge_steps_config(config_override = config_override)
+        results      = {}
 
-        results = self.perform_ocr_headless(image_files = image_files)
+        for image_path in image_files:
+            image_name = image_path.name
+            try:
+                ocr_results = self.perform_ocr(config_state = config_state, image_path = str(image_path))
+                results[image_name] = [
+                    (text, confidence) for _, text, confidence in ocr_results
+                ]
+            except Exception as e:
+                logger.error(f"Failed to process image {image_name}: {e}")
+                continue
 
         if self.output_json:
             with self.output_file.open('w', encoding = 'utf-8') as f:
                 json.dump(results, f, ensure_ascii = False, indent = 4)
             logger.info(f"OCR results saved to {self.output_file}")
+
+        return results
 
     # -------------------- Image Loading and Preparation --------------------
 
@@ -389,16 +413,16 @@ class TextExtractor:
         if centered_image.ndim == 2:
             centered_image = cv2.cvtColor(centered_image, cv2.COLOR_GRAY2BGR)
 
-        display_scale = self.state.window_height / centered_image.shape[0]
+        display_scale = self.window_height / centered_image.shape[0]
         display_image = cv2.resize(
             centered_image,
-            (int(centered_image.shape[1] * display_scale), self.state.window_height)
+            (int(centered_image.shape[1] * display_scale), self.window_height)
         )
         return display_image, display_scale
 
     # -------------------- Interactive Mode Operations --------------------
 
-    def interactive_mode(
+    def run_interactive_mode(
         self,
         image_files     : list[Path],
         config_override : dict | None = None
@@ -413,8 +437,10 @@ class TextExtractor:
         if not image_files:
             raise ValueError("No image files provided")
 
-        if self.config_state is None or config_override:
-            self.initialize_processing_steps(config_override = config_override)
+        # Set up the display state since we're in interactive mode
+        self.state = DisplayState(window_height = self.window_height)
+
+        config_state = self.merge_steps_config(config_override = config_override)
 
         cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
         logger.info("Starting interactive experiment.")
@@ -423,12 +449,12 @@ class TextExtractor:
             while True:
                 current_image_path    = image_files[self.state.image_idx]
                 self.state.image_name = current_image_path.name
-                ocr_results           = self.perform_ocr(config_state = self.config_state, image_path = str(current_image_path))
+                ocr_results           = self.perform_ocr(config_state = config_state, image_path = str(current_image_path))
 
                 if self.state.check_and_reset_new_image_flag():
                     self.log_ocr_results(ocr_results = ocr_results)
 
-                processed_image      = self.process_image(config_state = self.config_state, image_path = str(current_image_path))
+                processed_image      = self.process_image(config_state = config_state, image_path = str(current_image_path))
                 display_image, scale = self.prepare_display_image(processed_image = processed_image)
 
                 if ocr_results:
@@ -442,7 +468,7 @@ class TextExtractor:
                         display_image        = display_image
                     )
 
-                sidebar_image  = self.render_sidebar(image_name = self.state.image_name, window_height = self.state.window_height)
+                sidebar_image  = self.render_sidebar(config_state = config_state, image_name = self.state.image_name, window_height = self.state.window_height)
                 combined_image = np.hstack([display_image, sidebar_image])
                 cv2.imshow(self.WINDOW_NAME, combined_image)
                 cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
@@ -456,7 +482,8 @@ class TextExtractor:
                 except ValueError:
                     continue
 
-                if self.process_user_input(char = char, ocr_results = ocr_results, total_images = len(image_files)):
+                should_quit, config_state = self.process_user_input(char = char, config_state = config_state, ocr_results = ocr_results, total_images = len(image_files))
+                if should_quit:
                     break
 
         finally:
@@ -482,10 +509,13 @@ class TextExtractor:
         """
         processed_image = self.process_image(config_state = config_state, image_path = image_path)
         try:
+            decoder       = config_state.config_dict["easyocr"]["decoder"]
+            rotation_info = config_state.config_dict["easyocr"]["rotation_info"]
+
             ocr_results = self.reader.readtext(
                 processed_image[..., ::-1],
-                decoder       = 'greedy',
-                rotation_info = [90, 180, 270]
+                decoder       = decoder,
+                rotation_info = rotation_info
             )
             logger.debug(f"Extracted text from image '{image_path}'.")
             return ocr_results
@@ -493,30 +523,6 @@ class TextExtractor:
         except Exception as e:
             logger.error(f"OCR failed for {image_path}: {e}")
             return []
-
-    def perform_ocr_headless(self, image_files: list[Path]) -> dict:
-        """
-        Processes a list of images and extracts text from them in headless mode.
-
-        Args:
-            image_files : List of image file paths to process.
-
-        Returns:
-            dict: Mapping image names to their OCR results
-        """
-        results = {}
-        for image_path in image_files:
-            image_name = image_path.name
-            try:
-                ocr_results = self.perform_ocr(config_state = self.config_state, image_path = str(image_path))
-                results[image_name] = [
-                    (text, confidence) for _, text, confidence in ocr_results
-                ]
-            except Exception as e:
-                logger.error(f"Failed to process image {image_name}: {e}")
-                continue
-
-        return results
 
     # -------------------- UI Rendering and Annotation --------------------
 
@@ -613,14 +619,18 @@ class TextExtractor:
         annotated_image = Image.alpha_composite(pil_image.convert('RGBA'), text_layer)
         return cv2.cvtColor(np.array(annotated_image), cv2.COLOR_RGBA2BGR)
 
-    def generate_sidebar_content(self, image_name: str
+    def generate_sidebar_content(
+        self, 
+        config_state : ConfigState,
+        image_name   : str
     ) -> list[tuple[str, tuple[int, int, int], float]]:
         """
         Generates a list of sidebar lines with text content, colors, and scaling factors.
         Used internally by render_sidebar to prepare display content.
 
         Args:
-            image_name : Name of the current image being processed
+            config_state : Current ConfigState
+            image_name   : Name of the current image being processed
 
         Returns:
             list: (text, color, scale_factor) tuples
@@ -630,9 +640,9 @@ class TextExtractor:
             ("", self.UI_COLORS['WHITE'], 1.0)
         ]
 
-        steps_dict = self.config_state.config_dict["steps"]
-        for i in sorted(self.config_state.step_index_map.keys()):
-            step_name       = self.config_state.step_index_map[i]
+        steps_dict = config_state.config_dict["steps"]
+        for i in sorted(config_state.step_index_map.keys()):
+            step_name       = config_state.step_index_map[i]
             step_definition = steps_dict[step_name]
             status          = 'Enabled' if step_definition['enabled'] else 'Disabled'
 
@@ -665,6 +675,7 @@ class TextExtractor:
 
     def render_sidebar(
         self, 
+        config_state  : ConfigState,
         image_name    : str, 
         window_height : int
     ) -> np.ndarray:
@@ -672,13 +683,14 @@ class TextExtractor:
         Renders the sidebar image with controls and settings.
 
         Args:
+            config_state  : Current ConfigState
             image_name    : Name of the current image being processed
             window_height : Height of the display window
 
         Returns:
             np.ndarray: Sidebar image as a numpy array.
         """
-        lines             = self.generate_sidebar_content(image_name = image_name)
+        lines             = self.generate_sidebar_content(config_state = config_state, image_name = image_name)
         num_lines         = len(lines)
         margin            = int(0.05 * window_height)
         horizontal_margin = 20
@@ -715,46 +727,48 @@ class TextExtractor:
 
     def process_user_input(
         self,
-        char        : str,
-        ocr_results : list,
-        total_images: int
-    ) -> bool:
+        char         : str,
+        config_state : ConfigState,
+        ocr_results  : list,
+        total_images : int
+    ) -> tuple[bool, ConfigState]:
         """
         Processes user input and performs corresponding actions.
 
         Args:
             char         : Input character
+            config_state : Current ConfigState
             ocr_results  : Current OCR results for logging after changes
             total_images : Total number of images for navigation
 
         Returns:
-            bool: True if should quit, False otherwise
+            tuple: (should_quit, updated_config_state)
         """
         if char == 'q':
             logger.info("Quitting interactive experiment.")
-            return True
+            return True, config_state
 
         elif char == '/':
             old_name = self.state.image_name
             self.state.advance_to_next_image(total_images = total_images)
             logger.info(f"Switched from '{old_name}' to '{self.state.image_name}'")
-            return False
+            return False, config_state
 
         if char.isdigit():
             step_index        = int(char)
-            new_state, action = self.config_state.toggle_step_enabled(step_index = step_index)
+            new_state, action = config_state.toggle_step_enabled(step_index = step_index)
             if action:
-                self.config_state = new_state
+                config_state = new_state
                 logger.info(action)
                 self.log_ocr_results(ocr_results = ocr_results)
-            return False
+            return False, config_state
 
-        new_state, action = self.config_state.adjust_parameter(key_char = char)
+        new_state, action = config_state.adjust_parameter(key_char = char)
         if action:
-            self.config_state = new_state
+            config_state = new_state
             logger.info(action)
             self.log_ocr_results(ocr_results = ocr_results)
-        return False
+        return False, config_state
 
     # -------------------- Utility Methods --------------------
 
@@ -865,12 +879,12 @@ class TextExtractor:
 
     def log_ocr_results(self, ocr_results: list[tuple[list, str, float]]):
         """
-        Logs OCR results in a consistent format.
+        Logs OCR results in a consistent format. Logs only when in interactive mode (self.state is not None).
 
         Args:
             ocr_results: List of OCR results (bounding_box, text, confidence)
         """
-        if ocr_results and not self.headless:
+        if ocr_results and self.state is not None:
             logger.info(f"OCR Results for image '{self.state.image_name}':")
             for _, text, confidence in ocr_results:
                 logger.info(f"Text: '{text}' with confidence {confidence:.2f}")

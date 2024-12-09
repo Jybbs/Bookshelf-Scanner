@@ -30,7 +30,7 @@ class ModuleLogger:
             self.logger.setLevel(logging.INFO)
             self.LOGS_DIR.mkdir(exist_ok = True)
             
-            handler = logging.FileHandler(self.log_file, mode = 'w')
+            handler = logging.FileHandler(self.log_file, mode = 'a')
             handler.setFormatter(
                 logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
             )

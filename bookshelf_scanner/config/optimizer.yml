@@ -1,29 +1,30 @@
 optimization:
   cluster_distance_threshold     : 2.0    # Maximum allowed distance in latent space to decide if a configuration joins an existing cluster or forms a new one.
-  device_type                    : "cpu"  # The computation device used for processing. Use "cpu" if you have no GPU; "cuda" if you do.
+  device_type                    : "cpu"  # The computation device used for processing. Use "cpu" if you have no GPU, "cuda" if you do, or "mps" for Apple Silicon.
   initial_points_count           : 10     # How many configuration vectors to propose at the start, before any refinement.
+  initial_suggestion_noise_scale : 0.1    # Controls how much random noise is added to the best known configuration when generating the first set of suggestions.
   iteration_count                : 40     # How many rounds of iterative refinement to run per image, where each round tries to improve upon previous configurations.
   learning_rate_value            : 0.001  # The base step size used by the optimizer when updating model parameters during training.
+  num_workers                    : 8      # Number of processes to spawn for parallel evaluations, increasing overall throughput.
+  refinement_candidate_count     : 10     # How many new candidate configurations to generate and evaluate each iteration of refinement.
+  refinement_noise_scale         : 0.1    # Controls the intensity of random perturbations applied to configurations during each refinement iteration.
   training_batch_size            : 16     # Number of samples processed at once during a single training step of the meta-learner model.
   training_buffer_size           : 30     # After how many new data points collected (configurations and scores) we trigger a re-training of the meta-learner.
   ucb_beta                       : 0.1    # Exploration parameter for the UCB strategy, balancing exploration (uncertainty) and exploitation (expected performance).
-  initial_suggestion_noise_scale : 0.1    # Controls how much random noise is added to the best known configuration when generating the first set of suggestions.
-  refinement_noise_scale         : 0.1    # Controls the intensity of random perturbations applied to configurations during each refinement iteration.
-  refinement_candidate_count     : 10     # How many new candidate configurations to generate and evaluate each iteration of refinement.
 
 training:
-  max_epochs                     : 100    # The maximum number of passes through the entire training dataset during a training phase.
   diversity_weight               : 0.1    # Weighting factor for encouraging latent space diversity, helping the model avoid collapsing to similar configurations.
-  grad_clip_norm                 : 1.0    # Clamps the gradients if they exceed this norm, improving training stability and preventing huge updates.
-  min_improvement                : 0.0001 # The minimum validation loss decrease needed to consider it a real improvement and reset early stopping patience.
   early_stopping_patience        : 5      # If no sufficient improvement in validation loss is observed for this many epochs, training stops early.
+  grad_clip_norm                 : 1.0    # Clamps the gradients if they exceed this norm, improving training stability and preventing huge updates.
   lr_scheduler_factor            : 0.5    # When triggered, reduces the learning rate by this factor to help convergence in later training stages.
   lr_scheduler_patience          : 5      # If no improvement for these many epochs, the learning rate scheduler reduces the learning rate.
+  max_epochs                     : 100    # The maximum number of passes through the entire training dataset during a training phase.
+  min_improvement                : 0.0001 # The minimum validation loss decrease needed to consider it a real improvement and reset early stopping patience.
   train_valid_split_ratio        : 0.8    # Fraction of data used for training (remainder is used for validation), ensuring a meaningful validation set.
 
 architecture:
-  latent_dimension               : 64     # Dimensionality of the latent vector that represents each configuration's essential features.
   encoder_hidden_dim             : 128    # Size of the hidden layer in the configuration encoder network, controlling representational capacity.
+  latent_dimension               : 64     # Dimensionality of the latent vector that represents each configuration's essential features.
   predictor_hidden_dim_1         : 128    # Size of the first hidden layer in the performance predictor network, influencing its modeling power.
   predictor_hidden_dim_2         : 64     # Size of the second hidden layer in the performance predictor network, balancing complexity and generalization.
 

@@ -1,3 +1,9 @@
+easyocr:
+  gpu_enabled   : false          # Whether to attempt GPU usage with easyocr's fallback strategy.
+  language_list : ["en"]         # List of languages for the EasyOCR reader.
+  decoder       : "greedy"       # Decoder type for OCR. Could be "greedy", "beamsearch", etc.
+  rotation_info : [90, 180, 270] # Additional rotation angles for OCR attempts.
+
 steps:
   image_rotation:
     display_name : Image Rotation

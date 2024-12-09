@@ -74,7 +74,7 @@ class MetaLearningModel(nn.Module):
     """
     Combines ConfigEncoder and PerformancePredictor for meta-learning.
 
-    This model encodes configuration vectors (combinations of steps and their parameters)
+    This model encodes configuration vectors (combinations of steps and parameters)
     into latent vectors and predicts their corresponding OCR performance scores.
     The modular design allows for separate training and fine-tuning of the encoder and predictor.
     """
@@ -112,7 +112,7 @@ class ClusterMember:
     latent_vector     : torch.Tensor
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'ClusterMember':
+    def from_dict(cls, data: dict, device_type: str = 'cpu') -> 'ClusterMember':
         """
         Creates a ClusterMember instance from a dictionary.
 
@@ -123,9 +123,9 @@ class ClusterMember:
             ClusterMember instance.
         """
         return cls(
-            config_vector     = torch.tensor(data['parameters'], dtype = torch.float32),
+            config_vector     = torch.tensor(data['parameters'], dtype = torch.float32, device = device_type),
             performance_score = data['score'],
-            latent_vector     = torch.tensor(data['latent'], dtype = torch.float32)
+            latent_vector     = torch.tensor(data['latent'], dtype = torch.float32, device = device_type)
         )
 
 @dataclass
@@ -150,7 +150,7 @@ class OCRResult:
         }
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'OCRResult':
+    def from_dict(cls, data: dict, device_type: str = 'cpu') -> 'OCRResult':
         """
         Creates an OCRResult instance from a dictionary.
 
@@ -196,9 +196,6 @@ class OptimizationRecord:
     def to_dict(self) -> dict:
         """
         Converts the OptimizationRecord instance into a dictionary suitable for JSON serialization.
-        
-        Returns:
-            dict: A dictionary containing image path, config vector, score, latent vector, and OCR results.
         """
         return {
             'image_path'    : str(self.image_path),
@@ -209,7 +206,7 @@ class OptimizationRecord:
         }
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'OptimizationRecord':
+    def from_dict(cls, data: dict, device_type: str = 'cpu') -> 'OptimizationRecord':
         """
         Creates an OptimizationRecord instance from a dictionary.
 
@@ -221,10 +218,10 @@ class OptimizationRecord:
         """
         return cls(
             image_path    = Path(data['image_path']),
-            config_vector = torch.tensor(data['parameters'], dtype = torch.float32),
+            config_vector = torch.tensor(data['parameters'], dtype = torch.float32, device = device_type),
             score         = data['score'],
-            latent_vector = torch.tensor(data['latent_vector'], dtype = torch.float32),
-            ocr_results   = [OCRResult.from_dict(ocr) for ocr in data.get('ocr_results', [])]
+            latent_vector = torch.tensor(data['latent_vector'], dtype = torch.float32, device = device_type),
+            ocr_results   = [OCRResult.from_dict(ocr, device_type = device_type) for ocr in data.get('ocr_results', [])]
         )
     
     def update_if_better(self, other: 'OptimizationRecord') -> bool:
@@ -313,48 +310,42 @@ class ConfigOptimizer:
         config = OmegaConf.load(self.PARAMS_FILE)
 
         # Optimization parameters
-        self.extractor                      = extractor
         self.cluster_distance_threshold     = config.optimization.cluster_distance_threshold
         self.device_type                    = config.optimization.device_type
+        self.extractor                      = extractor
         self.initial_points_count           = config.optimization.initial_points_count
+        self.initial_suggestion_noise_scale = config.optimization.initial_suggestion_noise_scale
         self.iteration_count                = config.optimization.iteration_count
         self.learning_rate_value            = config.optimization.learning_rate_value
+        self.refinement_candidate_count     = config.optimization.refinement_candidate_count
+        self.refinement_noise_scale         = config.optimization.refinement_noise_scale
         self.training_batch_size            = config.optimization.training_batch_size
         self.training_buffer_size           = config.optimization.training_buffer_size
         self.ucb_beta                       = config.optimization.ucb_beta
-        self.initial_suggestion_noise_scale = config.optimization.initial_suggestion_noise_scale
-        self.refinement_noise_scale         = config.optimization.refinement_noise_scale
-        self.refinement_candidate_count     = config.optimization.refinement_candidate_count
 
         # Training parameters
-        self.max_epochs                     = config.training.max_epochs
         self.diversity_weight               = config.training.diversity_weight
-        self.grad_clip_norm                 = config.training.grad_clip_norm
-        self.min_improvement                = config.training.min_improvement
         self.early_stopping_patience        = config.training.early_stopping_patience
+        self.grad_clip_norm                 = config.training.grad_clip_norm
         self.lr_scheduler_factor            = config.training.lr_scheduler_factor
         self.lr_scheduler_patience          = config.training.lr_scheduler_patience
+        self.max_epochs                     = config.training.max_epochs
+        self.min_improvement                = config.training.min_improvement
         self.train_valid_split_ratio        = config.training.train_valid_split_ratio
 
         # Architecture parameters
-        self.latent_dimension               = config.architecture.latent_dimension
         self.encoder_hidden_dim             = config.architecture.encoder_hidden_dim
+        self.latent_dimension               = config.architecture.latent_dimension
         self.predictor_hidden_dim_1         = config.architecture.predictor_hidden_dim_1
         self.predictor_hidden_dim_2         = config.architecture.predictor_hidden_dim_2
 
         # Uncertainty parameters
         self.uncertainty_num_samples        = config.uncertainty.uncertainty_num_samples
 
-        # Ensure extractor config_state is initialized
-        self.extractor.initialize_processing_steps()
-        
-        # Extract configuration space
-        self.config_space_boundaries = self.extract_config_space()
-        
-        input_dimension      = len(self.config_space_boundaries)
-        self.optimizer_state = MetaLearningState(
-            model = self.initialize_meta_learning_model(input_dimension)
-        )
+        # Directly use extractor.config_space, which is pre-computed at extractor initialization
+        self.config_space_boundaries = self.extractor.config_space
+        input_dimension              = len(self.config_space_boundaries)
+        self.optimizer_state         = MetaLearningState(model = self.initialize_meta_learning_model(input_dimension))
         
         # Initialize the meta-learner optimizer and scheduler
         self.model_optimizer = torch.optim.Adam(
@@ -391,20 +382,23 @@ class ConfigOptimizer:
             encoder_hidden_dim     = self.encoder_hidden_dim,
             predictor_hidden_dim_1 = self.predictor_hidden_dim_1,
             predictor_hidden_dim_2 = self.predictor_hidden_dim_2
-        ).to(self.device_type)
+        ).to(device = self.device_type)
 
     # -------------------- Configuration Space & Conversion --------------------
 
-    def extract_config_space(self) -> list[dict[str, Any]]:
+    def extract_config_space(self, config_state) -> list[dict[str, Any]]:
         """
-        Extracts configuration range definitions from the extractor's configuration.
+        Extracts configuration range definitions from the given ConfigState.
         
-        The extractor's ConfigState includes multiple steps, each with several parameters.
-        Here we flatten those into a list of parameter definitions so we can map each parameter
+        The ConfigState includes multiple steps, each with several parameters.
+        We flatten those into a list of parameter definitions so we can map each parameter
         to a continuous or discrete range and represent the entire configuration as a vector.
 
+        Args:
+            config_state: A ConfigState instance from which to extract parameter definitions.
+
         Returns:
-            List of dictionaries defining each parameter's bounds, step, and type.
+            list: List of dictionaries defining each parameter's bounds, step, and type.
         """
         return [
             {
@@ -414,7 +408,7 @@ class ConfigOptimizer:
                 'step_value' : float(param_definition["step"]),
                 'is_integer' : isinstance(param_definition["value"], int)
             }
-            for step_name, step_definition in self.extractor.config_state.config_dict["steps"].items()
+            for step_name, step_definition in config_state.config_dict["steps"].items()
             if step_definition.get("parameters") is not None
             for param_name, param_definition in step_definition["parameters"].items()
         ]
@@ -433,7 +427,7 @@ class ConfigOptimizer:
             Dictionary structured for the extractor's config override, containing steps and parameters.
         """
         config_dict = {"steps": {}}
-        vector_numpy = config_vector.cpu().numpy()
+        vector_numpy = config_vector.detach().cpu().numpy()  # Numpy vectors require a CPU conversion
 
         names      = [b['name']       for b in self.config_space_boundaries]
         min_values = np.array([b['min_value']  for b in self.config_space_boundaries])
@@ -474,7 +468,7 @@ class ConfigOptimizer:
 
             # Restore optimization history
             self.optimizer_state.optimization_history = [
-                OptimizationRecord.from_dict(record)
+                OptimizationRecord.from_dict(record, device_type = self.device_type)
                 for record in checkpoint['optimization_history']
             ]
 
@@ -482,15 +476,14 @@ class ConfigOptimizer:
             config_clusters = defaultdict(lambda: {'members': [], 'center': None})
             for cluster_id_str, members in checkpoint['parameter_clusters'].items():
                 cluster_id_int = int(cluster_id_str)
-                cluster_members = [ClusterMember.from_dict(m) for m in members]
+                cluster_members = [ClusterMember.from_dict(m, device_type = self.device_type) for m in members]
                 config_clusters[cluster_id_int]['members'].extend(cluster_members)
 
             # Recalculate cluster centers now that we have members
             for _, cinfo in config_clusters.items():
                 if cinfo['members']:
-                    # Compute the mean latent vector of all members to serve as the cluster center
                     latent_vectors = torch.stack([m.latent_vector for m in cinfo['members']])
-                    cinfo['center'] = latent_vectors.mean(dim = 0)
+                    cinfo['center'] = latent_vectors.mean(dim = 0).to(device = self.device_type)
                 else:
                     cinfo['center'] = None
 
@@ -586,12 +579,12 @@ class ConfigOptimizer:
             best_config_vector = suggested_configs[0]
             needed = self.initial_points_count - len(suggested_configs)
             for _ in range(needed):
-                noise = torch.randn_like(best_config_vector) * self.initial_suggestion_noise_scale
+                noise = torch.randn_like(best_config_vector, device = self.device_type) * self.initial_suggestion_noise_scale
                 suggested_configs.append(torch.clamp(best_config_vector + noise, 0, 1))
         else:
             # If no existing suggestions, generate purely random configuration vectors
             suggested_configs.extend(
-                torch.rand(len(self.config_space_boundaries)) for _ in range(self.initial_points_count)
+                torch.rand(len(self.config_space_boundaries), device = self.device_type) for _ in range(self.initial_points_count)
             )
 
         return suggested_configs
@@ -616,7 +609,7 @@ class ConfigOptimizer:
 
         # Encode the configuration vector into latent space for clustering
         latent_representation, _ = self.optimizer_state.model(config_vector.unsqueeze(0))
-        latent_representation = latent_representation.squeeze().cpu()
+        latent_representation = latent_representation.squeeze().to(device = self.device_type)
 
         # If no clusters exist, initialize the first cluster
         if not self.optimizer_state.config_clusters:
@@ -675,9 +668,9 @@ class ConfigOptimizer:
         # Initialize best_record with very low initial score
         best_record = OptimizationRecord(
             image_path    = image_path,
-            config_vector = torch.zeros(len(self.config_space_boundaries)).to(self.device_type),
+            config_vector = torch.zeros(len(self.config_space_boundaries), device = self.device_type),
             score         = -float('inf'),
-            latent_vector = torch.zeros(self.latent_dimension).to(self.device_type),
+            latent_vector = torch.zeros(self.latent_dimension, device = self.device_type),
             ocr_results   = []
         )
 
@@ -694,20 +687,22 @@ class ConfigOptimizer:
             Returns:
                 OptimizationRecord capturing performance and OCR results for this configuration.
             """
+            config_vector = config_vector.to(device = self.device_type)
             config_override = self.vector_to_config_dictionary(config_vector)
-            self.extractor.initialize_processing_steps(config_override = config_override)
             
-            # Perform OCR and evaluate performance
-            ocr_results_raw = self.extractor.perform_ocr_headless([image_path])
-            ocr_results     = ocr_results_raw.get(image_path.name, [])
-            performance_score = sum(len(text) * count for text, count in ocr_results)
+            # Directly run headless mode on the single image and get results
+            results = self.extractor.run_headless_mode([image_path], config_override = config_override)
             
+            # Extract OCR results for the current image
+            image_name        = image_path.name
+            ocr_tuples        = results.get(image_name, [])
+            performance_score = sum(len(text) * confidence for text, confidence in ocr_tuples)
+            ocr_results_instances = OCRResult.from_tuples(ocr_tuples)
+
             # Encode the config vector in latent space
             with torch.inference_mode():
                 latent_representation, _ = self.optimizer_state.model(config_vector.unsqueeze(0))
                 latent_representation    = latent_representation.squeeze()
-            
-            ocr_results_instances = OCRResult.from_tuples(ocr_results)
             
             return OptimizationRecord(
                 image_path    = image_path,
@@ -716,7 +711,7 @@ class ConfigOptimizer:
                 ocr_results   = ocr_results_instances,
                 latent_vector = latent_representation 
                     if latent_representation is not None 
-                    else torch.zeros(len(self.config_space_boundaries)).to(self.device_type)
+                    else torch.zeros(len(self.config_space_boundaries), device = self.device_type)
             )
 
         # -------------------- Initial Evaluation --------------------
@@ -733,8 +728,8 @@ class ConfigOptimizer:
                 f"No configurations improved the score for {image_path.name}. "
                 f"Using a random configuration vector as a fallback."
             )
-            random_config = torch.rand(len(self.config_space_boundaries)).to(self.device_type)
-            fallback_record = evaluate_config_vector(random_config)
+            random_config         = torch.rand(len(self.config_space_boundaries), device = self.device_type)
+            fallback_record       = evaluate_config_vector(random_config)
             fallback_record.score = 0.0
             
             best_record.update_if_better(fallback_record)
@@ -746,14 +741,14 @@ class ConfigOptimizer:
             # Generate candidate configurations by adding noise that decreases over iterations
             candidate_config_vectors = [
                 torch.clamp(
-                    best_record.config_vector + torch.randn_like(best_record.config_vector) *
+                    best_record.config_vector + torch.randn_like(best_record.config_vector, device = self.device_type) *
                     (1.0 - iteration / self.iteration_count) * self.refinement_noise_scale,
                     min = 0,
                     max = 1
                 ) for _ in range(self.refinement_candidate_count)
             ]
 
-            candidate_tensor = torch.stack(candidate_config_vectors).to(self.device_type)
+            candidate_tensor = torch.stack(candidate_config_vectors).to(device = self.device_type)
             means, stds      = self.predict_with_uncertainty(candidate_tensor, num_samples = self.uncertainty_num_samples)
 
             # Use UCB to pick the candidate balancing exploitation (mean) and exploration (std)
@@ -830,8 +825,8 @@ class ConfigOptimizer:
             return
 
         # Prepare normalized training data
-        config_vectors = torch.stack([r.config_vector for r in self.optimizer_state.optimization_history])
-        scores         = torch.tensor([r.score for r in self.optimizer_state.optimization_history], dtype = torch.float32)
+        config_vectors = torch.stack([r.config_vector for r in self.optimizer_state.optimization_history]).to(device = self.device_type)
+        scores         = torch.tensor([r.score for r in self.optimizer_state.optimization_history], dtype = torch.float32, device = self.device_type)
         
         min_score, max_score = self.optimizer_state.score_scaling
         if max_score - min_score == 0:
@@ -869,8 +864,8 @@ class ConfigOptimizer:
         for epoch in range(1, self.max_epochs + 1):
             train_loss = 0.0
             for batch_configs, batch_scores in train_loader:
-                batch_configs = batch_configs.to(self.device_type)
-                batch_scores  = batch_scores.to(self.device_type)
+                batch_configs = batch_configs.to(device = self.device_type)
+                batch_scores  = batch_scores.to(device = self.device_type)
 
                 self.model_optimizer.zero_grad(set_to_none = True)
 
@@ -905,8 +900,8 @@ class ConfigOptimizer:
             valid_loss = 0.0
             with torch.inference_mode():
                 for batch_configs, batch_scores in valid_loader:
-                    batch_configs = batch_configs.to(self.device_type)
-                    batch_scores  = batch_scores.to(self.device_type)
+                    batch_configs = batch_configs.to(device = self.device_type)
+                    batch_scores  = batch_scores.to(device = self.device_type)
                     
                     _, predicted_scores = self.optimizer_state.model(batch_configs)
                     loss = mse_loss(predicted_scores.squeeze(), batch_scores)
