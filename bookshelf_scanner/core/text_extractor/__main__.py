@@ -5,10 +5,10 @@ Entry point for running the text extractor as a module.
 from bookshelf_scanner import TextExtractor
 
 def main():
-    extractor = TextExtractor()
+    extractor = TextExtractor(output_images = True)
     
     params = {
-        'image_files': extractor.find_image_files('Books'),
+        'image_files': extractor.find_image_files('books'),
 
         'config_override': {
             'steps': {
