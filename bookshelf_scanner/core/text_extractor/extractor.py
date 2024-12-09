@@ -967,6 +967,19 @@ class TextExtractor:
             for _, text, confidence in ocr_results:
                 logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
 
+    def save_annotated_image(self, annotated_image: np.ndarray, image_name: str):
+        """
+        Saves the annotated image to the specified directory.
+
+        Args:
+            annotated_image : The annotated image to save
+            image_name      : The file name for the output image
+        """
+        if self.output_image_dir is not None:
+            output_path = self.output_image_dir / image_name
+            cv2.imwrite(str(output_path), annotated_image)
+            logger.info(f"Annotated image saved to {output_path}")
+
     def save_to_json(self, results: dict):
         """
         Saves OCR results to a JSON file if output_json is True.
@@ -980,16 +993,3 @@ class TextExtractor:
         with self.output_file.open('w', encoding = 'utf-8') as f:
             json.dump(results, f, ensure_ascii = False, indent = 4)
         logger.info(f"OCR results saved to {self.output_file}")
-
-    def save_annotated_image(self, annotated_image: np.ndarray, image_name: str):
-        """
-        Saves the annotated image to the specified directory.
-
-        Args:
-            annotated_image : The annotated image to save
-            image_name      : The file name for the output image
-        """
-        if self.output_image_dir is not None:
-            output_path = self.output_image_dir / image_name
-            cv2.imwrite(str(output_path), annotated_image)
-            logger.info(f"Annotated image saved to {output_path}")
