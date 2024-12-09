@@ -267,7 +267,6 @@ class TextExtractor:
         self,
         allowed_formats : set[str] | None = None,
         config_file     : Path | None     = None,
-        headless        : bool            = False,
         output_file     : Path | None     = None,
         output_json     : bool            = False,
         window_height   : int             = DEFAULT_HEIGHT
@@ -278,17 +277,16 @@ class TextExtractor:
         Args:
             allowed_formats : Set of allowed image extensions (defaults to ALLOWED_FORMATS)
             config_file     : Optional custom path to config.yml
-            headless        : Whether to run in headless mode
             output_file     : Path to save resultant strings from OCR processing
             output_json     : Whether to output OCR results to JSON file
-            window_height   : Default window height for UI display
+            window_height   : Default window height for UI display (relevant for interactive mode)
         """
         self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
         self.config_file     = config_file or self.PARAMS_FILE
-        self.headless        = headless
         self.output_file     = output_file or self.OUTPUT_FILE
         self.output_json     = output_json
-        self.state           = DisplayState(window_height = window_height) if not headless else None
+        self.window_height   = window_height
+        self.state           = None  # Will be set in interactive mode
 
         # Load base config and setup the Reader
         self.base_config = OmegaConf.load(self.config_file)
@@ -318,7 +316,7 @@ class TextExtractor:
         config_override : dict | None = None
     ):
         """
-        Processes images in headless mode.
+        Processes images in a non-interactive (headless) mode.
 
         Args:
             config_override : Optional parameter overrides
@@ -381,10 +379,10 @@ class TextExtractor:
         if centered_image.ndim == 2:
             centered_image = cv2.cvtColor(centered_image, cv2.COLOR_GRAY2BGR)
 
-        display_scale = self.state.window_height / centered_image.shape[0]
+        display_scale = self.window_height / centered_image.shape[0]
         display_image = cv2.resize(
             centered_image,
-            (int(centered_image.shape[1] * display_scale), self.state.window_height)
+            (int(centered_image.shape[1] * display_scale), self.window_height)
         )
         return display_image, display_scale
 
@@ -404,6 +402,9 @@ class TextExtractor:
         """
         if not image_files:
             raise ValueError("No image files provided")
+
+        # Set up the display state since we're in interactive mode
+        self.state = DisplayState(window_height = self.window_height)
 
         config_state = self.merge_steps_config(config_override = config_override)
 
@@ -491,7 +492,7 @@ class TextExtractor:
 
     def perform_ocr_headless(self, image_files: list[Path], config_state: ConfigState) -> dict:
         """
-        Processes a list of images and extracts text from them in headless mode.
+        Processes a list of images and extracts text from them in non-interactive mode.
 
         Args:
             image_files : List of image file paths to process.
@@ -869,12 +870,12 @@ class TextExtractor:
 
     def log_ocr_results(self, ocr_results: list[tuple[list, str, float]]):
         """
-        Logs OCR results in a consistent format.
+        Logs OCR results in a consistent format. Logs only when in interactive mode (self.state is not None).
 
         Args:
             ocr_results: List of OCR results (bounding_box, text, confidence)
         """
-        if ocr_results and not self.headless:
+        if ocr_results and self.state is not None:
             logger.info(f"OCR Results for image '{self.state.image_name}':")
             for _, text, confidence in ocr_results:
                 logger.info(f"Text: '{text}' with confidence {confidence:.2f}")
