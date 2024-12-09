@@ -32,7 +32,7 @@ class FuzzyMatcher:
     """
     PROJECT_ROOT      = Utils.find_root('pyproject.toml')
     REFERENCE_DB_PATH = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'books.duckdb'
-    OCR_RESULTS_PATH  = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'extractor.json'
+    OCR_RESULTS_PATH  = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'optimizer.json'
     OUTPUT_FILE       = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'matcher.json'
 
     def __init__(
