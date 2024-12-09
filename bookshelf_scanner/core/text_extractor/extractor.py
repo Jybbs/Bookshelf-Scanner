@@ -147,6 +147,26 @@ class ConfigState:
             param_key_map  = param_key_map,
             step_index_map = step_index_map
         )
+    
+    def extract_parameter_space(self) -> list[dict[str, Any]]:
+        """
+        Extracts configuration range definitions from this ConfigState.
+        
+        Returns:
+            list: List of dictionaries defining each parameter's bounds, step, and type.
+        """
+        return [
+            {
+                'name'       : f"{step_name}.{param_name}",
+                'min_value'  : float(param_definition["min"]),
+                'max_value'  : float(param_definition["max"]),
+                'step_value' : float(param_definition["step"]),
+                'is_integer' : isinstance(param_definition["value"], int)
+            }
+            for step_name, step_definition in self.config_dict["steps"].items()
+            if step_definition.get("parameters") is not None
+            for param_name, param_definition in step_definition["parameters"].items()
+        ]
 
     def toggle_step_enabled(self, step_index: int) -> tuple['ConfigState', str]:
         """
@@ -289,8 +309,9 @@ class TextExtractor:
         self.state           = None  # Will be set in interactive mode
 
         # Load base config and setup the Reader
-        self.base_config = OmegaConf.load(self.config_file)
-        self.reader      = Reader(
+        self.base_config  = OmegaConf.load(self.config_file)
+        self.config_space = ConfigState.from_config(self.base_config).extract_parameter_space()
+        self.reader       = Reader(
             lang_list = self.base_config["easyocr"]["language_list"], 
             gpu       = self.base_config["easyocr"]["gpu_enabled"]
         )

@@ -74,7 +74,7 @@ class MetaLearningModel(nn.Module):
     """
     Combines ConfigEncoder and PerformancePredictor for meta-learning.
 
-    This model encodes configuration vectors (combinations of steps and their parameters)
+    This model encodes configuration vectors (combinations of steps and parameters)
     into latent vectors and predicts their corresponding OCR performance scores.
     The modular design allows for separate training and fine-tuning of the encoder and predictor.
     """
@@ -160,7 +160,6 @@ class OCRResult:
         Returns:
             OCRResult: An instance of OCRResult populated with the provided data.
         """
-        # No tensors here, but we keep the device_type parameter for consistency
         return cls(text = data['text'], confidence = data['confidence'])
     
     @classmethod
@@ -197,9 +196,6 @@ class OptimizationRecord:
     def to_dict(self) -> dict:
         """
         Converts the OptimizationRecord instance into a dictionary suitable for JSON serialization.
-        
-        Returns:
-            dict: A dictionary containing image path, config vector, score, latent vector, and OCR results.
         """
         return {
             'image_path'    : str(self.image_path),
@@ -345,17 +341,11 @@ class ConfigOptimizer:
 
         # Uncertainty parameters
         self.uncertainty_num_samples        = config.uncertainty.uncertainty_num_samples
-
-        # Ensure extractor config_state is initialized
-        self.extractor.initialize_processing_steps()
         
-        # Extract configuration space
-        self.config_space_boundaries = self.extract_config_space()
-        
-        input_dimension      = len(self.config_space_boundaries)
-        self.optimizer_state = MetaLearningState(
-            model = self.initialize_meta_learning_model(input_dimension)
-        )
+        # Directly use extractor.config_space, which is pre-computed at extractor initialization
+        self.config_space_boundaries = self.extractor.config_space
+        input_dimension              = len(self.config_space_boundaries)
+        self.optimizer_state         = MetaLearningState(model = self.initialize_meta_learning_model(input_dimension))
         
         # Initialize the meta-learner optimizer and scheduler
         self.model_optimizer = torch.optim.Adam(
@@ -396,16 +386,19 @@ class ConfigOptimizer:
 
     # -------------------- Configuration Space & Conversion --------------------
 
-    def extract_config_space(self) -> list[dict[str, Any]]:
+    def extract_config_space(self, config_state) -> list[dict[str, Any]]:
         """
-        Extracts configuration range definitions from the extractor's configuration.
+        Extracts configuration range definitions from the given ConfigState.
         
-        The extractor's ConfigState includes multiple steps, each with several parameters.
-        Here we flatten those into a list of parameter definitions so we can map each parameter
+        The ConfigState includes multiple steps, each with several parameters.
+        We flatten those into a list of parameter definitions so we can map each parameter
         to a continuous or discrete range and represent the entire configuration as a vector.
 
+        Args:
+            config_state: A ConfigState instance from which to extract parameter definitions.
+
         Returns:
-            List of dictionaries defining each parameter's bounds, step, and type.
+            list: List of dictionaries defining each parameter's bounds, step, and type.
         """
         return [
             {
@@ -415,7 +408,7 @@ class ConfigOptimizer:
                 'step_value' : float(param_definition["step"]),
                 'is_integer' : isinstance(param_definition["value"], int)
             }
-            for step_name, step_definition in self.extractor.config_state.config_dict["steps"].items()
+            for step_name, step_definition in config_state.config_dict["steps"].items()
             if step_definition.get("parameters") is not None
             for param_name, param_definition in step_definition["parameters"].items()
         ]
@@ -434,8 +427,7 @@ class ConfigOptimizer:
             Dictionary structured for the extractor's config override, containing steps and parameters.
         """
         config_dict = {"steps": {}}
-        # Convert to CPU for numpy operations
-        vector_numpy = config_vector.detach().cpu().numpy()
+        vector_numpy = config_vector.detach().cpu().numpy()  # Numpy vectors require a CPU conversion
 
         names      = [b['name']       for b in self.config_space_boundaries]
         min_values = np.array([b['min_value']  for b in self.config_space_boundaries])
@@ -490,7 +482,6 @@ class ConfigOptimizer:
             # Recalculate cluster centers now that we have members
             for _, cinfo in config_clusters.items():
                 if cinfo['members']:
-                    # Compute the mean latent vector of all members to serve as the cluster center
                     latent_vectors = torch.stack([m.latent_vector for m in cinfo['members']])
                     cinfo['center'] = latent_vectors.mean(dim = 0).to(device = self.device_type)
                 else:
@@ -698,19 +689,20 @@ class ConfigOptimizer:
             """
             config_vector = config_vector.to(device = self.device_type)
             config_override = self.vector_to_config_dictionary(config_vector)
-            self.extractor.initialize_processing_steps(config_override = config_override)
             
-            # Perform OCR and evaluate performance
-            ocr_results_raw = self.extractor.perform_ocr_headless([image_path])
-            ocr_results     = ocr_results_raw.get(image_path.name, [])
-            performance_score = sum(len(text) * count for text, count in ocr_results)
+            # Directly run headless mode on the single image and get results
+            results = self.extractor.run_headless_mode([image_path], config_override = config_override)
             
+            # Extract OCR results for the current image
+            image_name        = image_path.name
+            ocr_tuples        = results.get(image_name, [])
+            performance_score = sum(len(text) * confidence for text, confidence in ocr_tuples)
+            ocr_results_instances = OCRResult.from_tuples(ocr_tuples)
+
             # Encode the config vector in latent space
             with torch.inference_mode():
                 latent_representation, _ = self.optimizer_state.model(config_vector.unsqueeze(0))
                 latent_representation    = latent_representation.squeeze()
-            
-            ocr_results_instances = OCRResult.from_tuples(ocr_results)
             
             return OptimizationRecord(
                 image_path    = image_path,
