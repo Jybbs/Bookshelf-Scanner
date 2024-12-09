@@ -42,7 +42,7 @@ class FuzzyMatcher:
         output_file        : Path | None = None,
         max_matches        : int         = 3,
         min_ocr_confidence : float       = 0.1,
-        min_match_score    : float       = 0.8
+        min_match_score    : float       = 0.1
     ):
         """
         Initializes the FuzzyMatcher instance.

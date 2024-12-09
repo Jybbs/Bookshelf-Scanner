@@ -2,6 +2,8 @@ import json
 import csv
 import os
 
+from bookshelf_scanner import Utils
+
 def convert_matcher_to_csv(json_file_path, output_csv_path):
     try:
         # Read the matcher.json file
@@ -32,9 +34,9 @@ def convert_matcher_to_csv(json_file_path, output_csv_path):
         print(f"An error occurred: {e}")
 
 # File paths (adjust as needed)
-current_dir = os.path.dirname(__file__)
-json_file_path = os.path.join(current_dir, "matcher.json")
-output_csv_path = os.path.join(current_dir, "matcher_results.csv")
+PROJECT_ROOT      = Utils.find_root('pyproject.toml')
+MATCHER_JSON_PATH = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'matcher.json'
+CSV_RESULTS       = PROJECT_ROOT / 'bookshelf_scanner' / 'data' / 'results' / 'approvals.csv'
 
 # Convert the JSON to CSV
-convert_matcher_to_csv(json_file_path, output_csv_path)
+convert_matcher_to_csv(MATCHER_JSON_PATH, CSV_RESULTS)

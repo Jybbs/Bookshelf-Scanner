@@ -486,7 +486,7 @@ class TextExtractor:
 
                 # Prepare and annotate image
                 processed_image = self.process_image(config_state = config_state, image_path = str(current_image_path))
-                display_image = self.prepare_and_annotate_for_display(
+                display_image   = self.prepare_and_annotate_for_display(
                     processed_image = processed_image,
                     ocr_results     = ocr_results
                 )
@@ -851,7 +851,7 @@ class TextExtractor:
         ocr_results     : list[tuple]
     ) -> np.ndarray:
         """
-        Prepares and annotates the processed image for display or saving.
+        Orchestrates the pre-processing and annotation of a given image for display or saving.
 
         This method:
         1. Prepares the display image by centering and scaling.
