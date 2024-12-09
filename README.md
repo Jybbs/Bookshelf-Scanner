@@ -154,7 +154,7 @@ segmenter.display_segmented_books(spines, confidences)
 ```python
 from bookshelf_scanner import TextExtractor
 
-extractor   = TextExtractor(gpu_enabled = True)
+extractor   = TextExtractor()
 image_files = extractor.find_image_files(subdirectory = 'Books')
 ```
 

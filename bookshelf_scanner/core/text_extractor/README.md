@@ -112,7 +112,7 @@ This output is suitable for further analysis, record-keeping, or integration wit
 ```python
 from bookshelf_scanner import TextExtractor
 
-extractor = TextExtractor(headless = False)
+extractor = TextExtractor()
 
 image_files = extractor.find_image_files(subdirectory = 'Books')
 extractor.run_interactive_mode(image_files = image_files)
@@ -129,7 +129,6 @@ from pathlib import Path
 from bookshelf_scanner import TextExtractor
 
 extractor = TextExtractor(
-    headless     = True,
     output_json  = True,
     output_file  = Path('custom_output.json')
 )
@@ -167,7 +166,10 @@ config_override = {
     }
 }
 
-extractor.initialize_processing_steps(config_override = config_override)
+extractor.run_headless_mode(
+  image_files     = image_files,
+  config_override = config_override
+)
 ```
 
 This ensures your custom settings are applied consistently across runs.
