@@ -33,6 +33,13 @@ class DisplayState:
         self.image_idx = (self.image_idx + 1) % total_images
         self.new_image = True
 
+    def retreat_to_previous_image(self, total_images: int):
+        """
+        Cycle to the previous image and mark it as new.
+        """
+        self.image_idx = (self.image_idx - 1) % total_images
+        self.new_image = True
+
     def check_and_reset_new_image_flag(self) -> bool:
         """
         Checks if the current image is new and resets the flag.
@@ -648,7 +655,8 @@ class TextExtractor:
             list: (text, color, scale_factor) tuples
         """
         lines = [
-            (f"[/] Current Image: {image_name}", self.UI_COLORS['TEAL'],  0.85),
+            (f"Current Image: {image_name}",       self.UI_COLORS['TEAL'], 1.0),
+            ("   [< | >] Navigate Between Images", self.UI_COLORS['GRAY'], 0.85),
             ("", self.UI_COLORS['WHITE'], 1.0)
         ]
 
@@ -760,9 +768,15 @@ class TextExtractor:
             logger.info("Quitting interactive experiment.")
             return True, config_state
 
-        elif char == '/':
+        elif char == '>':
             old_name = self.state.image_name
             self.state.advance_to_next_image(total_images = total_images)
+            logger.info(f"Switched from '{old_name}' to '{self.state.image_name}'")
+            return False, config_state
+
+        elif char == '<':
+            old_name = self.state.image_name
+            self.state.retreat_to_previous_image(total_images = total_images)
             logger.info(f"Switched from '{old_name}' to '{self.state.image_name}'")
             return False, config_state
 
