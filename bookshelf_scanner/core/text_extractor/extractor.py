@@ -136,7 +136,6 @@ class ConfigState:
         Returns:
             ConfigState: Immutable state instance created from the given dictionary.
         """
-        # We remove JSON serialization entirely and rely on a stable hashable tuple structure.
         # Create a temporary instance to call convert_to_hashable_tuple for hashing:
         temp = object.__new__(cls)
         tuple_representation = cls.convert_to_hashable_tuple(temp, config_dict)
@@ -311,14 +310,14 @@ class TextExtractor:
         Args:
             config_override: Optional dictionary of step-level overrides matching config structure from YML
         """
-        base_config       = OmegaConf.load(self.config_file)
-        merged_config     = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
-        self.config_state = ConfigState.from_config(config = merged_config)
-
-        # Store easyocr configuration for easier access
+        base_config         = OmegaConf.load(self.config_file)
+        merged_config       = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
+        self.config_state   = ConfigState.from_config(config = merged_config)
         self.easyocr_config = self.config_state.config_dict["easyocr"]
-        language_list       = self.easyocr_config["language_list"]
-        self.reader         = Reader(language_list, gpu = True)
+        self.reader         = Reader(
+            lang_list = self.easyocr_config["language_list"], 
+            gpu       = self.easyocr_config["gpu_enabled"]
+        )
 
     # -------------------- Headless Mode Operations --------------------
 

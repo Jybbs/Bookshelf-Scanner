@@ -1,6 +1,6 @@
 optimization:
   cluster_distance_threshold     : 2.0    # Maximum allowed distance in latent space to decide if a configuration joins an existing cluster or forms a new one.
-  device_type                    : "mps"  # The computation device used for processing. Use "cpu" if you have no GPU, "cuda" if you do, or "mps" for Apple Silicon.
+  device_type                    : "cpu"  # The computation device used for processing. Use "cpu" if you have no GPU, "cuda" if you do, or "mps" for Apple Silicon.
   initial_points_count           : 10     # How many configuration vectors to propose at the start, before any refinement.
   iteration_count                : 40     # How many rounds of iterative refinement to run per image, where each round tries to improve upon previous configurations.
   learning_rate_value            : 0.001  # The base step size used by the optimizer when updating model parameters during training.

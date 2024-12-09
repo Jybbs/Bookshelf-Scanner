@@ -187,8 +187,11 @@ config_override = {
         }
     }
 }
-extractor.initialize_processing_steps(config_override = config_override)
-extractor.run_headless_mode(image_files = image_files)
+
+extractor.run_headless_mode(
+  image_files     = image_files, 
+  config_override = config_override
+)
 ```
 
 **What This Does**: 
