@@ -285,12 +285,17 @@ class TextExtractor:
         """
         self.allowed_formats = allowed_formats or self.ALLOWED_FORMATS
         self.config_file     = config_file or self.PARAMS_FILE
-        self.config_state    = None
         self.headless        = headless
         self.output_file     = output_file or self.OUTPUT_FILE
         self.output_json     = output_json
-        self.reader          = None
         self.state           = DisplayState(window_height = window_height) if not headless else None
+
+        # Load base config and setup the Reader
+        self.base_config = OmegaConf.load(self.config_file)
+        self.reader      = Reader(
+            lang_list = self.base_config["easyocr"]["language_list"], 
+            gpu       = self.base_config["easyocr"]["gpu_enabled"]
+        )
 
     def merge_steps_config(self, config_override: dict | None = None) -> ConfigState:
         """
@@ -302,32 +307,8 @@ class TextExtractor:
         Returns:
             ConfigState: The newly created configuration state after merging.
         """
-        base_config   = OmegaConf.load(self.config_file)
-        merged_config = OmegaConf.merge(base_config, OmegaConf.create(config_override)) if config_override else base_config
+        merged_config = OmegaConf.merge(self.base_config, OmegaConf.create(config_override)) if config_override else self.base_config
         return ConfigState.from_config(config = merged_config)
-
-    def setup_reader_from_config(self, config_state: ConfigState):
-        """
-        Sets up the EasyOCR Reader instance from a given ConfigState.
-
-        Args:
-            config_state : The ConfigState instance from which to create the Reader.
-        """
-        self.reader = Reader(
-            lang_list = config_state.config_dict["easyocr"]["language_list"], 
-            gpu       = config_state.config_dict["easyocr"]["gpu_enabled"]
-        )
-
-    def initialize_processing_steps(self, config_override: dict | None = None):
-        """
-        Initializes processing steps and sets up the OCR reader.
-        Maintains consistent dictionary structure for ConfigState compatibility.
-
-        Args:
-            config_override: Optional dictionary of step-level overrides.
-        """
-        self.config_state = self.merge_steps_config(config_override = config_override)
-        self.setup_reader_from_config(config_state = self.config_state)
 
     # -------------------- Headless Mode Operations --------------------
 
@@ -346,10 +327,8 @@ class TextExtractor:
         if not image_files:
             raise ValueError("No image files provided")
 
-        if self.config_state is None or config_override:
-            self.initialize_processing_steps(config_override = config_override)
-
-        results = self.perform_ocr_headless(image_files = image_files)
+        config_state = self.merge_steps_config(config_override = config_override)
+        results      = self.perform_ocr_headless(image_files = image_files, config_state = config_state)
 
         if self.output_json:
             with self.output_file.open('w', encoding = 'utf-8') as f:
@@ -426,8 +405,7 @@ class TextExtractor:
         if not image_files:
             raise ValueError("No image files provided")
 
-        if self.config_state is None or config_override:
-            self.initialize_processing_steps(config_override = config_override)
+        config_state = self.merge_steps_config(config_override = config_override)
 
         cv2.namedWindow(self.WINDOW_NAME, cv2.WINDOW_KEEPRATIO)
         logger.info("Starting interactive experiment.")
@@ -436,12 +414,12 @@ class TextExtractor:
             while True:
                 current_image_path    = image_files[self.state.image_idx]
                 self.state.image_name = current_image_path.name
-                ocr_results           = self.perform_ocr(config_state = self.config_state, image_path = str(current_image_path))
+                ocr_results           = self.perform_ocr(config_state = config_state, image_path = str(current_image_path))
 
                 if self.state.check_and_reset_new_image_flag():
                     self.log_ocr_results(ocr_results = ocr_results)
 
-                processed_image      = self.process_image(config_state = self.config_state, image_path = str(current_image_path))
+                processed_image      = self.process_image(config_state = config_state, image_path = str(current_image_path))
                 display_image, scale = self.prepare_display_image(processed_image = processed_image)
 
                 if ocr_results:
@@ -455,7 +433,7 @@ class TextExtractor:
                         display_image        = display_image
                     )
 
-                sidebar_image  = self.render_sidebar(image_name = self.state.image_name, window_height = self.state.window_height)
+                sidebar_image  = self.render_sidebar(config_state = config_state, image_name = self.state.image_name, window_height = self.state.window_height)
                 combined_image = np.hstack([display_image, sidebar_image])
                 cv2.imshow(self.WINDOW_NAME, combined_image)
                 cv2.resizeWindow(self.WINDOW_NAME, combined_image.shape[1], combined_image.shape[0])
@@ -469,7 +447,8 @@ class TextExtractor:
                 except ValueError:
                     continue
 
-                if self.process_user_input(char = char, ocr_results = ocr_results, total_images = len(image_files)):
+                should_quit, config_state = self.process_user_input(char = char, config_state = config_state, ocr_results = ocr_results, total_images = len(image_files))
+                if should_quit:
                     break
 
         finally:
@@ -495,8 +474,8 @@ class TextExtractor:
         """
         processed_image = self.process_image(config_state = config_state, image_path = image_path)
         try:
-            decoder       = self.config_state.config_dict["easyocr"]["decoder"]
-            rotation_info = self.config_state.config_dict["easyocr"]["rotation_info"]
+            decoder       = config_state.config_dict["easyocr"]["decoder"]
+            rotation_info = config_state.config_dict["easyocr"]["rotation_info"]
 
             ocr_results = self.reader.readtext(
                 processed_image[..., ::-1],
@@ -510,12 +489,13 @@ class TextExtractor:
             logger.error(f"OCR failed for {image_path}: {e}")
             return []
 
-    def perform_ocr_headless(self, image_files: list[Path]) -> dict:
+    def perform_ocr_headless(self, image_files: list[Path], config_state: ConfigState) -> dict:
         """
         Processes a list of images and extracts text from them in headless mode.
 
         Args:
             image_files : List of image file paths to process.
+            config_state: ConfigState used for processing.
 
         Returns:
             dict: Mapping image names to their OCR results
@@ -524,7 +504,7 @@ class TextExtractor:
         for image_path in image_files:
             image_name = image_path.name
             try:
-                ocr_results = self.perform_ocr(config_state = self.config_state, image_path = str(image_path))
+                ocr_results = self.perform_ocr(config_state = config_state, image_path = str(image_path))
                 results[image_name] = [
                     (text, confidence) for _, text, confidence in ocr_results
                 ]
@@ -629,14 +609,18 @@ class TextExtractor:
         annotated_image = Image.alpha_composite(pil_image.convert('RGBA'), text_layer)
         return cv2.cvtColor(np.array(annotated_image), cv2.COLOR_RGBA2BGR)
 
-    def generate_sidebar_content(self, image_name: str
+    def generate_sidebar_content(
+        self, 
+        config_state : ConfigState,
+        image_name   : str
     ) -> list[tuple[str, tuple[int, int, int], float]]:
         """
         Generates a list of sidebar lines with text content, colors, and scaling factors.
         Used internally by render_sidebar to prepare display content.
 
         Args:
-            image_name : Name of the current image being processed
+            config_state : Current ConfigState
+            image_name   : Name of the current image being processed
 
         Returns:
             list: (text, color, scale_factor) tuples
@@ -646,9 +630,9 @@ class TextExtractor:
             ("", self.UI_COLORS['WHITE'], 1.0)
         ]
 
-        steps_dict = self.config_state.config_dict["steps"]
-        for i in sorted(self.config_state.step_index_map.keys()):
-            step_name       = self.config_state.step_index_map[i]
+        steps_dict = config_state.config_dict["steps"]
+        for i in sorted(config_state.step_index_map.keys()):
+            step_name       = config_state.step_index_map[i]
             step_definition = steps_dict[step_name]
             status          = 'Enabled' if step_definition['enabled'] else 'Disabled'
 
@@ -681,6 +665,7 @@ class TextExtractor:
 
     def render_sidebar(
         self, 
+        config_state  : ConfigState,
         image_name    : str, 
         window_height : int
     ) -> np.ndarray:
@@ -688,13 +673,14 @@ class TextExtractor:
         Renders the sidebar image with controls and settings.
 
         Args:
+            config_state  : Current ConfigState
             image_name    : Name of the current image being processed
             window_height : Height of the display window
 
         Returns:
             np.ndarray: Sidebar image as a numpy array.
         """
-        lines             = self.generate_sidebar_content(image_name = image_name)
+        lines             = self.generate_sidebar_content(config_state = config_state, image_name = image_name)
         num_lines         = len(lines)
         margin            = int(0.05 * window_height)
         horizontal_margin = 20
@@ -731,46 +717,48 @@ class TextExtractor:
 
     def process_user_input(
         self,
-        char        : str,
-        ocr_results : list,
-        total_images: int
-    ) -> bool:
+        char         : str,
+        config_state : ConfigState,
+        ocr_results  : list,
+        total_images : int
+    ) -> tuple[bool, ConfigState]:
         """
         Processes user input and performs corresponding actions.
 
         Args:
             char         : Input character
+            config_state : Current ConfigState
             ocr_results  : Current OCR results for logging after changes
             total_images : Total number of images for navigation
 
         Returns:
-            bool: True if should quit, False otherwise
+            tuple: (should_quit, updated_config_state)
         """
         if char == 'q':
             logger.info("Quitting interactive experiment.")
-            return True
+            return True, config_state
 
         elif char == '/':
             old_name = self.state.image_name
             self.state.advance_to_next_image(total_images = total_images)
             logger.info(f"Switched from '{old_name}' to '{self.state.image_name}'")
-            return False
+            return False, config_state
 
         if char.isdigit():
             step_index        = int(char)
-            new_state, action = self.config_state.toggle_step_enabled(step_index = step_index)
+            new_state, action = config_state.toggle_step_enabled(step_index = step_index)
             if action:
-                self.config_state = new_state
+                config_state = new_state
                 logger.info(action)
                 self.log_ocr_results(ocr_results = ocr_results)
-            return False
+            return False, config_state
 
-        new_state, action = self.config_state.adjust_parameter(key_char = char)
+        new_state, action = config_state.adjust_parameter(key_char = char)
         if action:
-            self.config_state = new_state
+            config_state = new_state
             logger.info(action)
             self.log_ocr_results(ocr_results = ocr_results)
-        return False
+        return False, config_state
 
     # -------------------- Utility Methods --------------------
 
