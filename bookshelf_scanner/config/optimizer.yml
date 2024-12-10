@@ -5,7 +5,6 @@ optimization:
   initial_suggestion_noise_scale : 0.1    # Controls how much random noise is added to the best known configuration when generating the first set of suggestions.
   iteration_count                : 40     # How many rounds of iterative refinement to run per image, where each round tries to improve upon previous configurations.
   learning_rate_value            : 0.001  # The base step size used by the optimizer when updating model parameters during training.
-  num_workers                    : 8      # Number of processes to spawn for parallel evaluations, increasing overall throughput.
   refinement_candidate_count     : 10     # How many new candidate configurations to generate and evaluate each iteration of refinement.
   refinement_noise_scale         : 0.1    # Controls the intensity of random perturbations applied to configurations during each refinement iteration.
   training_batch_size            : 16     # Number of samples processed at once during a single training step of the meta-learner model.

@@ -35,13 +35,16 @@ The system operates in stages:
 
    - **Parameter Space**: Each preprocessing step has parameters (*e.g., kernel sizes for shadow removal, clip limits for CLAHE, brightness offsets, rotation angles*). The combination forms a multi-dimensional parameter space.
   
-   - **Model-Based Search**: Instead of brute-forcing every parameter combination or manually guessing, the optimizer learns a surrogate model that approximates how parameters affect OCR performance.  
-   - **Uncertainty Estimation**: It estimates uncertainty in predictions by performing multiple stochastic forward passes (*e.g., with dropout*) to obtain a distribution of predicted OCR quality.  
+   - **Model-Based Search**: Instead of brute-forcing every parameter combination or manually guessing, the optimizer learns a surrogate model that approximates how parameters affect OCR performance.
+   - **Uncertainty Estimation**: It estimates uncertainty in predictions by performing multiple stochastic forward passes (*e.g., with dropout*) to obtain a distribution of predicted OCR quality.
    - **Acquisition Function (*UCB*)**: With mean and variance of predictions, it applies a selection criterion like Upper Confidence Bound (**UCB**) to pick the next parameter set to evaluate. This balances testing known good regions (*exploitation*) and exploring new areas that might yield even better results (*exploration*).
    - **Outcome**: Over multiple iterations, the optimizer converges toward a set of parameters that improve OCR results, reducing the need for manual tuning. It does not guarantee a global optimum, but it aims to find a reasonably good configuration more efficiently than naive methods.
 
 4. **Text Matching**:  
    Once text is extracted, the `FuzzyMatcher` module compares it to a database of known books. OCR may produce incomplete or slightly incorrect text. Fuzzy matching tolerates such imperfections. It can handle partial matches, character substitutions, and word order variations. This step links OCR output to actual titles, making the extracted data more meaningful and searchable.
+
+5. **Match Approval**:  
+   After fuzzy matching, the `MatchApprover` module provides an interactive interface to review and confirm matches. Instead of trusting fuzzy matches blindly, you can interactively scroll through images, view their top candidate matches, and approve or skip each one. This ensures the final data used downstream (e.g., catalogs) is accurate and trustworthy.
 
 **Logging with ModuleLogger**:  
 Throughout, a `ModuleLogger` system provides consistent, module-specific logging. Each component records operations, parameter changes, and results, aiding in debugging, monitoring performance, and maintaining reproducibility.
@@ -57,6 +60,7 @@ Throughout, a `ModuleLogger` system provides consistent, module-specific logging
 │   ├── core/
 │   │   ├── book_segmenter/   # Spine detection code
 │   │   ├── fuzzy_matcher/    # Fuzzy text matching
+│   │   ├── match_approver/   # Interactive approval of matched titles
 │   │   ├── module_logger/    # Logging utilities
 │   │   ├── config_optimizer/ # ConfigOptimizer and related code
 │   │   ├── text_extractor/   # OCR and preprocessing logic
@@ -215,6 +219,64 @@ matcher.match_books()
 - Uses fuzzy string matching to accommodate OCR noise, partial strings, or different word orders.
 - Outputs a ranked list of likely book matches for each extracted text snippet, aiding in automatically cataloging bookshelves.
 
+### Match Approval (*Interactive*)
+
+Once you have generated fuzzy match results (e.g., `matcher.json`), you can use the `MatchApprover` to review and finalize the matches. This step ensures that the final data entering your catalog or inventory system is both accurate and trusted.
+
+**Command to Launch**:
+```bash
+poetry run match-approver
+```
+
+**What This Does**:  
+
+- **Interactive UI**: Opens a simple, keyboard-driven interface displaying each image and its candidate matches side-by-side.
+
+- **Approve with a Keypress**: Press a number key to immediately approve a corresponding match—no mouse clicks required.
+- **Skip Non-Matching Images**: Press `s` if none of the listed matches fit; this ensures only correctly matched titles are recorded.
+- **View Options**: Toggle between processed and raw image views (`/` key) to confirm that preprocessing steps haven’t distorted the text.
+- **Easy Navigation**: Use `>` and `<` to move through the image list and `q` to quit once all approvals are done.
+
+---
+
+### Orchestrator (*Run the Entire Pipeline at Once*)
+
+For users who want to run the entire pipeline (*or selected parts of it*) from a single command-line entry point, **Bookshelf Scanner** provides an orchestrator script. This script integrates all stages—book segmentation, parameter optimization, text matching, and match approval—into a single interface.
+
+**Usage**:
+
+By default, if you run the orchestrator without any flags, it will execute all steps in sequence:
+
+```bash
+poetry run bookshelf-scanner
+```
+
+This will:
+
+1. **Book Segmenter**: Detect and segment out individual book spines.
+2. **Config Optimizer**: Attempt to find optimal preprocessing steps and parameters for improved OCR results.
+3. **Fuzzy Matcher**: Perform fuzzy matching of OCR-extracted text against a known database of book titles.
+4. **Match Approver**: Launch an interactive interface to confirm or adjust matched titles.
+
+If you prefer to run only certain parts of the pipeline, you can use the corresponding flags:
+
+- `--book-segmenter`: Run only the BookSegmenter step.
+- `--config-optimizer`: Run only the ConfigOptimizer step.
+- `--fuzzy-matcher`: Run only the FuzzyMatcher step.
+- `--match-approver`: Run only the MatchApprover step.
+
+For example, to run just the segmentation and optimizer steps, you would run:
+
+```bash
+poetry run bookshelf-scanner --book-segmenter --config-optimizer
+```
+
+To specify a different directory for your input images:
+
+```bash
+poetry run bookshelf-scanner --images_dir images/custom_shelf
+```
+
 ---
 
 ## Additional Documentation
@@ -224,7 +286,34 @@ matcher.match_books()
 - [Text Extraction (TextExtractor)](./bookshelf_scanner/core/text_extractor/README.md)
 - [Configuration Optimization (ConfigOptimizer)](./bookshelf_scanner/core/config_optimizer/README.md)
 - [Fuzzy Matching (FuzzyMatcher)](./bookshelf_scanner/core/fuzzy_matcher/README.md)
+- [Match Approval (MatchApprover)](./bookshelf_scanner/core/match_approver/README.md)
 - [Logging (ModuleLogger)](./bookshelf_scanner/core/module_logger/README.md)
+
+---
+
+## Future Work and Potential Enhancements
+
+If we had more time to continue developing **Bookshelf Scanner**, we would focus on several key areas to streamline the workflow, improve scalability, and enhance robustness:
+
+**1. Headless Orchestration of the Entire Pipeline**:  
+Currently, each module (*e.g., spine segmentation, OCR preprocessing, configuration optimization*) operates somewhat independently and relies on reading and writing intermediate results to disk. In a future iteration, we would implement a fully headless orchestration layer that allows modules to pass data in-memory, avoiding unnecessary I/O overhead. This would create a more seamless, integrated pipeline where each stage can feed directly into the next without manual intervention or file-based communication.
+
+**2. Parallelizing the Configuration Optimization Process**:  
+The `ConfigOptimizer` currently evaluates each parameter set in sequence. By leveraging Python’s `multiprocessing` module, we could introduce parallel runs where multiple images or parameter sets are processed simultaneously. A manager process could distribute tasks to worker processes via a `Queue`, aggregate the results, and update the optimization model in real-time. This would greatly reduce the time needed to converge on optimal OCR parameters, especially for large libraries of images.
+
+**3. Fallback Using Google Vision API**:  
+For spine images that remain low-confidence after segmentation or OCR preprocessing, we could incorporate a fallback mechanism using the Google Vision API. Instead of applying all preprocessing techniques or repeatedly adjusting parameters, the system could selectively invoke Vision API calls for difficult cases. This pay-per-use approach would be more cost-effective than defaulting to external OCR services on every image, while still providing a reliable safety net for challenging spines.
+
+**4. Expanding Pre-Processing Steps in `TextExtractor`**:  
+While the current pipeline includes steps like shadow removal, CLAHE, and brightness/contrast adjustments, future refinements could incorporate more advanced preprocessing techniques. Potential additions include:
+
+- **Binarization Strategies**: Adaptive thresholding, Otsu’s method, or Sauvola thresholding to isolate text foregrounds more reliably.
+- **Noise Reduction & Deblurring**: Filters or neural network-based denoising and deblurring methods to tackle motion blur or grainy images.
+- **Skew and Perspective Correction**: More sophisticated geometric transforms to correct not just rotation, but also perspective distortion and curvature.
+- **Color Space Transformations**: Converting to alternative color spaces (e.g., HSV, LAB) for more robust contrast enhancements targeted at text regions.
+
+**5. Improved Optimizer Trial Management**:  
+Currently, the `ConfigOptimizer` runs a single trial of parameters per image and uses that information directly. A future iteration would allow the optimizer to run multiple parameter sets per image and automatically select the best-scoring configuration. By conducting multiple trials and comparing their performance, the pipeline could converge more reliably on optimal OCR parameters for each image, further enhancing the robustness and accuracy of the overall system.
 
 ---
 
