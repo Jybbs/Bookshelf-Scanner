@@ -5,7 +5,8 @@ from pathlib           import Path
 
 def main():
 
-    parser = argparse.ArgumentParser(
+    default_image = Utils.find_root('pyproject.toml') / 'bookshelf_scanner' / 'images' / 'bookcases' / 'IMG_1538.jpg'
+    parser        = argparse.ArgumentParser(
         description = "Run the entire Bookshelf Scanner pipeline."
     )
 
@@ -31,14 +32,14 @@ def main():
     )
 
     parser.add_argument(
-        "--images_dir",
-        type    = str,
-        default = "images/bookcases",
-        help    = "Directory containing the bookshelf images."
+        "--image-path",
+        type     = str,
+        required = True,
+        default  = str(default_image),
+        help     = "Full path to the single image to process."
     )
 
-    args       = parser.parse_args()
-    images_dir = Utils.find_root('pyproject.toml') / 'bookshelf_scanner' / Path(args.images_dir)
+    args = parser.parse_args()
 
     # If no steps were explicitly requested, run them all.
     if not (args.book_segmenter or args.config_optimizer or args.fuzzy_matcher or args.match_approver):
@@ -47,11 +48,16 @@ def main():
         args.fuzzy_matcher    = True
         args.match_approver   = True
 
+    # Convert image path to a Path object and verify it exists
+    image_path = Path(args.image_path).resolve()
+    if not image_path.exists() or not image_path.is_file():
+        print(f"Error: The specified image does not exist or is not a file: {image_path}")
+        return
+
     # Run BookSegmenter
     if args.book_segmenter:
         segmenter = BookSegmenter(output_images = True, output_json = True)
-        for image_path in images_dir.glob("*.jpg"):
-            segmenter.segment_books(image_path = image_path)
+        segmenter.segment_books(image_path = image_path)
 
     # Run ParameterOptimizer
     if args.config_optimizer:

@@ -271,10 +271,10 @@ For example, to run just the segmentation and optimizer steps, you would run:
 poetry run bookshelf-scanner --book-segmenter --config-optimizer
 ```
 
-To specify a different directory for your input images:
+To specify a different image to process (*overriding the default image path*):
 
 ```bash
-poetry run bookshelf-scanner --images_dir images/custom_shelf
+poetry run bookshelf-scanner --image-path /full/path/to/another_image.jpg
 ```
 
 ---
