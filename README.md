@@ -219,11 +219,6 @@ matcher.match_books()
 - Uses fuzzy string matching to accommodate OCR noise, partial strings, or different word orders.
 - Outputs a ranked list of likely book matches for each extracted text snippet, aiding in automatically cataloging bookshelves.
 
----
-
-```markdown
----
-
 ### Match Approval (*Interactive*)
 
 Once you have generated fuzzy match results (e.g., `matcher.json`), you can use the `MatchApprover` to review and finalize the matches. This step ensures that the final data entering your catalog or inventory system is both accurate and trusted.
@@ -241,6 +236,46 @@ poetry run match-approver
 - **Skip Non-Matching Images**: Press `s` if none of the listed matches fit; this ensures only correctly matched titles are recorded.
 - **View Options**: Toggle between processed and raw image views (`/` key) to confirm that preprocessing steps haven’t distorted the text.
 - **Easy Navigation**: Use `>` and `<` to move through the image list and `q` to quit once all approvals are done.
+
+---
+
+### Orchestrator (*Run the Entire Pipeline at Once*)
+
+For users who want to run the entire pipeline (*or selected parts of it*) from a single command-line entry point, **Bookshelf Scanner** provides an orchestrator script. This script integrates all stages—book segmentation, parameter optimization, text matching, and match approval—into a single interface.
+
+**Usage**:
+
+By default, if you run the orchestrator without any flags, it will execute all steps in sequence:
+
+```bash
+poetry run bookshelf-scanner
+```
+
+This will:
+
+1. **Book Segmenter**: Detect and segment out individual book spines.
+2. **Config Optimizer**: Attempt to find optimal preprocessing steps and parameters for improved OCR results.
+3. **Fuzzy Matcher**: Perform fuzzy matching of OCR-extracted text against a known database of book titles.
+4. **Match Approver**: Launch an interactive interface to confirm or adjust matched titles.
+
+If you prefer to run only certain parts of the pipeline, you can use the corresponding flags:
+
+- `--book-segmenter`: Run only the BookSegmenter step.
+- `--config-optimizer`: Run only the ConfigOptimizer step.
+- `--fuzzy-matcher`: Run only the FuzzyMatcher step.
+- `--match-approver`: Run only the MatchApprover step.
+
+For example, to run just the segmentation and optimizer steps, you would run:
+
+```bash
+poetry run bookshelf-scanner --book-segmenter --config-optimizer
+```
+
+To specify a different directory for your input images:
+
+```bash
+poetry run bookshelf-scanner --images_dir images/custom_shelf
+```
 
 ---
 
