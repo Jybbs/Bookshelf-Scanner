@@ -33,10 +33,9 @@ def main():
 
     parser.add_argument(
         "--image-path",
-        type     = str,
-        required = True,
-        default  = str(default_image),
-        help     = "Full path to the single image to process."
+        type    = str,
+        default = str(default_image),
+        help    = "Full path to the single image to process."
     )
 
     args = parser.parse_args()
