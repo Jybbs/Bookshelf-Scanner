@@ -1,0 +1,1094 @@
+{
+    "books": [
+        {
+            "file_name": "IMG_1538_001.jpg",
+            "confidence": 0.8770695924758911,
+            "bounding_box": [
+                1791,
+                576,
+                1857,
+                1279
+            ]
+        },
+        {
+            "file_name": "IMG_1538_002.jpg",
+            "confidence": 0.8738729953765869,
+            "bounding_box": [
+                2144,
+                1727,
+                2249,
+                2527
+            ]
+        },
+        {
+            "file_name": "IMG_1538_003.jpg",
+            "confidence": 0.8689615726470947,
+            "bounding_box": [
+                753,
+                1890,
+                860,
+                2506
+            ]
+        },
+        {
+            "file_name": "IMG_1538_004.jpg",
+            "confidence": 0.8682228326797485,
+            "bounding_box": [
+                1379,
+                1783,
+                1464,
+                2499
+            ]
+        },
+        {
+            "file_name": "IMG_1538_005.jpg",
+            "confidence": 0.8630692958831787,
+            "bounding_box": [
+                1669,
+                579,
+                1729,
+                1282
+            ]
+        },
+        {
+            "file_name": "IMG_1538_006.jpg",
+            "confidence": 0.862212061882019,
+            "bounding_box": [
+                1958,
+                565,
+                2035,
+                1276
+            ]
+        },
+        {
+            "file_name": "IMG_1538_007.jpg",
+            "confidence": 0.8613333702087402,
+            "bounding_box": [
+                1935,
+                1722,
+                2050,
+                2522
+            ]
+        },
+        {
+            "file_name": "IMG_1538_008.jpg",
+            "confidence": 0.8606024980545044,
+            "bounding_box": [
+                930,
+                1786,
+                1052,
+                2512
+            ]
+        },
+        {
+            "file_name": "IMG_1538_009.jpg",
+            "confidence": 0.8578649759292603,
+            "bounding_box": [
+                2133,
+                574,
+                2198,
+                1271
+            ]
+        },
+        {
+            "file_name": "IMG_1538_010.jpg",
+            "confidence": 0.8566668033599854,
+            "bounding_box": [
+                1594,
+                563,
+                1680,
+                1285
+            ]
+        },
+        {
+            "file_name": "IMG_1538_011.jpg",
+            "confidence": 0.8553188443183899,
+            "bounding_box": [
+                2041,
+                1732,
+                2154,
+                2530
+            ]
+        },
+        {
+            "file_name": "IMG_1538_012.jpg",
+            "confidence": 0.8530603647232056,
+            "bounding_box": [
+                563,
+                1866,
+                664,
+                2494
+            ]
+        },
+        {
+            "file_name": "IMG_1538_013.jpg",
+            "confidence": 0.8530480861663818,
+            "bounding_box": [
+                2777,
+                524,
+                2870,
+                1241
+            ]
+        },
+        {
+            "file_name": "IMG_1538_014.jpg",
+            "confidence": 0.8529820442199707,
+            "bounding_box": [
+                2021,
+                574,
+                2094,
+                1280
+            ]
+        },
+        {
+            "file_name": "IMG_1538_015.jpg",
+            "confidence": 0.8520376682281494,
+            "bounding_box": [
+                673,
+                558,
+                754,
+                1247
+            ]
+        },
+        {
+            "file_name": "IMG_1538_016.jpg",
+            "confidence": 0.8516449928283691,
+            "bounding_box": [
+                1452,
+                1759,
+                1536,
+                2511
+            ]
+        },
+        {
+            "file_name": "IMG_1538_017.jpg",
+            "confidence": 0.8507556915283203,
+            "bounding_box": [
+                2243,
+                1785,
+                2333,
+                2525
+            ]
+        },
+        {
+            "file_name": "IMG_1538_018.jpg",
+            "confidence": 0.850043535232544,
+            "bounding_box": [
+                691,
+                1879,
+                769,
+                2506
+            ]
+        },
+        {
+            "file_name": "IMG_1538_019.jpg",
+            "confidence": 0.8493843674659729,
+            "bounding_box": [
+                844,
+                1866,
+                946,
+                2505
+            ]
+        },
+        {
+            "file_name": "IMG_1538_020.jpg",
+            "confidence": 0.8493008613586426,
+            "bounding_box": [
+                175,
+                525,
+                277,
+                1229
+            ]
+        },
+        {
+            "file_name": "IMG_1538_021.jpg",
+            "confidence": 0.8481295108795166,
+            "bounding_box": [
+                752,
+                563,
+                825,
+                1248
+            ]
+        },
+        {
+            "file_name": "IMG_1538_022.jpg",
+            "confidence": 0.8469741940498352,
+            "bounding_box": [
+                471,
+                1871,
+                574,
+                2507
+            ]
+        },
+        {
+            "file_name": "IMG_1538_023.jpg",
+            "confidence": 0.8456759452819824,
+            "bounding_box": [
+                1545,
+                574,
+                1606,
+                1285
+            ]
+        },
+        {
+            "file_name": "IMG_1538_024.jpg",
+            "confidence": 0.8455945253372192,
+            "bounding_box": [
+                1646,
+                1909,
+                1718,
+                2512
+            ]
+        },
+        {
+            "file_name": "IMG_1538_025.jpg",
+            "confidence": 0.8444178104400635,
+            "bounding_box": [
+                993,
+                566,
+                1060,
+                1279
+            ]
+        },
+        {
+            "file_name": "IMG_1538_026.jpg",
+            "confidence": 0.844292402267456,
+            "bounding_box": [
+                1714,
+                1874,
+                1803,
+                2506
+            ]
+        },
+        {
+            "file_name": "IMG_1538_027.jpg",
+            "confidence": 0.8429449796676636,
+            "bounding_box": [
+                1161,
+                1889,
+                1250,
+                2511
+            ]
+        },
+        {
+            "file_name": "IMG_1538_028.jpg",
+            "confidence": 0.8428515195846558,
+            "bounding_box": [
+                422,
+                524,
+                512,
+                1228
+            ]
+        },
+        {
+            "file_name": "IMG_1538_029.jpg",
+            "confidence": 0.8419631719589233,
+            "bounding_box": [
+                2553,
+                1788,
+                2683,
+                2516
+            ]
+        },
+        {
+            "file_name": "IMG_1538_030.jpg",
+            "confidence": 0.84105384349823,
+            "bounding_box": [
+                2185,
+                573,
+                2260,
+                1271
+            ]
+        },
+        {
+            "file_name": "IMG_1538_031.jpg",
+            "confidence": 0.8359694480895996,
+            "bounding_box": [
+                2475,
+                3063,
+                2562,
+                3779
+            ]
+        },
+        {
+            "file_name": "IMG_1538_032.jpg",
+            "confidence": 0.8354423642158508,
+            "bounding_box": [
+                2292,
+                577,
+                2356,
+                1267
+            ]
+        },
+        {
+            "file_name": "IMG_1538_033.jpg",
+            "confidence": 0.8349058628082275,
+            "bounding_box": [
+                1236,
+                1855,
+                1308,
+                2512
+            ]
+        },
+        {
+            "file_name": "IMG_1538_034.jpg",
+            "confidence": 0.83214271068573,
+            "bounding_box": [
+                1720,
+                569,
+                1805,
+                1282
+            ]
+        },
+        {
+            "file_name": "IMG_1538_035.jpg",
+            "confidence": 0.8293601870536804,
+            "bounding_box": [
+                1110,
+                578,
+                1172,
+                1272
+            ]
+        },
+        {
+            "file_name": "IMG_1538_036.jpg",
+            "confidence": 0.8292478322982788,
+            "bounding_box": [
+                2322,
+                1767,
+                2431,
+                2524
+            ]
+        },
+        {
+            "file_name": "IMG_1538_037.jpg",
+            "confidence": 0.8285813331604004,
+            "bounding_box": [
+                1802,
+                1894,
+                1865,
+                2509
+            ]
+        },
+        {
+            "file_name": "IMG_1538_038.jpg",
+            "confidence": 0.8265460729598999,
+            "bounding_box": [
+                1058,
+                572,
+                1117,
+                1277
+            ]
+        },
+        {
+            "file_name": "IMG_1538_039.jpg",
+            "confidence": 0.8262094259262085,
+            "bounding_box": [
+                2478,
+                559,
+                2540,
+                1248
+            ]
+        },
+        {
+            "file_name": "IMG_1538_040.jpg",
+            "confidence": 0.8248052597045898,
+            "bounding_box": [
+                1165,
+                574,
+                1221,
+                1276
+            ]
+        },
+        {
+            "file_name": "IMG_1538_041.jpg",
+            "confidence": 0.8242992758750916,
+            "bounding_box": [
+                280,
+                1862,
+                376,
+                2488
+            ]
+        },
+        {
+            "file_name": "IMG_1538_042.jpg",
+            "confidence": 0.8235601186752319,
+            "bounding_box": [
+                1843,
+                564,
+                1924,
+                1279
+            ]
+        },
+        {
+            "file_name": "IMG_1538_043.jpg",
+            "confidence": 0.8220422267913818,
+            "bounding_box": [
+                195,
+                1861,
+                288,
+                2490
+            ]
+        },
+        {
+            "file_name": "IMG_1538_044.jpg",
+            "confidence": 0.8216166496276855,
+            "bounding_box": [
+                364,
+                1856,
+                480,
+                2503
+            ]
+        },
+        {
+            "file_name": "IMG_1538_045.jpg",
+            "confidence": 0.8209604024887085,
+            "bounding_box": [
+                2511,
+                1783,
+                2565,
+                2517
+            ]
+        },
+        {
+            "file_name": "IMG_1538_046.jpg",
+            "confidence": 0.8175488710403442,
+            "bounding_box": [
+                2383,
+                575,
+                2440,
+                1266
+            ]
+        },
+        {
+            "file_name": "IMG_1538_047.jpg",
+            "confidence": 0.8137474656105042,
+            "bounding_box": [
+                1862,
+                1889,
+                1926,
+                2519
+            ]
+        },
+        {
+            "file_name": "IMG_1538_048.jpg",
+            "confidence": 0.8123356103897095,
+            "bounding_box": [
+                1294,
+                1763,
+                1391,
+                2514
+            ]
+        },
+        {
+            "file_name": "IMG_1538_049.jpg",
+            "confidence": 0.806038498878479,
+            "bounding_box": [
+                2718,
+                532,
+                2784,
+                1243
+            ]
+        },
+        {
+            "file_name": "IMG_1538_050.jpg",
+            "confidence": 0.8055000305175781,
+            "bounding_box": [
+                1906,
+                563,
+                1974,
+                1275
+            ]
+        },
+        {
+            "file_name": "IMG_1538_051.jpg",
+            "confidence": 0.8032065033912659,
+            "bounding_box": [
+                1271,
+                571,
+                1318,
+                1277
+            ]
+        },
+        {
+            "file_name": "IMG_1538_052.jpg",
+            "confidence": 0.7987587451934814,
+            "bounding_box": [
+                2079,
+                576,
+                2145,
+                1277
+            ]
+        },
+        {
+            "file_name": "IMG_1538_053.jpg",
+            "confidence": 0.7983014583587646,
+            "bounding_box": [
+                2248,
+                575,
+                2305,
+                1270
+            ]
+        },
+        {
+            "file_name": "IMG_1538_054.jpg",
+            "confidence": 0.7931090593338013,
+            "bounding_box": [
+                274,
+                524,
+                353,
+                1236
+            ]
+        },
+        {
+            "file_name": "IMG_1538_055.jpg",
+            "confidence": 0.7908625602722168,
+            "bounding_box": [
+                1474,
+                569,
+                1558,
+                1285
+            ]
+        },
+        {
+            "file_name": "IMG_1538_056.jpg",
+            "confidence": 0.7904763221740723,
+            "bounding_box": [
+                1211,
+                570,
+                1280,
+                1281
+            ]
+        },
+        {
+            "file_name": "IMG_1538_057.jpg",
+            "confidence": 0.7891017198562622,
+            "bounding_box": [
+                1084,
+                1882,
+                1190,
+                2502
+            ]
+        },
+        {
+            "file_name": "IMG_1538_058.jpg",
+            "confidence": 0.788913369178772,
+            "bounding_box": [
+                1028,
+                1844,
+                1113,
+                2503
+            ]
+        },
+        {
+            "file_name": "IMG_1538_059.jpg",
+            "confidence": 0.7870475053787231,
+            "bounding_box": [
+                2599,
+                548,
+                2648,
+                1244
+            ]
+        },
+        {
+            "file_name": "IMG_1538_060.jpg",
+            "confidence": 0.78347247838974,
+            "bounding_box": [
+                1310,
+                581,
+                1362,
+                1281
+            ]
+        },
+        {
+            "file_name": "IMG_1538_061.jpg",
+            "confidence": 0.7818032503128052,
+            "bounding_box": [
+                1526,
+                1768,
+                1589,
+                2513
+            ]
+        },
+        {
+            "file_name": "IMG_1538_062.jpg",
+            "confidence": 0.7817954421043396,
+            "bounding_box": [
+                823,
+                556,
+                895,
+                1257
+            ]
+        },
+        {
+            "file_name": "IMG_1538_063.jpg",
+            "confidence": 0.7807502746582031,
+            "bounding_box": [
+                2537,
+                563,
+                2603,
+                1248
+            ]
+        },
+        {
+            "file_name": "IMG_1538_064.jpg",
+            "confidence": 0.7742183208465576,
+            "bounding_box": [
+                2406,
+                3086,
+                2476,
+                3777
+            ]
+        },
+        {
+            "file_name": "IMG_1538_065.jpg",
+            "confidence": 0.7733285427093506,
+            "bounding_box": [
+                939,
+                574,
+                993,
+                1275
+            ]
+        },
+        {
+            "file_name": "IMG_1538_066.jpg",
+            "confidence": 0.7706160545349121,
+            "bounding_box": [
+                619,
+                562,
+                676,
+                1245
+            ]
+        },
+        {
+            "file_name": "IMG_1538_067.jpg",
+            "confidence": 0.7675071358680725,
+            "bounding_box": [
+                2389,
+                1750,
+                2517,
+                2524
+            ]
+        },
+        {
+            "file_name": "IMG_1538_068.jpg",
+            "confidence": 0.7653763294219971,
+            "bounding_box": [
+                1956,
+                3086,
+                2043,
+                3789
+            ]
+        },
+        {
+            "file_name": "IMG_1538_069.jpg",
+            "confidence": 0.7643162608146667,
+            "bounding_box": [
+                2343,
+                581,
+                2392,
+                1266
+            ]
+        },
+        {
+            "file_name": "IMG_1538_070.jpg",
+            "confidence": 0.7611120939254761,
+            "bounding_box": [
+                2666,
+                1791,
+                2836,
+                2509
+            ]
+        },
+        {
+            "file_name": "IMG_1538_071.jpg",
+            "confidence": 0.7569254636764526,
+            "bounding_box": [
+                2690,
+                3082,
+                2773,
+                3781
+            ]
+        },
+        {
+            "file_name": "IMG_1538_072.jpg",
+            "confidence": 0.7559921741485596,
+            "bounding_box": [
+                384,
+                528,
+                427,
+                1238
+            ]
+        },
+        {
+            "file_name": "IMG_1538_073.jpg",
+            "confidence": 0.755488395690918,
+            "bounding_box": [
+                553,
+                538,
+                627,
+                1243
+            ]
+        },
+        {
+            "file_name": "IMG_1538_074.jpg",
+            "confidence": 0.7552446126937866,
+            "bounding_box": [
+                2244,
+                2873,
+                2758,
+                3093
+            ]
+        },
+        {
+            "file_name": "IMG_1538_075.jpg",
+            "confidence": 0.751592755317688,
+            "bounding_box": [
+                346,
+                529,
+                392,
+                1241
+            ]
+        },
+        {
+            "file_name": "IMG_1538_076.jpg",
+            "confidence": 0.7482141256332397,
+            "bounding_box": [
+                1567,
+                1884,
+                1650,
+                2502
+            ]
+        },
+        {
+            "file_name": "IMG_1538_077.jpg",
+            "confidence": 0.7461594343185425,
+            "bounding_box": [
+                893,
+                599,
+                941,
+                1266
+            ]
+        },
+        {
+            "file_name": "IMG_1538_078.jpg",
+            "confidence": 0.7408549785614014,
+            "bounding_box": [
+                1357,
+                580,
+                1413,
+                1277
+            ]
+        },
+        {
+            "file_name": "IMG_1538_079.jpg",
+            "confidence": 0.7357710599899292,
+            "bounding_box": [
+                2558,
+                3052,
+                2611,
+                3770
+            ]
+        },
+        {
+            "file_name": "IMG_1538_080.jpg",
+            "confidence": 0.7319409847259521,
+            "bounding_box": [
+                651,
+                1873,
+                712,
+                2491
+            ]
+        },
+        {
+            "file_name": "IMG_1538_081.jpg",
+            "confidence": 0.706841230392456,
+            "bounding_box": [
+                2672,
+                560,
+                2720,
+                1244
+            ]
+        },
+        {
+            "file_name": "IMG_1538_082.jpg",
+            "confidence": 0.7065824270248413,
+            "bounding_box": [
+                2435,
+                575,
+                2484,
+                1250
+            ]
+        },
+        {
+            "file_name": "IMG_1538_083.jpg",
+            "confidence": 0.7048764228820801,
+            "bounding_box": [
+                2609,
+                3064,
+                2655,
+                3763
+            ]
+        },
+        {
+            "file_name": "IMG_1538_084.jpg",
+            "confidence": 0.7010632753372192,
+            "bounding_box": [
+                1443,
+                578,
+                1484,
+                1282
+            ]
+        },
+        {
+            "file_name": "IMG_1538_085.jpg",
+            "confidence": 0.6928843259811401,
+            "bounding_box": [
+                2039,
+                3078,
+                2087,
+                3786
+            ]
+        },
+        {
+            "file_name": "IMG_1538_086.jpg",
+            "confidence": 0.6878015995025635,
+            "bounding_box": [
+                146,
+                3792,
+                871,
+                4031
+            ]
+        },
+        {
+            "file_name": "IMG_1538_087.jpg",
+            "confidence": 0.6697611808776855,
+            "bounding_box": [
+                1404,
+                581,
+                1453,
+                1281
+            ]
+        },
+        {
+            "file_name": "IMG_1538_088.jpg",
+            "confidence": 0.6619811058044434,
+            "bounding_box": [
+                1599,
+                2877,
+                2156,
+                3094
+            ]
+        },
+        {
+            "file_name": "IMG_1538_089.jpg",
+            "confidence": 0.6431124806404114,
+            "bounding_box": [
+                1886,
+                1782,
+                1978,
+                2519
+            ]
+        },
+        {
+            "file_name": "IMG_1538_090.jpg",
+            "confidence": 0.6403158903121948,
+            "bounding_box": [
+                2642,
+                550,
+                2680,
+                1248
+            ]
+        },
+        {
+            "file_name": "IMG_1538_091.jpg",
+            "confidence": 0.6284092664718628,
+            "bounding_box": [
+                2650,
+                3080,
+                2692,
+                3764
+            ]
+        },
+        {
+            "file_name": "IMG_1538_092.jpg",
+            "confidence": 0.6210233569145203,
+            "bounding_box": [
+                510,
+                537,
+                556,
+                1243
+            ]
+        },
+        {
+            "file_name": "IMG_1538_093.jpg",
+            "confidence": 0.5620607733726501,
+            "bounding_box": [
+                2770,
+                3079,
+                2844,
+                3794
+            ]
+        },
+        {
+            "file_name": "IMG_1538_094.jpg",
+            "confidence": 0.5401666760444641,
+            "bounding_box": [
+                2180,
+                3058,
+                2226,
+                3782
+            ]
+        },
+        {
+            "file_name": "IMG_1538_095.jpg",
+            "confidence": 0.5387879610061646,
+            "bounding_box": [
+                2164,
+                2915,
+                2329,
+                3784
+            ]
+        },
+        {
+            "file_name": "IMG_1538_096.jpg",
+            "confidence": 0.48414748907089233,
+            "bounding_box": [
+                2767,
+                3094,
+                2818,
+                3793
+            ]
+        },
+        {
+            "file_name": "IMG_1538_097.jpg",
+            "confidence": 0.4114912152290344,
+            "bounding_box": [
+                1776,
+                1750,
+                1869,
+                1903
+            ]
+        },
+        {
+            "file_name": "IMG_1538_098.jpg",
+            "confidence": 0.40264084935188293,
+            "bounding_box": [
+                756,
+                2938,
+                888,
+                3769
+            ]
+        },
+        {
+            "file_name": "IMG_1538_099.jpg",
+            "confidence": 0.3876419961452484,
+            "bounding_box": [
+                1903,
+                3100,
+                1960,
+                3778
+            ]
+        },
+        {
+            "file_name": "IMG_1538_100.jpg",
+            "confidence": 0.385240375995636,
+            "bounding_box": [
+                331,
+                2978,
+                427,
+                3754
+            ]
+        },
+        {
+            "file_name": "IMG_1538_101.jpg",
+            "confidence": 0.384893536567688,
+            "bounding_box": [
+                465,
+                2614,
+                1044,
+                2826
+            ]
+        },
+        {
+            "file_name": "IMG_1538_102.jpg",
+            "confidence": 0.3828081786632538,
+            "bounding_box": [
+                1169,
+                1553,
+                1762,
+                1647
+            ]
+        },
+        {
+            "file_name": "IMG_1538_103.jpg",
+            "confidence": 0.36717987060546875,
+            "bounding_box": [
+                382,
+                2926,
+                504,
+                3765
+            ]
+        },
+        {
+            "file_name": "IMG_1538_104.jpg",
+            "confidence": 0.36585211753845215,
+            "bounding_box": [
+                2320,
+                1713,
+                2571,
+                2537
+            ]
+        },
+        {
+            "file_name": "IMG_1538_105.jpg",
+            "confidence": 0.36474940180778503,
+            "bounding_box": [
+                2151,
+                3048,
+                2186,
+                3787
+            ]
+        },
+        {
+            "file_name": "IMG_1538_106.jpg",
+            "confidence": 0.35770732164382935,
+            "bounding_box": [
+                2345,
+                3078,
+                2410,
+                3774
+            ]
+        },
+        {
+            "file_name": "IMG_1538_107.jpg",
+            "confidence": 0.35191887617111206,
+            "bounding_box": [
+                1169,
+                1605,
+                1758,
+                1708
+            ]
+        },
+        {
+            "file_name": "IMG_1538_108.jpg",
+            "confidence": 0.3088023066520691,
+            "bounding_box": [
+                192,
+                2921,
+                404,
+                3752
+            ]
+        },
+        {
+            "file_name": "IMG_1538_109.jpg",
+            "confidence": 0.3028934597969055,
+            "bounding_box": [
+                1103,
+                3127,
+                1179,
+                3779
+            ]
+        }
+    ]
+}

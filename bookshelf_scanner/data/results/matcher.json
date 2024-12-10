@@ -1,0 +1,3351 @@
+{
+    "0.jpg": {
+        "texts": [
+            "OFAVOUNG GIRI",
+            "DIARV",
+            "THE",
+            "ANNE FRANK:"
+        ],
+        "matches": [
+            {
+                "title": "Anne Frank",
+                "author": "Anne Frank",
+                "score": 1.0
+            },
+            {
+                "title": "Anne Frank",
+                "author": "Anne Frank",
+                "score": 1.0
+            },
+            {
+                "title": "The Diary of a Young Girl",
+                "author": "Anne Frank",
+                "score": 0.8571428571428571
+            }
+        ]
+    },
+    "1.jpg": {
+        "texts": [
+            "THE FORESHADOVING"
+        ],
+        "matches": [
+            {
+                "title": "The Foreshadowing",
+                "author": "Marcus Sedgwick",
+                "score": 0.64
+            },
+            {
+                "title": "The Forested Taiga",
+                "author": "Philip",
+                "score": 0.6190476190476191
+            },
+            {
+                "title": "The Lie Tree",
+                "author": "Frances Hardinge",
+                "score": 0.6086956521739131
+            }
+        ]
+    },
+    "10.jpg": {
+        "texts": [
+            "Chinese Cinderella",
+            "3"
+        ],
+        "matches": [
+            {
+                "title": "Chinese Cinderella",
+                "author": "Adeline Yen Mah",
+                "score": 0.9473684210526315
+            },
+            {
+                "title": "Chinese Cinderella and the Secret Dragon Society",
+                "author": "Adeline Yen Mah",
+                "score": 0.9473684210526315
+            },
+            {
+                "title": "Cinderella",
+                "author": "Charles Perrault",
+                "score": 0.6808510638297872
+            }
+        ]
+    },
+    "11.jpg": {
+        "texts": [
+            "ANN RINALD [",
+            "Th",
+            "Quilt",
+            "{",
+            "Harcourt"
+        ],
+        "matches": [
+            {
+                "title": "The Coffin Quilt",
+                "author": "Ann Rinaldi",
+                "score": 0.7857142857142857
+            },
+            {
+                "title": "A Break with Charity",
+                "author": "Ann Rinaldi",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Color of Fire",
+                "author": "Ann Rinaldi",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "12.jpg": {
+        "texts": [
+            "Emperor",
+            "Betsy",
+            "Rabin"
+        ],
+        "matches": [
+            {
+                "title": "Betsy and the Emperor",
+                "author": "Staton Rabin,Larry Rostant",
+                "score": 1.0
+            },
+            {
+                "title": "Jupiter",
+                "author": "Betsy Rathburn",
+                "score": 0.6829268292682927
+            },
+            {
+                "title": "Earth",
+                "author": "Betsy Rathburn",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "13.jpg": {
+        "texts": [
+            "Wolf by the Ears",
+            "Rinaldi"
+        ],
+        "matches": [
+            {
+                "title": "Wolf by the Ears",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            },
+            {
+                "title": "The Pinballs",
+                "author": "Betsy Byars",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Fifth Of March",
+                "author": "Ann Rinaldi",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "14.jpg": {
+        "texts": [
+            "JOHNNY TREMAIN",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Hoskins Forbes",
+                "score": 0.9333333333333332
+            },
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Forbes",
+                "score": 0.9333333333333332
+            },
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Forbes",
+                "score": 0.9333333333333332
+            }
+        ]
+    },
+    "15.jpg": {
+        "texts": [
+            "GARY PAULSEN",
+            "SOLDIER S HEART",
+            "0"
+        ],
+        "matches": [
+            {
+                "title": "Soldier's Heart",
+                "author": "Gary Paulsen",
+                "score": 1.0
+            },
+            {
+                "title": "Soldier's Heart",
+                "author": "Gary Paulsen",
+                "score": 1.0
+            },
+            {
+                "title": "Liar, Liar",
+                "author": "Gary Paulsen",
+                "score": 0.8275862068965517
+            }
+        ]
+    },
+    "16.jpg": {
+        "texts": [
+            "Confessions gf\" Chartolle",
+            "7",
+            "Fvi",
+            "Thc STrue"
+        ],
+        "matches": [
+            {
+                "title": "The True Confessions of Charlotte Doyle",
+                "author": "Avi",
+                "score": 0.6987951807228916
+            },
+            {
+                "title": "Confessions",
+                "author": "Kate Brian",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Ocean of Story",
+                "author": "Caroline Ness",
+                "score": 0.6111111111111112
+            }
+        ]
+    },
+    "17.jpg": {
+        "texts": [
+            "SOLDIER",
+            "GERMAN",
+            "SuMMER &",
+            "1",
+            "J4]"
+        ],
+        "matches": [
+            {
+                "title": "Summer of My German Soldier",
+                "author": "Bette Greene",
+                "score": 0.8936170212765957
+            },
+            {
+                "title": "Armageddon Summer",
+                "author": "Jane Yolen",
+                "score": 0.6296296296296297
+            },
+            {
+                "title": "Soldier Boy",
+                "author": "Brian Burks",
+                "score": 0.6122448979591837
+            }
+        ]
+    },
+    "18.jpg": {
+        "texts": [
+            "DANIEL HALF HUMAN",
+            "CHOTJEWITZ",
+            "3"
+        ],
+        "matches": [
+            {
+                "title": "Daniel Half Human",
+                "author": "David Chotjewitz, Doris Orgel",
+                "score": 0.9655172413793103
+            },
+            {
+                "title": "Daniel Half Human And The Good Nazi",
+                "author": "David Chotjewitz",
+                "score": 0.9655172413793103
+            },
+            {
+                "title": "Croatia",
+                "author": "Michael A. Schuman",
+                "score": 0.5818181818181818
+            }
+        ]
+    },
+    "19.jpg": {
+        "texts": [
+            "SARAH BISHOP",
+            "=",
+            "SCOTT ODELL"
+        ],
+        "matches": [
+            {
+                "title": "Sarah Bishop",
+                "author": "Scott O'Dell",
+                "score": 0.9387755102040817
+            },
+            {
+                "title": "Space",
+                "author": "Sarah Powell",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Space",
+                "author": "Sarah Powell",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "2.jpg": {
+        "texts": [
+            "3",
+            "secret of",
+            "ANN RINALDI",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "The Secret of Sarah Revere",
+                "author": "Ann Rinaldi",
+                "score": 0.9130434782608695
+            },
+            {
+                "title": "The Journal of Jasper Jonathan Pierce",
+                "author": "Ann Rinaldi",
+                "score": 0.717948717948718
+            },
+            {
+                "title": "The Fifth Of March",
+                "author": "Ann Rinaldi",
+                "score": 0.717948717948718
+            }
+        ]
+    },
+    "20.jpg": {
+        "texts": [
+            "spcak",
+            "Civil War",
+            "Gyvys",
+            "\"",
+            "8",
+            "~BRENAMAN"
+        ],
+        "matches": [
+            {
+                "title": "Civil War",
+                "author": "null",
+                "score": 0.782608695652174
+            },
+            {
+                "title": "Evvy's Civil War",
+                "author": "Miriam Brenaman",
+                "score": 0.72
+            },
+            {
+                "title": "Civil War",
+                "author": "Mark Millar",
+                "score": 0.6
+            }
+        ]
+    },
+    "21.jpg": {
+        "texts": [
+            "DJMs Zimoxsoh",
+            "1",
+            "Lyon",
+            "T",
+            "RAINe",
+            "D",
+            "WARM",
+            "ava 4d"
+        ],
+        "matches": [
+            {
+                "title": "The Lyon's Roar",
+                "author": "M. L. Stainer",
+                "score": 0.5217391304347826
+            },
+            {
+                "title": "The Lyon's Roar",
+                "author": "M. L. Stainer",
+                "score": 0.5217391304347826
+            },
+            {
+                "title": "Don't You Know There's a War On?",
+                "author": "Avi",
+                "score": 0.5194805194805194
+            }
+        ]
+    },
+    "22.jpg": {
+        "texts": [
+            "thE DAWN OF JIM CROW",
+            "QKV NOIL",
+            "RECONSTRUCT",
+            "RISING",
+            "SKYL",
+            "DARK",
+            "Bolden",
+            "GATES",
+            "Focus"
+        ],
+        "matches": [
+            {
+                "title": "Dark Sky Rising",
+                "author": "Henry Louis Gates, Jr.,Tonya Bolden",
+                "score": 0.6575342465753425
+            },
+            {
+                "title": "The Dark Is Rising",
+                "author": "Susan Cooper",
+                "score": 0.6521739130434783
+            },
+            {
+                "title": "The Dark Is Rising",
+                "author": "Susan Cooper",
+                "score": 0.6521739130434783
+            }
+        ]
+    },
+    "23.jpg": {
+        "texts": [
+            "Jali)",
+            "DREAM",
+            "3",
+            "che",
+            "ROBINSON"
+        ],
+        "matches": [
+            {
+                "title": "Child of the Dream",
+                "author": "Sharon Robinson",
+                "score": 0.717948717948718
+            },
+            {
+                "title": "Jackie Robinson",
+                "author": "Herb Dunn",
+                "score": 0.68
+            },
+            {
+                "title": "Jackie Robinson",
+                "author": "Herb Dunn",
+                "score": 0.68
+            }
+        ]
+    },
+    "24.jpg": {
+        "texts": [
+            "HOME % Ihe BRAVE",
+            "APPLEGATE"
+        ],
+        "matches": [
+            {
+                "title": "Home of the Brave",
+                "author": "Katherine Applegate",
+                "score": 0.9090909090909091
+            },
+            {
+                "title": "Brave the Betrayal",
+                "author": "Katherine Applegate",
+                "score": 0.7692307692307692
+            },
+            {
+                "title": "Brave the Betrayal",
+                "author": "Katherine Applegate",
+                "score": 0.7692307692307692
+            }
+        ]
+    },
+    "25.jpg": {
+        "texts": [
+            "ANGELS",
+            "WITH THE MIGHT OF"
+        ],
+        "matches": [
+            {
+                "title": "With the Might of Angels",
+                "author": "Andrea Davis Pinkney",
+                "score": 1.0
+            },
+            {
+                "title": "Angels, Prophets, Rabbis & Kings from the Stories of the Jewish People",
+                "author": "Još Patterson",
+                "score": 0.7027027027027027
+            },
+            {
+                "title": "The Life of Plants",
+                "author": "Angels Julivert",
+                "score": 0.7027027027027027
+            }
+        ]
+    },
+    "26.jpg": {
+        "texts": [
+            "Manzanar",
+            "Faicwct",
+            "Houston"
+        ],
+        "matches": [
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Wakatsuki Houston, James D. Houston",
+                "score": 0.8
+            },
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Wakatsuki Houston",
+                "score": 0.8
+            },
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Houston",
+                "score": 0.8
+            }
+        ]
+    },
+    "27.jpg": {
+        "texts": [
+            "3",
+            "3",
+            "2",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Dork Diaries 3 1/2",
+                "author": "Rachel Renée Russell",
+                "score": 1.0
+            },
+            {
+                "title": "Fullmetal Alchemist (3-in-1 Edition), Vol. 2",
+                "author": "Hiromu Arakawa",
+                "score": 1.0
+            },
+            {
+                "title": "1-2-3 Calligraphy!",
+                "author": "Eleanor Winters",
+                "score": 1.0
+            }
+        ]
+    },
+    "28.jpg": {
+        "texts": [
+            "1",
+            "8",
+            "Lit CHAT"
+        ],
+        "matches": [
+            {
+                "title": "The Challenger 1986",
+                "author": "Liz",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "Flight 19",
+                "author": "Chris Bowman",
+                "score": 0.5294117647058824
+            },
+            {
+                "title": "Chute!",
+                "author": "C. B. Colby",
+                "score": 0.5185185185185186
+            }
+        ]
+    },
+    "29.jpg": {
+        "texts": [
+            "ABOOK",
+            "borrowved phrases",
+            "Ihe game"
+        ],
+        "matches": [
+            {
+                "title": "The Maine Lobster Book",
+                "author": "Mike Brown",
+                "score": 0.5846153846153846
+            },
+            {
+                "title": "Forever Princess",
+                "author": "Meg Cabot",
+                "score": 0.5517241379310345
+            },
+            {
+                "title": "Forever Princess",
+                "author": "Meg Cabot",
+                "score": 0.5517241379310345
+            }
+        ]
+    },
+    "3.jpg": {
+        "texts": [
+            "Hang",
+            "Thousand",
+            "ANN",
+            "RINAL DI",
+            "5",
+            "Trees with Ribbons"
+        ],
+        "matches": [
+            {
+                "title": "Hang a Thousand Trees with Ribbons",
+                "author": "Ann Rinaldi",
+                "score": 0.9247311827956989
+            },
+            {
+                "title": "Over a Thousand Hills I Walk with You",
+                "author": "Hanna Jansen",
+                "score": 0.5979381443298969
+            },
+            {
+                "title": "Soaring with the Wind",
+                "author": "Gail Gibbons",
+                "score": 0.5925925925925926
+            }
+        ]
+    },
+    "4.jpg": {
+        "texts": [
+            "Miue Eyes UCave 8eev",
+            "NN RINALDI"
+        ],
+        "matches": [
+            {
+                "title": "Mine Eyes Have Seen",
+                "author": "Ann Rinaldi",
+                "score": 0.6451612903225806
+            },
+            {
+                "title": "Nine Days a Queen",
+                "author": "Ann Rinaldi",
+                "score": 0.5666666666666667
+            },
+            {
+                "title": "Nine Days a Queen",
+                "author": "Ann Rinaldi",
+                "score": 0.5666666666666667
+            }
+        ]
+    },
+    "5.jpg": {
+        "texts": [
+            "Ann Rinaldi",
+            "THE SECOND BEND IN THE RIVER",
+            "FON SONATURE"
+        ],
+        "matches": [
+            {
+                "title": "Second Bend in the River",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            },
+            {
+                "title": "The Staircase",
+                "author": "Ann Rinaldi",
+                "score": 0.75
+            },
+            {
+                "title": "The Blue Door",
+                "author": "Ann Rinaldi",
+                "score": 0.75
+            }
+        ]
+    },
+    "6.jpg": {
+        "texts": [
+            "William Lavender",
+            "JUST",
+            "JANE",
+            "8| @"
+        ],
+        "matches": [
+            {
+                "title": "Just Jane",
+                "author": "William Lavender",
+                "score": 1.0
+            },
+            {
+                "title": "William Penn",
+                "author": "Janey Levy",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "William Penn",
+                "author": "Janey Levy",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "7.jpg": {
+        "texts": [
+            "with CHARity",
+            "5",
+            "RINALD [",
+            "ANN",
+            "A BREAK"
+        ],
+        "matches": [
+            {
+                "title": "A Break with Charity",
+                "author": "Ann Rinaldi",
+                "score": 0.9538461538461539
+            },
+            {
+                "title": "Broken Days",
+                "author": "Ann Rinaldi",
+                "score": 0.6428571428571428
+            },
+            {
+                "title": "The Ever-After Bird",
+                "author": "Ann Rinaldi",
+                "score": 0.625
+            }
+        ]
+    },
+    "8.jpg": {
+        "texts": [
+            "FINISHING BECCA",
+            "1",
+            "CU!"
+        ],
+        "matches": [
+            {
+                "title": "Finishing Becca",
+                "author": "Ann Rinaldi",
+                "score": 0.8571428571428571
+            },
+            {
+                "title": "Teacup",
+                "author": "Rebecca Young",
+                "score": 0.55
+            },
+            {
+                "title": "The Vanishing Girl",
+                "author": "Shane Peacock",
+                "score": 0.5384615384615384
+            }
+        ]
+    },
+    "9.jpg": {
+        "texts": [
+            "BEYOND THE BURNING TIM"
+        ],
+        "matches": [
+            {
+                "title": "Beyond the Burning Time",
+                "author": "Kathryn Lasky",
+                "score": 0.9
+            },
+            {
+                "title": "The Boy in the Burning House",
+                "author": "Tim Wynne-Jones",
+                "score": 0.8108108108108109
+            },
+            {
+                "title": "The Burning (Young Readers Edition): Black Wall Street and the Tulsa Race Massacre of 1921",
+                "author": "Madigan, Tim, Beard, Hilary",
+                "score": 0.8108108108108109
+            }
+        ]
+    },
+    "IMG_1538_001.jpg": {
+        "texts": [
+            "CURRY",
+            "1",
+            "A STOLEN LIFE"
+        ],
+        "matches": [
+            {
+                "title": "A Stolen Life",
+                "author": "Jane Louise Curry",
+                "score": 0.95
+            },
+            {
+                "title": "The Life You Imagine",
+                "author": "Derek Jeter With Jack Curry",
+                "score": 0.6451612903225806
+            },
+            {
+                "title": "Stolen City",
+                "author": "Elisa A. Bonnin",
+                "score": 0.6382978723404256
+            }
+        ]
+    },
+    "IMG_1538_002.jpg": {
+        "texts": [
+            "DREAM",
+            "CHIDof tne",
+            "ROBINSON"
+        ],
+        "matches": [
+            {
+                "title": "Child of the Dream",
+                "author": "Sharon Robinson",
+                "score": 0.8135593220338982
+            },
+            {
+                "title": "Great Snakes!",
+                "author": "Fay Robinson",
+                "score": 0.68
+            },
+            {
+                "title": "Red Moon",
+                "author": "Kim Stanley Robinson",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "IMG_1538_003.jpg": {
+        "texts": [
+            "William Lavender",
+            "JUST",
+            "JANE",
+            " |"
+        ],
+        "matches": [
+            {
+                "title": "Just Jane",
+                "author": "William Lavender",
+                "score": 1.0
+            },
+            {
+                "title": "William Penn",
+                "author": "Janey Levy",
+                "score": 0.6938775510204082
+            },
+            {
+                "title": "William Penn",
+                "author": "Janey Levy",
+                "score": 0.6938775510204082
+            }
+        ]
+    },
+    "IMG_1538_004.jpg": {
+        "texts": [
+            "Rinaldi",
+            "Wolf by the Ears",
+            "heaney"
+        ],
+        "matches": [
+            {
+                "title": "Wolf by the Ears",
+                "author": "Ann Rinaldi",
+                "score": 0.923076923076923
+            },
+            {
+                "title": "The Education of Mary",
+                "author": "Ann Rinaldi",
+                "score": 0.65625
+            },
+            {
+                "title": "The Education of Mary",
+                "author": "Ann Rinaldi",
+                "score": 0.65625
+            }
+        ]
+    },
+    "IMG_1538_005.jpg": {
+        "texts": [
+            ";",
+            "Dolpkus",
+            "Jo",
+            "Mwstc",
+            "Tke"
+        ],
+        "matches": [
+            {
+                "title": "Dolphins",
+                "author": "Jason Skog",
+                "score": 0.5641025641025641
+            },
+            {
+                "title": "The Moon Is Down",
+                "author": "John Steinbeck",
+                "score": 0.5490196078431372
+            },
+            {
+                "title": "The Moon Is Down",
+                "author": "John Steinbeck",
+                "score": 0.5490196078431372
+            }
+        ]
+    },
+    "IMG_1538_006.jpg": {
+        "texts": [
+            "3",
+            "s Dead",
+            "Sim",
+            "Brother",
+            "My",
+            "Collicr 6 Collier"
+        ],
+        "matches": [
+            {
+                "title": "My Brother Sam is Dead",
+                "author": "James Lincoln Collier, Christopher Collier",
+                "score": 0.71875
+            },
+            {
+                "title": "My Brother's Secret",
+                "author": "Dan Smith",
+                "score": 0.5853658536585367
+            },
+            {
+                "title": "My Brother's Shadow",
+                "author": "Tom Avery",
+                "score": 0.5853658536585367
+            }
+        ]
+    },
+    "IMG_1538_007.jpg": {
+        "texts": [
+            "IT Rained",
+            "WARM BREAD",
+            "Moskowitz SWEET",
+            "1",
+            "Lyon"
+        ],
+        "matches": [
+            {
+                "title": "It Rained Warm Bread",
+                "author": "Gloria Moskowitz-Sweet, Hope Anita Smith",
+                "score": 0.9113924050632911
+            },
+            {
+                "title": "It Rained Warm Bread",
+                "author": "Gloria Moskowitz-Sweet",
+                "score": 0.9113924050632911
+            },
+            {
+                "title": "How Sweet It Is (and Was)",
+                "author": "Ruth Freeman Swain",
+                "score": 0.611764705882353
+            }
+        ]
+    },
+    "IMG_1538_008.jpg": {
+        "texts": [
+            "FINISHING BECCA",
+            "1",
+            "KINALDI"
+        ],
+        "matches": [
+            {
+                "title": "Finishing Becca",
+                "author": "Ann Rinaldi",
+                "score": 0.8846153846153847
+            },
+            {
+                "title": "Fishing",
+                "author": "Adam G. Klein",
+                "score": 0.5777777777777778
+            },
+            {
+                "title": "Girl in Blue",
+                "author": "Ann Rinaldi",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_009.jpg": {
+        "texts": [
+            "JIP His Story",
+            "PATERSON"
+        ],
+        "matches": [
+            {
+                "title": "Jip",
+                "author": "Katherine Paterson",
+                "score": 0.7058823529411765
+            },
+            {
+                "title": "Ghost Story",
+                "author": "Peter Straub",
+                "score": 0.6086956521739131
+            },
+            {
+                "title": "Select",
+                "author": "Christie Matheson",
+                "score": 0.6086956521739131
+            }
+        ]
+    },
+    "IMG_1538_010.jpg": {
+        "texts": [
+            "41 Capone Does My Shirts",
+            "Gennifer",
+            "Choldenko"
+        ],
+        "matches": [
+            {
+                "title": "Al Capone Does My Shirts",
+                "author": "Gennifer Choldenko",
+                "score": 0.963855421686747
+            },
+            {
+                "title": "Al Capone Does My Homework",
+                "author": "Gennifer Choldenko",
+                "score": 0.8684210526315789
+            },
+            {
+                "title": "Al Capone Shines My Shoes",
+                "author": "Gennifer Choldenko",
+                "score": 0.8275862068965517
+            }
+        ]
+    },
+    "IMG_1538_011.jpg": {
+        "texts": [
+            "Focus",
+            "GATES",
+            "Bolden",
+            "IDARK SKY RRISING",
+            "RECONSTRUCTION",
+            "JhL",
+            "3",
+            "JIM CROW",
+            "="
+        ],
+        "matches": [
+            {
+                "title": "Reconstruction",
+                "author": "Zak Mettger",
+                "score": 0.7
+            },
+            {
+                "title": "Reconstruction",
+                "author": "Tim McNeese",
+                "score": 0.7
+            },
+            {
+                "title": "Reconstruction",
+                "author": "Katie Marsico",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "IMG_1538_012.jpg": {
+        "texts": [
+            "Miue ",
+            "Gyes (Gave Ofeev",
+            "ANN RINALDI"
+        ],
+        "matches": [
+            {
+                "title": "Mine Eyes Have Seen",
+                "author": "Ann Rinaldi",
+                "score": 0.7301587301587301
+            },
+            {
+                "title": "Nine Days a Queen",
+                "author": "Ann Rinaldi",
+                "score": 0.7213114754098361
+            },
+            {
+                "title": "Nine Days a Queen",
+                "author": "Ann Rinaldi",
+                "score": 0.7213114754098361
+            }
+        ]
+    },
+    "IMG_1538_013.jpg": {
+        "texts": [
+            "JirISG",
+            "HADDIX",
+            "5"
+        ],
+        "matches": [
+            {
+                "title": "The Summer of Broken Things",
+                "author": "Margaret Peterson Haddix",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "The Always War",
+                "author": "Margaret Peterson Haddix",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "Thriller",
+                "author": "M.T. Anderson, Patrick Carman, Gennifer Choldenko, Matt de la Peña, Margaret Peterson Haddix, Bruce Hale, Anthony Horowitz, Jarrett J. Krosoczka, James Patterson, Walter Dean Myers",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_014.jpg": {
+        "texts": [
+            "5",
+            "SHARPSBURG",
+            "5",
+            "RED MOON",
+            "NELL"
+        ],
+        "matches": [
+            {
+                "title": "Red Moon at Sharpsburg",
+                "author": "Rosemary Wells",
+                "score": 0.8444444444444444
+            },
+            {
+                "title": "Red Moon Rising",
+                "author": "Erin Hunter",
+                "score": 0.6037735849056604
+            },
+            {
+                "title": "Red Moon Rising",
+                "author": "K. A. Holt",
+                "score": 0.6
+            }
+        ]
+    },
+    "IMG_1538_015.jpg": {
+        "texts": [
+            "RINALD",
+            "Gil iv",
+            "Glue"
+        ],
+        "matches": [
+            {
+                "title": "Girl in Blue",
+                "author": "Ann Rinaldi",
+                "score": 0.6190476190476191
+            },
+            {
+                "title": "Lou Gehrig",
+                "author": "Ronald A. Reis",
+                "score": 0.6190476190476191
+            },
+            {
+                "title": "Survival! Jungle",
+                "author": "Bill Rice",
+                "score": 0.6046511627906976
+            }
+        ]
+    },
+    "IMG_1538_016.jpg": {
+        "texts": [
+            "LAA",
+            "JOHNNY TREMAIN",
+            "1",
+            "DMT"
+        ],
+        "matches": [
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Hoskins Forbes",
+                "score": 0.736842105263158
+            },
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Forbes",
+                "score": 0.736842105263158
+            },
+            {
+                "title": "Johnny Tremain",
+                "author": "Esther Forbes",
+                "score": 0.736842105263158
+            }
+        ]
+    },
+    "IMG_1538_017.jpg": {
+        "texts": [
+            "HOME % the BRAVE",
+            "APPLEGATE",
+            "ML"
+        ],
+        "matches": [
+            {
+                "title": "Home of the Brave",
+                "author": "Katherine Applegate",
+                "score": 0.9411764705882354
+            },
+            {
+                "title": "Brave the Betrayal",
+                "author": "Katherine Applegate",
+                "score": 0.826086956521739
+            },
+            {
+                "title": "Brave the Betrayal",
+                "author": "Katherine Applegate",
+                "score": 0.826086956521739
+            }
+        ]
+    },
+    "IMG_1538_018.jpg": {
+        "texts": [
+            "THE SECOND BEND IN THE RIVER",
+            "FONT SCNATURE",
+            "Ann Rinaldi"
+        ],
+        "matches": [
+            {
+                "title": "Second Bend in the River",
+                "author": "Ann Rinaldi",
+                "score": 1.0
+            },
+            {
+                "title": "The Staircase",
+                "author": "Ann Rinaldi",
+                "score": 0.75
+            },
+            {
+                "title": "The Blue Door",
+                "author": "Ann Rinaldi",
+                "score": 0.75
+            }
+        ]
+    },
+    "IMG_1538_019.jpg": {
+        "texts": [
+            "with ChARity",
+            "ANN RINALD [",
+            "A BREAK"
+        ],
+        "matches": [
+            {
+                "title": "A Break with Charity",
+                "author": "Ann Rinaldi",
+                "score": 0.9841269841269842
+            },
+            {
+                "title": "Broken Days",
+                "author": "Ann Rinaldi",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Ever-After Bird",
+                "author": "Ann Rinaldi",
+                "score": 0.6451612903225806
+            }
+        ]
+    },
+    "IMG_1538_020.jpg": {
+        "texts": [
+            "1",
+            "(Megb €",
+            "9"
+        ],
+        "matches": [
+            {
+                "title": "QB 1",
+                "author": "Mike Lupica",
+                "score": 0.5
+            },
+            {
+                "title": "13",
+                "author": "James Howe",
+                "score": 0.4761904761904762
+            },
+            {
+                "title": "Jinx",
+                "author": "Meg Cabot",
+                "score": 0.45454545454545453
+            }
+        ]
+    },
+    "IMG_1538_021.jpg": {
+        "texts": [
+            "LIONBOY",
+            "CORDER"
+        ],
+        "matches": [
+            {
+                "title": "Lionboy",
+                "author": "Zizou Corder, Louisa Young, Isabel Adomakoh Young",
+                "score": 1.0
+            },
+            {
+                "title": "Code Girls",
+                "author": "Liza Mundy",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "Code Girls",
+                "author": "Liza Mundy",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_022.jpg": {
+        "texts": [
+            "ang",
+            "Thousand",
+            "ANN RINALDI",
+            "Trees with Ribbons"
+        ],
+        "matches": [
+            {
+                "title": "Hang a Thousand Trees with Ribbons",
+                "author": "Ann Rinaldi",
+                "score": 0.9662921348314607
+            },
+            {
+                "title": "A Break with Charity",
+                "author": "Ann Rinaldi",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Broken Days",
+                "author": "Ann Rinaldi",
+                "score": 0.6470588235294117
+            }
+        ]
+    },
+    "IMG_1538_023.jpg": {
+        "texts": [
+            "Flake",
+            "The Skin Inla"
+        ],
+        "matches": [
+            {
+                "title": "The Skin I'm In",
+                "author": "Sharon G. Flake",
+                "score": 0.8484848484848484
+            },
+            {
+                "title": "The Life I'm In",
+                "author": "SHARON G. FLAKE",
+                "score": 0.653061224489796
+            },
+            {
+                "title": "The Lake",
+                "author": "Natasha Preston",
+                "score": 0.6511627906976745
+            }
+        ]
+    },
+    "IMG_1538_024.jpg": {
+        "texts": [
+            "8",
+            "GERMAN SOLDIER",
+            "SuMMER,",
+            "B ETte Greend"
+        ],
+        "matches": [
+            {
+                "title": "Summer of My German Soldier",
+                "author": "Bette Greene",
+                "score": 0.8571428571428571
+            },
+            {
+                "title": "Summer People",
+                "author": "Brian Groh",
+                "score": 0.5901639344262295
+            },
+            {
+                "title": "Haunted Summer",
+                "author": "Betty Ren Wright",
+                "score": 0.5882352941176471
+            }
+        ]
+    },
+    "IMG_1538_025.jpg": {
+        "texts": [
+            "HOUSE",
+            "THE BIRCHBARK",
+            "ERDRICH"
+        ],
+        "matches": [
+            {
+                "title": "The Birchbark House",
+                "author": "Louise Erdrich",
+                "score": 1.0
+            },
+            {
+                "title": "The Round House: National Book Award Winning Fiction",
+                "author": "Louise Erdrich",
+                "score": 0.7727272727272728
+            },
+            {
+                "title": "The Crow",
+                "author": "Frederick E. Hoxie",
+                "score": 0.6415094339622641
+            }
+        ]
+    },
+    "IMG_1538_026.jpg": {
+        "texts": [
+            "DANIEL HALF HUMAN",
+            "CHOTJEWITZ"
+        ],
+        "matches": [
+            {
+                "title": "Daniel Half Human",
+                "author": "David Chotjewitz, Doris Orgel",
+                "score": 1.0
+            },
+            {
+                "title": "Daniel Half Human And The Good Nazi",
+                "author": "David Chotjewitz",
+                "score": 1.0
+            },
+            {
+                "title": "Pale Male",
+                "author": "Janet Schulman",
+                "score": 0.576923076923077
+            }
+        ]
+    },
+    "IMG_1538_027.jpg": {
+        "texts": [
+            "1",
+            "amily",
+            "Cinderella",
+            "Chinese",
+            "3"
+        ],
+        "matches": [
+            {
+                "title": "Chinese Cinderella",
+                "author": "Adeline Yen Mah",
+                "score": 0.782608695652174
+            },
+            {
+                "title": "Chinese Cinderella and the Secret Dragon Society",
+                "author": "Adeline Yen Mah",
+                "score": 0.782608695652174
+            },
+            {
+                "title": "Cinderella Man",
+                "author": "Michael DeLisa",
+                "score": 0.631578947368421
+            }
+        ]
+    },
+    "IMG_1538_028.jpg": {
+        "texts": [
+            "Crow",
+            "URIGKT"
+        ],
+        "matches": [
+            {
+                "title": "Crow",
+                "author": "Barbara Wright",
+                "score": 0.6
+            },
+            {
+                "title": "Hotel",
+                "author": "Carol Wright",
+                "score": 0.5517241379310345
+            },
+            {
+                "title": "The Crow-Girl",
+                "author": "Bodil Bredsdorff, Faith Ingwersen",
+                "score": 0.5333333333333333
+            }
+        ]
+    },
+    "IMG_1538_029.jpg": {
+        "texts": [
+            "1417 $ Bhoou Inonv",
+            "1",
+            "LIt CHAT"
+        ],
+        "matches": [
+            {
+                "title": "Hate List",
+                "author": "Jennifer Brown",
+                "score": 0.5098039215686274
+            },
+            {
+                "title": "Cat",
+                "author": "Juliet Clutton-Brock",
+                "score": 0.5098039215686274
+            },
+            {
+                "title": "Cat",
+                "author": "Juliet Clutton-Brock",
+                "score": 0.5098039215686274
+            }
+        ]
+    },
+    "IMG_1538_030.jpg": {
+        "texts": [
+            "Belle' Tal",
+            "MARTIN"
+        ],
+        "matches": [
+            {
+                "title": "Belle Teal",
+                "author": "Ann M. Martin",
+                "score": 0.8571428571428571
+            },
+            {
+                "title": "Chile",
+                "author": "Martin Hintz",
+                "score": 0.6470588235294117
+            },
+            {
+                "title": "ESP",
+                "author": "Michael Martin",
+                "score": 0.6470588235294117
+            }
+        ]
+    },
+    "IMG_1538_031.jpg": {
+        "texts": [
+            "9",
+            "Lasky"
+        ],
+        "matches": [
+            {
+                "title": "Night Witches",
+                "author": "Kathryn Lasky",
+                "score": 0.8333333333333333
+            },
+            {
+                "title": "Ashes",
+                "author": "Kathryn Lasky",
+                "score": 0.8333333333333333
+            },
+            {
+                "title": "Beyond the Burning Time",
+                "author": "Kathryn Lasky",
+                "score": 0.8333333333333333
+            }
+        ]
+    },
+    "IMG_1538_032.jpg": {
+        "texts": [
+            "THE SEER OF SHADOHS",
+            "6"
+        ],
+        "matches": [
+            {
+                "title": "The Seer of Shadows",
+                "author": "Avi",
+                "score": 0.8636363636363636
+            },
+            {
+                "title": "Shadows of the Clans",
+                "author": "Erin Hunter",
+                "score": 0.679245283018868
+            },
+            {
+                "title": "The Shadows of Doom",
+                "author": "Jennifer Bell",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "IMG_1538_033.jpg": {
+        "texts": [
+            "ANN RINALDI",
+            "ML",
+            "fin Quilt",
+            "Harcourt"
+        ],
+        "matches": [
+            {
+                "title": "The Coffin Quilt",
+                "author": "Ann Rinaldi",
+                "score": 0.7555555555555555
+            },
+            {
+                "title": "The Fifth Of March",
+                "author": "Ann Rinaldi",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Broken Days",
+                "author": "Ann Rinaldi",
+                "score": 0.6470588235294117
+            }
+        ]
+    },
+    "IMG_1538_034.jpg": {
+        "texts": [
+            "BRUCHAC",
+            "THUNDER @",
+            "MARCH",
+            "THE",
+            "JOSEPH",
+            "TOWARD"
+        ],
+        "matches": [
+            {
+                "title": "March Toward the Thunder",
+                "author": "Joseph Bruchac",
+                "score": 1.0
+            },
+            {
+                "title": "March Toward the Thunder",
+                "author": "Joseph Bruchac",
+                "score": 1.0
+            },
+            {
+                "title": "March Toward the Thunder",
+                "author": "Joseph Bruchac",
+                "score": 1.0
+            }
+        ]
+    },
+    "IMG_1538_035.jpg": {
+        "texts": [
+            "Miss Upitfire",
+            "Miller"
+        ],
+        "matches": [
+            {
+                "title": "Miss Spitfire",
+                "author": "Sarah Miller",
+                "score": 0.826086956521739
+            },
+            {
+                "title": "Mars",
+                "author": "Ron Miller",
+                "score": 0.6285714285714286
+            },
+            {
+                "title": "Killer's Kiss",
+                "author": "R. L. Stine",
+                "score": 0.6046511627906976
+            }
+        ]
+    },
+    "IMG_1538_036.jpg": {
+        "texts": [
+            "WITH THE MIGHT OF ANGELS"
+        ],
+        "matches": [
+            {
+                "title": "With the Might of Angels",
+                "author": "Andrea Davis Pinkney",
+                "score": 1.0
+            },
+            {
+                "title": "Angels, Prophets, Rabbis & Kings from the Stories of the Jewish People",
+                "author": "Još Patterson",
+                "score": 0.7027027027027027
+            },
+            {
+                "title": "The Life of Plants",
+                "author": "Angels Julivert",
+                "score": 0.7027027027027027
+            }
+        ]
+    },
+    "IMG_1538_037.jpg": {
+        "texts": [
+            "SARAH BISHOP",
+            "3",
+            "SCOTT ODELL"
+        ],
+        "matches": [
+            {
+                "title": "Sarah Bishop",
+                "author": "Scott O'Dell",
+                "score": 0.9019607843137254
+            },
+            {
+                "title": "Space",
+                "author": "Sarah Powell",
+                "score": 0.6363636363636364
+            },
+            {
+                "title": "Space",
+                "author": "Sarah Powell",
+                "score": 0.6363636363636364
+            }
+        ]
+    },
+    "IMG_1538_038.jpg": {
+        "texts": [
+            "SIHL",
+            "Wari"
+        ],
+        "matches": [
+            {
+                "title": "Civil War",
+                "author": "null",
+                "score": 0.5217391304347826
+            },
+            {
+                "title": "Ash",
+                "author": "Malinda Lo",
+                "score": 0.5217391304347826
+            },
+            {
+                "title": "Ash",
+                "author": "Malinda Lo",
+                "score": 0.5217391304347826
+            }
+        ]
+    },
+    "IMG_1538_039.jpg": {
+        "texts": [
+            "Tm E",
+            "A A T",
+            "0 F",
+            "1",
+            "C 0",
+            "0 L"
+        ],
+        "matches": [
+            {
+                "title": "Escape at 10,000 Feet",
+                "author": "Tom Sullivan",
+                "score": 0.576923076923077
+            },
+            {
+                "title": "F-15 Eagle",
+                "author": "Lynn M. Stone",
+                "score": 0.5365853658536586
+            },
+            {
+                "title": "Give Me a K-I-L-L",
+                "author": "R. L. Stine",
+                "score": 0.5365853658536586
+            }
+        ]
+    },
+    "IMG_1538_040.jpg": {
+        "texts": [
+            "LLINDA JUE",
+            "SINGLE SHARD",
+            "1",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "A Single Shard",
+                "author": "Linda Sue Park",
+                "score": 0.7037037037037037
+            },
+            {
+                "title": "It's Snowing!",
+                "author": "Julie Richards",
+                "score": 0.576923076923077
+            },
+            {
+                "title": "Haru: Spring (Volume 1) (Haru, 1)",
+                "author": "Latham, Joe",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_041.jpg": {
+        "texts": [
+            "8",
+            "THE FORESHADOWING"
+        ],
+        "matches": [
+            {
+                "title": "The Foreshadowing",
+                "author": "Marcus Sedgwick",
+                "score": 0.9444444444444444
+            },
+            {
+                "title": "Shadows at the Fair",
+                "author": "Lea Wait",
+                "score": 0.6382978723404256
+            },
+            {
+                "title": "The Shadows",
+                "author": "Alex North",
+                "score": 0.6341463414634146
+            }
+        ]
+    },
+    "IMG_1538_042.jpg": {
+        "texts": [
+            "ANDERS 0 N",
+            "1793"
+        ],
+        "matches": [
+            {
+                "title": "Frostborn",
+                "author": "Lou Anders",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "DNA, Genes, and Chromosomes",
+                "author": "Mason Anders",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "Victories Greater Than Death",
+                "author": "Charlie Jane Anders",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_043.jpg": {
+        "texts": [
+            "ANNE FRANK: THE DIARV OFAVOUNG GIRL"
+        ],
+        "matches": [
+            {
+                "title": "Anne Frank",
+                "author": "Anne Frank",
+                "score": 1.0
+            },
+            {
+                "title": "Anne Frank",
+                "author": "Anne Frank",
+                "score": 1.0
+            },
+            {
+                "title": "The Diary of a Young Girl",
+                "author": "Anne Frank",
+                "score": 0.8857142857142857
+            }
+        ]
+    },
+    "IMG_1538_044.jpg": {
+        "texts": [
+            "1",
+            "o f",
+            "ANN RINALDI",
+            "Sar a 6",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Amelia's War",
+                "author": "Ann Rinaldi",
+                "score": 0.6938775510204082
+            },
+            {
+                "title": "Hang a Thousand Trees with Ribbons",
+                "author": "Ann Rinaldi",
+                "score": 0.6842105263157895
+            },
+            {
+                "title": "A Break with Charity",
+                "author": "Ann Rinaldi",
+                "score": 0.6842105263157895
+            }
+        ]
+    },
+    "IMG_1538_045.jpg": {
+        "texts": [
+            "015",
+            "L",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Goosebumps Horrorland Box Set 1-4",
+                "author": "R. L. Stine",
+                "score": 0.6
+            },
+            {
+                "title": "Colonial America Biographies Volume 1, A-L",
+                "author": "Peggy Saari",
+                "score": 0.6
+            },
+            {
+                "title": "The Devouring Gray (The Devouring Gray, 1)",
+                "author": "Herman, C. L.",
+                "score": 0.6
+            }
+        ]
+    },
+    "IMG_1538_046.jpg": {
+        "texts": [
+            "IAV",
+            "TRON 'TUNAA",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Iron Thunder",
+                "author": "Avi",
+                "score": 0.625
+            },
+            {
+                "title": "TeenBoat!",
+                "author": "Dave Roman",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "Tornado!",
+                "author": "Hilary H. Milton",
+                "score": 0.5641025641025641
+            }
+        ]
+    },
+    "IMG_1538_047.jpg": {
+        "texts": [
+            "Grvs Civil War",
+            "BRENAMAN",
+            "apcak"
+        ],
+        "matches": [
+            {
+                "title": "Civil War",
+                "author": "null",
+                "score": 0.782608695652174
+            },
+            {
+                "title": "Evvy's Civil War",
+                "author": "Miriam Brenaman",
+                "score": 0.7659574468085105
+            },
+            {
+                "title": "Civil War",
+                "author": "Mark Millar",
+                "score": 0.64
+            }
+        ]
+    },
+    "IMG_1538_048.jpg": {
+        "texts": [
+            "Betsy",
+            "abin",
+            "Emperor",
+            "2",
+            "qr'u"
+        ],
+        "matches": [
+            {
+                "title": "Betsy and the Emperor",
+                "author": "Staton Rabin,Larry Rostant",
+                "score": 0.6842105263157895
+            },
+            {
+                "title": "Pirate Emperor",
+                "author": "Kai Meyer",
+                "score": 0.6122448979591837
+            },
+            {
+                "title": "Betsy Ross",
+                "author": "Susan Martins Miller",
+                "score": 0.6071428571428572
+            }
+        ]
+    },
+    "IMG_1538_049.jpg": {
+        "texts": [
+            "HuM J0 Swnuo",
+            "SMIELDS",
+            "Jaonoso"
+        ],
+        "matches": [
+            {
+                "title": "Look Both Ways",
+                "author": "Jason Reynolds",
+                "score": 0.5263157894736842
+            },
+            {
+                "title": "Mongrels",
+                "author": "Stephen Graham Jones",
+                "score": 0.5263157894736842
+            },
+            {
+                "title": "Michael J Fox",
+                "author": "John F. Wukovits",
+                "score": 0.5263157894736842
+            }
+        ]
+    },
+    "IMG_1538_050.jpg": {
+        "texts": [
+            "Numberg AI 4",
+            "Rinaldi"
+        ],
+        "matches": [
+            {
+                "title": "Numbering All the Bones",
+                "author": "Ann Rinaldi",
+                "score": 0.6545454545454545
+            },
+            {
+                "title": "My Vicksburg",
+                "author": "Ann Rinaldi",
+                "score": 0.6363636363636364
+            },
+            {
+                "title": "Or Give Me Death",
+                "author": "Ann Rinaldi",
+                "score": 0.625
+            }
+        ]
+    },
+    "IMG_1538_051.jpg": {
+        "texts": [
+            "Just Juice",
+            "HESSE"
+        ],
+        "matches": [
+            {
+                "title": "Just Juice",
+                "author": "Karen Hesse",
+                "score": 1.0
+            },
+            {
+                "title": "Horse",
+                "author": "Juliet",
+                "score": 0.6428571428571428
+            },
+            {
+                "title": "Salt",
+                "author": "Maurice Gee",
+                "score": 0.625
+            }
+        ]
+    },
+    "IMG_1538_052.jpg": {
+        "texts": [
+            "DummDWD",
+            "e",
+            "5",
+            "PHILBRICR"
+        ],
+        "matches": [
+            {
+                "title": "Who Killed Darius Drake?",
+                "author": "W. R. Philbrick",
+                "score": 0.5172413793103449
+            },
+            {
+                "title": "Maine",
+                "author": "Patricia K. Kummer",
+                "score": 0.5
+            },
+            {
+                "title": "Who Killed Darius Drake?",
+                "author": "Rodman Philbrick",
+                "score": 0.4918032786885246
+            }
+        ]
+    },
+    "IMG_1538_053.jpg": {
+        "texts": [
+            "THE SECRET Schoor",
+            "AVI"
+        ],
+        "matches": [
+            {
+                "title": "The Secret School",
+                "author": "Avi",
+                "score": 0.9523809523809524
+            },
+            {
+                "title": "The Barn",
+                "author": "Avi",
+                "score": 0.736842105263158
+            },
+            {
+                "title": "The Secret Zoo",
+                "author": "Bryan Chick",
+                "score": 0.7234042553191489
+            }
+        ]
+    },
+    "IMG_1538_054.jpg": {
+        "texts": [
+            "TRUE NORTH",
+            "LASKY",
+            "616"
+        ],
+        "matches": [
+            {
+                "title": "True North",
+                "author": "Kathryn Lasky",
+                "score": 0.8888888888888888
+            },
+            {
+                "title": "Marven of the Great North Woods",
+                "author": "Kathryn Lasky",
+                "score": 0.7096774193548387
+            },
+            {
+                "title": "Trusting True North",
+                "author": "G. J. Linko",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "IMG_1538_055.jpg": {
+        "texts": [
+            "\"7251575 %",
+            "1",
+            "8",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Fullmetal Alchemist (3-in-1 Edition), Vol. 8",
+                "author": "Hiromu Arakawa",
+                "score": 0.42857142857142855
+            },
+            {
+                "title": "The Baby-Sitters Club Netflix Editions 1-8 Boxed Set",
+                "author": "Martin Ann M",
+                "score": 0.42857142857142855
+            },
+            {
+                "title": "Samurai 8, Vol. 1",
+                "author": "Masashi Kishimoto",
+                "score": 0.42857142857142855
+            }
+        ]
+    },
+    "IMG_1538_056.jpg": {
+        "texts": [
+            "Out oj",
+            "HESSE",
+            "lie Dust"
+        ],
+        "matches": [
+            {
+                "title": "Out of the Dust",
+                "author": "Karen Hesse",
+                "score": 0.8
+            },
+            {
+                "title": "Out of the Dust",
+                "author": "Karen Hesse",
+                "score": 0.8
+            },
+            {
+                "title": "Out of the Dust",
+                "author": "Karen Hesse",
+                "score": 0.8
+            }
+        ]
+    },
+    "IMG_1538_057.jpg": {
+        "texts": [
+            "BEYOND THE BURNING TIM"
+        ],
+        "matches": [
+            {
+                "title": "Beyond the Burning Time",
+                "author": "Kathryn Lasky",
+                "score": 0.9
+            },
+            {
+                "title": "The Boy in the Burning House",
+                "author": "Tim Wynne-Jones",
+                "score": 0.8108108108108109
+            },
+            {
+                "title": "The Burning (Young Readers Edition): Black Wall Street and the Tulsa Race Massacre of 1921",
+                "author": "Madigan, Tim, Beard, Hilary",
+                "score": 0.8108108108108109
+            }
+        ]
+    },
+    "IMG_1538_058.jpg": {
+        "texts": [
+            "8",
+            "Ann Rinaldi",
+            "The Stairease",
+            ";"
+        ],
+        "matches": [
+            {
+                "title": "The Staircase",
+                "author": "Ann Rinaldi",
+                "score": 0.923076923076923
+            },
+            {
+                "title": "The Blue Door",
+                "author": "Ann Rinaldi",
+                "score": 0.75
+            },
+            {
+                "title": "The Blue Door",
+                "author": "Ann Rinaldi",
+                "score": 0.75
+            }
+        ]
+    },
+    "IMG_1538_059.jpg": {
+        "texts": [
+            "GEORCL WASHINGTONS SOCKS",
+            "TOODRUFR"
+        ],
+        "matches": [
+            {
+                "title": "George-isms",
+                "author": "George Washington",
+                "score": 0.6545454545454545
+            },
+            {
+                "title": "George Washington",
+                "author": "Tim McNeese",
+                "score": 0.6451612903225806
+            },
+            {
+                "title": "Washington",
+                "author": "Rebecca Stefoff",
+                "score": 0.6101694915254238
+            }
+        ]
+    },
+    "IMG_1538_060.jpg": {
+        "texts": [
+            "CHASING LINCOLN $ FiLLER",
+            "8"
+        ],
+        "matches": [
+            {
+                "title": "Chasing Lincoln's Killer",
+                "author": "James L. Swanson",
+                "score": 0.7692307692307692
+            },
+            {
+                "title": "Abe Lincoln",
+                "author": "Kay Winters",
+                "score": 0.5957446808510638
+            },
+            {
+                "title": "Chasing Evil",
+                "author": "Adam Blade",
+                "score": 0.5957446808510638
+            }
+        ]
+    },
+    "IMG_1538_061.jpg": {
+        "texts": [
+            "GARY PAULSEN",
+            "SOLDIER S HEART",
+            "3",
+            "EAR"
+        ],
+        "matches": [
+            {
+                "title": "Soldier's Heart",
+                "author": "Gary Paulsen",
+                "score": 1.0
+            },
+            {
+                "title": "Soldier's Heart",
+                "author": "Gary Paulsen",
+                "score": 1.0
+            },
+            {
+                "title": "Liar, Liar",
+                "author": "Gary Paulsen",
+                "score": 0.8275862068965517
+            }
+        ]
+    },
+    "IMG_1538_062.jpg": {
+        "texts": [
+            "@",
+            "ames",
+            "Boys Fithout",
+            "SHEH"
+        ],
+        "matches": [
+            {
+                "title": "The Fallout",
+                "author": "S. A. Bodeen",
+                "score": 0.5909090909090909
+            },
+            {
+                "title": "Boys without Names",
+                "author": "Kashmira Sheth",
+                "score": 0.5818181818181818
+            },
+            {
+                "title": "At First Bite",
+                "author": "Ruth Ames",
+                "score": 0.5777777777777778
+            }
+        ]
+    },
+    "IMG_1538_063.jpg": {
+        "texts": [
+            "GEAEEEEEL"
+        ],
+        "matches": [
+            {
+                "title": "Wereling",
+                "author": "Steve Feasey",
+                "score": 0.5333333333333333
+            },
+            {
+                "title": "Day",
+                "author": "Elie Wiesel",
+                "score": 0.5
+            },
+            {
+                "title": "Day",
+                "author": "Elie Wiesel",
+                "score": 0.5
+            }
+        ]
+    },
+    "IMG_1538_064.jpg": {
+        "texts": [
+            "FLYGIRL",
+            "nnus",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Flygirl",
+                "author": "Sherri L. Smith",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Girl in a Funk",
+                "author": "Tanya",
+                "score": 0.5294117647058824
+            },
+            {
+                "title": "Gold Rush Girl",
+                "author": "Avi",
+                "score": 0.5
+            }
+        ]
+    },
+    "IMG_1538_065.jpg": {
+        "texts": [
+            "Shooting the moon",
+            "DOWELL"
+        ],
+        "matches": [
+            {
+                "title": "Shooting the Moon",
+                "author": "Frances O'Roark Dowell",
+                "score": 1.0
+            },
+            {
+                "title": "Shooting for the Moon",
+                "author": "Stephen Krensky",
+                "score": 0.8292682926829268
+            },
+            {
+                "title": "Sing Down the Moon",
+                "author": "Scott O'Dell",
+                "score": 0.7272727272727272
+            }
+        ]
+    },
+    "IMG_1538_066.jpg": {
+        "texts": [
+            "Gltaman",
+            "Goov NiGHT;"
+        ],
+        "matches": [
+            {
+                "title": "Light",
+                "author": "John Gorman",
+                "score": 0.6285714285714286
+            },
+            {
+                "title": "Night Dive",
+                "author": "Ann McGovern",
+                "score": 0.5853658536585367
+            },
+            {
+                "title": "Human Rights",
+                "author": "Linda Jacobs Altman",
+                "score": 0.56
+            }
+        ]
+    },
+    "IMG_1538_067.jpg": {
+        "texts": [
+            "Manzanar",
+            "Fatewell",
+            "Houstol"
+        ],
+        "matches": [
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Houston",
+                "score": 0.7666666666666667
+            },
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Houston",
+                "score": 0.7666666666666667
+            },
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Wakatsuki Houston",
+                "score": 0.6571428571428573
+            }
+        ]
+    },
+    "IMG_1538_068.jpg": {
+        "texts": [
+            "Jhe Jences Between Us",
+            "8",
+            "DMLRICA",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "The River Between Us",
+                "author": "Richard Peck",
+                "score": 0.6363636363636364
+            },
+            {
+                "title": "The Silence Between Us",
+                "author": "Alison Gervais",
+                "score": 0.6285714285714286
+            },
+            {
+                "title": "The Distance Between Us",
+                "author": "Kasie West",
+                "score": 0.6268656716417911
+            }
+        ]
+    },
+    "IMG_1538_069.jpg": {
+        "texts": [
+            "THE FICHTINC CROUND"
+        ],
+        "matches": [
+            {
+                "title": "The Titanic",
+                "author": "Michael D. Cole",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Titanic",
+                "author": "Michael Burgan",
+                "score": 0.6222222222222222
+            },
+            {
+                "title": "The Titanic",
+                "author": "Michael Burgan",
+                "score": 0.6222222222222222
+            }
+        ]
+    },
+    "IMG_1538_070.jpg": {
+        "texts": [
+            "AGES",
+            "IBRINGYOTROTIBOOR",
+            "borrowed phrases"
+        ],
+        "matches": [
+            {
+                "title": "The Borrowers Avenged",
+                "author": "Mary Norton",
+                "score": 0.5833333333333334
+            },
+            {
+                "title": "The Borrowers Avenged",
+                "author": "Mary Norton",
+                "score": 0.5833333333333334
+            },
+            {
+                "title": "The Borrowers Afield",
+                "author": "Mary Norton",
+                "score": 0.5633802816901409
+            }
+        ]
+    },
+    "IMG_1538_071.jpg": {
+        "texts": [
+            "1",
+            "~aade",
+            "Eray"
+        ],
+        "matches": [
+            {
+                "title": "Troy",
+                "author": "Adele Geras",
+                "score": 0.5925925925925926
+            },
+            {
+                "title": "Peru",
+                "author": "Sarah De Capua",
+                "score": 0.5333333333333333
+            },
+            {
+                "title": "Karate",
+                "author": "Rennay Craats",
+                "score": 0.5161290322580645
+            }
+        ]
+    },
+    "IMG_1538_072.jpg": {
+        "texts": [
+            "KIZZY ANN STAMPS",
+            "5b"
+        ],
+        "matches": [
+            {
+                "title": "Kizzy Ann Stamps",
+                "author": "Jeri Watts",
+                "score": 0.9142857142857143
+            },
+            {
+                "title": "Kizzy Ann Stamps",
+                "author": "Jeri Watts",
+                "score": 0.9142857142857143
+            },
+            {
+                "title": "Samus Aran",
+                "author": "Kenny Abdo",
+                "score": 0.6
+            }
+        ]
+    },
+    "IMG_1538_073.jpg": {
+        "texts": [
+            "2",
+            "The Journal & Douglus Allen Deeds",
+            "0",
+            "Tk Dennst Part Epedtion"
+        ],
+        "matches": [
+            {
+                "title": "The Journal of Douglas Allen Deeds",
+                "author": "Rodman Philbrick",
+                "score": 0.6545454545454545
+            },
+            {
+                "title": "The Journal of Scott Pendleton Collins",
+                "author": "Walter Dean Myers",
+                "score": 0.591304347826087
+            },
+            {
+                "title": "The Lost Lake",
+                "author": "Allen Say",
+                "score": 0.5625
+            }
+        ]
+    },
+    "IMG_1538_074.jpg": {
+        "texts": [
+            "1",
+            "1",
+            "1",
+            "L",
+            "1",
+            "1",
+            "LL"
+        ],
+        "matches": [
+            {
+                "title": "Things I'll Never Say",
+                "author": "Ann Angel, Varian Johnson, Erica L. Kaufman, Katy Moran, J. L. Powers, Ron Koertge, E. M. Kokie, Kekla Magoon, Zoë Marriott,  Mary Ann Rodman, Chris Lynch, Louise Hawes, Kerry Cohen, Cynthia Leitich Smith, Ellen Wittlinger",
+                "score": 0.8
+            },
+            {
+                "title": "By the Time You Read This I'll Be Gone (Murder, She Wrote #1)",
+                "author": "Stephanie Kuehn",
+                "score": 0.8
+            },
+            {
+                "title": "Goosebumps Horrorland Box Set 1-4",
+                "author": "R. L. Stine",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "IMG_1538_075.jpg": {
+        "texts": [
+            "FASER"
+        ],
+        "matches": [
+            {
+                "title": "Ferraris",
+                "author": "Bob Power",
+                "score": 0.43478260869565216
+            },
+            {
+                "title": "Worth",
+                "author": "A. LaFaye",
+                "score": 0.4210526315789474
+            },
+            {
+                "title": "Tyger",
+                "author": "S.F. Said",
+                "score": 0.4210526315789474
+            }
+        ]
+    },
+    "IMG_1538_076.jpg": {
+        "texts": [
+            "The STrue Confessions",
+            "vi",
+            "Charlolle 'Doyle"
+        ],
+        "matches": [
+            {
+                "title": "The True Confessions of Charlotte Doyle",
+                "author": "Avi",
+                "score": 0.8192771084337349
+            },
+            {
+                "title": "Confessions",
+                "author": "Kate Brian",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Ocean of Story",
+                "author": "Caroline Ness",
+                "score": 0.6388888888888888
+            }
+        ]
+    },
+    "IMG_1538_077.jpg": {
+        "texts": [
+            "QuEstious",
+            "00",
+            "\"",
+            "1",
+            ":"
+        ],
+        "matches": [
+            {
+                "title": "Triss",
+                "author": "Brian Jacques",
+                "score": 0.48484848484848486
+            },
+            {
+                "title": "Triss",
+                "author": "Brian Jacques",
+                "score": 0.48484848484848486
+            },
+            {
+                "title": "Queerstory",
+                "author": "null",
+                "score": 0.48275862068965514
+            }
+        ]
+    },
+    "IMG_1538_078.jpg": {
+        "texts": [
+            "Tsland ofthe Blue Dolphins",
+            "YEARLINC",
+            "0' D-l"
+        ],
+        "matches": [
+            {
+                "title": "Island of the Blue Dolphins",
+                "author": "Scott O'Dell",
+                "score": 0.5925925925925926
+            },
+            {
+                "title": "Dolphins",
+                "author": "Jason Skog",
+                "score": 0.5925925925925926
+            },
+            {
+                "title": "Dolphins",
+                "author": "Kathy White",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_079.jpg": {
+        "texts": [
+            "Sonieone Named Eva",
+            "Woll"
+        ],
+        "matches": [
+            {
+                "title": "Someone Named Eva",
+                "author": "Joan M. Wolf",
+                "score": 0.7692307692307692
+            },
+            {
+                "title": "The Silenced",
+                "author": "James DeVita",
+                "score": 0.5833333333333334
+            },
+            {
+                "title": "Firehouse",
+                "author": "Bernard Wolf",
+                "score": 0.5777777777777778
+            }
+        ]
+    },
+    "IMG_1538_080.jpg": {
+        "texts": [
+            "THE BOMB",
+            "THEODORE TAYLOR"
+        ],
+        "matches": [
+            {
+                "title": "The Bomb",
+                "author": "Theodore Taylor",
+                "score": 1.0
+            },
+            {
+                "title": "The Cay",
+                "author": "Theodore Taylor",
+                "score": 0.9047619047619048
+            },
+            {
+                "title": "The Cay",
+                "author": "Theodore Taylor",
+                "score": 0.9047619047619048
+            }
+        ]
+    },
+    "IMG_1538_081.jpg": {
+        "texts": [
+            "6",
+            "3",
+            "Roar"
+        ],
+        "matches": [
+            {
+                "title": "The Roar",
+                "author": "Emma Clayton",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Roar of the Thunder Dragon",
+                "author": "Tracey West",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "The Roar of the Crowd",
+                "author": "Rich Wallace",
+                "score": 0.6666666666666665
+            }
+        ]
+    },
+    "IMG_1538_082.jpg": {
+        "texts": [
+            "7 Yrof Min Agnt}",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Minerals",
+                "author": "Roy A. Gallant",
+                "score": 0.5641025641025641
+            },
+            {
+                "title": "12 to 22",
+                "author": "Jen Calonita",
+                "score": 0.5263157894736842
+            },
+            {
+                "title": "New York, 1609-1776",
+                "author": "Michael Burgan",
+                "score": 0.52
+            }
+        ]
+    },
+    "IMG_1538_083.jpg": {
+        "texts": [
+            "1",
+            "Hei UL+JS",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "13",
+                "author": "James Howe",
+                "score": 0.5833333333333334
+            },
+            {
+                "title": "Turtles",
+                "author": "Jodi Huelin",
+                "score": 0.5333333333333333
+            },
+            {
+                "title": "Horse",
+                "author": "Juliet",
+                "score": 0.5217391304347826
+            }
+        ]
+    },
+    "IMG_1538_084.jpg": {
+        "texts": [
+            "CITIL WAR SPIES: BEHIND ENEMT LINES",
+            "(Wilson"
+        ],
+        "matches": [
+            {
+                "title": "Behind Enemy Lines",
+                "author": "Jennifer A. Nielsen",
+                "score": 0.6923076923076923
+            },
+            {
+                "title": "Civil War Spies",
+                "author": "Camilla J. Wilson",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Sea Mysteries",
+                "author": "Ben Wilson",
+                "score": 0.6153846153846154
+            }
+        ]
+    },
+    "IMG_1538_085.jpg": {
+        "texts": [
+            "bchind tc bcdroom Wvall",
+            "milliams"
+        ],
+        "matches": [
+            {
+                "title": "Behind the Bedroom Wall",
+                "author": "Laura E. Williams",
+                "score": 0.6111111111111112
+            },
+            {
+                "title": "Cracking the Wall",
+                "author": "Eileen Lucas",
+                "score": 0.5806451612903225
+            },
+            {
+                "title": "Miriam's Well",
+                "author": "Alice Bach",
+                "score": 0.5714285714285715
+            }
+        ]
+    },
+    "IMG_1538_086.jpg": {
+        "texts": [
+            "3",
+            "\"IReMo"
+        ],
+        "matches": [
+            {
+                "title": "D-39",
+                "author": "Irene Latham",
+                "score": 0.5
+            },
+            {
+                "title": "Page",
+                "author": "Tamora Pierce",
+                "score": 0.48
+            },
+            {
+                "title": "Page",
+                "author": "Tamora Pierce",
+                "score": 0.48
+            }
+        ]
+    },
+    "IMG_1538_087.jpg": {
+        "texts": [
+            "YEARLING",
+            "The Slave Dancer",
+            "2"
+        ],
+        "matches": [
+            {
+                "title": "The Slave Dancer",
+                "author": "Paula Fox",
+                "score": 0.7619047619047619
+            },
+            {
+                "title": "The Young Dancer",
+                "author": "Darcey Bussell",
+                "score": 0.6551724137931035
+            },
+            {
+                "title": "The 13th Reality",
+                "author": "James Dashner",
+                "score": 0.631578947368421
+            }
+        ]
+    },
+    "IMG_1538_088.jpg": {
+        "texts": [
+            "SToRYTELLING",
+            "Inas]",
+            "40",
+            "GA ME"
+        ],
+        "matches": [
+            {
+                "title": "¡Mira, abuela! / Look, Grandma! / Ni, Elisi! (Storytelling Math)",
+                "author": "Art Coulson",
+                "score": 0.631578947368421
+            },
+            {
+                "title": "Bracelets for Bina's Brothers (Storytelling Math)",
+                "author": "Rajani LaRocca",
+                "score": 0.631578947368421
+            },
+            {
+                "title": "Extraordinary Magic: The Storytelling Life of Virginia Hamilton",
+                "author": "Nina Crews",
+                "score": 0.631578947368421
+            }
+        ]
+    },
+    "IMG_1538_089.jpg": {
+        "texts": [
+            "Long WALK To WATER",
+            "FARK",
+            "AQOHMH"
+        ],
+        "matches": [
+            {
+                "title": "A Long Walk to Water",
+                "author": "Linda Sue Park",
+                "score": 0.75
+            },
+            {
+                "title": "The Long Walk",
+                "author": "Richard Bachman",
+                "score": 0.6440677966101694
+            },
+            {
+                "title": "Like Water on Stone",
+                "author": "Dana Walrath",
+                "score": 0.6129032258064516
+            }
+        ]
+    },
+    "IMG_1538_090.jpg": {
+        "texts": [
+            "MAMERICA",
+            "Colod"
+        ],
+        "matches": [
+            {
+                "title": "Mars--",
+                "author": "Michael D. Cole",
+                "score": 0.6666666666666665
+            },
+            {
+                "title": "Cold",
+                "author": "Mariko Tamaki",
+                "score": 0.625
+            },
+            {
+                "title": "Moldova",
+                "author": "Patricia",
+                "score": 0.6
+            }
+        ]
+    },
+    "IMG_1538_091.jpg": {
+        "texts": [
+            "NUMDERETHEETAR $",
+            "C",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "The Year 1000",
+                "author": "Robert Lacey",
+                "score": 0.5454545454545454
+            },
+            {
+                "title": "Thumbeline",
+                "author": "H. C. Andersen",
+                "score": 0.5365853658536586
+            },
+            {
+                "title": "Maserati",
+                "author": "Jill C. Wheeler",
+                "score": 0.5365853658536586
+            }
+        ]
+    },
+    "IMG_1538_092.jpg": {
+        "texts": [
+            "1",
+            "6",
+            "SLATTON",
+            "1",
+            "Dloma"
+        ],
+        "matches": [
+            {
+                "title": "Stetson",
+                "author": "S.L. Rottman",
+                "score": 0.5555555555555556
+            },
+            {
+                "title": "Stetson",
+                "author": "S. L. Rottman",
+                "score": 0.5555555555555556
+            },
+            {
+                "title": "D-Day",
+                "author": "Milton Dank",
+                "score": 0.5294117647058824
+            }
+        ]
+    },
+    "IMG_1538_093.jpg": {
+        "texts": [
+            "Ba",
+            "AGATHLRING 0"
+        ],
+        "matches": [
+            {
+                "title": "Earth",
+                "author": "Susan Ring",
+                "score": 0.5806451612903225
+            },
+            {
+                "title": "A Gathering of Days",
+                "author": "Joan Blos",
+                "score": 0.5454545454545454
+            },
+            {
+                "title": "Earthling!",
+                "author": "Mark Fearing",
+                "score": 0.5405405405405406
+            }
+        ]
+    },
+    "IMG_1538_094.jpg": {
+        "texts": [
+            "1",
+            "T",
+            "LINL",
+            "FIGHTERS",
+            "THE KITE"
+        ],
+        "matches": [
+            {
+                "title": "The Kite Fighters",
+                "author": "Linda Sue Park",
+                "score": 0.7906976744186046
+            },
+            {
+                "title": "The Chinese",
+                "author": "Lorien Kite",
+                "score": 0.653061224489796
+            },
+            {
+                "title": "The Chinese",
+                "author": "Lorien Kite",
+                "score": 0.653061224489796
+            }
+        ]
+    },
+    "IMG_1538_095.jpg": {
+        "texts": [
+            "richmond",
+            "]",
+            "745 NJQQIH",
+            "JKL",
+            "3"
+        ],
+        "matches": [
+            {
+                "title": "Phillis Wheatley",
+                "author": "M. A. Richmond",
+                "score": 0.5185185185185186
+            },
+            {
+                "title": "Night World No. 3",
+                "author": "L.J. Smith",
+                "score": 0.5098039215686274
+            },
+            {
+                "title": "The Only Thing to Fear",
+                "author": "Caroline Tung Richmond",
+                "score": 0.48484848484848486
+            }
+        ]
+    },
+    "IMG_1538_096.jpg": {
+        "texts": [
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Beautiful Volume 1",
+                "author": "Marie D'Abreo",
+                "score": 1.0
+            },
+            {
+                "title": "Fly to the Rescue (Tiny Geniuses #1)",
+                "author": "Megan E. Bryant",
+                "score": 1.0
+            },
+            {
+                "title": "Island Trilogy Volume 1-3",
+                "author": "Gordon Korman",
+                "score": 1.0
+            }
+        ]
+    },
+    "IMG_1538_097.jpg": {
+        "texts": [
+            "AVI"
+        ],
+        "matches": [
+            {
+                "title": "The Most Important Thing",
+                "author": "Avi",
+                "score": 1.0
+            },
+            {
+                "title": "Strange Happenings",
+                "author": "Avi",
+                "score": 1.0
+            },
+            {
+                "title": "The Unexpected Life of Oliver Cromwell Pitts",
+                "author": "Avi",
+                "score": 1.0
+            }
+        ]
+    },
+    "IMG_1538_098.jpg": {
+        "texts": [
+            "Bread andRoses; Ioo",
+            "PATERSON"
+        ],
+        "matches": [
+            {
+                "title": "Bread and Roses, Too",
+                "author": "Katherine Paterson",
+                "score": 0.8
+            },
+            {
+                "title": "Med Head",
+                "author": "James Patterson",
+                "score": 0.6274509803921569
+            },
+            {
+                "title": "Med Head",
+                "author": "James Patterson",
+                "score": 0.6274509803921569
+            }
+        ]
+    },
+    "IMG_1538_099.jpg": {
+        "texts": [
+            "HAH EEL",
+            "THE",
+            "1",
+            "6"
+        ],
+        "matches": [
+            {
+                "title": "Lost in the Wilderness, Level 6 Theme 1.1",
+                "author": "Mindy Clarkson",
+                "score": 0.6363636363636364
+            },
+            {
+                "title": "Voyage of the Fram, Level 6 Theme 1.4",
+                "author": "Tanner Ottley Gay",
+                "score": 0.6363636363636364
+            },
+            {
+                "title": "The Search",
+                "author": "Eric Heuvel",
+                "score": 0.5945945945945946
+            }
+        ]
+    },
+    "IMG_1538_100.jpg": {
+        "texts": [
+            "to tbe DEAD",
+            "PROMISES",
+            "HAHN"
+        ],
+        "matches": [
+            {
+                "title": "Promises to the Dead",
+                "author": "Mary Downing Hahn",
+                "score": 0.9130434782608695
+            },
+            {
+                "title": "Promises to Keep",
+                "author": "Paul Langan",
+                "score": 0.6415094339622641
+            },
+            {
+                "title": "Dead in the Water",
+                "author": "Robin H. Stevenson",
+                "score": 0.6333333333333333
+            }
+        ]
+    },
+    "IMG_1538_101.jpg": {
+        "texts": [
+            "1",
+            "HE",
+            "40",
+            "SOUL",
+            "TP",
+            "au/Lawton",
+            "1"
+        ],
+        "matches": [
+            {
+                "title": "Ohio",
+                "author": "Val Lawton",
+                "score": 0.5714285714285715
+            },
+            {
+                "title": "The 1970s",
+                "author": "Neil A. Hamilton",
+                "score": 0.56
+            },
+            {
+                "title": "West Virginia",
+                "author": "Val Lawton",
+                "score": 0.5306122448979592
+            }
+        ]
+    },
+    "IMG_1538_103.jpg": {
+        "texts": [
+            "LAm Malala",
+            "MALALA",
+            "YOUSAFZA"
+        ],
+        "matches": [
+            {
+                "title": "I Am Malala",
+                "author": "Malala Yousafzai",
+                "score": 0.9
+            },
+            {
+                "title": "Malala",
+                "author": "Malala Yousafzai",
+                "score": 0.8571428571428571
+            },
+            {
+                "title": "Malala Yousafzai",
+                "author": "Elisa Peters",
+                "score": 0.75
+            }
+        ]
+    },
+    "IMG_1538_104.jpg": {
+        "texts": [
+            "Manzanak",
+            "Fatcwct",
+            "Houston"
+        ],
+        "matches": [
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Houston",
+                "score": 0.6440677966101694
+            },
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Houston",
+                "score": 0.6440677966101694
+            },
+            {
+                "title": "Farewell to Manzanar",
+                "author": "Jeanne Wakatsuki Houston",
+                "score": 0.5797101449275363
+            }
+        ]
+    },
+    "IMG_1538_105.jpg": {
+        "texts": [
+            "FbRT",
+            "DAGO",
+            "3"
+        ],
+        "matches": [
+            {
+                "title": "D-Day",
+                "author": "Tom McGowen",
+                "score": 0.5
+            },
+            {
+                "title": "Dog",
+                "author": "Clare Hibbert",
+                "score": 0.5
+            },
+            {
+                "title": "13",
+                "author": "Jason Robert Brown",
+                "score": 0.5
+            }
+        ]
+    },
+    "IMG_1538_106.jpg": {
+        "texts": [
+            "SOLDIER",
+            "Wulppson"
+        ],
+        "matches": [
+            {
+                "title": "Soldier X",
+                "author": "Don L. Wulffson",
+                "score": 0.7
+            },
+            {
+                "title": "Soldier",
+                "author": "Simon Adams",
+                "score": 0.6285714285714286
+            },
+            {
+                "title": "Soldier",
+                "author": "Simon Adams",
+                "score": 0.6285714285714286
+            }
+        ]
+    },
+    "IMG_1538_107.jpg": {
+        "texts": [
+            "0",
+            "6",
+            "0",
+            "006"
+        ],
+        "matches": [
+            {
+                "title": "1900-20",
+                "author": "Sue Mee",
+                "score": 0.36363636363636365
+            },
+            {
+                "title": "T0073641",
+                "author": "Rich Wallace",
+                "score": 0.3571428571428571
+            },
+            {
+                "title": "進撃の巨人 6",
+                "author": "諫山創",
+                "score": 0.33333333333333326
+            }
+        ]
+    },
+    "IMG_1538_108.jpg": {
+        "texts": [
+            "drrudg",
+            "@ Wi",
+            "72 > [im",
+            "JIA"
+        ],
+        "matches": [
+            {
+                "title": "In Waves",
+                "author": "A. J. Dungo",
+                "score": 0.5405405405405406
+            },
+            {
+                "title": "Is My Dog a Wolf?",
+                "author": "Jenni Bidner",
+                "score": 0.5
+            },
+            {
+                "title": "Warriors!",
+                "author": "Jim Eldridge",
+                "score": 0.5
+            }
+        ]
+    },
+    "IMG_1538_109.jpg": {
+        "texts": [
+            "INDIAN CAPTIVE",
+            "1",
+            "5"
+        ],
+        "matches": [
+            {
+                "title": "Indian Captive",
+                "author": "Lois Lenski",
+                "score": 0.875
+            },
+            {
+                "title": "Indian Captive",
+                "author": "Lois Lenski",
+                "score": 0.875
+            },
+            {
+                "title": "Indian Captive",
+                "author": "Lois Lenski",
+                "score": 0.875
+            }
+        ]
+    }
+}
