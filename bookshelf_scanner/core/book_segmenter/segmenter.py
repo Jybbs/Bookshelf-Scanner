@@ -2,9 +2,11 @@ import cv2
 import json
 import numpy       as np
 import onnxruntime as ort
+import torch
 
 from bookshelf_scanner import ModuleLogger, Utils
 from dataclasses       import dataclass
+from functools         import cache
 from pathlib           import Path
 from typing            import Any
 
@@ -16,7 +18,8 @@ def sigmoid(x: np.ndarray) -> np.ndarray:
     """
     Applies the sigmoid function element-wise to the input array.
     """
-    return 1 / (1 + np.exp(-x))
+    # Using torch's sigmoid for vectorization and cleaner code
+    return torch.sigmoid(torch.from_numpy(x)).numpy()
 
 def crop_mask(masks: np.ndarray, bboxes: np.ndarray) -> np.ndarray:
     """
@@ -29,10 +32,10 @@ def crop_mask(masks: np.ndarray, bboxes: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: Cropped masks.
     """
-    n, h, w = masks.shape
     cropped_masks = np.zeros_like(masks)
-    for i in range(n):
-        x1, y1, x2, y2 = bboxes[i]
+    
+    # Loop through each bounding box and mask to isolate only the region within the box.
+    for i, (x1, y1, x2, y2) in enumerate(bboxes):
         cropped_masks[i, y1:y2, x1:x2] = masks[i, y1:y2, x1:x2]
     return cropped_masks
 
@@ -47,6 +50,16 @@ class BookSegmentResult:
     confidence  : float
     bbox        : list[int]
     image_array : np.ndarray | None
+
+# -------------------- Helper Function for Model Loading --------------------
+
+@cache
+def load_onnx_session(model_path_str: str) -> ort.InferenceSession:
+    """
+    Loads the ONNX model session. Cached to avoid reloading the model multiple times.
+    """
+    # Caching this call improves performance if multiple instances of YOLOModel with the same model path are created.
+    return ort.InferenceSession(model_path_str)
 
 # -------------------- YOLOModel Class --------------------
 
@@ -79,17 +92,14 @@ class YOLOModel:
 
         self.init_model(model_path = self.model_path)
 
-    def init_model(
-        self,
-        model_path : Path
-    ):
+    def init_model(self, model_path: Path):
         """
         Initializes the ONNX runtime session for the YOLO model.
 
         Args:
             model_path : Path to the ONNX model file
         """
-        self.ort_session  = ort.InferenceSession(str(model_path))
+        self.ort_session  = load_onnx_session(str(model_path))
         self.input_name   = self.ort_session.get_inputs()[0].name
         self.output0_name = self.ort_session.get_outputs()[0].name
         self.output1_name = self.ort_session.get_outputs()[1].name
@@ -104,10 +114,7 @@ class YOLOModel:
         """
         return self.ort_session is not None
 
-    def preprocess(
-        self,
-        image : np.ndarray
-    ) -> np.ndarray:
+    def preprocess(self, image: np.ndarray) -> np.ndarray:
         """
         Preprocesses the input image for inference.
 
@@ -118,12 +125,11 @@ class YOLOModel:
             np.ndarray: Preprocessed image as input tensor
         """
         self.image_height, self.image_width, _ = image.shape
-        image_rgb    = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        img          = cv2.resize(image_rgb, (640, 640))
-        img          = img.astype(np.float32) / 255.0
-        img          = np.transpose(img, (2, 0, 1))
-        input_tensor = np.expand_dims(img, axis=0)
-        return input_tensor
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # Combining steps into fewer lines while maintaining clarity
+        img = cv2.resize(image_rgb, (640, 640)).astype(np.float32) / 255.0
+        img = img.transpose(2, 0, 1)  # Convert HWC to CHW format
+        return np.expand_dims(img, axis = 0)  # Add batch dimension
 
     def inference(
         self,
@@ -163,23 +169,25 @@ class YOLOModel:
         Returns:
             tuple: (detections, masks)
         """
-        predictions      = np.squeeze(output0).T
-        prototypes       = np.squeeze(output1)
-        num_classes      = predictions.shape[1] - 4 - prototypes.shape[0]
+        predictions = np.squeeze(output0).T
+        prototypes  = np.squeeze(output1)
+        num_classes = predictions.shape[1] - 4 - prototypes.shape[0]
 
+        # Here we assume a single class (book). If there's more, log an error.
         if num_classes != 1:
             logger.error("The model is expected to have only one class (book).")
             return [], np.array([])
 
-        class_predictions       = np.squeeze(predictions[:, 4:4 + num_classes])
-        bounding_boxes          = predictions[:, :4]
-        prototype_coefficients  = predictions[:, 4 + num_classes:]
+        class_predictions      = np.squeeze(predictions[:, 4:4 + num_classes])
+        bounding_boxes         = predictions[:, :4]
+        prototype_coefficients = predictions[:, 4 + num_classes:]
 
+        # Non-Maximum Suppression to filter out overlapping boxes
         indices = cv2.dnn.NMSBoxes(
-            bboxes         = bounding_boxes.tolist(),
-            scores         = class_predictions.tolist(),
-            score_threshold= self.confidence_threshold,
-            nms_threshold  = self.iou_threshold
+            bboxes          = bounding_boxes.tolist(),
+            scores          = class_predictions.tolist(),
+            score_threshold = self.confidence_threshold,
+            nms_threshold   = self.iou_threshold
         )
 
         detections = []
@@ -187,18 +195,18 @@ class YOLOModel:
         X_factor   = self.image_width / 640
         Y_factor   = self.image_height / 640
 
+        # Scale bounding boxes back to original image dimensions and collect mask coefficients
         for i in indices.flatten():
-            box   = bounding_boxes[i]
-            score = class_predictions[i]
-            cx, cy, w, h = box
+            cx, cy, w, h = bounding_boxes[i]
             x1 = int((cx - w / 2) * X_factor)
             y1 = int((cy - h / 2) * Y_factor)
             x2 = int((cx + w / 2) * X_factor)
             y2 = int((cy + h / 2) * Y_factor)
 
-            detections.append([x1, y1, x2, y2, float(score), 0])
+            detections.append([x1, y1, x2, y2, float(class_predictions[i]), 0])
             masks_in.append(prototype_coefficients[i])
 
+        # Use upsample method to get the final masks
         masks = self.process_mask_upsample(
             protos   = prototypes,
             masks_in = masks_in,
@@ -225,13 +233,17 @@ class YOLOModel:
             np.ndarray: Boolean mask array [n, h, w]
         """
         c, mh, mw = protos.shape
+        # Using matrix multiplication to combine prototype masks with coefficients
         masks = sigmoid(np.dot(masks_in, protos.reshape(c, -1))).reshape(-1, mh, mw)
+
+        # Resize the masks to the original image shape
         masks = cv2.resize(
             masks.transpose(1, 2, 0),
             (self.image_width, self.image_height),
             interpolation = cv2.INTER_LINEAR
         ).transpose(2, 0, 1)
 
+        # Crop masks to each bounding box
         masks = crop_mask(masks, np.array(bboxes))
         return masks > 0.5
 
@@ -307,6 +319,7 @@ class BookSegmenter:
             logger.error("Failed to load YOLO model.")
             raise RuntimeError("YOLO model loading failed.")
 
+        # Ensure output directory exists if images are to be saved
         if self.output_images and not self.OUTPUT_IMAGE_DIR.exists():
             self.OUTPUT_IMAGE_DIR.mkdir(parents = True, exist_ok = True)
 
@@ -327,6 +340,7 @@ class BookSegmenter:
         segments, bboxes, confidences = self.segment_image(image = image)
 
         results = []
+        # Iterate over each segmented book to store results and optionally save images
         for i, (seg_img, conf) in enumerate(zip(segments, confidences)):
             seg_name = f"{image_path.stem}_{i+1:03d}{image_path.suffix}" if self.output_images else None
 
@@ -336,18 +350,16 @@ class BookSegmenter:
             result = BookSegmentResult(
                 file_name   = seg_name,
                 confidence  = conf,
-                bbox        = bboxes[i],
-                image_array = seg_img if not self.output_images else None
+                bbox        = bboxes[i]
             )
             results.append(result)
 
         results_dict = {
             "books": [
                 {
-                    "file_name"   : r.file_name,
-                    "confidence"  : r.confidence,
-                    "bbox"        : r.bbox,
-                    "image_array" : None if self.output_images else r.image_array
+                    "file_name"    : r.file_name,
+                    "confidence"   : r.confidence,
+                    "bounding_box" : r.bbox
                 }
                 for r in results
             ]
@@ -378,11 +390,13 @@ class BookSegmenter:
         bboxes      = []
         confidences = []
 
+        # For each detection, optionally apply the mask and isolate the book
         for i, box in enumerate(detections):
             x1, y1, x2, y2, score, _ = box
             segment = image[y1:y2, x1:x2]
 
             if use_masks:
+                # Mask the segment to isolate the book from the background
                 mask = masks[i][y1:y2, x1:x2]
                 segment = cv2.bitwise_and(segment, segment, mask = mask.astype(np.uint8))
 

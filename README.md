@@ -228,6 +228,32 @@ matcher.match_books()
 
 ---
 
+## Future Work and Potential Enhancements
+
+If we had more time to continue developing **Bookshelf Scanner**, we would focus on several key areas to streamline the workflow, improve scalability, and enhance robustness:
+
+**1. Headless Orchestration of the Entire Pipeline**:  
+Currently, each module (*e.g., spine segmentation, OCR preprocessing, configuration optimization*) operates somewhat independently and relies on reading and writing intermediate results to disk. In a future iteration, we would implement a fully headless orchestration layer that allows modules to pass data in-memory, avoiding unnecessary I/O overhead. This would create a more seamless, integrated pipeline where each stage can feed directly into the next without manual intervention or file-based communication.
+
+**2. Parallelizing the Configuration Optimization Process**:  
+The `ConfigOptimizer` currently evaluates each parameter set in sequence. By leveraging Python’s `multiprocessing` module, we could introduce parallel runs where multiple images or parameter sets are processed simultaneously. A manager process could distribute tasks to worker processes via a `Queue`, aggregate the results, and update the optimization model in real-time. This would greatly reduce the time needed to converge on optimal OCR parameters, especially for large libraries of images.
+
+**3. Fallback Using Google Vision API**:  
+For spine images that remain low-confidence after segmentation or OCR preprocessing, we could incorporate a fallback mechanism using the Google Vision API. Instead of applying all preprocessing techniques or repeatedly adjusting parameters, the system could selectively invoke Vision API calls for difficult cases. This pay-per-use approach would be more cost-effective than defaulting to external OCR services on every image, while still providing a reliable safety net for challenging spines.
+
+**4. Expanding Pre-Processing Steps in `TextExtractor`**:  
+While the current pipeline includes steps like shadow removal, CLAHE, and brightness/contrast adjustments, future refinements could incorporate more advanced preprocessing techniques. Potential additions include:
+
+- **Binarization Strategies**: Adaptive thresholding, Otsu’s method, or Sauvola thresholding to isolate text foregrounds more reliably.
+- **Noise Reduction & Deblurring**: Filters or neural network-based denoising and deblurring methods to tackle motion blur or grainy images.
+- **Skew and Perspective Correction**: More sophisticated geometric transforms to correct not just rotation, but also perspective distortion and curvature.
+- **Color Space Transformations**: Converting to alternative color spaces (e.g., HSV, LAB) for more robust contrast enhancements targeted at text regions.
+
+**5. Improved Optimizer Trial Management**:  
+Currently, the `ConfigOptimizer` runs a single trial of parameters per image and uses that information directly. A future iteration would allow the optimizer to run multiple parameter sets per image and automatically select the best-scoring configuration. By conducting multiple trials and comparing their performance, the pipeline could converge more reliably on optimal OCR parameters for each image, further enhancing the robustness and accuracy of the overall system.
+
+---
+
 ## Configuration
 
 - Default parameters are stored in `bookshelf_scanner/config/params.yml`.

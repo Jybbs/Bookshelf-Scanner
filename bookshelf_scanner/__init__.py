@@ -11,6 +11,7 @@ from bookshelf_scanner.core.book_segmenter   import BookSegmenter
 from bookshelf_scanner.core.text_extractor   import TextExtractor
 from bookshelf_scanner.core.config_optimizer import ConfigOptimizer
 from bookshelf_scanner.core.fuzzy_matcher    import FuzzyMatcher
+from bookshelf_scanner.core.match_approver   import MatchApprover
 
 __all__ = [
     'Utils',
@@ -18,5 +19,6 @@ __all__ = [
     'BookSegmenter',
     'TextExtractor', 
     'ConfigOptimizer',
-    'FuzzyMatcher'
+    'FuzzyMatcher',
+    'MatchApprover'
 ]
