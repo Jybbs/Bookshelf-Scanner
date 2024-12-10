@@ -72,7 +72,7 @@ def main():
 
     # Run MatchApprover
     if args.match_approver:
-        approver = MatchApprover(threshold = 0.75)
+        approver = MatchApprover()
         approver.run_interactive_mode()
 
 if __name__ == "__main__":
