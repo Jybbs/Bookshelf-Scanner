@@ -35,13 +35,16 @@ The system operates in stages:
 
    - **Parameter Space**: Each preprocessing step has parameters (*e.g., kernel sizes for shadow removal, clip limits for CLAHE, brightness offsets, rotation angles*). The combination forms a multi-dimensional parameter space.
   
-   - **Model-Based Search**: Instead of brute-forcing every parameter combination or manually guessing, the optimizer learns a surrogate model that approximates how parameters affect OCR performance.  
-   - **Uncertainty Estimation**: It estimates uncertainty in predictions by performing multiple stochastic forward passes (*e.g., with dropout*) to obtain a distribution of predicted OCR quality.  
+   - **Model-Based Search**: Instead of brute-forcing every parameter combination or manually guessing, the optimizer learns a surrogate model that approximates how parameters affect OCR performance.
+   - **Uncertainty Estimation**: It estimates uncertainty in predictions by performing multiple stochastic forward passes (*e.g., with dropout*) to obtain a distribution of predicted OCR quality.
    - **Acquisition Function (*UCB*)**: With mean and variance of predictions, it applies a selection criterion like Upper Confidence Bound (**UCB**) to pick the next parameter set to evaluate. This balances testing known good regions (*exploitation*) and exploring new areas that might yield even better results (*exploration*).
    - **Outcome**: Over multiple iterations, the optimizer converges toward a set of parameters that improve OCR results, reducing the need for manual tuning. It does not guarantee a global optimum, but it aims to find a reasonably good configuration more efficiently than naive methods.
 
 4. **Text Matching**:  
    Once text is extracted, the `FuzzyMatcher` module compares it to a database of known books. OCR may produce incomplete or slightly incorrect text. Fuzzy matching tolerates such imperfections. It can handle partial matches, character substitutions, and word order variations. This step links OCR output to actual titles, making the extracted data more meaningful and searchable.
+
+5. **Match Approval**:  
+   After fuzzy matching, the `MatchApprover` module provides an interactive interface to review and confirm matches. Instead of trusting fuzzy matches blindly, you can interactively scroll through images, view their top candidate matches, and approve or skip each one. This ensures the final data used downstream (e.g., catalogs) is accurate and trustworthy.
 
 **Logging with ModuleLogger**:  
 Throughout, a `ModuleLogger` system provides consistent, module-specific logging. Each component records operations, parameter changes, and results, aiding in debugging, monitoring performance, and maintaining reproducibility.
@@ -57,6 +60,7 @@ Throughout, a `ModuleLogger` system provides consistent, module-specific logging
 │   ├── core/
 │   │   ├── book_segmenter/   # Spine detection code
 │   │   ├── fuzzy_matcher/    # Fuzzy text matching
+│   │   ├── match_approver/   # Interactive approval of matched titles
 │   │   ├── module_logger/    # Logging utilities
 │   │   ├── config_optimizer/ # ConfigOptimizer and related code
 │   │   ├── text_extractor/   # OCR and preprocessing logic
@@ -217,6 +221,29 @@ matcher.match_books()
 
 ---
 
+```markdown
+---
+
+### Match Approval (*Interactive*)
+
+Once you have generated fuzzy match results (e.g., `matcher.json`), you can use the `MatchApprover` to review and finalize the matches. This step ensures that the final data entering your catalog or inventory system is both accurate and trusted.
+
+**Command to Launch**:
+```bash
+poetry run match-approver
+```
+
+**What This Does**:  
+
+- **Interactive UI**: Opens a simple, keyboard-driven interface displaying each image and its candidate matches side-by-side.
+
+- **Approve with a Keypress**: Press a number key to immediately approve a corresponding match—no mouse clicks required.
+- **Skip Non-Matching Images**: Press `s` if none of the listed matches fit; this ensures only correctly matched titles are recorded.
+- **View Options**: Toggle between processed and raw image views (`/` key) to confirm that preprocessing steps haven’t distorted the text.
+- **Easy Navigation**: Use `>` and `<` to move through the image list and `q` to quit once all approvals are done.
+
+---
+
 ## Additional Documentation
 
 - [Spine Segmentation](./bookshelf_scanner/core/book_segmenter/README.md)
@@ -224,6 +251,7 @@ matcher.match_books()
 - [Text Extraction (TextExtractor)](./bookshelf_scanner/core/text_extractor/README.md)
 - [Configuration Optimization (ConfigOptimizer)](./bookshelf_scanner/core/config_optimizer/README.md)
 - [Fuzzy Matching (FuzzyMatcher)](./bookshelf_scanner/core/fuzzy_matcher/README.md)
+- [Match Approval (MatchApprover)](./bookshelf_scanner/core/match_approver/README.md)
 - [Logging (ModuleLogger)](./bookshelf_scanner/core/module_logger/README.md)
 
 ---
