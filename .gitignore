@@ -1,4 +1,5 @@
 # Log files
+*.log
 .DS_Store
 
 #All pycache files
