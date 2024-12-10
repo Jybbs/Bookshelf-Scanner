@@ -382,6 +382,7 @@ class TextExtractor:
                 )
 
                 if self.output_images:
+                    self.output_image_dir.mkdir(parents = True, exist_ok = True)
                     self.save_annotated_image(display_image, image_name)
 
             except Exception as e:
@@ -493,6 +494,7 @@ class TextExtractor:
 
                 # If output_images is enabled, save the annotated image used for display
                 if self.output_images and self.output_image_dir is not None:
+                    self.output_image_dir.mkdir(parents = True, exist_ok = True)
                     self.save_annotated_image(display_image, self.state.image_name)
 
                 if self.state.check_and_reset_new_image_flag():
