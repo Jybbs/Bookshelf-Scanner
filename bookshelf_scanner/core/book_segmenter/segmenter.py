@@ -350,7 +350,8 @@ class BookSegmenter:
             result = BookSegmentResult(
                 file_name   = seg_name,
                 confidence  = conf,
-                bbox        = bboxes[i]
+                bbox        = bboxes[i],
+                image_array = seg_img
             )
             results.append(result)
 
