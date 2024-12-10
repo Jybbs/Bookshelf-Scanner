@@ -6,8 +6,17 @@ This pipeline addresses various challenges: the complexity of detecting books in
 
 ---
 
+## Team Members
+Dev Akre akre.de@northeastern.edu  
+Dan O'Brien obrien.dan@northeastern.edu  
+James Parkington parkington.j@northeastern.edu  
+Sean Sullivan sullivan.sean2@northeastern.edu  
+
+
 ## Overview of the Pipeline
 
+Top Level Visualization Viewable on [Canva](https://www.canva.com/design/DAGY6WFCmxo/Pbk_01N7bK97Nqp2xKTvNA/edit?utm_content=DAGY6WFCmxo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)  
+  
 The system operates in stages:
 
 1. **Spine Segmentation**:  
