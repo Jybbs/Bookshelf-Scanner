@@ -6,7 +6,7 @@ from bookshelf_scanner import MatchApprover
 
 def main():
     
-    approver = MatchApprover(threshold = 0.75)
+    approver = MatchApprover(threshold = 0.5)
     approver.run_interactive_mode()
 
 if __name__ == "__main__":

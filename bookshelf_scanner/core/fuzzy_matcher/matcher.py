@@ -67,15 +67,24 @@ class FuzzyMatcher:
     def load_book_records(self):
         """
         Loads book records from the database into memory and prepares candidate strings for matching.
+        Deduplicates records by their normalized (title, author) pairs.
         """
         conn    = duckdb.connect(str(self.reference_db_path))
         records = conn.execute("SELECT title, author FROM books").fetchall()
         conn.close()
 
-        self.book_records = [BookRecord(title = title, author = author) for title, author in records]
-        logger.info(f"Loaded {len(self.book_records)} book records from database")
+        # Deduplicate by using a dictionary keyed by normalized (title, author) pairs
+        unique_records = {
+            (title.strip().lower(), author.strip().lower()): (title.strip(), author.strip())
+            for title, author in records
+        }
 
-        # For each book record, create combinations of title and author
+        self.book_records = [
+            BookRecord(title = title, author = author)
+            for (_, _), (title, author) in unique_records.items()
+        ]
+        logger.info(f"Loaded {len(self.book_records)} unique book records from database")
+
         self.candidate_strings = [
             self.preprocess_text(f"{record.title} {record.author}")
             for record in self.book_records

@@ -13,12 +13,12 @@
                 "score": 1.0
             },
             {
-                "title": "Anne Frank",
+                "title": "The Diary of a Young Girl",
                 "author": "Anne Frank",
-                "score": 1.0
+                "score": 0.8571428571428571
             },
             {
-                "title": "The Diary of a Young Girl",
+                "title": "Anne Frank: the Diary of a Young Girl",
                 "author": "Anne Frank",
                 "score": 0.8571428571428571
             }
@@ -160,8 +160,8 @@
                 "score": 0.9333333333333332
             },
             {
-                "title": "Johnny Tremain",
-                "author": "Esther Forbes",
+                "title": "Reading Johnny Tremain",
+                "author": "Neil Heims",
                 "score": 0.9333333333333332
             }
         ]
@@ -179,12 +179,12 @@
                 "score": 1.0
             },
             {
-                "title": "Soldier's Heart",
+                "title": "Liar, Liar",
                 "author": "Gary Paulsen",
-                "score": 1.0
+                "score": 0.8275862068965517
             },
             {
-                "title": "Liar, Liar",
+                "title": "Vote",
                 "author": "Gary Paulsen",
                 "score": 0.8275862068965517
             }
@@ -283,9 +283,9 @@
                 "score": 0.6666666666666665
             },
             {
-                "title": "Space",
-                "author": "Sarah Powell",
-                "score": 0.6666666666666665
+                "title": "Life Inside My Mind: 31 Authors Share Their Personal Struggles",
+                "author": "Maureen Johnson, Robison Wells, Lauren Oliver, Jennifer L. Armentrout, Amy Reed, Aprilynne Pike, Rachel M. Wilson, Dan Wells, Amber Benson, E. Kristin Anderson, Sarah Fine, Kelly Fiore-Stultz, Ellen Hopkins, Scott Neumyer, Crissa-Jean Chappell, Francesca Lia Block, Tara Kelly, Kimberly McCreight, Megan Kelley Hall, Hannah Moskowitz, Karen Mahoney, Tom Pollock, Cyn Balog, Melissa Marr, Wendy Toliver, Cindy L. Rodriguez, Candace Ganger, Sara Zarr, Cynthia Hand, Francisco X. Stork, Jessica Burkhart",
+                "score": 0.6285714285714286
             }
         ]
     },
@@ -360,14 +360,14 @@
                 "score": 0.5217391304347826
             },
             {
-                "title": "The Lyon's Roar",
-                "author": "M. L. Stainer",
-                "score": 0.5217391304347826
-            },
-            {
                 "title": "Don't You Know There's a War On?",
                 "author": "Avi",
                 "score": 0.5194805194805194
+            },
+            {
+                "title": "Demon Dentist",
+                "author": "David Walliams",
+                "score": 0.5142857142857143
             }
         ]
     },
@@ -395,9 +395,9 @@
                 "score": 0.6521739130434783
             },
             {
-                "title": "The Dark Is Rising",
-                "author": "Susan Cooper",
-                "score": 0.6521739130434783
+                "title": "The Champ",
+                "author": "Tonya Bolden",
+                "score": 0.625
             }
         ]
     },
@@ -421,9 +421,9 @@
                 "score": 0.68
             },
             {
-                "title": "Jackie Robinson",
-                "author": "Herb Dunn",
-                "score": 0.68
+                "title": "Vampire Crush",
+                "author": "A. M. Robinson",
+                "score": 0.6666666666666665
             }
         ]
     },
@@ -444,9 +444,9 @@
                 "score": 0.7692307692307692
             },
             {
-                "title": "Brave the Betrayal",
-                "author": "Katherine Applegate",
-                "score": 0.7692307692307692
+                "title": "The Threat",
+                "author": "K. A. Applegate",
+                "score": 0.7083333333333333
             }
         ]
     },
@@ -565,8 +565,8 @@
                 "score": 0.5517241379310345
             },
             {
-                "title": "Forever Princess",
-                "author": "Meg Cabot",
+                "title": "The CAFE Book",
+                "author": "Gail Boushey",
                 "score": 0.5517241379310345
             }
         ]
@@ -615,9 +615,9 @@
                 "score": 0.5666666666666667
             },
             {
-                "title": "Nine Days a Queen",
+                "title": "Amelia's War",
                 "author": "Ann Rinaldi",
-                "score": 0.5666666666666667
+                "score": 0.5454545454545454
             }
         ]
     },
@@ -664,9 +664,9 @@
                 "score": 0.6666666666666665
             },
             {
-                "title": "William Penn",
-                "author": "Janey Levy",
-                "score": 0.6666666666666665
+                "title": "Winter Danger",
+                "author": "William O. Steele",
+                "score": 0.6551724137931035
             }
         ]
     },
@@ -809,9 +809,9 @@
                 "score": 0.6938775510204082
             },
             {
-                "title": "William Penn",
-                "author": "Janey Levy",
-                "score": 0.6938775510204082
+                "title": "Winter Danger",
+                "author": "William O. Steele",
+                "score": 0.6785714285714286
             }
         ]
     },
@@ -833,9 +833,9 @@
                 "score": 0.65625
             },
             {
-                "title": "The Education of Mary",
-                "author": "Ann Rinaldi",
-                "score": 0.65625
+                "title": "The Names upon the Harp",
+                "author": "Marie Heaney",
+                "score": 0.6349206349206349
             }
         ]
     },
@@ -859,9 +859,9 @@
                 "score": 0.5490196078431372
             },
             {
-                "title": "The Moon Is Down",
-                "author": "John Steinbeck",
-                "score": 0.5490196078431372
+                "title": "Stitch in Time",
+                "author": "John Gould",
+                "score": 0.5333333333333333
             }
         ]
     },
@@ -1037,9 +1037,9 @@
                 "score": 0.7213114754098361
             },
             {
-                "title": "Nine Days a Queen",
+                "title": "Or Give Me Death",
                 "author": "Ann Rinaldi",
-                "score": 0.7213114754098361
+                "score": 0.7
             }
         ]
     },
@@ -1136,8 +1136,8 @@
                 "score": 0.736842105263158
             },
             {
-                "title": "Johnny Tremain",
-                "author": "Esther Forbes",
+                "title": "Reading Johnny Tremain",
+                "author": "Neil Heims",
                 "score": 0.736842105263158
             }
         ]
@@ -1160,9 +1160,9 @@
                 "score": 0.826086956521739
             },
             {
-                "title": "Brave the Betrayal",
-                "author": "Katherine Applegate",
-                "score": 0.826086956521739
+                "title": "The Change",
+                "author": "K.A. Applegate",
+                "score": 0.7450980392156863
             }
         ]
     },
@@ -1255,9 +1255,9 @@
                 "score": 0.5714285714285715
             },
             {
-                "title": "Code Girls",
-                "author": "Liza Mundy",
-                "score": 0.5714285714285715
+                "title": "Ecuador",
+                "author": "Erin Foley",
+                "score": 0.5625
             }
         ]
     },
@@ -1448,9 +1448,9 @@
                 "score": 0.5098039215686274
             },
             {
-                "title": "Cat",
-                "author": "Juliet Clutton-Brock",
-                "score": 0.5098039215686274
+                "title": "The Fireborne Blade (The Fireborne Blade, 1)",
+                "author": "Bond, Charlotte",
+                "score": 0.5079365079365079
             }
         ]
     },
@@ -1564,14 +1564,14 @@
                 "score": 1.0
             },
             {
-                "title": "March Toward the Thunder",
+                "title": "March Towards the Thunder",
                 "author": "Joseph Bruchac",
-                "score": 1.0
+                "score": 0.9873417721518988
             },
             {
-                "title": "March Toward the Thunder",
+                "title": "Wabi",
                 "author": "Joseph Bruchac",
-                "score": 1.0
+                "score": 0.8484848484848484
             }
         ]
     },
@@ -1638,9 +1638,9 @@
                 "score": 0.6363636363636364
             },
             {
-                "title": "Space",
-                "author": "Sarah Powell",
-                "score": 0.6363636363636364
+                "title": "ENIAC",
+                "author": "Scott",
+                "score": 0.625
             }
         ]
     },
@@ -1661,9 +1661,9 @@
                 "score": 0.5217391304347826
             },
             {
-                "title": "Ash",
-                "author": "Malinda Lo",
-                "score": 0.5217391304347826
+                "title": "Snow",
+                "author": "Uri Shulevitz",
+                "score": 0.5185185185185186
             }
         ]
     },
@@ -1776,12 +1776,12 @@
                 "score": 1.0
             },
             {
-                "title": "Anne Frank",
+                "title": "The Diary of a Young Girl",
                 "author": "Anne Frank",
-                "score": 1.0
+                "score": 0.8857142857142857
             },
             {
-                "title": "The Diary of a Young Girl",
+                "title": "Anne Frank: the Diary of a Young Girl",
                 "author": "Anne Frank",
                 "score": 0.8857142857142857
             }
@@ -2091,14 +2091,14 @@
                 "score": 0.8
             },
             {
-                "title": "Out of the Dust",
+                "title": "Just Juice",
                 "author": "Karen Hesse",
-                "score": 0.8
+                "score": 0.6046511627906976
             },
             {
-                "title": "Out of the Dust",
-                "author": "Karen Hesse",
-                "score": 0.8
+                "title": "Shout",
+                "author": "Laurie Halse Anderson",
+                "score": 0.5833333333333334
             }
         ]
     },
@@ -2143,9 +2143,9 @@
                 "score": 0.75
             },
             {
-                "title": "The Blue Door",
+                "title": "Wolf by the Ears",
                 "author": "Ann Rinaldi",
-                "score": 0.75
+                "score": 0.7272727272727272
             }
         ]
     },
@@ -2209,12 +2209,12 @@
                 "score": 1.0
             },
             {
-                "title": "Soldier's Heart",
+                "title": "Liar, Liar",
                 "author": "Gary Paulsen",
-                "score": 1.0
+                "score": 0.8275862068965517
             },
             {
-                "title": "Liar, Liar",
+                "title": "Vote",
                 "author": "Gary Paulsen",
                 "score": 0.8275862068965517
             }
@@ -2261,9 +2261,9 @@
                 "score": 0.5
             },
             {
-                "title": "Day",
-                "author": "Elie Wiesel",
-                "score": 0.5
+                "title": "Feathered",
+                "author": "Deborah Kerbel",
+                "score": 0.48484848484848486
             }
         ]
     },
@@ -2351,13 +2351,13 @@
             },
             {
                 "title": "Farewell to Manzanar",
-                "author": "Jeanne Houston",
-                "score": 0.7666666666666667
-            },
-            {
-                "title": "Farewell to Manzanar",
                 "author": "Jeanne Wakatsuki Houston",
                 "score": 0.6571428571428573
+            },
+            {
+                "title": "Mystery at Manzanar",
+                "author": "Eric Fein",
+                "score": 0.5925925925925926
             }
         ]
     },
@@ -2402,9 +2402,9 @@
                 "score": 0.6222222222222222
             },
             {
-                "title": "The Titanic",
-                "author": "Michael Burgan",
-                "score": 0.6222222222222222
+                "title": "The Switch",
+                "author": "Roland Smith",
+                "score": 0.6190476190476191
             }
         ]
     },
@@ -2421,14 +2421,14 @@
                 "score": 0.5833333333333334
             },
             {
-                "title": "The Borrowers Avenged",
-                "author": "Mary Norton",
-                "score": 0.5833333333333334
-            },
-            {
                 "title": "The Borrowers Afield",
                 "author": "Mary Norton",
                 "score": 0.5633802816901409
+            },
+            {
+                "title": "A Book About Whales",
+                "author": "Andrea Antinori",
+                "score": 0.5405405405405406
             }
         ]
     },
@@ -2468,14 +2468,14 @@
                 "score": 0.9142857142857143
             },
             {
-                "title": "Kizzy Ann Stamps",
-                "author": "Jeri Watts",
-                "score": 0.9142857142857143
-            },
-            {
                 "title": "Samus Aran",
                 "author": "Kenny Abdo",
                 "score": 0.6
+            },
+            {
+                "title": "Tampa Bay Rays",
+                "author": "Luke Hanlon",
+                "score": 0.5777777777777778
             }
         ]
     },
@@ -2593,13 +2593,13 @@
                 "score": 0.48484848484848486
             },
             {
-                "title": "Triss",
-                "author": "Brian Jacques",
-                "score": 0.48484848484848486
-            },
-            {
                 "title": "Queerstory",
                 "author": "null",
+                "score": 0.48275862068965514
+            },
+            {
+                "title": "1900-20",
+                "author": "Sue Mee",
                 "score": 0.48275862068965514
             }
         ]
@@ -2668,9 +2668,9 @@
                 "score": 0.9047619047619048
             },
             {
-                "title": "The Cay",
+                "title": "Timothy of the Cay",
                 "author": "Theodore Taylor",
-                "score": 0.9047619047619048
+                "score": 0.8837209302325582
             }
         ]
     },
@@ -2808,9 +2808,9 @@
                 "score": 0.48
             },
             {
-                "title": "Page",
-                "author": "Tamora Pierce",
-                "score": 0.48
+                "title": "Fire",
+                "author": "Tom Mason",
+                "score": 0.4761904761904762
             }
         ]
     },
@@ -3003,9 +3003,9 @@
                 "score": 0.653061224489796
             },
             {
-                "title": "The Chinese",
-                "author": "Lorien Kite",
-                "score": 0.653061224489796
+                "title": "The Disease Fighters",
+                "author": "Nathan Aaseng",
+                "score": 0.6333333333333333
             }
         ]
     },
@@ -3096,9 +3096,9 @@
                 "score": 0.6274509803921569
             },
             {
-                "title": "Med Head",
-                "author": "James Patterson",
-                "score": 0.6274509803921569
+                "title": "Top Dog",
+                "author": "Brad Anderson",
+                "score": 0.625
             }
         ]
     },
@@ -3217,13 +3217,13 @@
             },
             {
                 "title": "Farewell to Manzanar",
-                "author": "Jeanne Houston",
-                "score": 0.6440677966101694
-            },
-            {
-                "title": "Farewell to Manzanar",
                 "author": "Jeanne Wakatsuki Houston",
                 "score": 0.5797101449275363
+            },
+            {
+                "title": "Long Claws",
+                "author": "James A. Houston",
+                "score": 0.56
             }
         ]
     },
@@ -3268,9 +3268,9 @@
                 "score": 0.6285714285714286
             },
             {
-                "title": "Soldier",
-                "author": "Simon Adams",
-                "score": 0.6285714285714286
+                "title": "A Soldier and A Liar",
+                "author": "Caitlin Lochner",
+                "score": 0.6086956521739131
             }
         ]
     },
@@ -3337,14 +3337,14 @@
                 "score": 0.875
             },
             {
-                "title": "Indian Captive",
-                "author": "Lois Lenski",
-                "score": 0.875
+                "title": "Captured",
+                "author": "Linda Barr",
+                "score": 0.5945945945945946
             },
             {
-                "title": "Indian Captive",
-                "author": "Lois Lenski",
-                "score": 0.875
+                "title": "Captive!",
+                "author": "Gary Paulsen",
+                "score": 0.5789473684210527
             }
         ]
     }

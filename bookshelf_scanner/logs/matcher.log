@@ -1,0 +1,974 @@
+2024-12-10 04:35:20,935 - INFO - Loaded 59432 unique book records from database
+2024-12-10 04:35:20,966 - INFO - Processing 139 images
+2024-12-10 04:35:20,967 - INFO - 
+Processing image 1/139: 0.jpg
+2024-12-10 04:35:20,967 - INFO - Combined 4 text segments: ['OFAVOUNG GIRI', 'DIARV', 'THE', 'ANNE FRANK:']
+2024-12-10 04:35:20,967 - INFO - Matching preprocessed string: 'ofavoung giri diarv the anne frank'
+2024-12-10 04:35:21,084 - INFO -   Match found: 'Anne Frank' by Anne Frank (Score: 1.000)
+2024-12-10 04:35:21,084 - INFO -   Match found: 'The Diary of a Young Girl' by Anne Frank (Score: 0.857)
+2024-12-10 04:35:21,084 - INFO -   Match found: 'Anne Frank: the Diary of a Young Girl' by Anne Frank (Score: 0.857)
+2024-12-10 04:35:21,084 - INFO - 
+Processing image 2/139: 1.jpg
+2024-12-10 04:35:21,084 - INFO - Combined 1 text segments: ['THE FORESHADOVING']
+2024-12-10 04:35:21,084 - INFO - Matching preprocessed string: 'the foreshadoving'
+2024-12-10 04:35:21,169 - INFO -   Match found: 'The Foreshadowing' by Marcus Sedgwick (Score: 0.640)
+2024-12-10 04:35:21,170 - INFO -   Match found: 'The Forested Taiga' by Philip (Score: 0.619)
+2024-12-10 04:35:21,170 - INFO -   Match found: 'The Lie Tree' by Frances Hardinge (Score: 0.609)
+2024-12-10 04:35:21,170 - INFO - 
+Processing image 3/139: 10.jpg
+2024-12-10 04:35:21,170 - INFO - Combined 2 text segments: ['Chinese Cinderella', '3']
+2024-12-10 04:35:21,170 - INFO - Matching preprocessed string: 'chinese cinderella 3'
+2024-12-10 04:35:21,264 - INFO -   Match found: 'Chinese Cinderella' by Adeline Yen Mah (Score: 0.947)
+2024-12-10 04:35:21,264 - INFO -   Match found: 'Chinese Cinderella and the Secret Dragon Society' by Adeline Yen Mah (Score: 0.947)
+2024-12-10 04:35:21,264 - INFO -   Match found: 'Cinderella' by Charles Perrault (Score: 0.681)
+2024-12-10 04:35:21,264 - INFO - 
+Processing image 4/139: 11.jpg
+2024-12-10 04:35:21,264 - INFO - Combined 5 text segments: ['ANN RINALD [', 'Th', 'Quilt', '{', 'Harcourt']
+2024-12-10 04:35:21,264 - INFO - Matching preprocessed string: 'ann rinald   th quilt   harcourt'
+2024-12-10 04:35:21,366 - INFO -   Match found: 'The Coffin Quilt' by Ann Rinaldi (Score: 0.786)
+2024-12-10 04:35:21,366 - INFO -   Match found: 'A Break with Charity' by Ann Rinaldi (Score: 0.667)
+2024-12-10 04:35:21,366 - INFO -   Match found: 'The Color of Fire' by Ann Rinaldi (Score: 0.667)
+2024-12-10 04:35:21,366 - INFO - 
+Processing image 5/139: 12.jpg
+2024-12-10 04:35:21,366 - INFO - Combined 3 text segments: ['Emperor', 'Betsy', 'Rabin']
+2024-12-10 04:35:21,366 - INFO - Matching preprocessed string: 'emperor betsy rabin'
+2024-12-10 04:35:21,459 - INFO -   Match found: 'Betsy and the Emperor' by Staton Rabin,Larry Rostant (Score: 1.000)
+2024-12-10 04:35:21,460 - INFO -   Match found: 'Jupiter' by Betsy Rathburn (Score: 0.683)
+2024-12-10 04:35:21,460 - INFO -   Match found: 'Earth' by Betsy Rathburn (Score: 0.667)
+2024-12-10 04:35:21,460 - INFO - 
+Processing image 6/139: 13.jpg
+2024-12-10 04:35:21,460 - INFO - Combined 2 text segments: ['Wolf by the Ears', 'Rinaldi']
+2024-12-10 04:35:21,460 - INFO - Matching preprocessed string: 'wolf by the ears rinaldi'
+2024-12-10 04:35:21,562 - INFO -   Match found: 'Wolf by the Ears' by Ann Rinaldi (Score: 1.000)
+2024-12-10 04:35:21,562 - INFO -   Match found: 'The Pinballs' by Betsy Byars (Score: 0.667)
+2024-12-10 04:35:21,562 - INFO -   Match found: 'The Fifth Of March' by Ann Rinaldi (Score: 0.667)
+2024-12-10 04:35:21,562 - INFO - 
+Processing image 7/139: 14.jpg
+2024-12-10 04:35:21,562 - INFO - Combined 3 text segments: ['JOHNNY TREMAIN', '1', '1']
+2024-12-10 04:35:21,562 - INFO - Matching preprocessed string: 'johnny tremain 1 1'
+2024-12-10 04:35:21,654 - INFO -   Match found: 'Johnny Tremain' by Esther Hoskins Forbes (Score: 0.933)
+2024-12-10 04:35:21,654 - INFO -   Match found: 'Johnny Tremain' by Esther Forbes (Score: 0.933)
+2024-12-10 04:35:21,654 - INFO -   Match found: 'Reading Johnny Tremain' by Neil Heims (Score: 0.933)
+2024-12-10 04:35:21,654 - INFO - 
+Processing image 8/139: 15.jpg
+2024-12-10 04:35:21,654 - INFO - Combined 3 text segments: ['GARY PAULSEN', 'SOLDIER S HEART', '0']
+2024-12-10 04:35:21,654 - INFO - Matching preprocessed string: 'gary paulsen soldier s heart 0'
+2024-12-10 04:35:21,762 - INFO -   Match found: 'Soldier's Heart' by Gary Paulsen (Score: 1.000)
+2024-12-10 04:35:21,762 - INFO -   Match found: 'Liar, Liar' by Gary Paulsen (Score: 0.828)
+2024-12-10 04:35:21,762 - INFO -   Match found: 'Vote' by Gary Paulsen (Score: 0.828)
+2024-12-10 04:35:21,762 - INFO - 
+Processing image 9/139: 16.jpg
+2024-12-10 04:35:21,762 - INFO - Combined 4 text segments: ['Confessions gf" Chartolle', '7', 'Fvi', 'Thc STrue']
+2024-12-10 04:35:21,762 - INFO - Matching preprocessed string: 'confessions gf  chartolle 7 fvi thc strue'
+2024-12-10 04:35:21,862 - INFO -   Match found: 'The True Confessions of Charlotte Doyle' by Avi (Score: 0.699)
+2024-12-10 04:35:21,862 - INFO -   Match found: 'Confessions' by Kate Brian (Score: 0.667)
+2024-12-10 04:35:21,862 - INFO -   Match found: 'The Ocean of Story' by Caroline Ness (Score: 0.611)
+2024-12-10 04:35:21,862 - INFO - 
+Processing image 10/139: 17.jpg
+2024-12-10 04:35:21,862 - INFO - Combined 5 text segments: ['SOLDIER', 'GERMAN', 'SuMMER &', '1', 'J4]']
+2024-12-10 04:35:21,862 - INFO - Matching preprocessed string: 'soldier german summer   1 j4'
+2024-12-10 04:35:21,958 - INFO -   Match found: 'Summer of My German Soldier' by Bette Greene (Score: 0.894)
+2024-12-10 04:35:21,958 - INFO -   Match found: 'Armageddon Summer' by Jane Yolen (Score: 0.630)
+2024-12-10 04:35:21,958 - INFO -   Match found: 'Soldier Boy' by Brian Burks (Score: 0.612)
+2024-12-10 04:35:21,958 - INFO - 
+Processing image 11/139: 18.jpg
+2024-12-10 04:35:21,958 - INFO - Combined 3 text segments: ['DANIEL HALF HUMAN', 'CHOTJEWITZ', '3']
+2024-12-10 04:35:21,958 - INFO - Matching preprocessed string: 'daniel half human chotjewitz 3'
+2024-12-10 04:35:22,058 - INFO -   Match found: 'Daniel Half Human' by David Chotjewitz, Doris Orgel (Score: 0.966)
+2024-12-10 04:35:22,058 - INFO -   Match found: 'Daniel Half Human And The Good Nazi' by David Chotjewitz (Score: 0.966)
+2024-12-10 04:35:22,058 - INFO -   Match found: 'Croatia' by Michael A. Schuman (Score: 0.582)
+2024-12-10 04:35:22,058 - INFO - 
+Processing image 12/139: 19.jpg
+2024-12-10 04:35:22,058 - INFO - Combined 3 text segments: ['SARAH BISHOP', '=', 'SCOTT ODELL']
+2024-12-10 04:35:22,058 - INFO - Matching preprocessed string: 'sarah bishop   scott odell'
+2024-12-10 04:35:22,150 - INFO -   Match found: 'Sarah Bishop' by Scott O'Dell (Score: 0.939)
+2024-12-10 04:35:22,150 - INFO -   Match found: 'Space' by Sarah Powell (Score: 0.667)
+2024-12-10 04:35:22,150 - INFO -   Match found: 'Life Inside My Mind: 31 Authors Share Their Personal Struggles' by Maureen Johnson, Robison Wells, Lauren Oliver, Jennifer L. Armentrout, Amy Reed, Aprilynne Pike, Rachel M. Wilson, Dan Wells, Amber Benson, E. Kristin Anderson, Sarah Fine, Kelly Fiore-Stultz, Ellen Hopkins, Scott Neumyer, Crissa-Jean Chappell, Francesca Lia Block, Tara Kelly, Kimberly McCreight, Megan Kelley Hall, Hannah Moskowitz, Karen Mahoney, Tom Pollock, Cyn Balog, Melissa Marr, Wendy Toliver, Cindy L. Rodriguez, Candace Ganger, Sara Zarr, Cynthia Hand, Francisco X. Stork, Jessica Burkhart (Score: 0.629)
+2024-12-10 04:35:22,150 - INFO - 
+Processing image 13/139: 2.jpg
+2024-12-10 04:35:22,150 - INFO - Combined 5 text segments: ['3', 'secret of', 'ANN RINALDI', '1', '1']
+2024-12-10 04:35:22,150 - INFO - Matching preprocessed string: '3 secret of ann rinaldi 1 1'
+2024-12-10 04:35:22,258 - INFO -   Match found: 'The Secret of Sarah Revere' by Ann Rinaldi (Score: 0.913)
+2024-12-10 04:35:22,259 - INFO -   Match found: 'The Journal of Jasper Jonathan Pierce' by Ann Rinaldi (Score: 0.718)
+2024-12-10 04:35:22,259 - INFO -   Match found: 'The Fifth Of March' by Ann Rinaldi (Score: 0.718)
+2024-12-10 04:35:22,259 - INFO - 
+Processing image 14/139: 20.jpg
+2024-12-10 04:35:22,259 - INFO - Combined 6 text segments: ['spcak', 'Civil War', 'Gyvys', '"', '8', '~BRENAMAN']
+2024-12-10 04:35:22,259 - INFO - Matching preprocessed string: 'spcak civil war gyvys   8  brenaman'
+2024-12-10 04:35:22,359 - INFO -   Match found: 'Civil War' by null (Score: 0.783)
+2024-12-10 04:35:22,359 - INFO -   Match found: 'Evvy's Civil War' by Miriam Brenaman (Score: 0.720)
+2024-12-10 04:35:22,359 - INFO -   Match found: 'Civil War' by Mark Millar (Score: 0.600)
+2024-12-10 04:35:22,359 - INFO - 
+Processing image 15/139: 21.jpg
+2024-12-10 04:35:22,359 - INFO - Combined 8 text segments: ['DJMs Zimoxsoh', '1', 'Lyon', 'T', 'RAINe', 'D', 'WARM', 'ava 4d']
+2024-12-10 04:35:22,359 - INFO - Matching preprocessed string: 'djms zimoxsoh 1 lyon t raine d warm ava 4d'
+2024-12-10 04:35:22,473 - INFO -   Match found: 'The Lyon's Roar' by M. L. Stainer (Score: 0.522)
+2024-12-10 04:35:22,474 - INFO -   Match found: 'Don't You Know There's a War On?' by Avi (Score: 0.519)
+2024-12-10 04:35:22,474 - INFO -   Match found: 'Demon Dentist' by David Walliams (Score: 0.514)
+2024-12-10 04:35:22,474 - INFO - 
+Processing image 16/139: 22.jpg
+2024-12-10 04:35:22,474 - INFO - Combined 9 text segments: ['thE DAWN OF JIM CROW', 'QKV NOIL', 'RECONSTRUCT', 'RISING', 'SKYL', 'DARK', 'Bolden', 'GATES', 'Focus']
+2024-12-10 04:35:22,474 - INFO - Matching preprocessed string: 'the dawn of jim crow qkv noil reconstruct rising skyl dark bolden gates focus'
+2024-12-10 04:35:22,613 - INFO -   Match found: 'Dark Sky Rising' by Henry Louis Gates, Jr.,Tonya Bolden (Score: 0.658)
+2024-12-10 04:35:22,613 - INFO -   Match found: 'The Dark Is Rising' by Susan Cooper (Score: 0.652)
+2024-12-10 04:35:22,613 - INFO -   Match found: 'The Champ' by Tonya Bolden (Score: 0.625)
+2024-12-10 04:35:22,613 - INFO - 
+Processing image 17/139: 23.jpg
+2024-12-10 04:35:22,613 - INFO - Combined 5 text segments: ['Jali)', 'DREAM', '3', 'che', 'ROBINSON']
+2024-12-10 04:35:22,613 - INFO - Matching preprocessed string: 'jali  dream 3 che robinson'
+2024-12-10 04:35:22,714 - INFO -   Match found: 'Child of the Dream' by Sharon Robinson (Score: 0.718)
+2024-12-10 04:35:22,714 - INFO -   Match found: 'Jackie Robinson' by Herb Dunn (Score: 0.680)
+2024-12-10 04:35:22,714 - INFO -   Match found: 'Vampire Crush' by A. M. Robinson (Score: 0.667)
+2024-12-10 04:35:22,714 - INFO - 
+Processing image 18/139: 24.jpg
+2024-12-10 04:35:22,714 - INFO - Combined 2 text segments: ['HOME % Ihe BRAVE', 'APPLEGATE']
+2024-12-10 04:35:22,714 - INFO - Matching preprocessed string: 'home   ihe brave applegate'
+2024-12-10 04:35:22,808 - INFO -   Match found: 'Home of the Brave' by Katherine Applegate (Score: 0.909)
+2024-12-10 04:35:22,808 - INFO -   Match found: 'Brave the Betrayal' by Katherine Applegate (Score: 0.769)
+2024-12-10 04:35:22,808 - INFO -   Match found: 'The Threat' by K. A. Applegate (Score: 0.708)
+2024-12-10 04:35:22,808 - INFO - 
+Processing image 19/139: 25.jpg
+2024-12-10 04:35:22,808 - INFO - Combined 2 text segments: ['ANGELS', 'WITH THE MIGHT OF']
+2024-12-10 04:35:22,808 - INFO - Matching preprocessed string: 'angels with the might of'
+2024-12-10 04:35:22,913 - INFO -   Match found: 'With the Might of Angels' by Andrea Davis Pinkney (Score: 1.000)
+2024-12-10 04:35:22,913 - INFO -   Match found: 'Angels, Prophets, Rabbis & Kings from the Stories of the Jewish People' by Još Patterson (Score: 0.703)
+2024-12-10 04:35:22,913 - INFO -   Match found: 'The Life of Plants' by Angels Julivert (Score: 0.703)
+2024-12-10 04:35:22,913 - INFO - 
+Processing image 20/139: 26.jpg
+2024-12-10 04:35:22,913 - INFO - Combined 3 text segments: ['Manzanar', 'Faicwct', 'Houston']
+2024-12-10 04:35:22,913 - INFO - Matching preprocessed string: 'manzanar faicwct houston'
+2024-12-10 04:35:22,996 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Wakatsuki Houston, James D. Houston (Score: 0.800)
+2024-12-10 04:35:22,996 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Wakatsuki Houston (Score: 0.800)
+2024-12-10 04:35:22,996 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Houston (Score: 0.800)
+2024-12-10 04:35:22,996 - INFO - 
+Processing image 21/139: 27.jpg
+2024-12-10 04:35:22,996 - INFO - Combined 5 text segments: ['3', '3', '2', '1', '1']
+2024-12-10 04:35:22,996 - INFO - Matching preprocessed string: '3 3 2 1 1'
+2024-12-10 04:35:23,082 - INFO -   Match found: 'Dork Diaries 3 1/2' by Rachel Renée Russell (Score: 1.000)
+2024-12-10 04:35:23,082 - INFO -   Match found: 'Fullmetal Alchemist (3-in-1 Edition), Vol. 2' by Hiromu Arakawa (Score: 1.000)
+2024-12-10 04:35:23,082 - INFO -   Match found: '1-2-3 Calligraphy!' by Eleanor Winters (Score: 1.000)
+2024-12-10 04:35:23,082 - INFO - 
+Processing image 22/139: 28.jpg
+2024-12-10 04:35:23,082 - INFO - Combined 3 text segments: ['1', '8', 'Lit CHAT']
+2024-12-10 04:35:23,082 - INFO - Matching preprocessed string: '1 8 lit chat'
+2024-12-10 04:35:23,167 - INFO -   Match found: 'The Challenger 1986' by Liz (Score: 0.571)
+2024-12-10 04:35:23,168 - INFO -   Match found: 'Flight 19' by Chris Bowman (Score: 0.529)
+2024-12-10 04:35:23,168 - INFO -   Match found: 'Chute!' by C. B. Colby (Score: 0.519)
+2024-12-10 04:35:23,168 - INFO - 
+Processing image 23/139: 29.jpg
+2024-12-10 04:35:23,168 - INFO - Combined 3 text segments: ['ABOOK', 'borrowved phrases', 'Ihe game']
+2024-12-10 04:35:23,168 - INFO - Matching preprocessed string: 'abook borrowved phrases ihe game'
+2024-12-10 04:35:23,262 - INFO -   Match found: 'The Maine Lobster Book' by Mike Brown (Score: 0.585)
+2024-12-10 04:35:23,262 - INFO -   Match found: 'Forever Princess' by Meg Cabot (Score: 0.552)
+2024-12-10 04:35:23,262 - INFO -   Match found: 'The CAFE Book' by Gail Boushey (Score: 0.552)
+2024-12-10 04:35:23,262 - INFO - 
+Processing image 24/139: 3.jpg
+2024-12-10 04:35:23,262 - INFO - Combined 6 text segments: ['Hang', 'Thousand', 'ANN', 'RINAL DI', '5', 'Trees with Ribbons']
+2024-12-10 04:35:23,262 - INFO - Matching preprocessed string: 'hang thousand ann rinal di 5 trees with ribbons'
+2024-12-10 04:35:23,377 - INFO -   Match found: 'Hang a Thousand Trees with Ribbons' by Ann Rinaldi (Score: 0.925)
+2024-12-10 04:35:23,377 - INFO -   Match found: 'Over a Thousand Hills I Walk with You' by Hanna Jansen (Score: 0.598)
+2024-12-10 04:35:23,377 - INFO -   Match found: 'Soaring with the Wind' by Gail Gibbons (Score: 0.593)
+2024-12-10 04:35:23,377 - INFO - 
+Processing image 25/139: 4.jpg
+2024-12-10 04:35:23,377 - INFO - Combined 2 text segments: ['Miue Eyes UCave 8eev', 'NN RINALDI']
+2024-12-10 04:35:23,378 - INFO - Matching preprocessed string: 'miue eyes ucave 8eev nn rinaldi'
+2024-12-10 04:35:23,476 - INFO -   Match found: 'Mine Eyes Have Seen' by Ann Rinaldi (Score: 0.645)
+2024-12-10 04:35:23,476 - INFO -   Match found: 'Nine Days a Queen' by Ann Rinaldi (Score: 0.567)
+2024-12-10 04:35:23,476 - INFO -   Match found: 'Amelia's War' by Ann Rinaldi (Score: 0.545)
+2024-12-10 04:35:23,476 - INFO - 
+Processing image 26/139: 5.jpg
+2024-12-10 04:35:23,476 - INFO - Combined 3 text segments: ['Ann Rinaldi', 'THE SECOND BEND IN THE RIVER', 'FON SONATURE']
+2024-12-10 04:35:23,476 - INFO - Matching preprocessed string: 'ann rinaldi the second bend in the river fon sonature'
+2024-12-10 04:35:23,600 - INFO -   Match found: 'Second Bend in the River' by Ann Rinaldi (Score: 1.000)
+2024-12-10 04:35:23,600 - INFO -   Match found: 'The Staircase' by Ann Rinaldi (Score: 0.750)
+2024-12-10 04:35:23,600 - INFO -   Match found: 'The Blue Door' by Ann Rinaldi (Score: 0.750)
+2024-12-10 04:35:23,600 - INFO - 
+Processing image 27/139: 6.jpg
+2024-12-10 04:35:23,600 - INFO - Combined 4 text segments: ['William Lavender', 'JUST', 'JANE', '8| @']
+2024-12-10 04:35:23,600 - INFO - Matching preprocessed string: 'william lavender just jane 8'
+2024-12-10 04:35:23,699 - INFO -   Match found: 'Just Jane' by William Lavender (Score: 1.000)
+2024-12-10 04:35:23,700 - INFO -   Match found: 'William Penn' by Janey Levy (Score: 0.667)
+2024-12-10 04:35:23,700 - INFO -   Match found: 'Winter Danger' by William O. Steele (Score: 0.655)
+2024-12-10 04:35:23,700 - INFO - 
+Processing image 28/139: 7.jpg
+2024-12-10 04:35:23,700 - INFO - Combined 5 text segments: ['with CHARity', '5', 'RINALD [', 'ANN', 'A BREAK']
+2024-12-10 04:35:23,700 - INFO - Matching preprocessed string: 'with charity 5 rinald   ann a break'
+2024-12-10 04:35:23,808 - INFO -   Match found: 'A Break with Charity' by Ann Rinaldi (Score: 0.954)
+2024-12-10 04:35:23,808 - INFO -   Match found: 'Broken Days' by Ann Rinaldi (Score: 0.643)
+2024-12-10 04:35:23,808 - INFO -   Match found: 'The Ever-After Bird' by Ann Rinaldi (Score: 0.625)
+2024-12-10 04:35:23,808 - INFO - 
+Processing image 29/139: 8.jpg
+2024-12-10 04:35:23,808 - INFO - Combined 3 text segments: ['FINISHING BECCA', '1', 'CU!']
+2024-12-10 04:35:23,808 - INFO - Matching preprocessed string: 'finishing becca 1 cu'
+2024-12-10 04:35:23,903 - INFO -   Match found: 'Finishing Becca' by Ann Rinaldi (Score: 0.857)
+2024-12-10 04:35:23,903 - INFO -   Match found: 'Teacup' by Rebecca Young (Score: 0.550)
+2024-12-10 04:35:23,903 - INFO -   Match found: 'The Vanishing Girl' by Shane Peacock (Score: 0.538)
+2024-12-10 04:35:23,903 - INFO - 
+Processing image 30/139: 9.jpg
+2024-12-10 04:35:23,903 - INFO - Combined 1 text segments: ['BEYOND THE BURNING TIM']
+2024-12-10 04:35:23,903 - INFO - Matching preprocessed string: 'beyond the burning tim'
+2024-12-10 04:35:23,999 - INFO -   Match found: 'Beyond the Burning Time' by Kathryn Lasky (Score: 0.900)
+2024-12-10 04:35:23,999 - INFO -   Match found: 'The Boy in the Burning House' by Tim Wynne-Jones (Score: 0.811)
+2024-12-10 04:35:23,999 - INFO -   Match found: 'The Burning (Young Readers Edition): Black Wall Street and the Tulsa Race Massacre of 1921' by Madigan, Tim, Beard, Hilary (Score: 0.811)
+2024-12-10 04:35:23,999 - INFO - 
+Processing image 31/139: IMG_1538_001.jpg
+2024-12-10 04:35:23,999 - INFO - Combined 3 text segments: ['CURRY', '1', 'A STOLEN LIFE']
+2024-12-10 04:35:23,999 - INFO - Matching preprocessed string: 'curry 1 a stolen life'
+2024-12-10 04:35:24,100 - INFO -   Match found: 'A Stolen Life' by Jane Louise Curry (Score: 0.950)
+2024-12-10 04:35:24,101 - INFO -   Match found: 'The Life You Imagine' by Derek Jeter With Jack Curry (Score: 0.645)
+2024-12-10 04:35:24,101 - INFO -   Match found: 'Stolen City' by Elisa A. Bonnin (Score: 0.638)
+2024-12-10 04:35:24,101 - INFO - 
+Processing image 32/139: IMG_1538_002.jpg
+2024-12-10 04:35:24,101 - INFO - Combined 3 text segments: ['DREAM', 'CHIDof tne', 'ROBINSON']
+2024-12-10 04:35:24,101 - INFO - Matching preprocessed string: 'dream chidof tne robinson'
+2024-12-10 04:35:24,197 - INFO -   Match found: 'Child of the Dream' by Sharon Robinson (Score: 0.814)
+2024-12-10 04:35:24,197 - INFO -   Match found: 'Great Snakes!' by Fay Robinson (Score: 0.680)
+2024-12-10 04:35:24,197 - INFO -   Match found: 'Red Moon' by Kim Stanley Robinson (Score: 0.667)
+2024-12-10 04:35:24,197 - INFO - 
+Processing image 33/139: IMG_1538_003.jpg
+2024-12-10 04:35:24,197 - INFO - Combined 4 text segments: ['William Lavender', 'JUST', 'JANE', ' |']
+2024-12-10 04:35:24,197 - INFO - Matching preprocessed string: 'william lavender just jane'
+2024-12-10 04:35:24,289 - INFO -   Match found: 'Just Jane' by William Lavender (Score: 1.000)
+2024-12-10 04:35:24,289 - INFO -   Match found: 'William Penn' by Janey Levy (Score: 0.694)
+2024-12-10 04:35:24,289 - INFO -   Match found: 'Winter Danger' by William O. Steele (Score: 0.679)
+2024-12-10 04:35:24,289 - INFO - 
+Processing image 34/139: IMG_1538_004.jpg
+2024-12-10 04:35:24,289 - INFO - Combined 3 text segments: ['Rinaldi', 'Wolf by the Ears', 'heaney']
+2024-12-10 04:35:24,289 - INFO - Matching preprocessed string: 'rinaldi wolf by the ears heaney'
+2024-12-10 04:35:24,397 - INFO -   Match found: 'Wolf by the Ears' by Ann Rinaldi (Score: 0.923)
+2024-12-10 04:35:24,397 - INFO -   Match found: 'The Education of Mary' by Ann Rinaldi (Score: 0.656)
+2024-12-10 04:35:24,397 - INFO -   Match found: 'The Names upon the Harp' by Marie Heaney (Score: 0.635)
+2024-12-10 04:35:24,397 - INFO - 
+Processing image 35/139: IMG_1538_005.jpg
+2024-12-10 04:35:24,397 - INFO - Combined 5 text segments: [';', 'Dolpkus', 'Jo', 'Mwstc', 'Tke']
+2024-12-10 04:35:24,397 - INFO - Matching preprocessed string: 'dolpkus jo mwstc tke'
+2024-12-10 04:35:24,488 - INFO -   Match found: 'Dolphins' by Jason Skog (Score: 0.564)
+2024-12-10 04:35:24,488 - INFO -   Match found: 'The Moon Is Down' by John Steinbeck (Score: 0.549)
+2024-12-10 04:35:24,488 - INFO -   Match found: 'Stitch in Time' by John Gould (Score: 0.533)
+2024-12-10 04:35:24,488 - INFO - 
+Processing image 36/139: IMG_1538_006.jpg
+2024-12-10 04:35:24,488 - INFO - Combined 6 text segments: ['3', 's Dead', 'Sim', 'Brother', 'My', 'Collicr 6 Collier']
+2024-12-10 04:35:24,488 - INFO - Matching preprocessed string: '3 s dead sim brother my collicr 6 collier'
+2024-12-10 04:35:24,600 - INFO -   Match found: 'My Brother Sam is Dead' by James Lincoln Collier, Christopher Collier (Score: 0.719)
+2024-12-10 04:35:24,600 - INFO -   Match found: 'My Brother's Secret' by Dan Smith (Score: 0.585)
+2024-12-10 04:35:24,600 - INFO -   Match found: 'My Brother's Shadow' by Tom Avery (Score: 0.585)
+2024-12-10 04:35:24,600 - INFO - 
+Processing image 37/139: IMG_1538_007.jpg
+2024-12-10 04:35:24,600 - INFO - Combined 5 text segments: ['IT Rained', 'WARM BREAD', 'Moskowitz SWEET', '1', 'Lyon']
+2024-12-10 04:35:24,600 - INFO - Matching preprocessed string: 'it rained warm bread moskowitz sweet 1 lyon'
+2024-12-10 04:35:24,710 - INFO -   Match found: 'It Rained Warm Bread' by Gloria Moskowitz-Sweet, Hope Anita Smith (Score: 0.911)
+2024-12-10 04:35:24,710 - INFO -   Match found: 'It Rained Warm Bread' by Gloria Moskowitz-Sweet (Score: 0.911)
+2024-12-10 04:35:24,710 - INFO -   Match found: 'How Sweet It Is (and Was)' by Ruth Freeman Swain (Score: 0.612)
+2024-12-10 04:35:24,710 - INFO - 
+Processing image 38/139: IMG_1538_008.jpg
+2024-12-10 04:35:24,710 - INFO - Combined 3 text segments: ['FINISHING BECCA', '1', 'KINALDI']
+2024-12-10 04:35:24,710 - INFO - Matching preprocessed string: 'finishing becca 1 kinaldi'
+2024-12-10 04:35:24,807 - INFO -   Match found: 'Finishing Becca' by Ann Rinaldi (Score: 0.885)
+2024-12-10 04:35:24,807 - INFO -   Match found: 'Fishing' by Adam G. Klein (Score: 0.578)
+2024-12-10 04:35:24,807 - INFO -   Match found: 'Girl in Blue' by Ann Rinaldi (Score: 0.571)
+2024-12-10 04:35:24,807 - INFO - 
+Processing image 39/139: IMG_1538_009.jpg
+2024-12-10 04:35:24,807 - INFO - Combined 2 text segments: ['JIP His Story', 'PATERSON']
+2024-12-10 04:35:24,807 - INFO - Matching preprocessed string: 'jip his story paterson'
+2024-12-10 04:35:24,899 - INFO -   Match found: 'Jip' by Katherine Paterson (Score: 0.706)
+2024-12-10 04:35:24,899 - INFO -   Match found: 'Ghost Story' by Peter Straub (Score: 0.609)
+2024-12-10 04:35:24,899 - INFO -   Match found: 'Select' by Christie Matheson (Score: 0.609)
+2024-12-10 04:35:24,899 - INFO - 
+Processing image 40/139: IMG_1538_010.jpg
+2024-12-10 04:35:24,899 - INFO - Combined 3 text segments: ['41 Capone Does My Shirts', 'Gennifer', 'Choldenko']
+2024-12-10 04:35:24,899 - INFO - Matching preprocessed string: '41 capone does my shirts gennifer choldenko'
+2024-12-10 04:35:25,008 - INFO -   Match found: 'Al Capone Does My Shirts' by Gennifer Choldenko (Score: 0.964)
+2024-12-10 04:35:25,008 - INFO -   Match found: 'Al Capone Does My Homework' by Gennifer Choldenko (Score: 0.868)
+2024-12-10 04:35:25,008 - INFO -   Match found: 'Al Capone Shines My Shoes' by Gennifer Choldenko (Score: 0.828)
+2024-12-10 04:35:25,008 - INFO - 
+Processing image 41/139: IMG_1538_011.jpg
+2024-12-10 04:35:25,008 - INFO - Combined 9 text segments: ['Focus', 'GATES', 'Bolden', 'IDARK SKY RRISING', 'RECONSTRUCTION', 'JhL', '3', 'JIM CROW', '=']
+2024-12-10 04:35:25,008 - INFO - Matching preprocessed string: 'focus gates bolden idark sky rrising reconstruction jhl 3 jim crow'
+2024-12-10 04:35:25,135 - INFO -   Match found: 'Reconstruction' by Zak Mettger (Score: 0.700)
+2024-12-10 04:35:25,135 - INFO -   Match found: 'Reconstruction' by Tim McNeese (Score: 0.700)
+2024-12-10 04:35:25,135 - INFO -   Match found: 'Reconstruction' by Katie Marsico (Score: 0.667)
+2024-12-10 04:35:25,135 - INFO - 
+Processing image 42/139: IMG_1538_012.jpg
+2024-12-10 04:35:25,135 - INFO - Combined 3 text segments: ['Miue ', 'Gyes (Gave Ofeev', 'ANN RINALDI']
+2024-12-10 04:35:25,135 - INFO - Matching preprocessed string: 'miue  gyes  gave ofeev ann rinaldi'
+2024-12-10 04:35:25,237 - INFO -   Match found: 'Mine Eyes Have Seen' by Ann Rinaldi (Score: 0.730)
+2024-12-10 04:35:25,237 - INFO -   Match found: 'Nine Days a Queen' by Ann Rinaldi (Score: 0.721)
+2024-12-10 04:35:25,237 - INFO -   Match found: 'Or Give Me Death' by Ann Rinaldi (Score: 0.700)
+2024-12-10 04:35:25,237 - INFO - 
+Processing image 43/139: IMG_1538_013.jpg
+2024-12-10 04:35:25,237 - INFO - Combined 3 text segments: ['JirISG', 'HADDIX', '5']
+2024-12-10 04:35:25,237 - INFO - Matching preprocessed string: 'jirisg haddix 5'
+2024-12-10 04:35:25,327 - INFO -   Match found: 'The Summer of Broken Things' by Margaret Peterson Haddix (Score: 0.571)
+2024-12-10 04:35:25,327 - INFO -   Match found: 'The Always War' by Margaret Peterson Haddix (Score: 0.571)
+2024-12-10 04:35:25,327 - INFO -   Match found: 'Thriller' by M.T. Anderson, Patrick Carman, Gennifer Choldenko, Matt de la Peña, Margaret Peterson Haddix, Bruce Hale, Anthony Horowitz, Jarrett J. Krosoczka, James Patterson, Walter Dean Myers (Score: 0.571)
+2024-12-10 04:35:25,327 - INFO - 
+Processing image 44/139: IMG_1538_014.jpg
+2024-12-10 04:35:25,327 - INFO - Combined 5 text segments: ['5', 'SHARPSBURG', '5', 'RED MOON', 'NELL']
+2024-12-10 04:35:25,327 - INFO - Matching preprocessed string: '5 sharpsburg 5 red moon nell'
+2024-12-10 04:35:25,427 - INFO -   Match found: 'Red Moon at Sharpsburg' by Rosemary Wells (Score: 0.844)
+2024-12-10 04:35:25,427 - INFO -   Match found: 'Red Moon Rising' by Erin Hunter (Score: 0.604)
+2024-12-10 04:35:25,427 - INFO -   Match found: 'Red Moon Rising' by K. A. Holt (Score: 0.600)
+2024-12-10 04:35:25,427 - INFO - 
+Processing image 45/139: IMG_1538_015.jpg
+2024-12-10 04:35:25,427 - INFO - Combined 3 text segments: ['RINALD', 'Gil iv', 'Glue']
+2024-12-10 04:35:25,427 - INFO - Matching preprocessed string: 'rinald gil iv glue'
+2024-12-10 04:35:25,519 - INFO -   Match found: 'Girl in Blue' by Ann Rinaldi (Score: 0.619)
+2024-12-10 04:35:25,519 - INFO -   Match found: 'Lou Gehrig' by Ronald A. Reis (Score: 0.619)
+2024-12-10 04:35:25,519 - INFO -   Match found: 'Survival! Jungle' by Bill Rice (Score: 0.605)
+2024-12-10 04:35:25,519 - INFO - 
+Processing image 46/139: IMG_1538_016.jpg
+2024-12-10 04:35:25,519 - INFO - Combined 4 text segments: ['LAA', 'JOHNNY TREMAIN', '1', 'DMT']
+2024-12-10 04:35:25,519 - INFO - Matching preprocessed string: 'laa johnny tremain 1 dmt'
+2024-12-10 04:35:25,619 - INFO -   Match found: 'Johnny Tremain' by Esther Hoskins Forbes (Score: 0.737)
+2024-12-10 04:35:25,619 - INFO -   Match found: 'Johnny Tremain' by Esther Forbes (Score: 0.737)
+2024-12-10 04:35:25,619 - INFO -   Match found: 'Reading Johnny Tremain' by Neil Heims (Score: 0.737)
+2024-12-10 04:35:25,619 - INFO - 
+Processing image 47/139: IMG_1538_017.jpg
+2024-12-10 04:35:25,619 - INFO - Combined 3 text segments: ['HOME % the BRAVE', 'APPLEGATE', 'ML']
+2024-12-10 04:35:25,619 - INFO - Matching preprocessed string: 'home   the brave applegate ml'
+2024-12-10 04:35:25,718 - INFO -   Match found: 'Home of the Brave' by Katherine Applegate (Score: 0.941)
+2024-12-10 04:35:25,718 - INFO -   Match found: 'Brave the Betrayal' by Katherine Applegate (Score: 0.826)
+2024-12-10 04:35:25,718 - INFO -   Match found: 'The Change' by K.A. Applegate (Score: 0.745)
+2024-12-10 04:35:25,718 - INFO - 
+Processing image 48/139: IMG_1538_018.jpg
+2024-12-10 04:35:25,718 - INFO - Combined 3 text segments: ['THE SECOND BEND IN THE RIVER', 'FONT SCNATURE', 'Ann Rinaldi']
+2024-12-10 04:35:25,718 - INFO - Matching preprocessed string: 'the second bend in the river font scnature ann rinaldi'
+2024-12-10 04:35:25,840 - INFO -   Match found: 'Second Bend in the River' by Ann Rinaldi (Score: 1.000)
+2024-12-10 04:35:25,840 - INFO -   Match found: 'The Staircase' by Ann Rinaldi (Score: 0.750)
+2024-12-10 04:35:25,840 - INFO -   Match found: 'The Blue Door' by Ann Rinaldi (Score: 0.750)
+2024-12-10 04:35:25,840 - INFO - 
+Processing image 49/139: IMG_1538_019.jpg
+2024-12-10 04:35:25,840 - INFO - Combined 3 text segments: ['with ChARity', 'ANN RINALD [', 'A BREAK']
+2024-12-10 04:35:25,840 - INFO - Matching preprocessed string: 'with charity ann rinald   a break'
+2024-12-10 04:35:25,945 - INFO -   Match found: 'A Break with Charity' by Ann Rinaldi (Score: 0.984)
+2024-12-10 04:35:25,945 - INFO -   Match found: 'Broken Days' by Ann Rinaldi (Score: 0.667)
+2024-12-10 04:35:25,945 - INFO -   Match found: 'The Ever-After Bird' by Ann Rinaldi (Score: 0.645)
+2024-12-10 04:35:25,945 - INFO - 
+Processing image 50/139: IMG_1538_020.jpg
+2024-12-10 04:35:25,945 - INFO - Combined 3 text segments: ['1', '(Megb €', '9']
+2024-12-10 04:35:25,945 - INFO - Matching preprocessed string: '1  megb   9'
+2024-12-10 04:35:26,036 - INFO -   Match found: 'QB 1' by Mike Lupica (Score: 0.500)
+2024-12-10 04:35:26,036 - INFO -   Match found: '13' by James Howe (Score: 0.476)
+2024-12-10 04:35:26,036 - INFO -   Match found: 'Jinx' by Meg Cabot (Score: 0.455)
+2024-12-10 04:35:26,036 - INFO - 
+Processing image 51/139: IMG_1538_021.jpg
+2024-12-10 04:35:26,036 - INFO - Combined 2 text segments: ['LIONBOY', 'CORDER']
+2024-12-10 04:35:26,036 - INFO - Matching preprocessed string: 'lionboy corder'
+2024-12-10 04:35:26,124 - INFO -   Match found: 'Lionboy' by Zizou Corder, Louisa Young, Isabel Adomakoh Young (Score: 1.000)
+2024-12-10 04:35:26,124 - INFO -   Match found: 'Code Girls' by Liza Mundy (Score: 0.571)
+2024-12-10 04:35:26,124 - INFO -   Match found: 'Ecuador' by Erin Foley (Score: 0.562)
+2024-12-10 04:35:26,124 - INFO - 
+Processing image 52/139: IMG_1538_022.jpg
+2024-12-10 04:35:26,124 - INFO - Combined 4 text segments: ['ang', 'Thousand', 'ANN RINALDI', 'Trees with Ribbons']
+2024-12-10 04:35:26,124 - INFO - Matching preprocessed string: 'ang thousand ann rinaldi trees with ribbons'
+2024-12-10 04:35:26,237 - INFO -   Match found: 'Hang a Thousand Trees with Ribbons' by Ann Rinaldi (Score: 0.966)
+2024-12-10 04:35:26,237 - INFO -   Match found: 'A Break with Charity' by Ann Rinaldi (Score: 0.667)
+2024-12-10 04:35:26,237 - INFO -   Match found: 'Broken Days' by Ann Rinaldi (Score: 0.647)
+2024-12-10 04:35:26,237 - INFO - 
+Processing image 53/139: IMG_1538_023.jpg
+2024-12-10 04:35:26,237 - INFO - Combined 2 text segments: ['Flake', 'The Skin Inla']
+2024-12-10 04:35:26,237 - INFO - Matching preprocessed string: 'flake the skin inla'
+2024-12-10 04:35:26,338 - INFO -   Match found: 'The Skin I'm In' by Sharon G. Flake (Score: 0.848)
+2024-12-10 04:35:26,338 - INFO -   Match found: 'The Life I'm In' by SHARON G. FLAKE (Score: 0.653)
+2024-12-10 04:35:26,338 - INFO -   Match found: 'The Lake' by Natasha Preston (Score: 0.651)
+2024-12-10 04:35:26,338 - INFO - 
+Processing image 54/139: IMG_1538_024.jpg
+2024-12-10 04:35:26,338 - INFO - Combined 4 text segments: ['8', 'GERMAN SOLDIER', 'SuMMER,', 'B ETte Greend']
+2024-12-10 04:35:26,338 - INFO - Matching preprocessed string: '8 german soldier summer  b ette greend'
+2024-12-10 04:35:26,447 - INFO -   Match found: 'Summer of My German Soldier' by Bette Greene (Score: 0.857)
+2024-12-10 04:35:26,447 - INFO -   Match found: 'Summer People' by Brian Groh (Score: 0.590)
+2024-12-10 04:35:26,447 - INFO -   Match found: 'Haunted Summer' by Betty Ren Wright (Score: 0.588)
+2024-12-10 04:35:26,447 - INFO - 
+Processing image 55/139: IMG_1538_025.jpg
+2024-12-10 04:35:26,447 - INFO - Combined 3 text segments: ['HOUSE', 'THE BIRCHBARK', 'ERDRICH']
+2024-12-10 04:35:26,447 - INFO - Matching preprocessed string: 'house the birchbark erdrich'
+2024-12-10 04:35:26,541 - INFO -   Match found: 'The Birchbark House' by Louise Erdrich (Score: 1.000)
+2024-12-10 04:35:26,541 - INFO -   Match found: 'The Round House: National Book Award Winning Fiction' by Louise Erdrich (Score: 0.773)
+2024-12-10 04:35:26,541 - INFO -   Match found: 'The Crow' by Frederick E. Hoxie (Score: 0.642)
+2024-12-10 04:35:26,541 - INFO - 
+Processing image 56/139: IMG_1538_026.jpg
+2024-12-10 04:35:26,541 - INFO - Combined 2 text segments: ['DANIEL HALF HUMAN', 'CHOTJEWITZ']
+2024-12-10 04:35:26,541 - INFO - Matching preprocessed string: 'daniel half human chotjewitz'
+2024-12-10 04:35:26,628 - INFO -   Match found: 'Daniel Half Human' by David Chotjewitz, Doris Orgel (Score: 1.000)
+2024-12-10 04:35:26,628 - INFO -   Match found: 'Daniel Half Human And The Good Nazi' by David Chotjewitz (Score: 1.000)
+2024-12-10 04:35:26,629 - INFO -   Match found: 'Pale Male' by Janet Schulman (Score: 0.577)
+2024-12-10 04:35:26,629 - INFO - 
+Processing image 57/139: IMG_1538_027.jpg
+2024-12-10 04:35:26,629 - INFO - Combined 5 text segments: ['1', 'amily', 'Cinderella', 'Chinese', '3']
+2024-12-10 04:35:26,629 - INFO - Matching preprocessed string: '1 amily cinderella chinese 3'
+2024-12-10 04:35:26,725 - INFO -   Match found: 'Chinese Cinderella' by Adeline Yen Mah (Score: 0.783)
+2024-12-10 04:35:26,725 - INFO -   Match found: 'Chinese Cinderella and the Secret Dragon Society' by Adeline Yen Mah (Score: 0.783)
+2024-12-10 04:35:26,725 - INFO -   Match found: 'Cinderella Man' by Michael DeLisa (Score: 0.632)
+2024-12-10 04:35:26,725 - INFO - 
+Processing image 58/139: IMG_1538_028.jpg
+2024-12-10 04:35:26,725 - INFO - Combined 2 text segments: ['Crow', 'URIGKT']
+2024-12-10 04:35:26,725 - INFO - Matching preprocessed string: 'crow urigkt'
+2024-12-10 04:35:26,805 - INFO -   Match found: 'Crow' by Barbara Wright (Score: 0.600)
+2024-12-10 04:35:26,806 - INFO -   Match found: 'Hotel' by Carol Wright (Score: 0.552)
+2024-12-10 04:35:26,806 - INFO -   Match found: 'The Crow-Girl' by Bodil Bredsdorff, Faith Ingwersen (Score: 0.533)
+2024-12-10 04:35:26,806 - INFO - 
+Processing image 59/139: IMG_1538_029.jpg
+2024-12-10 04:35:26,806 - INFO - Combined 3 text segments: ['1417 $ Bhoou Inonv', '1', 'LIt CHAT']
+2024-12-10 04:35:26,806 - INFO - Matching preprocessed string: '1417   bhoou inonv 1 lit chat'
+2024-12-10 04:35:26,910 - INFO -   Match found: 'Hate List' by Jennifer Brown (Score: 0.510)
+2024-12-10 04:35:26,910 - INFO -   Match found: 'Cat' by Juliet Clutton-Brock (Score: 0.510)
+2024-12-10 04:35:26,910 - INFO -   Match found: 'The Fireborne Blade (The Fireborne Blade, 1)' by Bond, Charlotte (Score: 0.508)
+2024-12-10 04:35:26,910 - INFO - 
+Processing image 60/139: IMG_1538_030.jpg
+2024-12-10 04:35:26,910 - INFO - Combined 2 text segments: ["Belle' Tal", 'MARTIN']
+2024-12-10 04:35:26,910 - INFO - Matching preprocessed string: 'belle  tal martin'
+2024-12-10 04:35:27,002 - INFO -   Match found: 'Belle Teal' by Ann M. Martin (Score: 0.857)
+2024-12-10 04:35:27,002 - INFO -   Match found: 'Chile' by Martin Hintz (Score: 0.647)
+2024-12-10 04:35:27,002 - INFO -   Match found: 'ESP' by Michael Martin (Score: 0.647)
+2024-12-10 04:35:27,002 - INFO - 
+Processing image 61/139: IMG_1538_031.jpg
+2024-12-10 04:35:27,002 - INFO - Combined 2 text segments: ['9', 'Lasky']
+2024-12-10 04:35:27,002 - INFO - Matching preprocessed string: '9 lasky'
+2024-12-10 04:35:27,086 - INFO -   Match found: 'Night Witches' by Kathryn Lasky (Score: 0.833)
+2024-12-10 04:35:27,086 - INFO -   Match found: 'Ashes' by Kathryn Lasky (Score: 0.833)
+2024-12-10 04:35:27,086 - INFO -   Match found: 'Beyond the Burning Time' by Kathryn Lasky (Score: 0.833)
+2024-12-10 04:35:27,086 - INFO - 
+Processing image 62/139: IMG_1538_032.jpg
+2024-12-10 04:35:27,086 - INFO - Combined 2 text segments: ['THE SEER OF SHADOHS', '6']
+2024-12-10 04:35:27,086 - INFO - Matching preprocessed string: 'the seer of shadohs 6'
+2024-12-10 04:35:27,186 - INFO -   Match found: 'The Seer of Shadows' by Avi (Score: 0.864)
+2024-12-10 04:35:27,186 - INFO -   Match found: 'Shadows of the Clans' by Erin Hunter (Score: 0.679)
+2024-12-10 04:35:27,186 - INFO -   Match found: 'The Shadows of Doom' by Jennifer Bell (Score: 0.667)
+2024-12-10 04:35:27,186 - INFO - 
+Processing image 63/139: IMG_1538_033.jpg
+2024-12-10 04:35:27,186 - INFO - Combined 4 text segments: ['ANN RINALDI', 'ML', 'fin Quilt', 'Harcourt']
+2024-12-10 04:35:27,186 - INFO - Matching preprocessed string: 'ann rinaldi ml fin quilt harcourt'
+2024-12-10 04:35:27,290 - INFO -   Match found: 'The Coffin Quilt' by Ann Rinaldi (Score: 0.756)
+2024-12-10 04:35:27,290 - INFO -   Match found: 'The Fifth Of March' by Ann Rinaldi (Score: 0.667)
+2024-12-10 04:35:27,290 - INFO -   Match found: 'Broken Days' by Ann Rinaldi (Score: 0.647)
+2024-12-10 04:35:27,290 - INFO - 
+Processing image 64/139: IMG_1538_034.jpg
+2024-12-10 04:35:27,290 - INFO - Combined 6 text segments: ['BRUCHAC', 'THUNDER @', 'MARCH', 'THE', 'JOSEPH', 'TOWARD']
+2024-12-10 04:35:27,290 - INFO - Matching preprocessed string: 'bruchac thunder   march the joseph toward'
+2024-12-10 04:35:27,394 - INFO -   Match found: 'March Toward the Thunder' by Joseph Bruchac (Score: 1.000)
+2024-12-10 04:35:27,394 - INFO -   Match found: 'March Towards the Thunder' by Joseph Bruchac (Score: 0.987)
+2024-12-10 04:35:27,394 - INFO -   Match found: 'Wabi' by Joseph Bruchac (Score: 0.848)
+2024-12-10 04:35:27,394 - INFO - 
+Processing image 65/139: IMG_1538_035.jpg
+2024-12-10 04:35:27,394 - INFO - Combined 2 text segments: ['Miss Upitfire', 'Miller']
+2024-12-10 04:35:27,394 - INFO - Matching preprocessed string: 'miss upitfire miller'
+2024-12-10 04:35:27,478 - INFO -   Match found: 'Miss Spitfire' by Sarah Miller (Score: 0.826)
+2024-12-10 04:35:27,478 - INFO -   Match found: 'Mars' by Ron Miller (Score: 0.629)
+2024-12-10 04:35:27,478 - INFO -   Match found: 'Killer's Kiss' by R. L. Stine (Score: 0.605)
+2024-12-10 04:35:27,478 - INFO - 
+Processing image 66/139: IMG_1538_036.jpg
+2024-12-10 04:35:27,478 - INFO - Combined 1 text segments: ['WITH THE MIGHT OF ANGELS']
+2024-12-10 04:35:27,478 - INFO - Matching preprocessed string: 'with the might of angels'
+2024-12-10 04:35:27,571 - INFO -   Match found: 'With the Might of Angels' by Andrea Davis Pinkney (Score: 1.000)
+2024-12-10 04:35:27,571 - INFO -   Match found: 'Angels, Prophets, Rabbis & Kings from the Stories of the Jewish People' by Još Patterson (Score: 0.703)
+2024-12-10 04:35:27,571 - INFO -   Match found: 'The Life of Plants' by Angels Julivert (Score: 0.703)
+2024-12-10 04:35:27,571 - INFO - 
+Processing image 67/139: IMG_1538_037.jpg
+2024-12-10 04:35:27,571 - INFO - Combined 3 text segments: ['SARAH BISHOP', '3', 'SCOTT ODELL']
+2024-12-10 04:35:27,571 - INFO - Matching preprocessed string: 'sarah bishop 3 scott odell'
+2024-12-10 04:35:27,665 - INFO -   Match found: 'Sarah Bishop' by Scott O'Dell (Score: 0.902)
+2024-12-10 04:35:27,665 - INFO -   Match found: 'Space' by Sarah Powell (Score: 0.636)
+2024-12-10 04:35:27,665 - INFO -   Match found: 'ENIAC' by Scott (Score: 0.625)
+2024-12-10 04:35:27,665 - INFO - 
+Processing image 68/139: IMG_1538_038.jpg
+2024-12-10 04:35:27,665 - INFO - Combined 2 text segments: ['SIHL', 'Wari']
+2024-12-10 04:35:27,665 - INFO - Matching preprocessed string: 'sihl wari'
+2024-12-10 04:35:27,744 - INFO -   Match found: 'Civil War' by null (Score: 0.522)
+2024-12-10 04:35:27,744 - INFO -   Match found: 'Ash' by Malinda Lo (Score: 0.522)
+2024-12-10 04:35:27,744 - INFO -   Match found: 'Snow' by Uri Shulevitz (Score: 0.519)
+2024-12-10 04:35:27,744 - INFO - 
+Processing image 69/139: IMG_1538_039.jpg
+2024-12-10 04:35:27,744 - INFO - Combined 6 text segments: ['Tm E', 'A A T', '0 F', '1', 'C 0', '0 L']
+2024-12-10 04:35:27,744 - INFO - Matching preprocessed string: 'tm e a a t 0 f 1 c 0 0 l'
+2024-12-10 04:35:27,848 - INFO -   Match found: 'Escape at 10,000 Feet' by Tom Sullivan (Score: 0.577)
+2024-12-10 04:35:27,848 - INFO -   Match found: 'F-15 Eagle' by Lynn M. Stone (Score: 0.537)
+2024-12-10 04:35:27,848 - INFO -   Match found: 'Give Me a K-I-L-L' by R. L. Stine (Score: 0.537)
+2024-12-10 04:35:27,848 - INFO - 
+Processing image 70/139: IMG_1538_040.jpg
+2024-12-10 04:35:27,848 - INFO - Combined 4 text segments: ['LLINDA JUE', 'SINGLE SHARD', '1', '1']
+2024-12-10 04:35:27,848 - INFO - Matching preprocessed string: 'llinda jue single shard 1 1'
+2024-12-10 04:35:27,955 - INFO -   Match found: 'A Single Shard' by Linda Sue Park (Score: 0.704)
+2024-12-10 04:35:27,955 - INFO -   Match found: 'It's Snowing!' by Julie Richards (Score: 0.577)
+2024-12-10 04:35:27,955 - INFO -   Match found: 'Haru: Spring (Volume 1) (Haru, 1)' by Latham, Joe (Score: 0.571)
+2024-12-10 04:35:27,955 - INFO - 
+Processing image 71/139: IMG_1538_041.jpg
+2024-12-10 04:35:27,955 - INFO - Combined 2 text segments: ['8', 'THE FORESHADOWING']
+2024-12-10 04:35:27,955 - INFO - Matching preprocessed string: '8 the foreshadowing'
+2024-12-10 04:35:28,045 - INFO -   Match found: 'The Foreshadowing' by Marcus Sedgwick (Score: 0.944)
+2024-12-10 04:35:28,046 - INFO -   Match found: 'Shadows at the Fair' by Lea Wait (Score: 0.638)
+2024-12-10 04:35:28,046 - INFO -   Match found: 'The Shadows' by Alex North (Score: 0.634)
+2024-12-10 04:35:28,046 - INFO - 
+Processing image 72/139: IMG_1538_042.jpg
+2024-12-10 04:35:28,046 - INFO - Combined 2 text segments: ['ANDERS 0 N', '1793']
+2024-12-10 04:35:28,046 - INFO - Matching preprocessed string: 'anders 0 n 1793'
+2024-12-10 04:35:28,137 - INFO -   Match found: 'Frostborn' by Lou Anders (Score: 0.571)
+2024-12-10 04:35:28,137 - INFO -   Match found: 'DNA, Genes, and Chromosomes' by Mason Anders (Score: 0.571)
+2024-12-10 04:35:28,137 - INFO -   Match found: 'Victories Greater Than Death' by Charlie Jane Anders (Score: 0.571)
+2024-12-10 04:35:28,137 - INFO - 
+Processing image 73/139: IMG_1538_043.jpg
+2024-12-10 04:35:28,137 - INFO - Combined 1 text segments: ['ANNE FRANK: THE DIARV OFAVOUNG GIRL']
+2024-12-10 04:35:28,137 - INFO - Matching preprocessed string: 'anne frank  the diarv ofavoung girl'
+2024-12-10 04:35:28,247 - INFO -   Match found: 'Anne Frank' by Anne Frank (Score: 1.000)
+2024-12-10 04:35:28,247 - INFO -   Match found: 'The Diary of a Young Girl' by Anne Frank (Score: 0.886)
+2024-12-10 04:35:28,247 - INFO -   Match found: 'Anne Frank: the Diary of a Young Girl' by Anne Frank (Score: 0.886)
+2024-12-10 04:35:28,247 - INFO - 
+Processing image 74/139: IMG_1538_044.jpg
+2024-12-10 04:35:28,247 - INFO - Combined 5 text segments: ['1', 'o f', 'ANN RINALDI', 'Sar a 6', '1']
+2024-12-10 04:35:28,247 - INFO - Matching preprocessed string: '1 o f ann rinaldi sar a 6 1'
+2024-12-10 04:35:28,355 - INFO -   Match found: 'Amelia's War' by Ann Rinaldi (Score: 0.694)
+2024-12-10 04:35:28,355 - INFO -   Match found: 'Hang a Thousand Trees with Ribbons' by Ann Rinaldi (Score: 0.684)
+2024-12-10 04:35:28,355 - INFO -   Match found: 'A Break with Charity' by Ann Rinaldi (Score: 0.684)
+2024-12-10 04:35:28,355 - INFO - 
+Processing image 75/139: IMG_1538_045.jpg
+2024-12-10 04:35:28,355 - INFO - Combined 3 text segments: ['015', 'L', '1']
+2024-12-10 04:35:28,355 - INFO - Matching preprocessed string: '015 l 1'
+2024-12-10 04:35:28,444 - INFO -   Match found: 'Goosebumps Horrorland Box Set 1-4' by R. L. Stine (Score: 0.600)
+2024-12-10 04:35:28,444 - INFO -   Match found: 'Colonial America Biographies Volume 1, A-L' by Peggy Saari (Score: 0.600)
+2024-12-10 04:35:28,444 - INFO -   Match found: 'The Devouring Gray (The Devouring Gray, 1)' by Herman, C. L. (Score: 0.600)
+2024-12-10 04:35:28,444 - INFO - 
+Processing image 76/139: IMG_1538_046.jpg
+2024-12-10 04:35:28,444 - INFO - Combined 3 text segments: ['IAV', "TRON 'TUNAA", '1']
+2024-12-10 04:35:28,444 - INFO - Matching preprocessed string: 'iav tron  tunaa 1'
+2024-12-10 04:35:28,535 - INFO -   Match found: 'Iron Thunder' by Avi (Score: 0.625)
+2024-12-10 04:35:28,535 - INFO -   Match found: 'TeenBoat!' by Dave Roman (Score: 0.571)
+2024-12-10 04:35:28,535 - INFO -   Match found: 'Tornado!' by Hilary H. Milton (Score: 0.564)
+2024-12-10 04:35:28,535 - INFO - 
+Processing image 77/139: IMG_1538_047.jpg
+2024-12-10 04:35:28,535 - INFO - Combined 3 text segments: ['Grvs Civil War', 'BRENAMAN', 'apcak']
+2024-12-10 04:35:28,535 - INFO - Matching preprocessed string: 'grvs civil war brenaman apcak'
+2024-12-10 04:35:28,631 - INFO -   Match found: 'Civil War' by null (Score: 0.783)
+2024-12-10 04:35:28,631 - INFO -   Match found: 'Evvy's Civil War' by Miriam Brenaman (Score: 0.766)
+2024-12-10 04:35:28,631 - INFO -   Match found: 'Civil War' by Mark Millar (Score: 0.640)
+2024-12-10 04:35:28,631 - INFO - 
+Processing image 78/139: IMG_1538_048.jpg
+2024-12-10 04:35:28,631 - INFO - Combined 5 text segments: ['Betsy', 'abin', 'Emperor', '2', "qr'u"]
+2024-12-10 04:35:28,631 - INFO - Matching preprocessed string: 'betsy abin emperor 2 qr u'
+2024-12-10 04:35:28,729 - INFO -   Match found: 'Betsy and the Emperor' by Staton Rabin,Larry Rostant (Score: 0.684)
+2024-12-10 04:35:28,729 - INFO -   Match found: 'Pirate Emperor' by Kai Meyer (Score: 0.612)
+2024-12-10 04:35:28,729 - INFO -   Match found: 'Betsy Ross' by Susan Martins Miller (Score: 0.607)
+2024-12-10 04:35:28,729 - INFO - 
+Processing image 79/139: IMG_1538_049.jpg
+2024-12-10 04:35:28,729 - INFO - Combined 3 text segments: ['HuM J0 Swnuo', 'SMIELDS', 'Jaonoso']
+2024-12-10 04:35:28,729 - INFO - Matching preprocessed string: 'hum j0 swnuo smields jaonoso'
+2024-12-10 04:35:28,826 - INFO -   Match found: 'Look Both Ways' by Jason Reynolds (Score: 0.526)
+2024-12-10 04:35:28,827 - INFO -   Match found: 'Mongrels' by Stephen Graham Jones (Score: 0.526)
+2024-12-10 04:35:28,827 - INFO -   Match found: 'Michael J Fox' by John F. Wukovits (Score: 0.526)
+2024-12-10 04:35:28,827 - INFO - 
+Processing image 80/139: IMG_1538_050.jpg
+2024-12-10 04:35:28,827 - INFO - Combined 2 text segments: ['Numberg AI 4', 'Rinaldi']
+2024-12-10 04:35:28,827 - INFO - Matching preprocessed string: 'numberg ai 4 rinaldi'
+2024-12-10 04:35:28,926 - INFO -   Match found: 'Numbering All the Bones' by Ann Rinaldi (Score: 0.655)
+2024-12-10 04:35:28,926 - INFO -   Match found: 'My Vicksburg' by Ann Rinaldi (Score: 0.636)
+2024-12-10 04:35:28,926 - INFO -   Match found: 'Or Give Me Death' by Ann Rinaldi (Score: 0.625)
+2024-12-10 04:35:28,926 - INFO - 
+Processing image 81/139: IMG_1538_051.jpg
+2024-12-10 04:35:28,926 - INFO - Combined 2 text segments: ['Just Juice', 'HESSE']
+2024-12-10 04:35:28,926 - INFO - Matching preprocessed string: 'just juice hesse'
+2024-12-10 04:35:29,017 - INFO -   Match found: 'Just Juice' by Karen Hesse (Score: 1.000)
+2024-12-10 04:35:29,017 - INFO -   Match found: 'Horse' by Juliet (Score: 0.643)
+2024-12-10 04:35:29,017 - INFO -   Match found: 'Salt' by Maurice Gee (Score: 0.625)
+2024-12-10 04:35:29,017 - INFO - 
+Processing image 82/139: IMG_1538_052.jpg
+2024-12-10 04:35:29,017 - INFO - Combined 4 text segments: ['DummDWD', 'e', '5', 'PHILBRICR']
+2024-12-10 04:35:29,017 - INFO - Matching preprocessed string: 'dummdwd e 5 philbricr'
+2024-12-10 04:35:29,111 - INFO -   Match found: 'Who Killed Darius Drake?' by W. R. Philbrick (Score: 0.517)
+2024-12-10 04:35:29,111 - INFO -   Match found: 'Maine' by Patricia K. Kummer (Score: 0.500)
+2024-12-10 04:35:29,111 - INFO -   Match found: 'Who Killed Darius Drake?' by Rodman Philbrick (Score: 0.492)
+2024-12-10 04:35:29,111 - INFO - 
+Processing image 83/139: IMG_1538_053.jpg
+2024-12-10 04:35:29,111 - INFO - Combined 2 text segments: ['THE SECRET Schoor', 'AVI']
+2024-12-10 04:35:29,112 - INFO - Matching preprocessed string: 'the secret schoor avi'
+2024-12-10 04:35:29,206 - INFO -   Match found: 'The Secret School' by Avi (Score: 0.952)
+2024-12-10 04:35:29,206 - INFO -   Match found: 'The Barn' by Avi (Score: 0.737)
+2024-12-10 04:35:29,206 - INFO -   Match found: 'The Secret Zoo' by Bryan Chick (Score: 0.723)
+2024-12-10 04:35:29,206 - INFO - 
+Processing image 84/139: IMG_1538_054.jpg
+2024-12-10 04:35:29,206 - INFO - Combined 3 text segments: ['TRUE NORTH', 'LASKY', '616']
+2024-12-10 04:35:29,206 - INFO - Matching preprocessed string: 'true north lasky 616'
+2024-12-10 04:35:29,293 - INFO -   Match found: 'True North' by Kathryn Lasky (Score: 0.889)
+2024-12-10 04:35:29,293 - INFO -   Match found: 'Marven of the Great North Woods' by Kathryn Lasky (Score: 0.710)
+2024-12-10 04:35:29,293 - INFO -   Match found: 'Trusting True North' by G. J. Linko (Score: 0.667)
+2024-12-10 04:35:29,293 - INFO - 
+Processing image 85/139: IMG_1538_055.jpg
+2024-12-10 04:35:29,293 - INFO - Combined 4 text segments: ['"7251575 %', '1', '8', '1']
+2024-12-10 04:35:29,293 - INFO - Matching preprocessed string: '7251575   1 8 1'
+2024-12-10 04:35:29,387 - INFO -   Match found: 'Fullmetal Alchemist (3-in-1 Edition), Vol. 8' by Hiromu Arakawa (Score: 0.429)
+2024-12-10 04:35:29,387 - INFO -   Match found: 'The Baby-Sitters Club Netflix Editions 1-8 Boxed Set' by Martin Ann M (Score: 0.429)
+2024-12-10 04:35:29,387 - INFO -   Match found: 'Samurai 8, Vol. 1' by Masashi Kishimoto (Score: 0.429)
+2024-12-10 04:35:29,387 - INFO - 
+Processing image 86/139: IMG_1538_056.jpg
+2024-12-10 04:35:29,387 - INFO - Combined 3 text segments: ['Out oj', 'HESSE', 'lie Dust']
+2024-12-10 04:35:29,387 - INFO - Matching preprocessed string: 'out oj hesse lie dust'
+2024-12-10 04:35:29,486 - INFO -   Match found: 'Out of the Dust' by Karen Hesse (Score: 0.800)
+2024-12-10 04:35:29,486 - INFO -   Match found: 'Just Juice' by Karen Hesse (Score: 0.605)
+2024-12-10 04:35:29,486 - INFO -   Match found: 'Shout' by Laurie Halse Anderson (Score: 0.583)
+2024-12-10 04:35:29,486 - INFO - 
+Processing image 87/139: IMG_1538_057.jpg
+2024-12-10 04:35:29,486 - INFO - Combined 1 text segments: ['BEYOND THE BURNING TIM']
+2024-12-10 04:35:29,486 - INFO - Matching preprocessed string: 'beyond the burning tim'
+2024-12-10 04:35:29,582 - INFO -   Match found: 'Beyond the Burning Time' by Kathryn Lasky (Score: 0.900)
+2024-12-10 04:35:29,582 - INFO -   Match found: 'The Boy in the Burning House' by Tim Wynne-Jones (Score: 0.811)
+2024-12-10 04:35:29,582 - INFO -   Match found: 'The Burning (Young Readers Edition): Black Wall Street and the Tulsa Race Massacre of 1921' by Madigan, Tim, Beard, Hilary (Score: 0.811)
+2024-12-10 04:35:29,582 - INFO - 
+Processing image 88/139: IMG_1538_058.jpg
+2024-12-10 04:35:29,582 - INFO - Combined 4 text segments: ['8', 'Ann Rinaldi', 'The Stairease', ';']
+2024-12-10 04:35:29,582 - INFO - Matching preprocessed string: '8 ann rinaldi the stairease'
+2024-12-10 04:35:29,687 - INFO -   Match found: 'The Staircase' by Ann Rinaldi (Score: 0.923)
+2024-12-10 04:35:29,687 - INFO -   Match found: 'The Blue Door' by Ann Rinaldi (Score: 0.750)
+2024-12-10 04:35:29,687 - INFO -   Match found: 'Wolf by the Ears' by Ann Rinaldi (Score: 0.727)
+2024-12-10 04:35:29,687 - INFO - 
+Processing image 89/139: IMG_1538_059.jpg
+2024-12-10 04:35:29,687 - INFO - Combined 2 text segments: ['GEORCL WASHINGTONS SOCKS', 'TOODRUFR']
+2024-12-10 04:35:29,687 - INFO - Matching preprocessed string: 'georcl washingtons socks toodrufr'
+2024-12-10 04:35:29,785 - INFO -   Match found: 'George-isms' by George Washington (Score: 0.655)
+2024-12-10 04:35:29,785 - INFO -   Match found: 'George Washington' by Tim McNeese (Score: 0.645)
+2024-12-10 04:35:29,785 - INFO -   Match found: 'Washington' by Rebecca Stefoff (Score: 0.610)
+2024-12-10 04:35:29,785 - INFO - 
+Processing image 90/139: IMG_1538_060.jpg
+2024-12-10 04:35:29,785 - INFO - Combined 2 text segments: ['CHASING LINCOLN $ FiLLER', '8']
+2024-12-10 04:35:29,785 - INFO - Matching preprocessed string: 'chasing lincoln   filler 8'
+2024-12-10 04:35:29,919 - INFO -   Match found: 'Chasing Lincoln's Killer' by James L. Swanson (Score: 0.769)
+2024-12-10 04:35:29,919 - INFO -   Match found: 'Abe Lincoln' by Kay Winters (Score: 0.596)
+2024-12-10 04:35:29,919 - INFO -   Match found: 'Chasing Evil' by Adam Blade (Score: 0.596)
+2024-12-10 04:35:29,919 - INFO - 
+Processing image 91/139: IMG_1538_061.jpg
+2024-12-10 04:35:29,919 - INFO - Combined 4 text segments: ['GARY PAULSEN', 'SOLDIER S HEART', '3', 'EAR']
+2024-12-10 04:35:29,919 - INFO - Matching preprocessed string: 'gary paulsen soldier s heart 3 ear'
+2024-12-10 04:35:30,029 - INFO -   Match found: 'Soldier's Heart' by Gary Paulsen (Score: 1.000)
+2024-12-10 04:35:30,029 - INFO -   Match found: 'Liar, Liar' by Gary Paulsen (Score: 0.828)
+2024-12-10 04:35:30,029 - INFO -   Match found: 'Vote' by Gary Paulsen (Score: 0.828)
+2024-12-10 04:35:30,029 - INFO - 
+Processing image 92/139: IMG_1538_062.jpg
+2024-12-10 04:35:30,029 - INFO - Combined 4 text segments: ['@', 'ames', 'Boys Fithout', 'SHEH']
+2024-12-10 04:35:30,029 - INFO - Matching preprocessed string: 'ames boys fithout sheh'
+2024-12-10 04:35:30,121 - INFO -   Match found: 'The Fallout' by S. A. Bodeen (Score: 0.591)
+2024-12-10 04:35:30,121 - INFO -   Match found: 'Boys without Names' by Kashmira Sheth (Score: 0.582)
+2024-12-10 04:35:30,121 - INFO -   Match found: 'At First Bite' by Ruth Ames (Score: 0.578)
+2024-12-10 04:35:30,121 - INFO - 
+Processing image 93/139: IMG_1538_063.jpg
+2024-12-10 04:35:30,121 - INFO - Combined 1 text segments: ['GEAEEEEEL']
+2024-12-10 04:35:30,121 - INFO - Matching preprocessed string: 'geaeeeeel'
+2024-12-10 04:35:30,198 - INFO -   Match found: 'Wereling' by Steve Feasey (Score: 0.533)
+2024-12-10 04:35:30,198 - INFO -   Match found: 'Day' by Elie Wiesel (Score: 0.500)
+2024-12-10 04:35:30,198 - INFO -   Match found: 'Feathered' by Deborah Kerbel (Score: 0.485)
+2024-12-10 04:35:30,198 - INFO - 
+Processing image 94/139: IMG_1538_064.jpg
+2024-12-10 04:35:30,198 - INFO - Combined 3 text segments: ['FLYGIRL', 'nnus', '1']
+2024-12-10 04:35:30,199 - INFO - Matching preprocessed string: 'flygirl nnus 1'
+2024-12-10 04:35:30,288 - INFO -   Match found: 'Flygirl' by Sherri L. Smith (Score: 0.667)
+2024-12-10 04:35:30,288 - INFO -   Match found: 'Girl in a Funk' by Tanya (Score: 0.529)
+2024-12-10 04:35:30,288 - INFO -   Match found: 'Gold Rush Girl' by Avi (Score: 0.500)
+2024-12-10 04:35:30,288 - INFO - 
+Processing image 95/139: IMG_1538_065.jpg
+2024-12-10 04:35:30,288 - INFO - Combined 2 text segments: ['Shooting the moon', 'DOWELL']
+2024-12-10 04:35:30,288 - INFO - Matching preprocessed string: 'shooting the moon dowell'
+2024-12-10 04:35:30,385 - INFO -   Match found: 'Shooting the Moon' by Frances O'Roark Dowell (Score: 1.000)
+2024-12-10 04:35:30,385 - INFO -   Match found: 'Shooting for the Moon' by Stephen Krensky (Score: 0.829)
+2024-12-10 04:35:30,385 - INFO -   Match found: 'Sing Down the Moon' by Scott O'Dell (Score: 0.727)
+2024-12-10 04:35:30,385 - INFO - 
+Processing image 96/139: IMG_1538_066.jpg
+2024-12-10 04:35:30,385 - INFO - Combined 2 text segments: ['Gltaman', 'Goov NiGHT;']
+2024-12-10 04:35:30,385 - INFO - Matching preprocessed string: 'gltaman goov night'
+2024-12-10 04:35:30,475 - INFO -   Match found: 'Light' by John Gorman (Score: 0.629)
+2024-12-10 04:35:30,476 - INFO -   Match found: 'Night Dive' by Ann McGovern (Score: 0.585)
+2024-12-10 04:35:30,476 - INFO -   Match found: 'Human Rights' by Linda Jacobs Altman (Score: 0.560)
+2024-12-10 04:35:30,476 - INFO - 
+Processing image 97/139: IMG_1538_067.jpg
+2024-12-10 04:35:30,476 - INFO - Combined 3 text segments: ['Manzanar', 'Fatewell', 'Houstol']
+2024-12-10 04:35:30,476 - INFO - Matching preprocessed string: 'manzanar fatewell houstol'
+2024-12-10 04:35:30,564 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Houston (Score: 0.767)
+2024-12-10 04:35:30,564 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Wakatsuki Houston (Score: 0.657)
+2024-12-10 04:35:30,564 - INFO -   Match found: 'Mystery at Manzanar' by Eric Fein (Score: 0.593)
+2024-12-10 04:35:30,564 - INFO - 
+Processing image 98/139: IMG_1538_068.jpg
+2024-12-10 04:35:30,564 - INFO - Combined 4 text segments: ['Jhe Jences Between Us', '8', 'DMLRICA', '1']
+2024-12-10 04:35:30,565 - INFO - Matching preprocessed string: 'jhe jences between us 8 dmlrica 1'
+2024-12-10 04:35:30,674 - INFO -   Match found: 'The River Between Us' by Richard Peck (Score: 0.636)
+2024-12-10 04:35:30,674 - INFO -   Match found: 'The Silence Between Us' by Alison Gervais (Score: 0.629)
+2024-12-10 04:35:30,674 - INFO -   Match found: 'The Distance Between Us' by Kasie West (Score: 0.627)
+2024-12-10 04:35:30,674 - INFO - 
+Processing image 99/139: IMG_1538_069.jpg
+2024-12-10 04:35:30,674 - INFO - Combined 1 text segments: ['THE FICHTINC CROUND']
+2024-12-10 04:35:30,674 - INFO - Matching preprocessed string: 'the fichtinc cround'
+2024-12-10 04:35:30,768 - INFO -   Match found: 'The Titanic' by Michael D. Cole (Score: 0.667)
+2024-12-10 04:35:30,768 - INFO -   Match found: 'The Titanic' by Michael Burgan (Score: 0.622)
+2024-12-10 04:35:30,768 - INFO -   Match found: 'The Switch' by Roland Smith (Score: 0.619)
+2024-12-10 04:35:30,768 - INFO - 
+Processing image 100/139: IMG_1538_070.jpg
+2024-12-10 04:35:30,768 - INFO - Combined 3 text segments: ['AGES', 'IBRINGYOTROTIBOOR', 'borrowed phrases']
+2024-12-10 04:35:30,768 - INFO - Matching preprocessed string: 'ages ibringyotrotiboor borrowed phrases'
+2024-12-10 04:35:30,864 - INFO -   Match found: 'The Borrowers Avenged' by Mary Norton (Score: 0.583)
+2024-12-10 04:35:30,864 - INFO -   Match found: 'The Borrowers Afield' by Mary Norton (Score: 0.563)
+2024-12-10 04:35:30,864 - INFO -   Match found: 'A Book About Whales' by Andrea Antinori (Score: 0.541)
+2024-12-10 04:35:30,864 - INFO - 
+Processing image 101/139: IMG_1538_071.jpg
+2024-12-10 04:35:30,864 - INFO - Combined 3 text segments: ['1', '~aade', 'Eray']
+2024-12-10 04:35:30,864 - INFO - Matching preprocessed string: '1  aade eray'
+2024-12-10 04:35:30,954 - INFO -   Match found: 'Troy' by Adele Geras (Score: 0.593)
+2024-12-10 04:35:30,954 - INFO -   Match found: 'Peru' by Sarah De Capua (Score: 0.533)
+2024-12-10 04:35:30,954 - INFO -   Match found: 'Karate' by Rennay Craats (Score: 0.516)
+2024-12-10 04:35:30,954 - INFO - 
+Processing image 102/139: IMG_1538_072.jpg
+2024-12-10 04:35:30,954 - INFO - Combined 2 text segments: ['KIZZY ANN STAMPS', '5b']
+2024-12-10 04:35:30,954 - INFO - Matching preprocessed string: 'kizzy ann stamps 5b'
+2024-12-10 04:35:31,055 - INFO -   Match found: 'Kizzy Ann Stamps' by Jeri Watts (Score: 0.914)
+2024-12-10 04:35:31,055 - INFO -   Match found: 'Samus Aran' by Kenny Abdo (Score: 0.600)
+2024-12-10 04:35:31,055 - INFO -   Match found: 'Tampa Bay Rays' by Luke Hanlon (Score: 0.578)
+2024-12-10 04:35:31,055 - INFO - 
+Processing image 103/139: IMG_1538_073.jpg
+2024-12-10 04:35:31,055 - INFO - Combined 4 text segments: ['2', 'The Journal & Douglus Allen Deeds', '0', 'Tk Dennst Part Epedtion']
+2024-12-10 04:35:31,055 - INFO - Matching preprocessed string: '2 the journal   douglus allen deeds 0 tk dennst part epedtion'
+2024-12-10 04:35:31,187 - INFO -   Match found: 'The Journal of Douglas Allen Deeds' by Rodman Philbrick (Score: 0.655)
+2024-12-10 04:35:31,187 - INFO -   Match found: 'The Journal of Scott Pendleton Collins' by Walter Dean Myers (Score: 0.591)
+2024-12-10 04:35:31,187 - INFO -   Match found: 'The Lost Lake' by Allen Say (Score: 0.562)
+2024-12-10 04:35:31,187 - INFO - 
+Processing image 104/139: IMG_1538_074.jpg
+2024-12-10 04:35:31,187 - INFO - Combined 7 text segments: ['1', '1', '1', 'L', '1', '1', 'LL']
+2024-12-10 04:35:31,187 - INFO - Matching preprocessed string: '1 1 1 l 1 1 ll'
+2024-12-10 04:35:31,278 - INFO -   Match found: 'Things I'll Never Say' by Ann Angel, Varian Johnson, Erica L. Kaufman, Katy Moran, J. L. Powers, Ron Koertge, E. M. Kokie, Kekla Magoon, Zoë Marriott,  Mary Ann Rodman, Chris Lynch, Louise Hawes, Kerry Cohen, Cynthia Leitich Smith, Ellen Wittlinger (Score: 0.800)
+2024-12-10 04:35:31,278 - INFO -   Match found: 'By the Time You Read This I'll Be Gone (Murder, She Wrote #1)' by Stephanie Kuehn (Score: 0.800)
+2024-12-10 04:35:31,278 - INFO -   Match found: 'Goosebumps Horrorland Box Set 1-4' by R. L. Stine (Score: 0.667)
+2024-12-10 04:35:31,278 - INFO - 
+Processing image 105/139: IMG_1538_075.jpg
+2024-12-10 04:35:31,278 - INFO - Combined 1 text segments: ['FASER']
+2024-12-10 04:35:31,278 - INFO - Matching preprocessed string: 'faser'
+2024-12-10 04:35:31,357 - INFO -   Match found: 'Ferraris' by Bob Power (Score: 0.435)
+2024-12-10 04:35:31,358 - INFO -   Match found: 'Worth' by A. LaFaye (Score: 0.421)
+2024-12-10 04:35:31,358 - INFO -   Match found: 'Tyger' by S.F. Said (Score: 0.421)
+2024-12-10 04:35:31,358 - INFO - 
+Processing image 106/139: IMG_1538_076.jpg
+2024-12-10 04:35:31,358 - INFO - Combined 3 text segments: ['The STrue Confessions', 'vi', "Charlolle 'Doyle"]
+2024-12-10 04:35:31,358 - INFO - Matching preprocessed string: 'the strue confessions vi charlolle  doyle'
+2024-12-10 04:35:31,466 - INFO -   Match found: 'The True Confessions of Charlotte Doyle' by Avi (Score: 0.819)
+2024-12-10 04:35:31,466 - INFO -   Match found: 'Confessions' by Kate Brian (Score: 0.667)
+2024-12-10 04:35:31,466 - INFO -   Match found: 'The Ocean of Story' by Caroline Ness (Score: 0.639)
+2024-12-10 04:35:31,466 - INFO - 
+Processing image 107/139: IMG_1538_077.jpg
+2024-12-10 04:35:31,466 - INFO - Combined 5 text segments: ['QuEstious', '00', '"', '1', ':']
+2024-12-10 04:35:31,466 - INFO - Matching preprocessed string: 'questious 00   1'
+2024-12-10 04:35:31,555 - INFO -   Match found: 'Triss' by Brian Jacques (Score: 0.485)
+2024-12-10 04:35:31,555 - INFO -   Match found: 'Queerstory' by null (Score: 0.483)
+2024-12-10 04:35:31,555 - INFO -   Match found: '1900-20' by Sue Mee (Score: 0.483)
+2024-12-10 04:35:31,555 - INFO - 
+Processing image 108/139: IMG_1538_078.jpg
+2024-12-10 04:35:31,555 - INFO - Combined 3 text segments: ['Tsland ofthe Blue Dolphins', 'YEARLINC', "0' D-l"]
+2024-12-10 04:35:31,555 - INFO - Matching preprocessed string: 'tsland ofthe blue dolphins yearlinc 0  d l'
+2024-12-10 04:35:31,661 - INFO -   Match found: 'Island of the Blue Dolphins' by Scott O'Dell (Score: 0.593)
+2024-12-10 04:35:31,661 - INFO -   Match found: 'Dolphins' by Jason Skog (Score: 0.593)
+2024-12-10 04:35:31,661 - INFO -   Match found: 'Dolphins' by Kathy White (Score: 0.571)
+2024-12-10 04:35:31,661 - INFO - 
+Processing image 109/139: IMG_1538_079.jpg
+2024-12-10 04:35:31,661 - INFO - Combined 2 text segments: ['Sonieone Named Eva', 'Woll']
+2024-12-10 04:35:31,661 - INFO - Matching preprocessed string: 'sonieone named eva woll'
+2024-12-10 04:35:31,755 - INFO -   Match found: 'Someone Named Eva' by Joan M. Wolf (Score: 0.769)
+2024-12-10 04:35:31,755 - INFO -   Match found: 'The Silenced' by James DeVita (Score: 0.583)
+2024-12-10 04:35:31,755 - INFO -   Match found: 'Firehouse' by Bernard Wolf (Score: 0.578)
+2024-12-10 04:35:31,755 - INFO - 
+Processing image 110/139: IMG_1538_080.jpg
+2024-12-10 04:35:31,755 - INFO - Combined 2 text segments: ['THE BOMB', 'THEODORE TAYLOR']
+2024-12-10 04:35:31,755 - INFO - Matching preprocessed string: 'the bomb theodore taylor'
+2024-12-10 04:35:31,850 - INFO -   Match found: 'The Bomb' by Theodore Taylor (Score: 1.000)
+2024-12-10 04:35:31,850 - INFO -   Match found: 'The Cay' by Theodore Taylor (Score: 0.905)
+2024-12-10 04:35:31,850 - INFO -   Match found: 'Timothy of the Cay' by Theodore Taylor (Score: 0.884)
+2024-12-10 04:35:31,850 - INFO - 
+Processing image 111/139: IMG_1538_081.jpg
+2024-12-10 04:35:31,850 - INFO - Combined 3 text segments: ['6', '3', 'Roar']
+2024-12-10 04:35:31,850 - INFO - Matching preprocessed string: '6 3 roar'
+2024-12-10 04:35:31,933 - INFO -   Match found: 'The Roar' by Emma Clayton (Score: 0.667)
+2024-12-10 04:35:31,933 - INFO -   Match found: 'Roar of the Thunder Dragon' by Tracey West (Score: 0.667)
+2024-12-10 04:35:31,933 - INFO -   Match found: 'The Roar of the Crowd' by Rich Wallace (Score: 0.667)
+2024-12-10 04:35:31,933 - INFO - 
+Processing image 112/139: IMG_1538_082.jpg
+2024-12-10 04:35:31,933 - INFO - Combined 2 text segments: ['7 Yrof Min Agnt}', '1']
+2024-12-10 04:35:31,933 - INFO - Matching preprocessed string: '7 yrof min agnt  1'
+2024-12-10 04:35:32,027 - INFO -   Match found: 'Minerals' by Roy A. Gallant (Score: 0.564)
+2024-12-10 04:35:32,027 - INFO -   Match found: '12 to 22' by Jen Calonita (Score: 0.526)
+2024-12-10 04:35:32,027 - INFO -   Match found: 'New York, 1609-1776' by Michael Burgan (Score: 0.520)
+2024-12-10 04:35:32,027 - INFO - 
+Processing image 113/139: IMG_1538_083.jpg
+2024-12-10 04:35:32,027 - INFO - Combined 3 text segments: ['1', 'Hei UL+JS', '1']
+2024-12-10 04:35:32,027 - INFO - Matching preprocessed string: '1 hei ul js 1'
+2024-12-10 04:35:32,115 - INFO -   Match found: '13' by James Howe (Score: 0.583)
+2024-12-10 04:35:32,115 - INFO -   Match found: 'Turtles' by Jodi Huelin (Score: 0.533)
+2024-12-10 04:35:32,115 - INFO -   Match found: 'Horse' by Juliet (Score: 0.522)
+2024-12-10 04:35:32,115 - INFO - 
+Processing image 114/139: IMG_1538_084.jpg
+2024-12-10 04:35:32,115 - INFO - Combined 2 text segments: ['CITIL WAR SPIES: BEHIND ENEMT LINES', '(Wilson']
+2024-12-10 04:35:32,116 - INFO - Matching preprocessed string: 'citil war spies  behind enemt lines  wilson'
+2024-12-10 04:35:32,216 - INFO -   Match found: 'Behind Enemy Lines' by Jennifer A. Nielsen (Score: 0.692)
+2024-12-10 04:35:32,216 - INFO -   Match found: 'Civil War Spies' by Camilla J. Wilson (Score: 0.667)
+2024-12-10 04:35:32,216 - INFO -   Match found: 'Sea Mysteries' by Ben Wilson (Score: 0.615)
+2024-12-10 04:35:32,216 - INFO - 
+Processing image 115/139: IMG_1538_085.jpg
+2024-12-10 04:35:32,216 - INFO - Combined 2 text segments: ['bchind tc bcdroom Wvall', 'milliams']
+2024-12-10 04:35:32,216 - INFO - Matching preprocessed string: 'bchind tc bcdroom wvall milliams'
+2024-12-10 04:35:32,312 - INFO -   Match found: 'Behind the Bedroom Wall' by Laura E. Williams (Score: 0.611)
+2024-12-10 04:35:32,312 - INFO -   Match found: 'Cracking the Wall' by Eileen Lucas (Score: 0.581)
+2024-12-10 04:35:32,312 - INFO -   Match found: 'Miriam's Well' by Alice Bach (Score: 0.571)
+2024-12-10 04:35:32,312 - INFO - 
+Processing image 116/139: IMG_1538_086.jpg
+2024-12-10 04:35:32,312 - INFO - Combined 2 text segments: ['3', '"IReMo']
+2024-12-10 04:35:32,312 - INFO - Matching preprocessed string: '3  iremo'
+2024-12-10 04:35:32,398 - INFO -   Match found: 'D-39' by Irene Latham (Score: 0.500)
+2024-12-10 04:35:32,398 - INFO -   Match found: 'Page' by Tamora Pierce (Score: 0.480)
+2024-12-10 04:35:32,398 - INFO -   Match found: 'Fire' by Tom Mason (Score: 0.476)
+2024-12-10 04:35:32,398 - INFO - 
+Processing image 117/139: IMG_1538_087.jpg
+2024-12-10 04:35:32,398 - INFO - Combined 3 text segments: ['YEARLING', 'The Slave Dancer', '2']
+2024-12-10 04:35:32,398 - INFO - Matching preprocessed string: 'yearling the slave dancer 2'
+2024-12-10 04:35:32,498 - INFO -   Match found: 'The Slave Dancer' by Paula Fox (Score: 0.762)
+2024-12-10 04:35:32,498 - INFO -   Match found: 'The Young Dancer' by Darcey Bussell (Score: 0.655)
+2024-12-10 04:35:32,498 - INFO -   Match found: 'The 13th Reality' by James Dashner (Score: 0.632)
+2024-12-10 04:35:32,498 - INFO - 
+Processing image 118/139: IMG_1538_088.jpg
+2024-12-10 04:35:32,498 - INFO - Combined 4 text segments: ['SToRYTELLING', 'Inas]', '40', 'GA ME']
+2024-12-10 04:35:32,498 - INFO - Matching preprocessed string: 'storytelling inas  40 ga me'
+2024-12-10 04:35:32,596 - INFO -   Match found: '¡Mira, abuela! / Look, Grandma! / Ni, Elisi! (Storytelling Math)' by Art Coulson (Score: 0.632)
+2024-12-10 04:35:32,596 - INFO -   Match found: 'Bracelets for Bina's Brothers (Storytelling Math)' by Rajani LaRocca (Score: 0.632)
+2024-12-10 04:35:32,596 - INFO -   Match found: 'Extraordinary Magic: The Storytelling Life of Virginia Hamilton' by Nina Crews (Score: 0.632)
+2024-12-10 04:35:32,596 - INFO - 
+Processing image 119/139: IMG_1538_089.jpg
+2024-12-10 04:35:32,597 - INFO - Combined 3 text segments: ['Long WALK To WATER', 'FARK', 'AQOHMH']
+2024-12-10 04:35:32,597 - INFO - Matching preprocessed string: 'long walk to water fark aqohmh'
+2024-12-10 04:35:32,703 - INFO -   Match found: 'A Long Walk to Water' by Linda Sue Park (Score: 0.750)
+2024-12-10 04:35:32,703 - INFO -   Match found: 'The Long Walk' by Richard Bachman (Score: 0.644)
+2024-12-10 04:35:32,703 - INFO -   Match found: 'Like Water on Stone' by Dana Walrath (Score: 0.613)
+2024-12-10 04:35:32,703 - INFO - 
+Processing image 120/139: IMG_1538_090.jpg
+2024-12-10 04:35:32,703 - INFO - Combined 2 text segments: ['MAMERICA', 'Colod']
+2024-12-10 04:35:32,703 - INFO - Matching preprocessed string: 'mamerica colod'
+2024-12-10 04:35:32,790 - INFO -   Match found: 'Mars--' by Michael D. Cole (Score: 0.667)
+2024-12-10 04:35:32,790 - INFO -   Match found: 'Cold' by Mariko Tamaki (Score: 0.625)
+2024-12-10 04:35:32,790 - INFO -   Match found: 'Moldova' by Patricia (Score: 0.600)
+2024-12-10 04:35:32,790 - INFO - 
+Processing image 121/139: IMG_1538_091.jpg
+2024-12-10 04:35:32,790 - INFO - Combined 3 text segments: ['NUMDERETHEETAR $', 'C', '1']
+2024-12-10 04:35:32,790 - INFO - Matching preprocessed string: 'numderetheetar   c 1'
+2024-12-10 04:35:32,881 - INFO -   Match found: 'The Year 1000' by Robert Lacey (Score: 0.545)
+2024-12-10 04:35:32,881 - INFO -   Match found: 'Thumbeline' by H. C. Andersen (Score: 0.537)
+2024-12-10 04:35:32,881 - INFO -   Match found: 'Maserati' by Jill C. Wheeler (Score: 0.537)
+2024-12-10 04:35:32,881 - INFO - 
+Processing image 122/139: IMG_1538_092.jpg
+2024-12-10 04:35:32,881 - INFO - Combined 5 text segments: ['1', '6', 'SLATTON', '1', 'Dloma']
+2024-12-10 04:35:32,881 - INFO - Matching preprocessed string: '1 6 slatton 1 dloma'
+2024-12-10 04:35:32,974 - INFO -   Match found: 'Stetson' by S.L. Rottman (Score: 0.556)
+2024-12-10 04:35:32,974 - INFO -   Match found: 'Stetson' by S. L. Rottman (Score: 0.556)
+2024-12-10 04:35:32,974 - INFO -   Match found: 'D-Day' by Milton Dank (Score: 0.529)
+2024-12-10 04:35:32,974 - INFO - 
+Processing image 123/139: IMG_1538_093.jpg
+2024-12-10 04:35:32,974 - INFO - Combined 2 text segments: ['Ba', 'AGATHLRING 0']
+2024-12-10 04:35:32,974 - INFO - Matching preprocessed string: 'ba agathlring 0'
+2024-12-10 04:35:33,061 - INFO -   Match found: 'Earth' by Susan Ring (Score: 0.581)
+2024-12-10 04:35:33,061 - INFO -   Match found: 'A Gathering of Days' by Joan Blos (Score: 0.545)
+2024-12-10 04:35:33,061 - INFO -   Match found: 'Earthling!' by Mark Fearing (Score: 0.541)
+2024-12-10 04:35:33,061 - INFO - 
+Processing image 124/139: IMG_1538_094.jpg
+2024-12-10 04:35:33,061 - INFO - Combined 5 text segments: ['1', 'T', 'LINL', 'FIGHTERS', 'THE KITE']
+2024-12-10 04:35:33,061 - INFO - Matching preprocessed string: '1 t linl fighters the kite'
+2024-12-10 04:35:33,168 - INFO -   Match found: 'The Kite Fighters' by Linda Sue Park (Score: 0.791)
+2024-12-10 04:35:33,168 - INFO -   Match found: 'The Chinese' by Lorien Kite (Score: 0.653)
+2024-12-10 04:35:33,168 - INFO -   Match found: 'The Disease Fighters' by Nathan Aaseng (Score: 0.633)
+2024-12-10 04:35:33,168 - INFO - 
+Processing image 125/139: IMG_1538_095.jpg
+2024-12-10 04:35:33,168 - INFO - Combined 5 text segments: ['richmond', ']', '745 NJQQIH', 'JKL', '3']
+2024-12-10 04:35:33,168 - INFO - Matching preprocessed string: 'richmond   745 njqqih jkl 3'
+2024-12-10 04:35:33,269 - INFO -   Match found: 'Phillis Wheatley' by M. A. Richmond (Score: 0.519)
+2024-12-10 04:35:33,269 - INFO -   Match found: 'Night World No. 3' by L.J. Smith (Score: 0.510)
+2024-12-10 04:35:33,269 - INFO -   Match found: 'The Only Thing to Fear' by Caroline Tung Richmond (Score: 0.485)
+2024-12-10 04:35:33,270 - INFO - 
+Processing image 126/139: IMG_1538_096.jpg
+2024-12-10 04:35:33,270 - INFO - Combined 1 text segments: ['1']
+2024-12-10 04:35:33,270 - INFO - Matching preprocessed string: '1'
+2024-12-10 04:35:33,344 - INFO -   Match found: 'Beautiful Volume 1' by Marie D'Abreo (Score: 1.000)
+2024-12-10 04:35:33,344 - INFO -   Match found: 'Fly to the Rescue (Tiny Geniuses #1)' by Megan E. Bryant (Score: 1.000)
+2024-12-10 04:35:33,344 - INFO -   Match found: 'Island Trilogy Volume 1-3' by Gordon Korman (Score: 1.000)
+2024-12-10 04:35:33,344 - INFO - 
+Processing image 127/139: IMG_1538_097.jpg
+2024-12-10 04:35:33,344 - INFO - Combined 1 text segments: ['AVI']
+2024-12-10 04:35:33,344 - INFO - Matching preprocessed string: 'avi'
+2024-12-10 04:35:33,422 - INFO -   Match found: 'The Most Important Thing' by Avi (Score: 1.000)
+2024-12-10 04:35:33,422 - INFO -   Match found: 'Strange Happenings' by Avi (Score: 1.000)
+2024-12-10 04:35:33,422 - INFO -   Match found: 'The Unexpected Life of Oliver Cromwell Pitts' by Avi (Score: 1.000)
+2024-12-10 04:35:33,422 - INFO - 
+Processing image 128/139: IMG_1538_098.jpg
+2024-12-10 04:35:33,422 - INFO - Combined 2 text segments: ['Bread andRoses; Ioo', 'PATERSON']
+2024-12-10 04:35:33,422 - INFO - Matching preprocessed string: 'bread androses  ioo paterson'
+2024-12-10 04:35:33,514 - INFO -   Match found: 'Bread and Roses, Too' by Katherine Paterson (Score: 0.800)
+2024-12-10 04:35:33,514 - INFO -   Match found: 'Med Head' by James Patterson (Score: 0.627)
+2024-12-10 04:35:33,514 - INFO -   Match found: 'Top Dog' by Brad Anderson (Score: 0.625)
+2024-12-10 04:35:33,514 - INFO - 
+Processing image 129/139: IMG_1538_099.jpg
+2024-12-10 04:35:33,514 - INFO - Combined 4 text segments: ['HAH EEL', 'THE', '1', '6']
+2024-12-10 04:35:33,514 - INFO - Matching preprocessed string: 'hah eel the 1 6'
+2024-12-10 04:35:33,611 - INFO -   Match found: 'Lost in the Wilderness, Level 6 Theme 1.1' by Mindy Clarkson (Score: 0.636)
+2024-12-10 04:35:33,611 - INFO -   Match found: 'Voyage of the Fram, Level 6 Theme 1.4' by Tanner Ottley Gay (Score: 0.636)
+2024-12-10 04:35:33,611 - INFO -   Match found: 'The Search' by Eric Heuvel (Score: 0.595)
+2024-12-10 04:35:33,611 - INFO - 
+Processing image 130/139: IMG_1538_100.jpg
+2024-12-10 04:35:33,611 - INFO - Combined 3 text segments: ['to tbe DEAD', 'PROMISES', 'HAHN']
+2024-12-10 04:35:33,611 - INFO - Matching preprocessed string: 'to tbe dead promises hahn'
+2024-12-10 04:35:33,706 - INFO -   Match found: 'Promises to the Dead' by Mary Downing Hahn (Score: 0.913)
+2024-12-10 04:35:33,706 - INFO -   Match found: 'Promises to Keep' by Paul Langan (Score: 0.642)
+2024-12-10 04:35:33,706 - INFO -   Match found: 'Dead in the Water' by Robin H. Stevenson (Score: 0.633)
+2024-12-10 04:35:33,706 - INFO - 
+Processing image 131/139: IMG_1538_101.jpg
+2024-12-10 04:35:33,706 - INFO - Combined 7 text segments: ['1', 'HE', '40', 'SOUL', 'TP', 'au/Lawton', '1']
+2024-12-10 04:35:33,706 - INFO - Matching preprocessed string: '1 he 40 soul tp au lawton 1'
+2024-12-10 04:35:33,811 - INFO -   Match found: 'Ohio' by Val Lawton (Score: 0.571)
+2024-12-10 04:35:33,811 - INFO -   Match found: 'The 1970s' by Neil A. Hamilton (Score: 0.560)
+2024-12-10 04:35:33,811 - INFO -   Match found: 'West Virginia' by Val Lawton (Score: 0.531)
+2024-12-10 04:35:33,811 - INFO - 
+Processing image 132/139: IMG_1538_102.jpg
+2024-12-10 04:35:33,811 - INFO - No valid texts found
+2024-12-10 04:35:33,811 - INFO - 
+Processing image 133/139: IMG_1538_103.jpg
+2024-12-10 04:35:33,811 - INFO - Combined 3 text segments: ['LAm Malala', 'MALALA', 'YOUSAFZA']
+2024-12-10 04:35:33,811 - INFO - Matching preprocessed string: 'lam malala malala yousafza'
+2024-12-10 04:35:33,907 - INFO -   Match found: 'I Am Malala' by Malala Yousafzai (Score: 0.900)
+2024-12-10 04:35:33,907 - INFO -   Match found: 'Malala' by Malala Yousafzai (Score: 0.857)
+2024-12-10 04:35:33,907 - INFO -   Match found: 'Malala Yousafzai' by Elisa Peters (Score: 0.750)
+2024-12-10 04:35:33,907 - INFO - 
+Processing image 134/139: IMG_1538_104.jpg
+2024-12-10 04:35:33,907 - INFO - Combined 3 text segments: ['Manzanak', 'Fatcwct', 'Houston']
+2024-12-10 04:35:33,907 - INFO - Matching preprocessed string: 'manzanak fatcwct houston'
+2024-12-10 04:35:34,001 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Houston (Score: 0.644)
+2024-12-10 04:35:34,002 - INFO -   Match found: 'Farewell to Manzanar' by Jeanne Wakatsuki Houston (Score: 0.580)
+2024-12-10 04:35:34,002 - INFO -   Match found: 'Long Claws' by James A. Houston (Score: 0.560)
+2024-12-10 04:35:34,002 - INFO - 
+Processing image 135/139: IMG_1538_105.jpg
+2024-12-10 04:35:34,002 - INFO - Combined 3 text segments: ['FbRT', 'DAGO', '3']
+2024-12-10 04:35:34,002 - INFO - Matching preprocessed string: 'fbrt dago 3'
+2024-12-10 04:35:34,136 - INFO -   Match found: 'D-Day' by Tom McGowen (Score: 0.500)
+2024-12-10 04:35:34,136 - INFO -   Match found: 'Dog' by Clare Hibbert (Score: 0.500)
+2024-12-10 04:35:34,136 - INFO -   Match found: '13' by Jason Robert Brown (Score: 0.500)
+2024-12-10 04:35:34,136 - INFO - 
+Processing image 136/139: IMG_1538_106.jpg
+2024-12-10 04:35:34,136 - INFO - Combined 2 text segments: ['SOLDIER', 'Wulppson']
+2024-12-10 04:35:34,136 - INFO - Matching preprocessed string: 'soldier wulppson'
+2024-12-10 04:35:34,222 - INFO -   Match found: 'Soldier X' by Don L. Wulffson (Score: 0.700)
+2024-12-10 04:35:34,222 - INFO -   Match found: 'Soldier' by Simon Adams (Score: 0.629)
+2024-12-10 04:35:34,222 - INFO -   Match found: 'A Soldier and A Liar' by Caitlin Lochner (Score: 0.609)
+2024-12-10 04:35:34,222 - INFO - 
+Processing image 137/139: IMG_1538_107.jpg
+2024-12-10 04:35:34,222 - INFO - Combined 4 text segments: ['0', '6', '0', '006']
+2024-12-10 04:35:34,222 - INFO - Matching preprocessed string: '0 6 0 006'
+2024-12-10 04:35:34,318 - INFO -   Match found: '1900-20' by Sue Mee (Score: 0.364)
+2024-12-10 04:35:34,318 - INFO -   Match found: 'T0073641' by Rich Wallace (Score: 0.357)
+2024-12-10 04:35:34,318 - INFO -   Match found: '進撃の巨人 6' by 諫山創 (Score: 0.333)
+2024-12-10 04:35:34,318 - INFO - 
+Processing image 138/139: IMG_1538_108.jpg
+2024-12-10 04:35:34,318 - INFO - Combined 4 text segments: ['drrudg', '@ Wi', '72 > [im', 'JIA']
+2024-12-10 04:35:34,318 - INFO - Matching preprocessed string: 'drrudg   wi 72    im jia'
+2024-12-10 04:35:34,427 - INFO -   Match found: 'In Waves' by A. J. Dungo (Score: 0.541)
+2024-12-10 04:35:34,427 - INFO -   Match found: 'Is My Dog a Wolf?' by Jenni Bidner (Score: 0.500)
+2024-12-10 04:35:34,427 - INFO -   Match found: 'Warriors!' by Jim Eldridge (Score: 0.500)
+2024-12-10 04:35:34,427 - INFO - 
+Processing image 139/139: IMG_1538_109.jpg
+2024-12-10 04:35:34,427 - INFO - Combined 3 text segments: ['INDIAN CAPTIVE', '1', '5']
+2024-12-10 04:35:34,427 - INFO - Matching preprocessed string: 'indian captive 1 5'
+2024-12-10 04:35:34,523 - INFO -   Match found: 'Indian Captive' by Lois Lenski (Score: 0.875)
+2024-12-10 04:35:34,523 - INFO -   Match found: 'Captured' by Linda Barr (Score: 0.595)
+2024-12-10 04:35:34,523 - INFO -   Match found: 'Captive!' by Gary Paulsen (Score: 0.579)
+2024-12-10 04:35:34,523 - INFO - 
+Processing complete. Found matches for 138 images
+2024-12-10 04:35:34,526 - INFO - Match results saved to /Users/Macington/Documents/Projects/Bookshelf Scanner/bookshelf_scanner/data/results/matcher.json

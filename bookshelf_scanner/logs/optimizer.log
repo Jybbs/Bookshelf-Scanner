@@ -1,0 +1,454 @@
+2024-12-09 22:52:03,627 - INFO - State loaded from /Users/Macington/Documents/Projects/Bookshelf Scanner/bookshelf_scanner/core/config_optimizer/models/meta_learner.pt
+2024-12-09 22:52:03,633 - INFO - Beginning meta-learning configuration search for 109 images
+2024-12-09 22:52:03,633 - INFO - Optimizing configuration for IMG_1538_001.jpg
+2024-12-09 22:52:15,502 - INFO - New best score 18.218 on iteration 2
+2024-12-09 22:52:18,403 - INFO - New best score 18.351 on iteration 9
+2024-12-09 22:52:32,442 - INFO - Saved processed image for the best configuration of 'IMG_1538_001.jpg'
+2024-12-09 22:52:32,442 - INFO - Optimizing configuration for IMG_1538_002.jpg
+2024-12-09 22:52:54,225 - INFO - New best score 18.363 on iteration 14
+2024-12-09 22:52:57,870 - INFO - New best score 19.421 on iteration 22
+2024-12-09 22:53:07,299 - INFO - Saved processed image for the best configuration of 'IMG_1538_002.jpg'
+2024-12-09 22:53:07,299 - INFO - Optimizing configuration for IMG_1538_003.jpg
+2024-12-09 22:53:26,466 - INFO - New best score 25.085 on iteration 1
+2024-12-09 22:53:54,431 - INFO - Saved processed image for the best configuration of 'IMG_1538_003.jpg'
+2024-12-09 22:53:54,431 - INFO - Optimizing configuration for IMG_1538_004.jpg
+2024-12-09 22:54:16,128 - INFO - New best score 26.341 on iteration 18
+2024-12-09 22:54:19,067 - INFO - New best score 27.236 on iteration 25
+2024-12-09 22:54:24,697 - INFO - Saved processed image for the best configuration of 'IMG_1538_004.jpg'
+2024-12-09 22:54:24,697 - INFO - Optimizing configuration for IMG_1538_005.jpg
+2024-12-09 22:54:54,615 - INFO - Saved processed image for the best configuration of 'IMG_1538_005.jpg'
+2024-12-09 22:54:54,615 - INFO - Optimizing configuration for IMG_1538_006.jpg
+2024-12-09 22:55:23,074 - INFO - New best score 32.816 on iteration 13
+2024-12-09 22:55:41,631 - INFO - Saved processed image for the best configuration of 'IMG_1538_006.jpg'
+2024-12-09 22:55:41,631 - INFO - Optimizing configuration for IMG_1538_007.jpg
+2024-12-09 22:56:19,441 - INFO - New best score 20.183 on iteration 4
+2024-12-09 22:56:26,583 - INFO - New best score 28.825 on iteration 13
+2024-12-09 22:56:47,672 - INFO - Saved processed image for the best configuration of 'IMG_1538_007.jpg'
+2024-12-09 22:56:47,672 - INFO - Optimizing configuration for IMG_1538_008.jpg
+2024-12-09 22:57:23,312 - INFO - New best score 20.381 on iteration 23
+2024-12-09 22:57:24,974 - INFO - New best score 20.394 on iteration 26
+2024-12-09 22:57:28,209 - INFO - New best score 20.679 on iteration 32
+2024-12-09 22:57:28,846 - INFO - New best score 21.124 on iteration 33
+2024-12-09 22:57:29,988 - INFO - New best score 21.325 on iteration 35
+2024-12-09 22:57:31,230 - INFO - New best score 21.570 on iteration 37
+2024-12-09 22:57:31,854 - INFO - Saved processed image for the best configuration of 'IMG_1538_008.jpg'
+2024-12-09 22:57:31,854 - INFO - Optimizing configuration for IMG_1538_009.jpg
+2024-12-09 22:57:49,376 - INFO - New best score 20.918 on iteration 7
+2024-12-09 22:57:59,036 - INFO - New best score 20.928 on iteration 33
+2024-12-09 22:58:01,655 - INFO - Saved processed image for the best configuration of 'IMG_1538_009.jpg'
+2024-12-09 22:58:01,655 - INFO - Optimizing configuration for IMG_1538_010.jpg
+2024-12-09 22:58:31,798 - INFO - New best score 26.329 on iteration 5
+2024-12-09 22:58:36,021 - INFO - New best score 28.545 on iteration 12
+2024-12-09 22:58:37,937 - INFO - New best score 32.566 on iteration 15
+2024-12-09 22:58:41,821 - INFO - New best score 34.218 on iteration 21
+2024-12-09 22:58:48,205 - INFO - New best score 34.686 on iteration 31
+2024-12-09 22:58:53,254 - INFO - Saved processed image for the best configuration of 'IMG_1538_010.jpg'
+2024-12-09 22:58:53,254 - INFO - Optimizing configuration for IMG_1538_011.jpg
+2024-12-09 22:59:38,632 - INFO - New best score 48.794 on iteration 12
+2024-12-09 22:59:55,225 - INFO - New best score 51.273 on iteration 34
+2024-12-09 22:59:58,457 - INFO - New best score 51.310 on iteration 37
+2024-12-09 22:59:59,765 - INFO - Saved processed image for the best configuration of 'IMG_1538_011.jpg'
+2024-12-09 22:59:59,766 - INFO - Optimizing configuration for IMG_1538_012.jpg
+2024-12-09 23:00:27,051 - INFO - New best score 16.035 on iteration 8
+2024-12-09 23:00:34,375 - INFO - New best score 17.644 on iteration 25
+2024-12-09 23:00:38,586 - INFO - New best score 19.556 on iteration 32
+2024-12-09 23:00:43,170 - INFO - Saved processed image for the best configuration of 'IMG_1538_012.jpg'
+2024-12-09 23:00:43,170 - INFO - Optimizing configuration for IMG_1538_013.jpg
+2024-12-09 23:01:12,790 - INFO - New best score 9.311 on iteration 26
+2024-12-09 23:01:17,690 - INFO - Saved processed image for the best configuration of 'IMG_1538_013.jpg'
+2024-12-09 23:01:17,690 - INFO - Optimizing configuration for IMG_1538_014.jpg
+2024-12-09 23:02:15,454 - INFO - Saved processed image for the best configuration of 'IMG_1538_014.jpg'
+2024-12-09 23:02:15,454 - INFO - Optimizing configuration for IMG_1538_015.jpg
+2024-12-09 23:02:35,499 - INFO - New best score 12.339 on iteration 2
+2024-12-09 23:02:43,446 - INFO - New best score 12.839 on iteration 24
+2024-12-09 23:02:49,222 - INFO - Saved processed image for the best configuration of 'IMG_1538_015.jpg'
+2024-12-09 23:02:49,222 - INFO - Optimizing configuration for IMG_1538_016.jpg
+2024-12-09 23:03:57,940 - INFO - Saved processed image for the best configuration of 'IMG_1538_016.jpg'
+2024-12-09 23:03:57,940 - INFO - Optimizing configuration for IMG_1538_017.jpg
+2024-12-09 23:04:56,611 - INFO - Saved processed image for the best configuration of 'IMG_1538_017.jpg'
+2024-12-09 23:04:56,612 - INFO - Optimizing configuration for IMG_1538_018.jpg
+2024-12-09 23:05:52,804 - INFO - New best score 43.196 on iteration 19
+2024-12-09 23:06:00,975 - INFO - New best score 43.984 on iteration 30
+2024-12-09 23:06:04,019 - INFO - New best score 44.080 on iteration 34
+2024-12-09 23:06:08,529 - INFO - Saved processed image for the best configuration of 'IMG_1538_018.jpg'
+2024-12-09 23:06:08,529 - INFO - Optimizing configuration for IMG_1538_019.jpg
+2024-12-09 23:07:27,470 - INFO - Saved processed image for the best configuration of 'IMG_1538_019.jpg'
+2024-12-09 23:07:27,470 - INFO - Optimizing configuration for IMG_1538_020.jpg
+2024-12-09 23:08:21,547 - INFO - New best score 5.663 on iteration 29
+2024-12-09 23:08:24,012 - INFO - New best score 5.707 on iteration 33
+2024-12-09 23:08:28,520 - INFO - Saved processed image for the best configuration of 'IMG_1538_020.jpg'
+2024-12-09 23:08:28,520 - INFO - Optimizing configuration for IMG_1538_021.jpg
+2024-12-09 23:08:55,580 - INFO - New best score 12.278 on iteration 1
+2024-12-09 23:09:00,570 - INFO - New best score 12.280 on iteration 12
+2024-12-09 23:09:06,440 - INFO - New best score 12.382 on iteration 25
+2024-12-09 23:09:13,561 - INFO - Saved processed image for the best configuration of 'IMG_1538_021.jpg'
+2024-12-09 23:09:13,561 - INFO - Optimizing configuration for IMG_1538_022.jpg
+2024-12-09 23:10:29,775 - INFO - New best score 37.260 on iteration 3
+2024-12-09 23:10:43,019 - INFO - New best score 38.459 on iteration 15
+2024-12-09 23:11:12,354 - INFO - Saved processed image for the best configuration of 'IMG_1538_022.jpg'
+2024-12-09 23:11:12,354 - INFO - Optimizing configuration for IMG_1538_023.jpg
+2024-12-09 23:11:38,046 - INFO - New best score 9.578 on iteration 6
+2024-12-09 23:11:39,603 - INFO - New best score 9.722 on iteration 10
+2024-12-09 23:11:40,018 - INFO - New best score 9.731 on iteration 11
+2024-12-09 23:11:45,205 - INFO - New best score 9.893 on iteration 25
+2024-12-09 23:11:46,115 - INFO - New best score 12.927 on iteration 27
+2024-12-09 23:11:50,690 - INFO - Saved processed image for the best configuration of 'IMG_1538_023.jpg'
+2024-12-09 23:11:50,690 - INFO - Optimizing configuration for IMG_1538_024.jpg
+2024-12-09 23:13:12,466 - INFO - New best score 20.082 on iteration 23
+2024-12-09 23:13:22,882 - INFO - New best score 20.182 on iteration 34
+2024-12-09 23:13:28,591 - INFO - Saved processed image for the best configuration of 'IMG_1538_024.jpg'
+2024-12-09 23:13:28,591 - INFO - Optimizing configuration for IMG_1538_025.jpg
+2024-12-09 23:14:32,863 - INFO - New best score 23.081 on iteration 19
+2024-12-09 23:14:34,662 - INFO - New best score 23.093 on iteration 21
+2024-12-09 23:14:44,554 - INFO - New best score 23.121 on iteration 33
+2024-12-09 23:14:50,216 - INFO - Saved processed image for the best configuration of 'IMG_1538_025.jpg'
+2024-12-09 23:14:50,216 - INFO - Optimizing configuration for IMG_1538_026.jpg
+2024-12-09 23:15:35,655 - INFO - New best score 26.748 on iteration 1
+2024-12-09 23:15:41,862 - INFO - New best score 26.780 on iteration 11
+2024-12-09 23:15:42,910 - INFO - New best score 26.810 on iteration 13
+2024-12-09 23:15:43,449 - INFO - New best score 26.849 on iteration 14
+2024-12-09 23:15:45,079 - INFO - New best score 26.871 on iteration 17
+2024-12-09 23:15:46,252 - INFO - New best score 26.876 on iteration 19
+2024-12-09 23:15:49,085 - INFO - New best score 26.881 on iteration 24
+2024-12-09 23:15:54,168 - INFO - New best score 26.881 on iteration 33
+2024-12-09 23:15:57,670 - INFO - Saved processed image for the best configuration of 'IMG_1538_026.jpg'
+2024-12-09 23:15:57,670 - INFO - Optimizing configuration for IMG_1538_027.jpg
+2024-12-09 23:16:37,700 - INFO - New best score 23.530 on iteration 3
+2024-12-09 23:17:02,001 - INFO - Saved processed image for the best configuration of 'IMG_1538_027.jpg'
+2024-12-09 23:17:02,001 - INFO - Optimizing configuration for IMG_1538_028.jpg
+2024-12-09 23:17:50,187 - INFO - New best score 8.806 on iteration 23
+2024-12-09 23:17:51,662 - INFO - New best score 8.922 on iteration 26
+2024-12-09 23:17:55,625 - INFO - New best score 8.993 on iteration 34
+2024-12-09 23:17:58,108 - INFO - Saved processed image for the best configuration of 'IMG_1538_028.jpg'
+2024-12-09 23:17:58,108 - INFO - Optimizing configuration for IMG_1538_029.jpg
+2024-12-09 23:19:15,897 - INFO - New best score 11.358 on iteration 13
+2024-12-09 23:19:31,262 - INFO - Saved processed image for the best configuration of 'IMG_1538_029.jpg'
+2024-12-09 23:19:31,262 - INFO - Optimizing configuration for IMG_1538_030.jpg
+2024-12-09 23:20:04,030 - INFO - New best score 11.491 on iteration 19
+2024-12-09 23:20:10,786 - INFO - Epoch 1: Train Loss = -1.6030, Validation Loss = 0.0263
+2024-12-09 23:20:10,786 - INFO - Epoch 1: New best validation loss: 0.0263
+2024-12-09 23:20:10,795 - INFO - Epoch 2: Train Loss = -1.7522, Validation Loss = 0.0280
+2024-12-09 23:20:10,805 - INFO - Epoch 3: Train Loss = -1.7965, Validation Loss = 0.0242
+2024-12-09 23:20:10,805 - INFO - Epoch 3: New best validation loss: 0.0242
+2024-12-09 23:20:10,814 - INFO - Epoch 4: Train Loss = -2.0932, Validation Loss = 0.0224
+2024-12-09 23:20:10,814 - INFO - Epoch 4: New best validation loss: 0.0224
+2024-12-09 23:20:10,824 - INFO - Epoch 5: Train Loss = -2.2067, Validation Loss = 0.0226
+2024-12-09 23:20:10,832 - INFO - Epoch 6: Train Loss = -2.3678, Validation Loss = 0.0226
+2024-12-09 23:20:10,841 - INFO - Epoch 7: Train Loss = -2.6443, Validation Loss = 0.0228
+2024-12-09 23:20:10,850 - INFO - Epoch 8: Train Loss = -2.7564, Validation Loss = 0.0293
+2024-12-09 23:20:10,859 - INFO - Epoch 9: Train Loss = -3.0434, Validation Loss = 0.0244
+2024-12-09 23:20:10,859 - INFO - Early stopping triggered after 9 epochs. Best validation loss: 0.0224
+2024-12-09 23:20:10,859 - INFO - Training completed. Best validation loss: 0.0224 after 9 epochs.
+2024-12-09 23:20:10,880 - INFO - Saved processed image for the best configuration of 'IMG_1538_030.jpg'
+2024-12-09 23:20:10,880 - INFO - Optimizing configuration for IMG_1538_031.jpg
+2024-12-09 23:20:33,431 - INFO - New best score 5.191 on iteration 1
+2024-12-09 23:20:34,999 - INFO - New best score 5.259 on iteration 6
+2024-12-09 23:20:36,886 - INFO - New best score 5.358 on iteration 12
+2024-12-09 23:20:37,497 - INFO - New best score 5.666 on iteration 14
+2024-12-09 23:20:44,481 - INFO - New best score 5.689 on iteration 36
+2024-12-09 23:20:45,433 - INFO - Saved processed image for the best configuration of 'IMG_1538_031.jpg'
+2024-12-09 23:20:45,433 - INFO - Optimizing configuration for IMG_1538_032.jpg
+2024-12-09 23:21:25,119 - INFO - Saved processed image for the best configuration of 'IMG_1538_032.jpg'
+2024-12-09 23:21:25,120 - INFO - Optimizing configuration for IMG_1538_033.jpg
+2024-12-09 23:22:48,911 - INFO - Saved processed image for the best configuration of 'IMG_1538_033.jpg'
+2024-12-09 23:22:48,911 - INFO - Optimizing configuration for IMG_1538_034.jpg
+2024-12-09 23:24:16,934 - INFO - New best score 35.668 on iteration 30
+2024-12-09 23:24:19,682 - INFO - New best score 35.675 on iteration 34
+2024-12-09 23:24:22,412 - INFO - Saved processed image for the best configuration of 'IMG_1538_034.jpg'
+2024-12-09 23:24:22,412 - INFO - Optimizing configuration for IMG_1538_035.jpg
+2024-12-09 23:24:53,957 - INFO - New best score 18.807 on iteration 6
+2024-12-09 23:25:00,245 - INFO - New best score 18.867 on iteration 27
+2024-12-09 23:25:03,816 - INFO - Saved processed image for the best configuration of 'IMG_1538_035.jpg'
+2024-12-09 23:25:03,816 - INFO - Optimizing configuration for IMG_1538_036.jpg
+2024-12-09 23:26:38,142 - INFO - New best score 22.723 on iteration 31
+2024-12-09 23:26:42,255 - INFO - New best score 22.862 on iteration 38
+2024-12-09 23:26:42,808 - INFO - Saved processed image for the best configuration of 'IMG_1538_036.jpg'
+2024-12-09 23:26:42,808 - INFO - Optimizing configuration for IMG_1538_037.jpg
+2024-12-09 23:27:37,242 - INFO - Saved processed image for the best configuration of 'IMG_1538_037.jpg'
+2024-12-09 23:27:37,242 - INFO - Optimizing configuration for IMG_1538_038.jpg
+2024-12-09 23:27:59,377 - INFO - New best score 6.704 on iteration 5
+2024-12-09 23:28:04,652 - INFO - New best score 6.720 on iteration 35
+2024-12-09 23:28:04,876 - INFO - New best score 6.806 on iteration 36
+2024-12-09 23:28:05,568 - INFO - Saved processed image for the best configuration of 'IMG_1538_038.jpg'
+2024-12-09 23:28:05,568 - INFO - Optimizing configuration for IMG_1538_039.jpg
+2024-12-09 23:29:42,460 - INFO - Saved processed image for the best configuration of 'IMG_1538_039.jpg'
+2024-12-09 23:29:42,461 - INFO - Optimizing configuration for IMG_1538_040.jpg
+2024-12-09 23:31:39,617 - INFO - New best score 19.098 on iteration 21
+2024-12-09 23:31:54,238 - INFO - Saved processed image for the best configuration of 'IMG_1538_040.jpg'
+2024-12-09 23:31:54,238 - INFO - Optimizing configuration for IMG_1538_041.jpg
+2024-12-09 23:33:24,214 - INFO - New best score 17.910 on iteration 23
+2024-12-09 23:33:36,268 - INFO - Saved processed image for the best configuration of 'IMG_1538_041.jpg'
+2024-12-09 23:33:36,268 - INFO - Optimizing configuration for IMG_1538_042.jpg
+2024-12-09 23:34:54,837 - INFO - New best score 12.423 on iteration 35
+2024-12-09 23:34:56,980 - INFO - Saved processed image for the best configuration of 'IMG_1538_042.jpg'
+2024-12-09 23:34:56,981 - INFO - Optimizing configuration for IMG_1538_043.jpg
+2024-12-09 23:36:45,416 - INFO - New best score 32.365 on iteration 35
+2024-12-09 23:36:45,912 - INFO - New best score 32.619 on iteration 36
+2024-12-09 23:36:47,987 - INFO - Saved processed image for the best configuration of 'IMG_1538_043.jpg'
+2024-12-09 23:36:47,987 - INFO - Optimizing configuration for IMG_1538_044.jpg
+2024-12-09 23:39:59,883 - INFO - New best score 19.054 on iteration 30
+2024-12-09 23:40:12,029 - INFO - Saved processed image for the best configuration of 'IMG_1538_044.jpg'
+2024-12-09 23:40:12,029 - INFO - Optimizing configuration for IMG_1538_045.jpg
+2024-12-09 23:40:44,729 - INFO - New best score 2.933 on iteration 1
+2024-12-09 23:41:11,777 - INFO - Saved processed image for the best configuration of 'IMG_1538_045.jpg'
+2024-12-09 23:41:11,777 - INFO - Optimizing configuration for IMG_1538_046.jpg
+2024-12-09 23:42:42,030 - INFO - New best score 9.246 on iteration 23
+2024-12-09 23:42:51,358 - INFO - New best score 9.487 on iteration 36
+2024-12-09 23:42:53,496 - INFO - Saved processed image for the best configuration of 'IMG_1538_046.jpg'
+2024-12-09 23:42:53,497 - INFO - Optimizing configuration for IMG_1538_047.jpg
+2024-12-09 23:44:37,641 - INFO - Saved processed image for the best configuration of 'IMG_1538_047.jpg'
+2024-12-09 23:44:37,641 - INFO - Optimizing configuration for IMG_1538_048.jpg
+2024-12-09 23:47:26,408 - INFO - Saved processed image for the best configuration of 'IMG_1538_048.jpg'
+2024-12-09 23:47:26,408 - INFO - Optimizing configuration for IMG_1538_049.jpg
+2024-12-09 23:49:50,838 - INFO - Saved processed image for the best configuration of 'IMG_1538_049.jpg'
+2024-12-09 23:49:50,838 - INFO - Optimizing configuration for IMG_1538_050.jpg
+2024-12-09 23:51:25,803 - INFO - Saved processed image for the best configuration of 'IMG_1538_050.jpg'
+2024-12-09 23:51:25,803 - INFO - Optimizing configuration for IMG_1538_051.jpg
+2024-12-09 23:52:43,082 - INFO - New best score 14.275 on iteration 9
+2024-12-09 23:52:44,937 - INFO - New best score 14.688 on iteration 14
+2024-12-09 23:52:46,430 - INFO - New best score 14.855 on iteration 18
+2024-12-09 23:52:49,207 - INFO - New best score 14.861 on iteration 26
+2024-12-09 23:52:53,057 - INFO - New best score 14.928 on iteration 36
+2024-12-09 23:52:53,922 - INFO - Saved processed image for the best configuration of 'IMG_1538_051.jpg'
+2024-12-09 23:52:53,922 - INFO - Optimizing configuration for IMG_1538_052.jpg
+2024-12-09 23:55:40,032 - INFO - New best score 10.754 on iteration 27
+2024-12-09 23:55:44,665 - INFO - New best score 11.489 on iteration 32
+2024-12-09 23:55:52,479 - INFO - Saved processed image for the best configuration of 'IMG_1538_052.jpg'
+2024-12-09 23:55:52,479 - INFO - Optimizing configuration for IMG_1538_053.jpg
+2024-12-09 23:57:34,625 - INFO - New best score 17.318 on iteration 19
+2024-12-09 23:57:35,184 - INFO - New best score 17.390 on iteration 20
+2024-12-09 23:57:46,590 - INFO - Saved processed image for the best configuration of 'IMG_1538_053.jpg'
+2024-12-09 23:57:46,591 - INFO - Optimizing configuration for IMG_1538_054.jpg
+2024-12-10 00:00:23,439 - INFO - New best score 16.915 on iteration 36
+2024-12-10 00:00:25,840 - INFO - Saved processed image for the best configuration of 'IMG_1538_054.jpg'
+2024-12-10 00:00:25,840 - INFO - Optimizing configuration for IMG_1538_055.jpg
+2024-12-10 00:02:32,692 - INFO - New best score 5.487 on iteration 22
+2024-12-10 00:02:37,271 - INFO - New best score 5.498 on iteration 27
+2024-12-10 00:02:48,384 - INFO - Saved processed image for the best configuration of 'IMG_1538_055.jpg'
+2024-12-10 00:02:48,384 - INFO - Optimizing configuration for IMG_1538_056.jpg
+2024-12-10 00:05:01,466 - INFO - New best score 16.645 on iteration 31
+2024-12-10 00:05:06,009 - INFO - Saved processed image for the best configuration of 'IMG_1538_056.jpg'
+2024-12-10 00:05:06,009 - INFO - Optimizing configuration for IMG_1538_057.jpg
+2024-12-10 00:06:54,940 - INFO - New best score 18.334 on iteration 11
+2024-12-10 00:07:00,771 - INFO - New best score 18.570 on iteration 22
+2024-12-10 00:07:02,823 - INFO - New best score 18.999 on iteration 26
+2024-12-10 00:07:10,077 - INFO - Saved processed image for the best configuration of 'IMG_1538_057.jpg'
+2024-12-10 00:07:10,077 - INFO - Optimizing configuration for IMG_1538_058.jpg
+2024-12-10 00:09:29,738 - INFO - New best score 24.020 on iteration 15
+2024-12-10 00:09:39,496 - INFO - New best score 24.443 on iteration 29
+2024-12-10 00:09:47,002 - INFO - Saved processed image for the best configuration of 'IMG_1538_058.jpg'
+2024-12-10 00:09:47,002 - INFO - Optimizing configuration for IMG_1538_059.jpg
+2024-12-10 00:12:47,192 - INFO - Saved processed image for the best configuration of 'IMG_1538_059.jpg'
+2024-12-10 00:12:47,192 - INFO - Optimizing configuration for IMG_1538_060.jpg
+2024-12-10 00:14:40,978 - INFO - New best score 15.203 on iteration 4
+2024-12-10 00:14:56,253 - INFO - Epoch 1: Train Loss = -3.2637, Validation Loss = 0.0346
+2024-12-10 00:14:56,253 - INFO - Epoch 1: New best validation loss: 0.0346
+2024-12-10 00:14:56,269 - INFO - Epoch 2: Train Loss = -3.5567, Validation Loss = 0.0411
+2024-12-10 00:14:56,283 - INFO - Epoch 3: Train Loss = -3.7784, Validation Loss = 0.0318
+2024-12-10 00:14:56,283 - INFO - Epoch 3: New best validation loss: 0.0318
+2024-12-10 00:14:56,298 - INFO - Epoch 4: Train Loss = -3.8951, Validation Loss = 0.0382
+2024-12-10 00:14:56,313 - INFO - Epoch 5: Train Loss = -3.9468, Validation Loss = 0.0478
+2024-12-10 00:14:56,328 - INFO - Epoch 6: Train Loss = -4.1258, Validation Loss = 0.0296
+2024-12-10 00:14:56,328 - INFO - Epoch 6: New best validation loss: 0.0296
+2024-12-10 00:14:56,342 - INFO - Epoch 7: Train Loss = -4.3461, Validation Loss = 0.0394
+2024-12-10 00:14:56,357 - INFO - Epoch 8: Train Loss = -4.4709, Validation Loss = 0.0339
+2024-12-10 00:14:56,371 - INFO - Epoch 9: Train Loss = -4.5999, Validation Loss = 0.0310
+2024-12-10 00:14:56,385 - INFO - Epoch 10: Train Loss = -4.6806, Validation Loss = 0.0389
+2024-12-10 00:14:56,401 - INFO - Epoch 11: Train Loss = -4.6699, Validation Loss = 0.0347
+2024-12-10 00:14:56,401 - INFO - Early stopping triggered after 11 epochs. Best validation loss: 0.0296
+2024-12-10 00:14:56,401 - INFO - Training completed. Best validation loss: 0.0296 after 11 epochs.
+2024-12-10 00:14:56,427 - INFO - Saved processed image for the best configuration of 'IMG_1538_060.jpg'
+2024-12-10 00:14:56,427 - INFO - Optimizing configuration for IMG_1538_061.jpg
+2024-12-10 00:18:25,469 - INFO - New best score 28.175 on iteration 34
+2024-12-10 00:18:29,983 - INFO - Saved processed image for the best configuration of 'IMG_1538_061.jpg'
+2024-12-10 00:18:29,984 - INFO - Optimizing configuration for IMG_1538_062.jpg
+2024-12-10 00:20:50,171 - INFO - New best score 15.880 on iteration 27
+2024-12-10 00:20:58,355 - INFO - Saved processed image for the best configuration of 'IMG_1538_062.jpg'
+2024-12-10 00:20:58,355 - INFO - Optimizing configuration for IMG_1538_063.jpg
+2024-12-10 00:23:05,002 - INFO - New best score 2.454 on iteration 30
+2024-12-10 00:23:09,749 - INFO - Saved processed image for the best configuration of 'IMG_1538_063.jpg'
+2024-12-10 00:23:09,749 - INFO - Optimizing configuration for IMG_1538_064.jpg
+2024-12-10 00:24:56,805 - INFO - New best score 11.475 on iteration 11
+2024-12-10 00:24:57,466 - INFO - New best score 11.659 on iteration 12
+2024-12-10 00:24:59,168 - INFO - New best score 11.673 on iteration 15
+2024-12-10 00:25:01,651 - INFO - New best score 11.734 on iteration 19
+2024-12-10 00:25:02,336 - INFO - New best score 11.796 on iteration 20
+2024-12-10 00:25:07,772 - INFO - New best score 11.805 on iteration 28
+2024-12-10 00:25:16,067 - INFO - Saved processed image for the best configuration of 'IMG_1538_064.jpg'
+2024-12-10 00:25:16,068 - INFO - Optimizing configuration for IMG_1538_065.jpg
+2024-12-10 00:27:37,647 - INFO - Saved processed image for the best configuration of 'IMG_1538_065.jpg'
+2024-12-10 00:27:37,647 - INFO - Optimizing configuration for IMG_1538_066.jpg
+2024-12-10 00:29:24,890 - INFO - New best score 9.607 on iteration 2
+2024-12-10 00:29:26,216 - INFO - New best score 10.895 on iteration 5
+2024-12-10 00:29:41,620 - INFO - Saved processed image for the best configuration of 'IMG_1538_066.jpg'
+2024-12-10 00:29:41,620 - INFO - Optimizing configuration for IMG_1538_067.jpg
+2024-12-10 00:33:03,318 - INFO - Saved processed image for the best configuration of 'IMG_1538_067.jpg'
+2024-12-10 00:33:03,318 - INFO - Optimizing configuration for IMG_1538_068.jpg
+2024-12-10 00:35:35,114 - INFO - New best score 22.513 on iteration 2
+2024-12-10 00:35:52,163 - INFO - New best score 22.625 on iteration 24
+2024-12-10 00:35:56,742 - INFO - New best score 23.660 on iteration 29
+2024-12-10 00:36:06,755 - INFO - Saved processed image for the best configuration of 'IMG_1538_068.jpg'
+2024-12-10 00:36:06,755 - INFO - Optimizing configuration for IMG_1538_069.jpg
+2024-12-10 00:38:34,422 - INFO - New best score 17.972 on iteration 21
+2024-12-10 00:38:45,405 - INFO - Saved processed image for the best configuration of 'IMG_1538_069.jpg'
+2024-12-10 00:38:45,405 - INFO - Optimizing configuration for IMG_1538_070.jpg
+2024-12-10 00:46:02,558 - INFO - New best score 33.569 on iteration 33
+2024-12-10 00:46:12,543 - INFO - Saved processed image for the best configuration of 'IMG_1538_070.jpg'
+2024-12-10 00:46:12,543 - INFO - Optimizing configuration for IMG_1538_071.jpg
+2024-12-10 00:48:17,342 - INFO - Saved processed image for the best configuration of 'IMG_1538_071.jpg'
+2024-12-10 00:48:17,343 - INFO - Optimizing configuration for IMG_1538_072.jpg
+2024-12-10 00:50:42,652 - INFO - New best score 17.206 on iteration 35
+2024-12-10 00:50:45,940 - INFO - Saved processed image for the best configuration of 'IMG_1538_072.jpg'
+2024-12-10 00:50:45,940 - INFO - Optimizing configuration for IMG_1538_073.jpg
+2024-12-10 00:55:16,536 - INFO - New best score 21.426 on iteration 29
+2024-12-10 00:55:17,727 - INFO - New best score 25.085 on iteration 30
+2024-12-10 00:55:27,370 - INFO - Saved processed image for the best configuration of 'IMG_1538_073.jpg'
+2024-12-10 00:55:27,370 - INFO - Optimizing configuration for IMG_1538_074.jpg
+2024-12-10 00:57:39,321 - INFO - New best score 5.089 on iteration 8
+2024-12-10 00:58:10,842 - INFO - New best score 5.900 on iteration 35
+2024-12-10 00:58:13,505 - INFO - Saved processed image for the best configuration of 'IMG_1538_074.jpg'
+2024-12-10 00:58:13,505 - INFO - Optimizing configuration for IMG_1538_075.jpg
+2024-12-10 00:59:21,352 - INFO - Saved processed image for the best configuration of 'IMG_1538_075.jpg'
+2024-12-10 00:59:21,352 - INFO - Optimizing configuration for IMG_1538_076.jpg
+2024-12-10 01:03:01,701 - INFO - New best score 19.822 on iteration 40
+2024-12-10 01:03:01,736 - INFO - Saved processed image for the best configuration of 'IMG_1538_076.jpg'
+2024-12-10 01:03:01,736 - INFO - Optimizing configuration for IMG_1538_077.jpg
+2024-12-10 01:04:56,135 - INFO - New best score 5.804 on iteration 20
+2024-12-10 01:04:58,830 - INFO - New best score 5.927 on iteration 24
+2024-12-10 01:05:10,944 - INFO - Saved processed image for the best configuration of 'IMG_1538_077.jpg'
+2024-12-10 01:05:10,944 - INFO - Optimizing configuration for IMG_1538_078.jpg
+2024-12-10 01:09:07,003 - INFO - New best score 31.276 on iteration 13
+2024-12-10 01:09:11,585 - INFO - New best score 31.981 on iteration 19
+2024-12-10 01:09:16,342 - INFO - New best score 32.885 on iteration 25
+2024-12-10 01:09:27,288 - INFO - New best score 32.944 on iteration 39
+2024-12-10 01:09:28,087 - INFO - Saved processed image for the best configuration of 'IMG_1538_078.jpg'
+2024-12-10 01:09:28,087 - INFO - Optimizing configuration for IMG_1538_079.jpg
+2024-12-10 01:12:16,520 - INFO - New best score 21.738 on iteration 35
+2024-12-10 01:12:18,586 - INFO - Saved processed image for the best configuration of 'IMG_1538_079.jpg'
+2024-12-10 01:12:18,586 - INFO - Optimizing configuration for IMG_1538_080.jpg
+2024-12-10 01:14:37,742 - INFO - New best score 22.175 on iteration 31
+2024-12-10 01:14:40,768 - INFO - Saved processed image for the best configuration of 'IMG_1538_080.jpg'
+2024-12-10 01:14:40,769 - INFO - Optimizing configuration for IMG_1538_081.jpg
+2024-12-10 01:16:23,199 - INFO - New best score 4.013 on iteration 13
+2024-12-10 01:16:28,353 - INFO - New best score 4.016 on iteration 27
+2024-12-10 01:16:34,005 - INFO - Saved processed image for the best configuration of 'IMG_1538_081.jpg'
+2024-12-10 01:16:34,006 - INFO - Optimizing configuration for IMG_1538_082.jpg
+2024-12-10 01:19:25,527 - INFO - Saved processed image for the best configuration of 'IMG_1538_082.jpg'
+2024-12-10 01:19:25,527 - INFO - Optimizing configuration for IMG_1538_083.jpg
+2024-12-10 01:21:14,722 - INFO - New best score 2.843 on iteration 3
+2024-12-10 01:21:17,794 - INFO - New best score 2.868 on iteration 11
+2024-12-10 01:21:21,462 - INFO - New best score 3.482 on iteration 18
+2024-12-10 01:21:32,960 - INFO - New best score 3.619 on iteration 39
+2024-12-10 01:21:33,585 - INFO - Saved processed image for the best configuration of 'IMG_1538_083.jpg'
+2024-12-10 01:21:33,585 - INFO - Optimizing configuration for IMG_1538_084.jpg
+2024-12-10 01:24:13,056 - INFO - New best score 18.831 on iteration 20
+2024-12-10 01:24:14,990 - INFO - New best score 23.433 on iteration 23
+2024-12-10 01:24:25,916 - INFO - Saved processed image for the best configuration of 'IMG_1538_084.jpg'
+2024-12-10 01:24:25,916 - INFO - Optimizing configuration for IMG_1538_085.jpg
+2024-12-10 01:28:17,269 - INFO - New best score 20.650 on iteration 28
+2024-12-10 01:28:17,845 - INFO - New best score 20.766 on iteration 29
+2024-12-10 01:28:24,319 - INFO - Saved processed image for the best configuration of 'IMG_1538_085.jpg'
+2024-12-10 01:28:24,319 - INFO - Optimizing configuration for IMG_1538_086.jpg
+2024-12-10 01:33:23,015 - INFO - New best score 5.617 on iteration 6
+2024-12-10 01:33:50,925 - INFO - Saved processed image for the best configuration of 'IMG_1538_086.jpg'
+2024-12-10 01:33:50,925 - INFO - Optimizing configuration for IMG_1538_087.jpg
+2024-12-10 01:37:22,224 - INFO - New best score 24.756 on iteration 26
+2024-12-10 01:37:29,688 - INFO - Saved processed image for the best configuration of 'IMG_1538_087.jpg'
+2024-12-10 01:37:29,688 - INFO - Optimizing configuration for IMG_1538_088.jpg
+2024-12-10 01:43:40,459 - INFO - New best score 18.488 on iteration 14
+2024-12-10 01:44:08,855 - INFO - Saved processed image for the best configuration of 'IMG_1538_088.jpg'
+2024-12-10 01:44:08,856 - INFO - Optimizing configuration for IMG_1538_089.jpg
+2024-12-10 01:49:44,809 - INFO - Saved processed image for the best configuration of 'IMG_1538_089.jpg'
+2024-12-10 01:49:44,809 - INFO - Optimizing configuration for IMG_1538_090.jpg
+2024-12-10 01:52:54,855 - INFO - New best score 11.526 on iteration 26
+2024-12-10 01:53:00,468 - INFO - Epoch 1: Train Loss = -4.7433, Validation Loss = 0.0484
+2024-12-10 01:53:00,468 - INFO - Epoch 1: New best validation loss: 0.0484
+2024-12-10 01:53:00,484 - INFO - Epoch 2: Train Loss = -4.8125, Validation Loss = 0.0444
+2024-12-10 01:53:00,484 - INFO - Epoch 2: New best validation loss: 0.0444
+2024-12-10 01:53:00,499 - INFO - Epoch 3: Train Loss = -4.9869, Validation Loss = 0.0455
+2024-12-10 01:53:00,514 - INFO - Epoch 4: Train Loss = -4.9238, Validation Loss = 0.0454
+2024-12-10 01:53:00,529 - INFO - Epoch 5: Train Loss = -5.0440, Validation Loss = 0.0501
+2024-12-10 01:53:00,545 - INFO - Epoch 6: Train Loss = -4.9151, Validation Loss = 0.0458
+2024-12-10 01:53:00,559 - INFO - Epoch 7: Train Loss = -5.1034, Validation Loss = 0.0481
+2024-12-10 01:53:00,559 - INFO - Early stopping triggered after 7 epochs. Best validation loss: 0.0444
+2024-12-10 01:53:00,559 - INFO - Training completed. Best validation loss: 0.0444 after 7 epochs.
+2024-12-10 01:53:00,584 - INFO - Saved processed image for the best configuration of 'IMG_1538_090.jpg'
+2024-12-10 01:53:00,584 - INFO - Optimizing configuration for IMG_1538_091.jpg
+2024-12-10 01:56:33,625 - INFO - New best score 12.491 on iteration 17
+2024-12-10 01:56:46,409 - INFO - Saved processed image for the best configuration of 'IMG_1538_091.jpg'
+2024-12-10 01:56:46,409 - INFO - Optimizing configuration for IMG_1538_092.jpg
+2024-12-10 02:01:34,203 - INFO - Saved processed image for the best configuration of 'IMG_1538_092.jpg'
+2024-12-10 02:01:34,203 - INFO - Optimizing configuration for IMG_1538_093.jpg
+2024-12-10 02:04:15,834 - INFO - New best score 10.241 on iteration 27
+2024-12-10 02:04:21,081 - INFO - Saved processed image for the best configuration of 'IMG_1538_093.jpg'
+2024-12-10 02:04:21,081 - INFO - Optimizing configuration for IMG_1538_094.jpg
+2024-12-10 02:08:15,701 - INFO - New best score 19.358 on iteration 4
+2024-12-10 02:08:42,002 - INFO - New best score 19.391 on iteration 36
+2024-12-10 02:08:45,228 - INFO - Saved processed image for the best configuration of 'IMG_1538_094.jpg'
+2024-12-10 02:08:45,228 - INFO - Optimizing configuration for IMG_1538_095.jpg
+2024-12-10 02:16:31,703 - INFO - New best score 11.636 on iteration 7
+2024-12-10 02:17:06,563 - INFO - New best score 12.164 on iteration 33
+2024-12-10 02:17:16,724 - INFO - Saved processed image for the best configuration of 'IMG_1538_095.jpg'
+2024-12-10 02:17:16,725 - INFO - Optimizing configuration for IMG_1538_096.jpg
+2024-12-10 02:18:26,543 - INFO - New best score 0.310 on iteration 1
+2024-12-10 02:18:28,042 - INFO - New best score 0.376 on iteration 4
+2024-12-10 02:18:28,561 - INFO - New best score 0.491 on iteration 5
+2024-12-10 02:18:37,404 - INFO - New best score 0.602 on iteration 21
+2024-12-10 02:18:45,295 - INFO - New best score 0.604 on iteration 37
+2024-12-10 02:18:46,403 - INFO - Saved processed image for the best configuration of 'IMG_1538_096.jpg'
+2024-12-10 02:18:46,403 - INFO - Optimizing configuration for IMG_1538_097.jpg
+2024-12-10 02:19:23,355 - INFO - New best score 2.993 on iteration 12
+2024-12-10 02:19:23,952 - INFO - New best score 2.995 on iteration 19
+2024-12-10 02:19:25,008 - INFO - New best score 2.995 on iteration 31
+2024-12-10 02:19:25,188 - INFO - New best score 2.995 on iteration 33
+2024-12-10 02:19:25,832 - INFO - Saved processed image for the best configuration of 'IMG_1538_097.jpg'
+2024-12-10 02:19:25,832 - INFO - Optimizing configuration for IMG_1538_098.jpg
+2024-12-10 02:23:02,612 - INFO - New best score 18.037 on iteration 20
+2024-12-10 02:23:04,091 - INFO - New best score 18.205 on iteration 23
+2024-12-10 02:23:05,582 - INFO - New best score 18.305 on iteration 26
+2024-12-10 02:23:06,591 - INFO - New best score 18.579 on iteration 28
+2024-12-10 02:23:11,648 - INFO - Saved processed image for the best configuration of 'IMG_1538_098.jpg'
+2024-12-10 02:23:11,648 - INFO - Optimizing configuration for IMG_1538_099.jpg
+2024-12-10 02:25:16,027 - INFO - Saved processed image for the best configuration of 'IMG_1538_099.jpg'
+2024-12-10 02:25:16,027 - INFO - Optimizing configuration for IMG_1538_100.jpg
+2024-12-10 02:28:08,981 - INFO - New best score 22.403 on iteration 14
+2024-12-10 02:28:19,771 - INFO - Saved processed image for the best configuration of 'IMG_1538_100.jpg'
+2024-12-10 02:28:19,771 - INFO - Optimizing configuration for IMG_1538_101.jpg
+2024-12-10 02:33:57,379 - INFO - Saved processed image for the best configuration of 'IMG_1538_101.jpg'
+2024-12-10 02:33:57,380 - INFO - Optimizing configuration for IMG_1538_102.jpg
+2024-12-10 02:35:02,509 - INFO - Saved processed image for the best configuration of 'IMG_1538_102.jpg'
+2024-12-10 02:35:02,510 - INFO - Optimizing configuration for IMG_1538_103.jpg
+2024-12-10 02:38:53,782 - INFO - Saved processed image for the best configuration of 'IMG_1538_103.jpg'
+2024-12-10 02:38:53,782 - INFO - Optimizing configuration for IMG_1538_104.jpg
+2024-12-10 02:45:16,370 - INFO - New best score 19.348 on iteration 37
+2024-12-10 02:45:18,779 - INFO - Saved processed image for the best configuration of 'IMG_1538_104.jpg'
+2024-12-10 02:45:18,779 - INFO - Optimizing configuration for IMG_1538_105.jpg
+2024-12-10 02:47:07,049 - INFO - New best score 3.832 on iteration 36
+2024-12-10 02:47:08,280 - INFO - Saved processed image for the best configuration of 'IMG_1538_105.jpg'
+2024-12-10 02:47:08,280 - INFO - Optimizing configuration for IMG_1538_106.jpg
+2024-12-10 02:49:53,308 - INFO - Saved processed image for the best configuration of 'IMG_1538_106.jpg'
+2024-12-10 02:49:53,308 - INFO - Optimizing configuration for IMG_1538_107.jpg
+2024-12-10 02:51:39,476 - INFO - New best score 5.286 on iteration 38
+2024-12-10 02:51:39,863 - INFO - Saved processed image for the best configuration of 'IMG_1538_107.jpg'
+2024-12-10 02:51:39,863 - INFO - Optimizing configuration for IMG_1538_108.jpg
+2024-12-10 02:56:54,792 - INFO - New best score 6.549 on iteration 11
+2024-12-10 02:57:00,932 - INFO - New best score 8.029 on iteration 19
+2024-12-10 02:57:10,126 - INFO - New best score 9.595 on iteration 31
+2024-12-10 02:57:12,871 - INFO - New best score 10.252 on iteration 35
+2024-12-10 02:57:14,306 - INFO - New best score 10.496 on iteration 37
+2024-12-10 02:57:15,761 - INFO - Saved processed image for the best configuration of 'IMG_1538_108.jpg'
+2024-12-10 02:57:15,761 - INFO - Optimizing configuration for IMG_1538_109.jpg
+2024-12-10 03:00:46,288 - INFO - New best score 15.561 on iteration 37
+2024-12-10 03:00:47,311 - INFO - Saved processed image for the best configuration of 'IMG_1538_109.jpg'
+2024-12-10 03:00:47,325 - INFO - Epoch 1: Train Loss = -5.1287, Validation Loss = 0.0367
+2024-12-10 03:00:47,325 - INFO - Epoch 1: New best validation loss: 0.0367
+2024-12-10 03:00:47,336 - INFO - Epoch 2: Train Loss = -5.2467, Validation Loss = 0.0386
+2024-12-10 03:00:47,347 - INFO - Epoch 3: Train Loss = -5.1957, Validation Loss = 0.0389
+2024-12-10 03:00:47,359 - INFO - Epoch 4: Train Loss = -5.3233, Validation Loss = 0.0384
+2024-12-10 03:00:47,370 - INFO - Epoch 5: Train Loss = -5.1576, Validation Loss = 0.0384
+2024-12-10 03:00:47,381 - INFO - Epoch 6: Train Loss = -5.2317, Validation Loss = 0.0405
+2024-12-10 03:00:47,381 - INFO - Early stopping triggered after 6 epochs. Best validation loss: 0.0367
+2024-12-10 03:00:47,381 - INFO - Training completed. Best validation loss: 0.0367 after 6 epochs.
+2024-12-10 03:00:47,396 - INFO - Results saved to /Users/Macington/Documents/Projects/Bookshelf Scanner/bookshelf_scanner/data/results/optimizer.json
+2024-12-10 03:00:48,276 - INFO - Model and state saved to /Users/Macington/Documents/Projects/Bookshelf Scanner/bookshelf_scanner/core/config_optimizer/models/meta_learner.pt
+2024-12-10 03:00:48,311 - INFO - Meta-learning configuration optimization complete

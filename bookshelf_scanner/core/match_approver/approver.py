@@ -84,7 +84,7 @@ class MatchApprover:
 
     def __init__(
         self,
-        threshold    : float       = 0.85,
+        threshold    : float       = 0.25,
         window_height: int         = DEFAULT_HEIGHT,
         matcher_file : Path | None = None,
         output_file  : Path | None = None
@@ -260,7 +260,7 @@ class MatchApprover:
         filtered = [(m['title'], m['author'], m['score']) for m in matches_list if m['score'] >= self.threshold]
         filtered.sort(key = lambda x: x[2], reverse = True)
 
-        lines.append((f"Matches (≥ {self.threshold * 100:.1f}%):", self.UI_COLORS['TEAL'], 1.0))
+        lines.append((f"Matches (> {self.threshold * 100:.1f}%):", self.UI_COLORS['TEAL'], 1.0))
 
         if filtered:
             for i, (title, author, score) in enumerate(filtered, start=1):
